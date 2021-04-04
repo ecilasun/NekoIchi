@@ -1,0 +1,1506 @@
+#-----------------------------------------------------------
+# Vivado v2020.2 (64-bit)
+# SW Build 3064766 on Wed Nov 18 09:12:47 MST 2020
+# IP Build 3064653 on Wed Nov 18 14:17:31 MST 2020
+# Start of session at: Sat Apr  3 23:40:35 2021
+# Process ID: 3392
+# Current directory: /home/engin
+# Command line: vivado
+# Log file: /home/engin/vivado.log
+# Journal file: /home/engin/vivado.jou
+#-----------------------------------------------------------
+start_gui
+open_project /media/engin/StorageA/FPGA/graphics/graphics.xpr
+update_compile_order -fileset sources_1
+update_compile_order -fileset sources_1
+launch_runs synth_1 -jobs 16
+wait_on_run synth_1
+reset_run synth_1
+launch_runs synth_1 -jobs 16
+wait_on_run synth_1
+launch_runs impl_1 -jobs 16
+wait_on_run impl_1
+launch_runs impl_1 -to_step write_bitstream -jobs 16
+wait_on_run impl_1
+open_hw_manager
+connect_hw_server -allow_non_jtag
+open_hw_target
+set_property PROGRAM.FILE {/media/engin/StorageA/FPGA/graphics/graphics.runs/impl_1/graphicstop.bit} [get_hw_devices xc7z020_1]
+current_hw_device [get_hw_devices xc7z020_1]
+refresh_hw_device -update_hw_probes false [lindex [get_hw_devices xc7z020_1] 0]
+set_property PROBES.FILE {} [get_hw_devices xc7z020_1]
+set_property FULL_PROBES.FILE {} [get_hw_devices xc7z020_1]
+set_property PROGRAM.FILE {/media/engin/StorageA/FPGA/graphics/graphics.runs/impl_1/graphicstop.bit} [get_hw_devices xc7z020_1]
+program_hw_devices [get_hw_devices xc7z020_1]
+refresh_hw_device [lindex [get_hw_devices xc7z020_1] 0]
+close_hw_manager
+archive_project /media/engin/StorageA/FPGA/graphics.xpr.zip -force -include_local_ip_cache -include_config_settings
+reset_run synth_1
+launch_runs synth_1 -jobs 16
+wait_on_run synth_1
+launch_runs impl_1 -jobs 16
+wait_on_run impl_1
+reset_run synth_1
+launch_runs synth_1 -jobs 16
+wait_on_run synth_1
+launch_runs impl_1 -jobs 16
+wait_on_run impl_1
+launch_runs impl_1 -to_step write_bitstream -jobs 16
+wait_on_run impl_1
+open_hw_manager
+connect_hw_server -allow_non_jtag
+open_hw_target
+set_property PROGRAM.FILE {/media/engin/StorageA/FPGA/graphics/graphics.runs/impl_1/graphicstop.bit} [get_hw_devices xc7z020_1]
+current_hw_device [get_hw_devices xc7z020_1]
+refresh_hw_device -update_hw_probes false [lindex [get_hw_devices xc7z020_1] 0]
+set_property PROBES.FILE {} [get_hw_devices xc7z020_1]
+set_property FULL_PROBES.FILE {} [get_hw_devices xc7z020_1]
+set_property PROGRAM.FILE {/media/engin/StorageA/FPGA/graphics/graphics.runs/impl_1/graphicstop.bit} [get_hw_devices xc7z020_1]
+program_hw_devices [get_hw_devices xc7z020_1]
+refresh_hw_device [lindex [get_hw_devices xc7z020_1] 0]
+close_hw_manager
+reset_run synth_1
+launch_runs synth_1 -jobs 16
+wait_on_run synth_1
+launch_runs impl_1 -jobs 16
+wait_on_run impl_1
+reset_run synth_1
+launch_runs synth_1 -jobs 16
+wait_on_run synth_1
+launch_runs impl_1 -jobs 16
+wait_on_run impl_1
+launch_runs impl_1 -to_step write_bitstream -jobs 16
+wait_on_run impl_1
+open_hw_manager
+connect_hw_server -allow_non_jtag
+open_hw_target
+set_property PROGRAM.FILE {/media/engin/StorageA/FPGA/graphics/graphics.runs/impl_1/graphicstop.bit} [get_hw_devices xc7z020_1]
+current_hw_device [get_hw_devices xc7z020_1]
+refresh_hw_device -update_hw_probes false [lindex [get_hw_devices xc7z020_1] 0]
+set_property PROBES.FILE {} [get_hw_devices xc7z020_1]
+set_property FULL_PROBES.FILE {} [get_hw_devices xc7z020_1]
+set_property PROGRAM.FILE {/media/engin/StorageA/FPGA/graphics/graphics.runs/impl_1/graphicstop.bit} [get_hw_devices xc7z020_1]
+program_hw_devices [get_hw_devices xc7z020_1]
+refresh_hw_device [lindex [get_hw_devices xc7z020_1] 0]
+close_hw_manager
+reset_run impl_1
+launch_runs impl_1 -jobs 16
+wait_on_run impl_1
+launch_runs impl_1 -to_step write_bitstream -jobs 16
+wait_on_run impl_1
+open_hw_manager
+connect_hw_server -allow_non_jtag
+open_hw_target
+set_property PROGRAM.FILE {/media/engin/StorageA/FPGA/graphics/graphics.runs/impl_1/graphicstop.bit} [get_hw_devices xc7z020_1]
+current_hw_device [get_hw_devices xc7z020_1]
+refresh_hw_device -update_hw_probes false [lindex [get_hw_devices xc7z020_1] 0]
+set_property PROBES.FILE {} [get_hw_devices xc7z020_1]
+set_property FULL_PROBES.FILE {} [get_hw_devices xc7z020_1]
+set_property PROGRAM.FILE {/media/engin/StorageA/FPGA/graphics/graphics.runs/impl_1/graphicstop.bit} [get_hw_devices xc7z020_1]
+program_hw_devices [get_hw_devices xc7z020_1]
+refresh_hw_device [lindex [get_hw_devices xc7z020_1] 0]
+close_hw_manager
+reset_target all [get_files  /media/engin/StorageA/FPGA/graphics/graphics.srcs/sources_1/ip/blk_mem_gen_0/blk_mem_gen_0.xci]
+export_ip_user_files -of_objects  [get_files  /media/engin/StorageA/FPGA/graphics/graphics.srcs/sources_1/ip/blk_mem_gen_0/blk_mem_gen_0.xci] -sync -no_script -force -quiet
+reset_run synth_1
+launch_runs impl_1 -jobs 16
+wait_on_run impl_1
+launch_runs impl_1 -to_step write_bitstream -jobs 16
+wait_on_run impl_1
+open_hw_manager
+connect_hw_server -allow_non_jtag
+open_hw_target
+set_property PROGRAM.FILE {/media/engin/StorageA/FPGA/graphics/graphics.runs/impl_1/graphicstop.bit} [get_hw_devices xc7z020_1]
+current_hw_device [get_hw_devices xc7z020_1]
+refresh_hw_device -update_hw_probes false [lindex [get_hw_devices xc7z020_1] 0]
+set_property PROBES.FILE {} [get_hw_devices xc7z020_1]
+set_property FULL_PROBES.FILE {} [get_hw_devices xc7z020_1]
+set_property PROGRAM.FILE {/media/engin/StorageA/FPGA/graphics/graphics.runs/impl_1/graphicstop.bit} [get_hw_devices xc7z020_1]
+program_hw_devices [get_hw_devices xc7z020_1]
+refresh_hw_device [lindex [get_hw_devices xc7z020_1] 0]
+close_hw_manager
+generate_target Simulation [get_files /media/engin/StorageA/FPGA/graphics/graphics.srcs/sources_1/ip/blk_mem_gen_0/blk_mem_gen_0.xci]
+export_ip_user_files -of_objects [get_files /media/engin/StorageA/FPGA/graphics/graphics.srcs/sources_1/ip/blk_mem_gen_0/blk_mem_gen_0.xci] -no_script -sync -force -quiet
+export_simulation -of_objects [get_files /media/engin/StorageA/FPGA/graphics/graphics.srcs/sources_1/ip/blk_mem_gen_0/blk_mem_gen_0.xci] -directory /media/engin/StorageA/FPGA/graphics/graphics.ip_user_files/sim_scripts -ip_user_files_dir /media/engin/StorageA/FPGA/graphics/graphics.ip_user_files -ipstatic_source_dir /media/engin/StorageA/FPGA/graphics/graphics.ip_user_files/ipstatic -lib_map_path [list {modelsim=/media/engin/StorageA/FPGA/graphics/graphics.cache/compile_simlib/modelsim} {questa=/media/engin/StorageA/FPGA/graphics/graphics.cache/compile_simlib/questa} {ies=/media/engin/StorageA/FPGA/graphics/graphics.cache/compile_simlib/ies} {xcelium=/media/engin/StorageA/FPGA/graphics/graphics.cache/compile_simlib/xcelium} {vcs=/media/engin/StorageA/FPGA/graphics/graphics.cache/compile_simlib/vcs} {riviera=/media/engin/StorageA/FPGA/graphics/graphics.cache/compile_simlib/riviera}] -use_ip_compiled_libs -force -quiet
+launch_simulation
+open_wave_config /media/engin/StorageA/FPGA/graphics/graphicstop_behav.wcfg
+source graphicstop.tcl
+add_force {/graphicstop/clk_i} -radix hex {0 0ns} {1 4000ps} -repeat_every 8000ps
+add_force {/graphicstop/rst_i} -radix hex {0 0ns}
+restart
+run all
+save_wave_config {/media/engin/StorageA/FPGA/graphics/graphicstop_behav.wcfg}
+run all
+relaunch_sim
+restart
+add_force {/graphicstop/rst_i} -radix hex {0 0ns}
+add_force {/graphicstop/clk_i} -radix hex {0 0ns} {1 4000ps} -repeat_every 8000ps
+run all
+run all
+close_sim
+reset_run impl_1
+launch_runs impl_1 -jobs 16
+wait_on_run impl_1
+reset_run synth_1
+launch_runs impl_1 -to_step write_bitstream -jobs 16
+wait_on_run impl_1
+open_hw_manager
+connect_hw_server -allow_non_jtag
+open_hw_target
+set_property PROGRAM.FILE {/media/engin/StorageA/FPGA/graphics/graphics.runs/impl_1/graphicstop.bit} [get_hw_devices xc7z020_1]
+current_hw_device [get_hw_devices xc7z020_1]
+refresh_hw_device -update_hw_probes false [lindex [get_hw_devices xc7z020_1] 0]
+set_property PROBES.FILE {} [get_hw_devices xc7z020_1]
+set_property FULL_PROBES.FILE {} [get_hw_devices xc7z020_1]
+set_property PROGRAM.FILE {/media/engin/StorageA/FPGA/graphics/graphics.runs/impl_1/graphicstop.bit} [get_hw_devices xc7z020_1]
+program_hw_devices [get_hw_devices xc7z020_1]
+refresh_hw_device [lindex [get_hw_devices xc7z020_1] 0]
+close_hw_manager
+archive_project /media/engin/StorageA/FPGA/graphics.xpr.zip -force -include_local_ip_cache -include_config_settings
+archive_project /media/engin/StorageA/FPGA/graphics.xpr.zip -force -include_local_ip_cache -include_config_settings
+set_property -dict [list CONFIG.CLKOUT1_REQUESTED_OUT_FREQ {125.000} CONFIG.MMCM_CLKOUT0_DIVIDE_F {8.000} CONFIG.CLKOUT1_JITTER {119.348}] [get_ips clk_wiz_0]
+generate_target all [get_files  /media/engin/StorageA/FPGA/graphics/graphics.srcs/sources_1/ip/clk_wiz_0/clk_wiz_0.xci]
+catch { config_ip_cache -export [get_ips -all clk_wiz_0] }
+export_ip_user_files -of_objects [get_files /media/engin/StorageA/FPGA/graphics/graphics.srcs/sources_1/ip/clk_wiz_0/clk_wiz_0.xci] -no_script -sync -force -quiet
+reset_run clk_wiz_0_synth_1
+launch_runs clk_wiz_0_synth_1 -jobs 16
+wait_on_run clk_wiz_0_synth_1
+export_simulation -of_objects [get_files /media/engin/StorageA/FPGA/graphics/graphics.srcs/sources_1/ip/clk_wiz_0/clk_wiz_0.xci] -directory /media/engin/StorageA/FPGA/graphics/graphics.ip_user_files/sim_scripts -ip_user_files_dir /media/engin/StorageA/FPGA/graphics/graphics.ip_user_files -ipstatic_source_dir /media/engin/StorageA/FPGA/graphics/graphics.ip_user_files/ipstatic -lib_map_path [list {modelsim=/media/engin/StorageA/FPGA/graphics/graphics.cache/compile_simlib/modelsim} {questa=/media/engin/StorageA/FPGA/graphics/graphics.cache/compile_simlib/questa} {ies=/media/engin/StorageA/FPGA/graphics/graphics.cache/compile_simlib/ies} {xcelium=/media/engin/StorageA/FPGA/graphics/graphics.cache/compile_simlib/xcelium} {vcs=/media/engin/StorageA/FPGA/graphics/graphics.cache/compile_simlib/vcs} {riviera=/media/engin/StorageA/FPGA/graphics/graphics.cache/compile_simlib/riviera}] -use_ip_compiled_libs -force -quiet
+reset_run synth_1
+launch_runs impl_1 -jobs 16
+wait_on_run impl_1
+launch_runs impl_1 -to_step write_bitstream -jobs 16
+wait_on_run impl_1
+open_hw_manager
+connect_hw_server -allow_non_jtag
+open_hw_target
+set_property PROGRAM.FILE {/media/engin/StorageA/FPGA/graphics/graphics.runs/impl_1/graphicstop.bit} [get_hw_devices xc7z020_1]
+current_hw_device [get_hw_devices xc7z020_1]
+refresh_hw_device -update_hw_probes false [lindex [get_hw_devices xc7z020_1] 0]
+set_property PROBES.FILE {} [get_hw_devices xc7z020_1]
+set_property FULL_PROBES.FILE {} [get_hw_devices xc7z020_1]
+set_property PROGRAM.FILE {/media/engin/StorageA/FPGA/graphics/graphics.runs/impl_1/graphicstop.bit} [get_hw_devices xc7z020_1]
+program_hw_devices [get_hw_devices xc7z020_1]
+refresh_hw_device [lindex [get_hw_devices xc7z020_1] 0]
+close_hw_manager
+reset_run impl_1
+launch_runs impl_1 -jobs 16
+wait_on_run impl_1
+reset_run synth_1
+launch_runs impl_1 -jobs 16
+wait_on_run impl_1
+launch_runs impl_1 -to_step write_bitstream -jobs 16
+wait_on_run impl_1
+open_hw_manager
+connect_hw_server -allow_non_jtag
+open_hw_target
+set_property PROGRAM.FILE {/media/engin/StorageA/FPGA/graphics/graphics.runs/impl_1/graphicstop.bit} [get_hw_devices xc7z020_1]
+current_hw_device [get_hw_devices xc7z020_1]
+refresh_hw_device -update_hw_probes false [lindex [get_hw_devices xc7z020_1] 0]
+set_property PROBES.FILE {} [get_hw_devices xc7z020_1]
+set_property FULL_PROBES.FILE {} [get_hw_devices xc7z020_1]
+set_property PROGRAM.FILE {/media/engin/StorageA/FPGA/graphics/graphics.runs/impl_1/graphicstop.bit} [get_hw_devices xc7z020_1]
+program_hw_devices [get_hw_devices xc7z020_1]
+refresh_hw_device [lindex [get_hw_devices xc7z020_1] 0]
+close_hw_manager
+reset_run impl_1
+launch_runs impl_1 -jobs 16
+wait_on_run impl_1
+reset_run synth_1
+launch_runs impl_1 -to_step write_bitstream -jobs 16
+wait_on_run impl_1
+open_hw_manager
+connect_hw_server -allow_non_jtag
+open_hw_target
+set_property PROGRAM.FILE {/media/engin/StorageA/FPGA/graphics/graphics.runs/impl_1/graphicstop.bit} [get_hw_devices xc7z020_1]
+current_hw_device [get_hw_devices xc7z020_1]
+refresh_hw_device -update_hw_probes false [lindex [get_hw_devices xc7z020_1] 0]
+set_property PROBES.FILE {} [get_hw_devices xc7z020_1]
+set_property FULL_PROBES.FILE {} [get_hw_devices xc7z020_1]
+set_property PROGRAM.FILE {/media/engin/StorageA/FPGA/graphics/graphics.runs/impl_1/graphicstop.bit} [get_hw_devices xc7z020_1]
+program_hw_devices [get_hw_devices xc7z020_1]
+refresh_hw_device [lindex [get_hw_devices xc7z020_1] 0]
+close_hw_manager
+create_ip -name mult_gen -vendor xilinx.com -library ip -version 12.0 -module_name mult_gen_0
+set_property -dict [list CONFIG.PortAWidth {32} CONFIG.PortBWidth {32} CONFIG.Multiplier_Construction {Use_Mults} CONFIG.Use_Custom_Output_Width {false} CONFIG.OutputWidthHigh {63} CONFIG.ClockEnable {false}] [get_ips mult_gen_0]
+generate_target {instantiation_template} [get_files /media/engin/StorageA/FPGA/graphics/graphics.srcs/sources_1/ip/mult_gen_0/mult_gen_0.xci]
+generate_target all [get_files  /media/engin/StorageA/FPGA/graphics/graphics.srcs/sources_1/ip/mult_gen_0/mult_gen_0.xci]
+catch { config_ip_cache -export [get_ips -all mult_gen_0] }
+export_ip_user_files -of_objects [get_files /media/engin/StorageA/FPGA/graphics/graphics.srcs/sources_1/ip/mult_gen_0/mult_gen_0.xci] -no_script -sync -force -quiet
+create_ip_run [get_files -of_objects [get_fileset sources_1] /media/engin/StorageA/FPGA/graphics/graphics.srcs/sources_1/ip/mult_gen_0/mult_gen_0.xci]
+launch_runs mult_gen_0_synth_1 -jobs 16
+wait_on_run mult_gen_0_synth_1
+export_simulation -of_objects [get_files /media/engin/StorageA/FPGA/graphics/graphics.srcs/sources_1/ip/mult_gen_0/mult_gen_0.xci] -directory /media/engin/StorageA/FPGA/graphics/graphics.ip_user_files/sim_scripts -ip_user_files_dir /media/engin/StorageA/FPGA/graphics/graphics.ip_user_files -ipstatic_source_dir /media/engin/StorageA/FPGA/graphics/graphics.ip_user_files/ipstatic -lib_map_path [list {modelsim=/media/engin/StorageA/FPGA/graphics/graphics.cache/compile_simlib/modelsim} {questa=/media/engin/StorageA/FPGA/graphics/graphics.cache/compile_simlib/questa} {ies=/media/engin/StorageA/FPGA/graphics/graphics.cache/compile_simlib/ies} {xcelium=/media/engin/StorageA/FPGA/graphics/graphics.cache/compile_simlib/xcelium} {vcs=/media/engin/StorageA/FPGA/graphics/graphics.cache/compile_simlib/vcs} {riviera=/media/engin/StorageA/FPGA/graphics/graphics.cache/compile_simlib/riviera}] -use_ip_compiled_libs -force -quiet
+reset_run synth_1
+launch_runs synth_1 -jobs 16
+wait_on_run synth_1
+reset_run synth_1
+launch_runs synth_1 -jobs 16
+wait_on_run synth_1
+launch_runs impl_1 -jobs 16
+wait_on_run impl_1
+open_run impl_1
+close_design
+reset_run synth_1
+launch_runs synth_1 -jobs 16
+wait_on_run synth_1
+update_compile_order -fileset sources_1
+reset_run synth_1
+launch_runs synth_1 -jobs 16
+wait_on_run synth_1
+launch_runs impl_1 -jobs 16
+wait_on_run impl_1
+reset_run synth_1
+launch_runs synth_1 -jobs 16
+wait_on_run synth_1
+launch_runs impl_1 -jobs 16
+wait_on_run impl_1
+launch_runs impl_1 -to_step write_bitstream -jobs 16
+wait_on_run impl_1
+reset_run impl_1 -prev_step 
+reset_target all [get_files  /media/engin/StorageA/FPGA/graphics/graphics.srcs/sources_1/ip/mult_gen_0/mult_gen_0.xci]
+export_ip_user_files -of_objects  [get_files  /media/engin/StorageA/FPGA/graphics/graphics.srcs/sources_1/ip/mult_gen_0/mult_gen_0.xci] -sync -no_script -force -quiet
+delete_ip_run [get_files -of_objects [get_fileset mult_gen_0] /media/engin/StorageA/FPGA/graphics/graphics.srcs/sources_1/ip/mult_gen_0/mult_gen_0.xci]
+update_compile_order -fileset sources_1
+set_property generate_synth_checkpoint false [get_files  /media/engin/StorageA/FPGA/graphics/graphics.srcs/sources_1/ip/mult_gen_0/mult_gen_0.xci]
+generate_target all [get_files  /media/engin/StorageA/FPGA/graphics/graphics.srcs/sources_1/ip/mult_gen_0/mult_gen_0.xci]
+export_ip_user_files -of_objects [get_files /media/engin/StorageA/FPGA/graphics/graphics.srcs/sources_1/ip/mult_gen_0/mult_gen_0.xci] -no_script -sync -force -quiet
+export_simulation -of_objects [get_files /media/engin/StorageA/FPGA/graphics/graphics.srcs/sources_1/ip/mult_gen_0/mult_gen_0.xci] -directory /media/engin/StorageA/FPGA/graphics/graphics.ip_user_files/sim_scripts -ip_user_files_dir /media/engin/StorageA/FPGA/graphics/graphics.ip_user_files -ipstatic_source_dir /media/engin/StorageA/FPGA/graphics/graphics.ip_user_files/ipstatic -lib_map_path [list {modelsim=/media/engin/StorageA/FPGA/graphics/graphics.cache/compile_simlib/modelsim} {questa=/media/engin/StorageA/FPGA/graphics/graphics.cache/compile_simlib/questa} {ies=/media/engin/StorageA/FPGA/graphics/graphics.cache/compile_simlib/ies} {xcelium=/media/engin/StorageA/FPGA/graphics/graphics.cache/compile_simlib/xcelium} {vcs=/media/engin/StorageA/FPGA/graphics/graphics.cache/compile_simlib/vcs} {riviera=/media/engin/StorageA/FPGA/graphics/graphics.cache/compile_simlib/riviera}] -use_ip_compiled_libs -force -quiet
+reset_run synth_1
+launch_runs synth_1 -jobs 16
+wait_on_run synth_1
+launch_runs impl_1 -jobs 16
+wait_on_run impl_1
+launch_runs impl_1 -to_step write_bitstream -jobs 16
+wait_on_run impl_1
+open_hw_manager
+connect_hw_server -allow_non_jtag
+open_hw_target
+set_property PROGRAM.FILE {/media/engin/StorageA/FPGA/graphics/graphics.runs/impl_1/graphicstop.bit} [get_hw_devices xc7z020_1]
+current_hw_device [get_hw_devices xc7z020_1]
+refresh_hw_device -update_hw_probes false [lindex [get_hw_devices xc7z020_1] 0]
+set_property PROBES.FILE {} [get_hw_devices xc7z020_1]
+set_property FULL_PROBES.FILE {} [get_hw_devices xc7z020_1]
+set_property PROGRAM.FILE {/media/engin/StorageA/FPGA/graphics/graphics.runs/impl_1/graphicstop.bit} [get_hw_devices xc7z020_1]
+program_hw_devices [get_hw_devices xc7z020_1]
+refresh_hw_device [lindex [get_hw_devices xc7z020_1] 0]
+close_hw_manager
+set_property -dict [list CONFIG.CLKOUT1_REQUESTED_OUT_FREQ {150.000} CONFIG.MMCM_DIVCLK_DIVIDE {5} CONFIG.MMCM_CLKFBOUT_MULT_F {39.750} CONFIG.MMCM_CLKOUT0_DIVIDE_F {6.625} CONFIG.CLKOUT1_JITTER {201.015} CONFIG.CLKOUT1_PHASE_ERROR {234.843}] [get_ips clk_wiz_0]
+generate_target all [get_files  /media/engin/StorageA/FPGA/graphics/graphics.srcs/sources_1/ip/clk_wiz_0/clk_wiz_0.xci]
+catch { config_ip_cache -export [get_ips -all clk_wiz_0] }
+catch { [ delete_ip_run [get_ips -all clk_wiz_0] ] }
+export_ip_user_files -of_objects [get_files /media/engin/StorageA/FPGA/graphics/graphics.srcs/sources_1/ip/clk_wiz_0/clk_wiz_0.xci] -no_script -sync -force -quiet
+create_ip_run [get_files -of_objects [get_fileset sources_1] /media/engin/StorageA/FPGA/graphics/graphics.srcs/sources_1/ip/clk_wiz_0/clk_wiz_0.xci]
+export_simulation -of_objects [get_files /media/engin/StorageA/FPGA/graphics/graphics.srcs/sources_1/ip/clk_wiz_0/clk_wiz_0.xci] -directory /media/engin/StorageA/FPGA/graphics/graphics.ip_user_files/sim_scripts -ip_user_files_dir /media/engin/StorageA/FPGA/graphics/graphics.ip_user_files -ipstatic_source_dir /media/engin/StorageA/FPGA/graphics/graphics.ip_user_files/ipstatic -lib_map_path [list {modelsim=/media/engin/StorageA/FPGA/graphics/graphics.cache/compile_simlib/modelsim} {questa=/media/engin/StorageA/FPGA/graphics/graphics.cache/compile_simlib/questa} {ies=/media/engin/StorageA/FPGA/graphics/graphics.cache/compile_simlib/ies} {xcelium=/media/engin/StorageA/FPGA/graphics/graphics.cache/compile_simlib/xcelium} {vcs=/media/engin/StorageA/FPGA/graphics/graphics.cache/compile_simlib/vcs} {riviera=/media/engin/StorageA/FPGA/graphics/graphics.cache/compile_simlib/riviera}] -use_ip_compiled_libs -force -quiet
+update_compile_order -fileset sources_1
+reset_run synth_1
+launch_runs impl_1 -jobs 16
+wait_on_run impl_1
+launch_runs impl_1 -to_step write_bitstream -jobs 16
+wait_on_run impl_1
+open_hw_manager
+connect_hw_server -allow_non_jtag
+open_hw_target
+set_property PROGRAM.FILE {/media/engin/StorageA/FPGA/graphics/graphics.runs/impl_1/graphicstop.bit} [get_hw_devices xc7z020_1]
+current_hw_device [get_hw_devices xc7z020_1]
+refresh_hw_device -update_hw_probes false [lindex [get_hw_devices xc7z020_1] 0]
+set_property PROBES.FILE {} [get_hw_devices xc7z020_1]
+set_property FULL_PROBES.FILE {} [get_hw_devices xc7z020_1]
+set_property PROGRAM.FILE {/media/engin/StorageA/FPGA/graphics/graphics.runs/impl_1/graphicstop.bit} [get_hw_devices xc7z020_1]
+program_hw_devices [get_hw_devices xc7z020_1]
+refresh_hw_device [lindex [get_hw_devices xc7z020_1] 0]
+close_hw_manager
+set_property -dict [list CONFIG.CLKOUT1_REQUESTED_OUT_FREQ {200.000} CONFIG.MMCM_DIVCLK_DIVIDE {1} CONFIG.MMCM_CLKFBOUT_MULT_F {8.000} CONFIG.MMCM_CLKOUT0_DIVIDE_F {5.000} CONFIG.CLKOUT1_JITTER {109.241} CONFIG.CLKOUT1_PHASE_ERROR {96.948}] [get_ips clk_wiz_0]
+generate_target all [get_files  /media/engin/StorageA/FPGA/graphics/graphics.srcs/sources_1/ip/clk_wiz_0/clk_wiz_0.xci]
+catch { config_ip_cache -export [get_ips -all clk_wiz_0] }
+export_ip_user_files -of_objects [get_files /media/engin/StorageA/FPGA/graphics/graphics.srcs/sources_1/ip/clk_wiz_0/clk_wiz_0.xci] -no_script -sync -force -quiet
+create_ip_run [get_files -of_objects [get_fileset sources_1] /media/engin/StorageA/FPGA/graphics/graphics.srcs/sources_1/ip/clk_wiz_0/clk_wiz_0.xci]
+launch_runs clk_wiz_0_synth_1 -jobs 16
+wait_on_run clk_wiz_0_synth_1
+export_simulation -of_objects [get_files /media/engin/StorageA/FPGA/graphics/graphics.srcs/sources_1/ip/clk_wiz_0/clk_wiz_0.xci] -directory /media/engin/StorageA/FPGA/graphics/graphics.ip_user_files/sim_scripts -ip_user_files_dir /media/engin/StorageA/FPGA/graphics/graphics.ip_user_files -ipstatic_source_dir /media/engin/StorageA/FPGA/graphics/graphics.ip_user_files/ipstatic -lib_map_path [list {modelsim=/media/engin/StorageA/FPGA/graphics/graphics.cache/compile_simlib/modelsim} {questa=/media/engin/StorageA/FPGA/graphics/graphics.cache/compile_simlib/questa} {ies=/media/engin/StorageA/FPGA/graphics/graphics.cache/compile_simlib/ies} {xcelium=/media/engin/StorageA/FPGA/graphics/graphics.cache/compile_simlib/xcelium} {vcs=/media/engin/StorageA/FPGA/graphics/graphics.cache/compile_simlib/vcs} {riviera=/media/engin/StorageA/FPGA/graphics/graphics.cache/compile_simlib/riviera}] -use_ip_compiled_libs -force -quiet
+reset_run synth_1
+launch_runs synth_1 -jobs 16
+wait_on_run synth_1
+launch_runs impl_1 -jobs 16
+wait_on_run impl_1
+launch_runs impl_1 -to_step write_bitstream -jobs 16
+wait_on_run impl_1
+open_hw_manager
+connect_hw_server -allow_non_jtag
+open_hw_target
+set_property PROGRAM.FILE {/media/engin/StorageA/FPGA/graphics/graphics.runs/impl_1/graphicstop.bit} [get_hw_devices xc7z020_1]
+current_hw_device [get_hw_devices xc7z020_1]
+refresh_hw_device -update_hw_probes false [lindex [get_hw_devices xc7z020_1] 0]
+set_property PROBES.FILE {} [get_hw_devices xc7z020_1]
+set_property FULL_PROBES.FILE {} [get_hw_devices xc7z020_1]
+set_property PROGRAM.FILE {/media/engin/StorageA/FPGA/graphics/graphics.runs/impl_1/graphicstop.bit} [get_hw_devices xc7z020_1]
+program_hw_devices [get_hw_devices xc7z020_1]
+refresh_hw_device [lindex [get_hw_devices xc7z020_1] 0]
+close_hw_manager
+set_property -dict [list CONFIG.CLKOUT1_REQUESTED_OUT_FREQ {150.000} CONFIG.MMCM_DIVCLK_DIVIDE {5} CONFIG.MMCM_CLKFBOUT_MULT_F {39.750} CONFIG.MMCM_CLKOUT0_DIVIDE_F {6.625} CONFIG.CLKOUT1_JITTER {201.015} CONFIG.CLKOUT1_PHASE_ERROR {234.843}] [get_ips clk_wiz_0]
+generate_target all [get_files  /media/engin/StorageA/FPGA/graphics/graphics.srcs/sources_1/ip/clk_wiz_0/clk_wiz_0.xci]
+catch { config_ip_cache -export [get_ips -all clk_wiz_0] }
+catch { [ delete_ip_run [get_ips -all clk_wiz_0] ] }
+export_ip_user_files -of_objects [get_files /media/engin/StorageA/FPGA/graphics/graphics.srcs/sources_1/ip/clk_wiz_0/clk_wiz_0.xci] -no_script -sync -force -quiet
+create_ip_run [get_files -of_objects [get_fileset sources_1] /media/engin/StorageA/FPGA/graphics/graphics.srcs/sources_1/ip/clk_wiz_0/clk_wiz_0.xci]
+export_simulation -of_objects [get_files /media/engin/StorageA/FPGA/graphics/graphics.srcs/sources_1/ip/clk_wiz_0/clk_wiz_0.xci] -directory /media/engin/StorageA/FPGA/graphics/graphics.ip_user_files/sim_scripts -ip_user_files_dir /media/engin/StorageA/FPGA/graphics/graphics.ip_user_files -ipstatic_source_dir /media/engin/StorageA/FPGA/graphics/graphics.ip_user_files/ipstatic -lib_map_path [list {modelsim=/media/engin/StorageA/FPGA/graphics/graphics.cache/compile_simlib/modelsim} {questa=/media/engin/StorageA/FPGA/graphics/graphics.cache/compile_simlib/questa} {ies=/media/engin/StorageA/FPGA/graphics/graphics.cache/compile_simlib/ies} {xcelium=/media/engin/StorageA/FPGA/graphics/graphics.cache/compile_simlib/xcelium} {vcs=/media/engin/StorageA/FPGA/graphics/graphics.cache/compile_simlib/vcs} {riviera=/media/engin/StorageA/FPGA/graphics/graphics.cache/compile_simlib/riviera}] -use_ip_compiled_libs -force -quiet
+update_compile_order -fileset sources_1
+reset_target all [get_files  /media/engin/StorageA/FPGA/graphics/graphics.srcs/sources_1/ip/clk_wiz_0/clk_wiz_0.xci]
+export_ip_user_files -of_objects  [get_files  /media/engin/StorageA/FPGA/graphics/graphics.srcs/sources_1/ip/clk_wiz_0/clk_wiz_0.xci] -sync -no_script -force -quiet
+set_property generate_synth_checkpoint false [get_files  /media/engin/StorageA/FPGA/graphics/graphics.srcs/sources_1/ip/clk_wiz_0/clk_wiz_0.xci]
+generate_target all [get_files  /media/engin/StorageA/FPGA/graphics/graphics.srcs/sources_1/ip/clk_wiz_0/clk_wiz_0.xci]
+export_ip_user_files -of_objects [get_files /media/engin/StorageA/FPGA/graphics/graphics.srcs/sources_1/ip/clk_wiz_0/clk_wiz_0.xci] -no_script -sync -force -quiet
+export_simulation -of_objects [get_files /media/engin/StorageA/FPGA/graphics/graphics.srcs/sources_1/ip/clk_wiz_0/clk_wiz_0.xci] -directory /media/engin/StorageA/FPGA/graphics/graphics.ip_user_files/sim_scripts -ip_user_files_dir /media/engin/StorageA/FPGA/graphics/graphics.ip_user_files -ipstatic_source_dir /media/engin/StorageA/FPGA/graphics/graphics.ip_user_files/ipstatic -lib_map_path [list {modelsim=/media/engin/StorageA/FPGA/graphics/graphics.cache/compile_simlib/modelsim} {questa=/media/engin/StorageA/FPGA/graphics/graphics.cache/compile_simlib/questa} {ies=/media/engin/StorageA/FPGA/graphics/graphics.cache/compile_simlib/ies} {xcelium=/media/engin/StorageA/FPGA/graphics/graphics.cache/compile_simlib/xcelium} {vcs=/media/engin/StorageA/FPGA/graphics/graphics.cache/compile_simlib/vcs} {riviera=/media/engin/StorageA/FPGA/graphics/graphics.cache/compile_simlib/riviera}] -use_ip_compiled_libs -force -quiet
+reset_run synth_1
+launch_runs impl_1 -jobs 16
+wait_on_run impl_1
+reset_target all [get_files  /media/engin/StorageA/FPGA/graphics/graphics.srcs/sources_1/ip/clk_wiz_0/clk_wiz_0.xci]
+export_ip_user_files -of_objects  [get_files  /media/engin/StorageA/FPGA/graphics/graphics.srcs/sources_1/ip/clk_wiz_0/clk_wiz_0.xci] -sync -no_script -force -quiet
+set_property generate_synth_checkpoint true [get_files  /media/engin/StorageA/FPGA/graphics/graphics.srcs/sources_1/ip/clk_wiz_0/clk_wiz_0.xci]
+generate_target all [get_files  /media/engin/StorageA/FPGA/graphics/graphics.srcs/sources_1/ip/clk_wiz_0/clk_wiz_0.xci]
+catch { config_ip_cache -export [get_ips -all clk_wiz_0] }
+export_ip_user_files -of_objects [get_files /media/engin/StorageA/FPGA/graphics/graphics.srcs/sources_1/ip/clk_wiz_0/clk_wiz_0.xci] -no_script -sync -force -quiet
+create_ip_run [get_files -of_objects [get_fileset sources_1] /media/engin/StorageA/FPGA/graphics/graphics.srcs/sources_1/ip/clk_wiz_0/clk_wiz_0.xci]
+export_simulation -of_objects [get_files /media/engin/StorageA/FPGA/graphics/graphics.srcs/sources_1/ip/clk_wiz_0/clk_wiz_0.xci] -directory /media/engin/StorageA/FPGA/graphics/graphics.ip_user_files/sim_scripts -ip_user_files_dir /media/engin/StorageA/FPGA/graphics/graphics.ip_user_files -ipstatic_source_dir /media/engin/StorageA/FPGA/graphics/graphics.ip_user_files/ipstatic -lib_map_path [list {modelsim=/media/engin/StorageA/FPGA/graphics/graphics.cache/compile_simlib/modelsim} {questa=/media/engin/StorageA/FPGA/graphics/graphics.cache/compile_simlib/questa} {ies=/media/engin/StorageA/FPGA/graphics/graphics.cache/compile_simlib/ies} {xcelium=/media/engin/StorageA/FPGA/graphics/graphics.cache/compile_simlib/xcelium} {vcs=/media/engin/StorageA/FPGA/graphics/graphics.cache/compile_simlib/vcs} {riviera=/media/engin/StorageA/FPGA/graphics/graphics.cache/compile_simlib/riviera}] -use_ip_compiled_libs -force -quiet
+set_property -dict [list CONFIG.CLKOUT1_REQUESTED_OUT_FREQ {125.000} CONFIG.MMCM_DIVCLK_DIVIDE {1} CONFIG.MMCM_CLKFBOUT_MULT_F {8.000} CONFIG.MMCM_CLKOUT0_DIVIDE_F {8.000} CONFIG.CLKOUT1_JITTER {119.348} CONFIG.CLKOUT1_PHASE_ERROR {96.948}] [get_ips clk_wiz_0]
+generate_target all [get_files  /media/engin/StorageA/FPGA/graphics/graphics.srcs/sources_1/ip/clk_wiz_0/clk_wiz_0.xci]
+catch { config_ip_cache -export [get_ips -all clk_wiz_0] }
+export_ip_user_files -of_objects [get_files /media/engin/StorageA/FPGA/graphics/graphics.srcs/sources_1/ip/clk_wiz_0/clk_wiz_0.xci] -no_script -sync -force -quiet
+create_ip_run [get_files -of_objects [get_fileset sources_1] /media/engin/StorageA/FPGA/graphics/graphics.srcs/sources_1/ip/clk_wiz_0/clk_wiz_0.xci]
+export_simulation -of_objects [get_files /media/engin/StorageA/FPGA/graphics/graphics.srcs/sources_1/ip/clk_wiz_0/clk_wiz_0.xci] -directory /media/engin/StorageA/FPGA/graphics/graphics.ip_user_files/sim_scripts -ip_user_files_dir /media/engin/StorageA/FPGA/graphics/graphics.ip_user_files -ipstatic_source_dir /media/engin/StorageA/FPGA/graphics/graphics.ip_user_files/ipstatic -lib_map_path [list {modelsim=/media/engin/StorageA/FPGA/graphics/graphics.cache/compile_simlib/modelsim} {questa=/media/engin/StorageA/FPGA/graphics/graphics.cache/compile_simlib/questa} {ies=/media/engin/StorageA/FPGA/graphics/graphics.cache/compile_simlib/ies} {xcelium=/media/engin/StorageA/FPGA/graphics/graphics.cache/compile_simlib/xcelium} {vcs=/media/engin/StorageA/FPGA/graphics/graphics.cache/compile_simlib/vcs} {riviera=/media/engin/StorageA/FPGA/graphics/graphics.cache/compile_simlib/riviera}] -use_ip_compiled_libs -force -quiet
+reset_run synth_1
+launch_runs impl_1 -jobs 16
+wait_on_run impl_1
+launch_runs impl_1 -to_step write_bitstream -jobs 16
+wait_on_run impl_1
+open_hw_manager
+connect_hw_server -allow_non_jtag
+open_hw_target
+set_property PROGRAM.FILE {/media/engin/StorageA/FPGA/graphics/graphics.runs/impl_1/graphicstop.bit} [get_hw_devices xc7z020_1]
+current_hw_device [get_hw_devices xc7z020_1]
+refresh_hw_device -update_hw_probes false [lindex [get_hw_devices xc7z020_1] 0]
+set_property PROBES.FILE {} [get_hw_devices xc7z020_1]
+set_property FULL_PROBES.FILE {} [get_hw_devices xc7z020_1]
+set_property PROGRAM.FILE {/media/engin/StorageA/FPGA/graphics/graphics.runs/impl_1/graphicstop.bit} [get_hw_devices xc7z020_1]
+program_hw_devices [get_hw_devices xc7z020_1]
+refresh_hw_device [lindex [get_hw_devices xc7z020_1] 0]
+close_hw_manager
+set_property -dict [list CONFIG.Multiplier_Construction {Use_Mults} CONFIG.OptGoal {Speed} CONFIG.PipeStages {1} CONFIG.ClockEnable {true}] [get_ips mult_gen_0]
+generate_target all [get_files  /media/engin/StorageA/FPGA/graphics/graphics.srcs/sources_1/ip/mult_gen_0/mult_gen_0.xci]
+export_ip_user_files -of_objects [get_files /media/engin/StorageA/FPGA/graphics/graphics.srcs/sources_1/ip/mult_gen_0/mult_gen_0.xci] -no_script -sync -force -quiet
+export_simulation -of_objects [get_files /media/engin/StorageA/FPGA/graphics/graphics.srcs/sources_1/ip/mult_gen_0/mult_gen_0.xci] -directory /media/engin/StorageA/FPGA/graphics/graphics.ip_user_files/sim_scripts -ip_user_files_dir /media/engin/StorageA/FPGA/graphics/graphics.ip_user_files -ipstatic_source_dir /media/engin/StorageA/FPGA/graphics/graphics.ip_user_files/ipstatic -lib_map_path [list {modelsim=/media/engin/StorageA/FPGA/graphics/graphics.cache/compile_simlib/modelsim} {questa=/media/engin/StorageA/FPGA/graphics/graphics.cache/compile_simlib/questa} {ies=/media/engin/StorageA/FPGA/graphics/graphics.cache/compile_simlib/ies} {xcelium=/media/engin/StorageA/FPGA/graphics/graphics.cache/compile_simlib/xcelium} {vcs=/media/engin/StorageA/FPGA/graphics/graphics.cache/compile_simlib/vcs} {riviera=/media/engin/StorageA/FPGA/graphics/graphics.cache/compile_simlib/riviera}] -use_ip_compiled_libs -force -quiet
+launch_simulation
+open_wave_config /media/engin/StorageA/FPGA/graphics/graphicstop_behav.wcfg
+source graphicstop.tcl
+restart
+save_wave_config {/media/engin/StorageA/FPGA/graphics/graphicstop_behav.wcfg}
+add_force {/graphicstop/rst_i} -radix hex {0 0ns}
+add_force {/graphicstop/clk_i} -radix hex {0 0ns} {1 4000ps} -repeat_every 8000ps
+run all
+relaunch_sim
+restart
+add_force {/graphicstop/rst_i} -radix hex {0 0ns}
+add_force {/graphicstop/clk_i} -radix hex {0 0ns} {1 4000ps} -repeat_every 8000ps
+run all
+save_wave_config {/media/engin/StorageA/FPGA/graphics/graphicstop_behav.wcfg}
+close_sim
+reset_target all [get_files  /media/engin/StorageA/FPGA/graphics/graphics.srcs/sources_1/ip/blk_mem_gen_0/blk_mem_gen_0.xci]
+export_ip_user_files -of_objects  [get_files  /media/engin/StorageA/FPGA/graphics/graphics.srcs/sources_1/ip/blk_mem_gen_0/blk_mem_gen_0.xci] -sync -no_script -force -quiet
+reset_run synth_1
+launch_runs impl_1 -jobs 16
+wait_on_run impl_1
+launch_runs impl_1 -to_step write_bitstream -jobs 16
+wait_on_run impl_1
+open_hw_manager
+connect_hw_server -allow_non_jtag
+open_hw_target
+set_property PROGRAM.FILE {/media/engin/StorageA/FPGA/graphics/graphics.runs/impl_1/graphicstop.bit} [get_hw_devices xc7z020_1]
+current_hw_device [get_hw_devices xc7z020_1]
+refresh_hw_device -update_hw_probes false [lindex [get_hw_devices xc7z020_1] 0]
+set_property PROBES.FILE {} [get_hw_devices xc7z020_1]
+set_property FULL_PROBES.FILE {} [get_hw_devices xc7z020_1]
+set_property PROGRAM.FILE {/media/engin/StorageA/FPGA/graphics/graphics.runs/impl_1/graphicstop.bit} [get_hw_devices xc7z020_1]
+program_hw_devices [get_hw_devices xc7z020_1]
+refresh_hw_device [lindex [get_hw_devices xc7z020_1] 0]
+close_hw_manager
+open_run impl_1
+close_design
+reset_run synth_1
+launch_runs synth_1 -jobs 16
+wait_on_run synth_1
+reset_run synth_1
+reset_target all [get_files  /media/engin/StorageA/FPGA/graphics/graphics.srcs/sources_1/ip/blk_mem_gen_0/blk_mem_gen_0.xci]
+export_ip_user_files -of_objects  [get_files  /media/engin/StorageA/FPGA/graphics/graphics.srcs/sources_1/ip/blk_mem_gen_0/blk_mem_gen_0.xci] -sync -no_script -force -quiet
+launch_runs synth_1 -jobs 16
+wait_on_run synth_1
+launch_runs impl_1 -jobs 16
+wait_on_run impl_1
+reset_run impl_1
+reset_run synth_1
+launch_runs synth_1 -jobs 16
+wait_on_run synth_1
+reset_run synth_1
+launch_runs synth_1 -jobs 16
+wait_on_run synth_1
+launch_runs impl_1 -jobs 16
+wait_on_run impl_1
+launch_runs impl_1 -to_step write_bitstream -jobs 16
+wait_on_run impl_1
+open_hw_manager
+connect_hw_server -allow_non_jtag
+open_hw_target
+set_property PROGRAM.FILE {/media/engin/StorageA/FPGA/graphics/graphics.runs/impl_1/graphicstop.bit} [get_hw_devices xc7z020_1]
+current_hw_device [get_hw_devices xc7z020_1]
+refresh_hw_device -update_hw_probes false [lindex [get_hw_devices xc7z020_1] 0]
+set_property PROBES.FILE {} [get_hw_devices xc7z020_1]
+set_property FULL_PROBES.FILE {} [get_hw_devices xc7z020_1]
+set_property PROGRAM.FILE {/media/engin/StorageA/FPGA/graphics/graphics.runs/impl_1/graphicstop.bit} [get_hw_devices xc7z020_1]
+program_hw_devices [get_hw_devices xc7z020_1]
+refresh_hw_device [lindex [get_hw_devices xc7z020_1] 0]
+close_hw_manager
+reset_run impl_1
+launch_runs impl_1 -jobs 16
+wait_on_run impl_1
+reset_run synth_1
+launch_runs synth_1 -jobs 16
+wait_on_run synth_1
+launch_runs impl_1 -jobs 16
+wait_on_run impl_1
+launch_runs impl_1 -to_step write_bitstream -jobs 16
+wait_on_run impl_1
+open_hw_manager
+connect_hw_server -allow_non_jtag
+open_hw_target
+set_property PROGRAM.FILE {/media/engin/StorageA/FPGA/graphics/graphics.runs/impl_1/graphicstop.bit} [get_hw_devices xc7z020_1]
+current_hw_device [get_hw_devices xc7z020_1]
+refresh_hw_device -update_hw_probes false [lindex [get_hw_devices xc7z020_1] 0]
+set_property PROBES.FILE {} [get_hw_devices xc7z020_1]
+set_property FULL_PROBES.FILE {} [get_hw_devices xc7z020_1]
+set_property PROGRAM.FILE {/media/engin/StorageA/FPGA/graphics/graphics.runs/impl_1/graphicstop.bit} [get_hw_devices xc7z020_1]
+program_hw_devices [get_hw_devices xc7z020_1]
+refresh_hw_device [lindex [get_hw_devices xc7z020_1] 0]
+close_hw_manager
+open_run impl_1
+close_design
+set_property strategy {Vivado Implementation Defaults} [get_runs impl_1]
+set_property STEPS.POST_ROUTE_PHYS_OPT_DESIGN.IS_ENABLED true [get_runs impl_1]
+reset_run impl_1
+launch_runs impl_1 -jobs 16
+wait_on_run impl_1
+reset_run impl_1
+set_property strategy Performance_ExtraTimingOpt [get_runs impl_1]
+set_property STEPS.POST_ROUTE_PHYS_OPT_DESIGN.IS_ENABLED true [get_runs impl_1]
+launch_runs impl_1 -jobs 16
+wait_on_run impl_1
+reset_run synth_1
+launch_runs synth_1 -jobs 16
+wait_on_run synth_1
+launch_runs impl_1 -jobs 16
+wait_on_run impl_1
+launch_runs impl_1 -to_step write_bitstream -jobs 16
+wait_on_run impl_1
+open_hw_manager
+connect_hw_server -allow_non_jtag
+open_hw_target
+set_property PROGRAM.FILE {/media/engin/StorageA/FPGA/graphics/graphics.runs/impl_1/graphicstop.bit} [get_hw_devices xc7z020_1]
+current_hw_device [get_hw_devices xc7z020_1]
+refresh_hw_device -update_hw_probes false [lindex [get_hw_devices xc7z020_1] 0]
+set_property PROBES.FILE {} [get_hw_devices xc7z020_1]
+set_property FULL_PROBES.FILE {} [get_hw_devices xc7z020_1]
+set_property PROGRAM.FILE {/media/engin/StorageA/FPGA/graphics/graphics.runs/impl_1/graphicstop.bit} [get_hw_devices xc7z020_1]
+program_hw_devices [get_hw_devices xc7z020_1]
+refresh_hw_device [lindex [get_hw_devices xc7z020_1] 0]
+close_hw_manager
+open_run impl_1
+close_design
+reset_run synth_1
+launch_runs synth_1 -jobs 16
+wait_on_run synth_1
+open_run synth_1 -name synth_1
+close_design
+launch_runs impl_1 -jobs 16
+wait_on_run impl_1
+reset_run synth_1
+launch_runs synth_1 -jobs 16
+wait_on_run synth_1
+launch_runs impl_1 -jobs 16
+wait_on_run impl_1
+reset_run synth_1
+launch_runs synth_1 -jobs 16
+wait_on_run synth_1
+launch_runs impl_1 -jobs 16
+wait_on_run impl_1
+reset_run synth_1
+launch_runs synth_1 -jobs 16
+wait_on_run synth_1
+reset_run synth_1
+launch_runs synth_1 -jobs 16
+wait_on_run synth_1
+launch_runs impl_1 -jobs 16
+wait_on_run impl_1
+launch_runs impl_1 -to_step write_bitstream -jobs 16
+wait_on_run impl_1
+open_hw_manager
+connect_hw_server -allow_non_jtag
+open_hw_target
+set_property PROGRAM.FILE {/media/engin/StorageA/FPGA/graphics/graphics.runs/impl_1/graphicstop.bit} [get_hw_devices xc7z020_1]
+current_hw_device [get_hw_devices xc7z020_1]
+refresh_hw_device -update_hw_probes false [lindex [get_hw_devices xc7z020_1] 0]
+set_property PROBES.FILE {} [get_hw_devices xc7z020_1]
+set_property FULL_PROBES.FILE {} [get_hw_devices xc7z020_1]
+set_property PROGRAM.FILE {/media/engin/StorageA/FPGA/graphics/graphics.runs/impl_1/graphicstop.bit} [get_hw_devices xc7z020_1]
+program_hw_devices [get_hw_devices xc7z020_1]
+refresh_hw_device [lindex [get_hw_devices xc7z020_1] 0]
+close_hw_manager
+reset_run synth_1
+launch_runs synth_1 -jobs 16
+wait_on_run synth_1
+launch_runs impl_1 -jobs 16
+wait_on_run impl_1
+launch_runs impl_1 -to_step write_bitstream -jobs 16
+wait_on_run impl_1
+open_hw_manager
+connect_hw_server -allow_non_jtag
+open_hw_target
+set_property PROGRAM.FILE {/media/engin/StorageA/FPGA/graphics/graphics.runs/impl_1/graphicstop.bit} [get_hw_devices xc7z020_1]
+current_hw_device [get_hw_devices xc7z020_1]
+refresh_hw_device -update_hw_probes false [lindex [get_hw_devices xc7z020_1] 0]
+set_property PROBES.FILE {} [get_hw_devices xc7z020_1]
+set_property FULL_PROBES.FILE {} [get_hw_devices xc7z020_1]
+set_property PROGRAM.FILE {/media/engin/StorageA/FPGA/graphics/graphics.runs/impl_1/graphicstop.bit} [get_hw_devices xc7z020_1]
+program_hw_devices [get_hw_devices xc7z020_1]
+refresh_hw_device [lindex [get_hw_devices xc7z020_1] 0]
+close_hw_manager
+set_property -dict [list CONFIG.Multiplier_Construction {Use_LUTs}] [get_ips mult_gen_0]
+generate_target all [get_files  /media/engin/StorageA/FPGA/graphics/graphics.srcs/sources_1/ip/mult_gen_0/mult_gen_0.xci]
+export_ip_user_files -of_objects [get_files /media/engin/StorageA/FPGA/graphics/graphics.srcs/sources_1/ip/mult_gen_0/mult_gen_0.xci] -no_script -sync -force -quiet
+export_simulation -of_objects [get_files /media/engin/StorageA/FPGA/graphics/graphics.srcs/sources_1/ip/mult_gen_0/mult_gen_0.xci] -directory /media/engin/StorageA/FPGA/graphics/graphics.ip_user_files/sim_scripts -ip_user_files_dir /media/engin/StorageA/FPGA/graphics/graphics.ip_user_files -ipstatic_source_dir /media/engin/StorageA/FPGA/graphics/graphics.ip_user_files/ipstatic -lib_map_path [list {modelsim=/media/engin/StorageA/FPGA/graphics/graphics.cache/compile_simlib/modelsim} {questa=/media/engin/StorageA/FPGA/graphics/graphics.cache/compile_simlib/questa} {ies=/media/engin/StorageA/FPGA/graphics/graphics.cache/compile_simlib/ies} {xcelium=/media/engin/StorageA/FPGA/graphics/graphics.cache/compile_simlib/xcelium} {vcs=/media/engin/StorageA/FPGA/graphics/graphics.cache/compile_simlib/vcs} {riviera=/media/engin/StorageA/FPGA/graphics/graphics.cache/compile_simlib/riviera}] -use_ip_compiled_libs -force -quiet
+reset_run synth_1
+launch_runs synth_1 -jobs 16
+wait_on_run synth_1
+set_property -dict [list CONFIG.Multiplier_Construction {Use_Mults} CONFIG.OptGoal {Speed} CONFIG.PipeStages {6}] [get_ips mult_gen_0]
+generate_target all [get_files  /media/engin/StorageA/FPGA/graphics/graphics.srcs/sources_1/ip/mult_gen_0/mult_gen_0.xci]
+export_ip_user_files -of_objects [get_files /media/engin/StorageA/FPGA/graphics/graphics.srcs/sources_1/ip/mult_gen_0/mult_gen_0.xci] -no_script -sync -force -quiet
+export_simulation -of_objects [get_files /media/engin/StorageA/FPGA/graphics/graphics.srcs/sources_1/ip/mult_gen_0/mult_gen_0.xci] -directory /media/engin/StorageA/FPGA/graphics/graphics.ip_user_files/sim_scripts -ip_user_files_dir /media/engin/StorageA/FPGA/graphics/graphics.ip_user_files -ipstatic_source_dir /media/engin/StorageA/FPGA/graphics/graphics.ip_user_files/ipstatic -lib_map_path [list {modelsim=/media/engin/StorageA/FPGA/graphics/graphics.cache/compile_simlib/modelsim} {questa=/media/engin/StorageA/FPGA/graphics/graphics.cache/compile_simlib/questa} {ies=/media/engin/StorageA/FPGA/graphics/graphics.cache/compile_simlib/ies} {xcelium=/media/engin/StorageA/FPGA/graphics/graphics.cache/compile_simlib/xcelium} {vcs=/media/engin/StorageA/FPGA/graphics/graphics.cache/compile_simlib/vcs} {riviera=/media/engin/StorageA/FPGA/graphics/graphics.cache/compile_simlib/riviera}] -use_ip_compiled_libs -force -quiet
+reset_run synth_1
+launch_runs synth_1 -jobs 16
+wait_on_run synth_1
+launch_runs impl_1 -jobs 16
+wait_on_run impl_1
+open_run synth_1 -name synth_1
+close_design
+launch_runs impl_1 -to_step write_bitstream -jobs 16
+wait_on_run impl_1
+open_hw_manager
+connect_hw_server -allow_non_jtag
+open_hw_target
+set_property PROGRAM.FILE {/media/engin/StorageA/FPGA/graphics/graphics.runs/impl_1/graphicstop.bit} [get_hw_devices xc7z020_1]
+current_hw_device [get_hw_devices xc7z020_1]
+refresh_hw_device -update_hw_probes false [lindex [get_hw_devices xc7z020_1] 0]
+set_property PROBES.FILE {} [get_hw_devices xc7z020_1]
+set_property FULL_PROBES.FILE {} [get_hw_devices xc7z020_1]
+set_property PROGRAM.FILE {/media/engin/StorageA/FPGA/graphics/graphics.runs/impl_1/graphicstop.bit} [get_hw_devices xc7z020_1]
+program_hw_devices [get_hw_devices xc7z020_1]
+refresh_hw_device [lindex [get_hw_devices xc7z020_1] 0]
+set_property PROBES.FILE {} [get_hw_devices xc7z020_1]
+set_property FULL_PROBES.FILE {} [get_hw_devices xc7z020_1]
+set_property PROGRAM.FILE {/media/engin/StorageA/FPGA/graphics/graphics.runs/impl_1/graphicstop.bit} [get_hw_devices xc7z020_1]
+program_hw_devices [get_hw_devices xc7z020_1]
+refresh_hw_device [lindex [get_hw_devices xc7z020_1] 0]
+close_hw_manager
+generate_target Simulation [get_files /media/engin/StorageA/FPGA/graphics/graphics.srcs/sources_1/ip/blk_mem_gen_0/blk_mem_gen_0.xci]
+export_ip_user_files -of_objects [get_files /media/engin/StorageA/FPGA/graphics/graphics.srcs/sources_1/ip/blk_mem_gen_0/blk_mem_gen_0.xci] -no_script -sync -force -quiet
+export_simulation -of_objects [get_files /media/engin/StorageA/FPGA/graphics/graphics.srcs/sources_1/ip/blk_mem_gen_0/blk_mem_gen_0.xci] -directory /media/engin/StorageA/FPGA/graphics/graphics.ip_user_files/sim_scripts -ip_user_files_dir /media/engin/StorageA/FPGA/graphics/graphics.ip_user_files -ipstatic_source_dir /media/engin/StorageA/FPGA/graphics/graphics.ip_user_files/ipstatic -lib_map_path [list {modelsim=/media/engin/StorageA/FPGA/graphics/graphics.cache/compile_simlib/modelsim} {questa=/media/engin/StorageA/FPGA/graphics/graphics.cache/compile_simlib/questa} {ies=/media/engin/StorageA/FPGA/graphics/graphics.cache/compile_simlib/ies} {xcelium=/media/engin/StorageA/FPGA/graphics/graphics.cache/compile_simlib/xcelium} {vcs=/media/engin/StorageA/FPGA/graphics/graphics.cache/compile_simlib/vcs} {riviera=/media/engin/StorageA/FPGA/graphics/graphics.cache/compile_simlib/riviera}] -use_ip_compiled_libs -force -quiet
+launch_simulation
+open_wave_config /media/engin/StorageA/FPGA/graphics/graphicstop_behav.wcfg
+source graphicstop.tcl
+add_force {/graphicstop/clk_i} -radix hex {0 0ns} {1 4000ps} -repeat_every 8000ps
+add_force {/graphicstop/rst_i} -radix hex {0 0ns}
+restart
+run all
+run all
+close_sim
+set_property -dict [list CONFIG.PipeStages {1} CONFIG.ClockEnable {true}] [get_ips mult_gen_0]
+generate_target all [get_files  /media/engin/StorageA/FPGA/graphics/graphics.srcs/sources_1/ip/mult_gen_0/mult_gen_0.xci]
+export_ip_user_files -of_objects [get_files /media/engin/StorageA/FPGA/graphics/graphics.srcs/sources_1/ip/mult_gen_0/mult_gen_0.xci] -no_script -sync -force -quiet
+export_simulation -of_objects [get_files /media/engin/StorageA/FPGA/graphics/graphics.srcs/sources_1/ip/mult_gen_0/mult_gen_0.xci] -directory /media/engin/StorageA/FPGA/graphics/graphics.ip_user_files/sim_scripts -ip_user_files_dir /media/engin/StorageA/FPGA/graphics/graphics.ip_user_files -ipstatic_source_dir /media/engin/StorageA/FPGA/graphics/graphics.ip_user_files/ipstatic -lib_map_path [list {modelsim=/media/engin/StorageA/FPGA/graphics/graphics.cache/compile_simlib/modelsim} {questa=/media/engin/StorageA/FPGA/graphics/graphics.cache/compile_simlib/questa} {ies=/media/engin/StorageA/FPGA/graphics/graphics.cache/compile_simlib/ies} {xcelium=/media/engin/StorageA/FPGA/graphics/graphics.cache/compile_simlib/xcelium} {vcs=/media/engin/StorageA/FPGA/graphics/graphics.cache/compile_simlib/vcs} {riviera=/media/engin/StorageA/FPGA/graphics/graphics.cache/compile_simlib/riviera}] -use_ip_compiled_libs -force -quiet
+launch_simulation
+open_wave_config /media/engin/StorageA/FPGA/graphics/graphicstop_behav.wcfg
+source graphicstop.tcl
+add_force {/graphicstop/rst_i} -radix hex {0 0ns}
+add_force {/graphicstop/clk_i} -radix hex {0 0ns} {1 4000ps} -repeat_every 8000ps
+restart
+run all
+save_wave_config {/media/engin/StorageA/FPGA/graphics/graphicstop_behav.wcfg}
+relaunch_sim
+add_force {/graphicstop/rst_i} -radix hex {0 0ns}
+add_force {/graphicstop/clk_i} -radix hex {0 0ns} {1 4000ps} -repeat_every 8000ps
+restart
+run all
+close_sim
+set_property -dict [list CONFIG.PipeStages {6}] [get_ips mult_gen_0]
+generate_target all [get_files  /media/engin/StorageA/FPGA/graphics/graphics.srcs/sources_1/ip/mult_gen_0/mult_gen_0.xci]
+export_ip_user_files -of_objects [get_files /media/engin/StorageA/FPGA/graphics/graphics.srcs/sources_1/ip/mult_gen_0/mult_gen_0.xci] -no_script -sync -force -quiet
+export_simulation -of_objects [get_files /media/engin/StorageA/FPGA/graphics/graphics.srcs/sources_1/ip/mult_gen_0/mult_gen_0.xci] -directory /media/engin/StorageA/FPGA/graphics/graphics.ip_user_files/sim_scripts -ip_user_files_dir /media/engin/StorageA/FPGA/graphics/graphics.ip_user_files -ipstatic_source_dir /media/engin/StorageA/FPGA/graphics/graphics.ip_user_files/ipstatic -lib_map_path [list {modelsim=/media/engin/StorageA/FPGA/graphics/graphics.cache/compile_simlib/modelsim} {questa=/media/engin/StorageA/FPGA/graphics/graphics.cache/compile_simlib/questa} {ies=/media/engin/StorageA/FPGA/graphics/graphics.cache/compile_simlib/ies} {xcelium=/media/engin/StorageA/FPGA/graphics/graphics.cache/compile_simlib/xcelium} {vcs=/media/engin/StorageA/FPGA/graphics/graphics.cache/compile_simlib/vcs} {riviera=/media/engin/StorageA/FPGA/graphics/graphics.cache/compile_simlib/riviera}] -use_ip_compiled_libs -force -quiet
+launch_simulation
+open_wave_config /media/engin/StorageA/FPGA/graphics/graphicstop_behav.wcfg
+source graphicstop.tcl
+add_force {/graphicstop/rst_i} -radix hex {0 0ns}
+add_force {/graphicstop/clk_i} -radix hex {0 0ns} {1 4000ps} -repeat_every 8000ps
+restart
+run all
+close_sim
+reset_run synth_1
+launch_runs synth_1 -jobs 16
+wait_on_run synth_1
+launch_runs impl_1 -jobs 16
+wait_on_run impl_1
+reset_run impl_1
+reset_run synth_1
+launch_runs synth_1 -jobs 16
+wait_on_run synth_1
+reset_run synth_1
+launch_runs synth_1 -jobs 16
+wait_on_run synth_1
+launch_runs impl_1 -jobs 16
+wait_on_run impl_1
+reset_run synth_1
+launch_runs impl_1 -to_step write_bitstream -jobs 16
+wait_on_run impl_1
+open_hw_manager
+connect_hw_server -allow_non_jtag
+open_hw_target
+set_property PROGRAM.FILE {/media/engin/StorageA/FPGA/graphics/graphics.runs/impl_1/graphicstop.bit} [get_hw_devices xc7z020_1]
+current_hw_device [get_hw_devices xc7z020_1]
+refresh_hw_device -update_hw_probes false [lindex [get_hw_devices xc7z020_1] 0]
+set_property PROBES.FILE {} [get_hw_devices xc7z020_1]
+set_property FULL_PROBES.FILE {} [get_hw_devices xc7z020_1]
+set_property PROGRAM.FILE {/media/engin/StorageA/FPGA/graphics/graphics.runs/impl_1/graphicstop.bit} [get_hw_devices xc7z020_1]
+program_hw_devices [get_hw_devices xc7z020_1]
+refresh_hw_device [lindex [get_hw_devices xc7z020_1] 0]
+close_hw_manager
+export_ip_user_files -of_objects  [get_files /media/engin/StorageA/FPGA/graphics/graphics.srcs/sources_1/ip/mult_gen_0/mult_gen_0.xci] -no_script -reset -force -quiet
+remove_files  /media/engin/StorageA/FPGA/graphics/graphics.srcs/sources_1/ip/mult_gen_0/mult_gen_0.xci
+file delete -force /media/engin/StorageA/FPGA/graphics/graphics.srcs/sources_1/ip/mult_gen_0
+file delete -force /media/engin/StorageA/FPGA/graphics/graphics.gen/sources_1/ip/mult_gen_0
+reset_run synth_1
+launch_runs synth_1 -jobs 16
+wait_on_run synth_1
+launch_runs impl_1 -jobs 16
+wait_on_run impl_1
+launch_runs impl_1 -to_step write_bitstream -jobs 16
+wait_on_run impl_1
+open_hw_manager
+connect_hw_server -allow_non_jtag
+open_hw_target
+set_property PROGRAM.FILE {/media/engin/StorageA/FPGA/graphics/graphics.runs/impl_1/graphicstop.bit} [get_hw_devices xc7z020_1]
+current_hw_device [get_hw_devices xc7z020_1]
+refresh_hw_device -update_hw_probes false [lindex [get_hw_devices xc7z020_1] 0]
+set_property PROBES.FILE {} [get_hw_devices xc7z020_1]
+set_property FULL_PROBES.FILE {} [get_hw_devices xc7z020_1]
+set_property PROGRAM.FILE {/media/engin/StorageA/FPGA/graphics/graphics.runs/impl_1/graphicstop.bit} [get_hw_devices xc7z020_1]
+program_hw_devices [get_hw_devices xc7z020_1]
+refresh_hw_device [lindex [get_hw_devices xc7z020_1] 0]
+close_hw_manager
+reset_run synth_1
+launch_runs synth_1 -jobs 16
+wait_on_run synth_1
+launch_runs impl_1 -jobs 16
+wait_on_run impl_1
+reset_run synth_1
+launch_runs synth_1 -jobs 16
+wait_on_run synth_1
+reset_run synth_1
+launch_runs synth_1 -jobs 16
+wait_on_run synth_1
+launch_runs impl_1 -jobs 16
+wait_on_run impl_1
+set_property strategy {Vivado Synthesis Defaults} [get_runs synth_1]
+set_property strategy {Vivado Implementation Defaults} [get_runs impl_1]
+set_property STEPS.POST_ROUTE_PHYS_OPT_DESIGN.IS_ENABLED true [get_runs impl_1]
+reset_run synth_1
+launch_runs impl_1 -jobs 16
+wait_on_run impl_1
+reset_run synth_1
+launch_runs synth_1 -jobs 16
+wait_on_run synth_1
+launch_runs impl_1 -jobs 16
+wait_on_run impl_1
+launch_runs impl_1 -to_step write_bitstream -jobs 16
+wait_on_run impl_1
+open_hw_manager
+connect_hw_server -allow_non_jtag
+open_hw_target
+set_property PROGRAM.FILE {/media/engin/StorageA/FPGA/graphics/graphics.runs/impl_1/graphicstop.bit} [get_hw_devices xc7z020_1]
+current_hw_device [get_hw_devices xc7z020_1]
+refresh_hw_device -update_hw_probes false [lindex [get_hw_devices xc7z020_1] 0]
+set_property PROBES.FILE {} [get_hw_devices xc7z020_1]
+set_property FULL_PROBES.FILE {} [get_hw_devices xc7z020_1]
+set_property PROGRAM.FILE {/media/engin/StorageA/FPGA/graphics/graphics.runs/impl_1/graphicstop.bit} [get_hw_devices xc7z020_1]
+program_hw_devices [get_hw_devices xc7z020_1]
+refresh_hw_device [lindex [get_hw_devices xc7z020_1] 0]
+close_hw_manager
+reset_run synth_1
+launch_runs synth_1 -jobs 16
+wait_on_run synth_1
+update_compile_order -fileset sources_1
+reset_run synth_1
+launch_runs synth_1 -jobs 16
+wait_on_run synth_1
+launch_runs impl_1 -jobs 16
+wait_on_run impl_1
+launch_runs impl_1 -to_step write_bitstream -jobs 16
+wait_on_run impl_1
+open_hw_manager
+connect_hw_server -allow_non_jtag
+open_hw_target
+set_property PROGRAM.FILE {/media/engin/StorageA/FPGA/graphics/graphics.runs/impl_1/graphicstop.bit} [get_hw_devices xc7z020_1]
+current_hw_device [get_hw_devices xc7z020_1]
+refresh_hw_device -update_hw_probes false [lindex [get_hw_devices xc7z020_1] 0]
+set_property PROBES.FILE {} [get_hw_devices xc7z020_1]
+set_property FULL_PROBES.FILE {} [get_hw_devices xc7z020_1]
+set_property PROGRAM.FILE {/media/engin/StorageA/FPGA/graphics/graphics.runs/impl_1/graphicstop.bit} [get_hw_devices xc7z020_1]
+program_hw_devices [get_hw_devices xc7z020_1]
+refresh_hw_device [lindex [get_hw_devices xc7z020_1] 0]
+close_hw_manager
+reset_run synth_1
+launch_runs synth_1 -jobs 16
+wait_on_run synth_1
+launch_simulation
+open_wave_config /media/engin/StorageA/FPGA/graphics/graphicstop_behav.wcfg
+source graphicstop.tcl
+add_force {/graphicstop/rst_i} -radix hex {0 0ns}
+add_force {/graphicstop/clk_i} -radix hex {0 0ns} {1 4000ps} -repeat_every 8000ps
+restart
+run all
+save_wave_config {/media/engin/StorageA/FPGA/graphics/graphicstop_behav.wcfg}
+close_sim
+reset_run synth_1
+launch_runs synth_1 -jobs 16
+wait_on_run synth_1
+update_compile_order -fileset sources_1
+reset_run synth_1
+launch_runs impl_1 -jobs 16
+wait_on_run impl_1
+reset_run synth_1
+launch_runs synth_1 -jobs 16
+wait_on_run synth_1
+reset_run synth_1
+launch_runs synth_1 -jobs 16
+wait_on_run synth_1
+launch_runs impl_1 -jobs 16
+wait_on_run impl_1
+launch_runs impl_1 -to_step write_bitstream -jobs 16
+wait_on_run impl_1
+open_hw_manager
+connect_hw_server -allow_non_jtag
+open_hw_target
+set_property PROGRAM.FILE {/media/engin/StorageA/FPGA/graphics/graphics.runs/impl_1/graphicstop.bit} [get_hw_devices xc7z020_1]
+current_hw_device [get_hw_devices xc7z020_1]
+refresh_hw_device -update_hw_probes false [lindex [get_hw_devices xc7z020_1] 0]
+set_property PROBES.FILE {} [get_hw_devices xc7z020_1]
+set_property FULL_PROBES.FILE {} [get_hw_devices xc7z020_1]
+set_property PROGRAM.FILE {/media/engin/StorageA/FPGA/graphics/graphics.runs/impl_1/graphicstop.bit} [get_hw_devices xc7z020_1]
+program_hw_devices [get_hw_devices xc7z020_1]
+refresh_hw_device [lindex [get_hw_devices xc7z020_1] 0]
+close_hw_manager
+reset_run synth_1
+launch_runs synth_1 -jobs 16
+wait_on_run synth_1
+update_compile_order -fileset sources_1
+reset_run synth_1
+launch_runs synth_1 -jobs 16
+wait_on_run synth_1
+launch_runs impl_1 -jobs 16
+wait_on_run impl_1
+launch_runs impl_1 -to_step write_bitstream -jobs 16
+wait_on_run impl_1
+open_hw_manager
+connect_hw_server -allow_non_jtag
+open_hw_target
+set_property PROGRAM.FILE {/media/engin/StorageA/FPGA/graphics/graphics.runs/impl_1/graphicstop.bit} [get_hw_devices xc7z020_1]
+current_hw_device [get_hw_devices xc7z020_1]
+refresh_hw_device -update_hw_probes false [lindex [get_hw_devices xc7z020_1] 0]
+set_property PROBES.FILE {} [get_hw_devices xc7z020_1]
+set_property FULL_PROBES.FILE {} [get_hw_devices xc7z020_1]
+set_property PROGRAM.FILE {/media/engin/StorageA/FPGA/graphics/graphics.runs/impl_1/graphicstop.bit} [get_hw_devices xc7z020_1]
+program_hw_devices [get_hw_devices xc7z020_1]
+refresh_hw_device [lindex [get_hw_devices xc7z020_1] 0]
+close_hw_manager
+launch_simulation
+open_wave_config /media/engin/StorageA/FPGA/graphics/graphicstop_behav.wcfg
+source graphicstop.tcl
+add_force {/graphicstop/rst_i} -radix hex {0 0ns}
+add_force {/graphicstop/clk_i} -radix hex {0 0ns} {1 4000ps} -repeat_every 8000ps
+restart
+run all
+relaunch_sim
+add_force {/graphicstop/rst_i} -radix hex {0 0ns}
+add_force {/graphicstop/clk_i} -radix hex {0 0ns} {1 4000ps} -repeat_every 8000ps
+restart
+run all
+save_wave_config {/media/engin/StorageA/FPGA/graphics/graphicstop_behav.wcfg}
+relaunch_sim
+restart
+add_force {/graphicstop/rst_i} -radix hex {0 0ns}
+add_force {/graphicstop/clk_i} -radix hex {0 0ns} {1 4000ps} -repeat_every 8000ps
+run all
+save_wave_config {/media/engin/StorageA/FPGA/graphics/graphicstop_behav.wcfg}
+relaunch_sim
+relaunch_sim
+add_force {/graphicstop/rst_i} -radix hex {0 0ns}
+add_force {/graphicstop/clk_i} -radix hex {0 0ns} {1 4000ps} -repeat_every 8000ps
+restart
+run all
+relaunch_sim
+add_force {/graphicstop/rst_i} -radix hex {0 0ns}
+add_force {/graphicstop/clk_i} -radix hex {0 0ns} {1 4000ps} -repeat_every 8000ps
+restart
+run all
+relaunch_sim
+relaunch_sim
+restart
+add_force {/graphicstop/rst_i} -radix hex {0 0ns}
+add_force {/graphicstop/clk_i} -radix hex {0 0ns} {1 4000ps} -repeat_every 8000ps
+run all
+close_sim
+reset_run synth_1
+launch_runs synth_1 -jobs 16
+wait_on_run synth_1
+launch_runs impl_1 -jobs 16
+wait_on_run impl_1
+launch_runs impl_1 -to_step write_bitstream -jobs 16
+wait_on_run impl_1
+open_hw_manager
+connect_hw_server -allow_non_jtag
+open_hw_target
+set_property PROGRAM.FILE {/media/engin/StorageA/FPGA/graphics/graphics.runs/impl_1/graphicstop.bit} [get_hw_devices xc7z020_1]
+current_hw_device [get_hw_devices xc7z020_1]
+refresh_hw_device -update_hw_probes false [lindex [get_hw_devices xc7z020_1] 0]
+set_property PROBES.FILE {} [get_hw_devices xc7z020_1]
+set_property FULL_PROBES.FILE {} [get_hw_devices xc7z020_1]
+set_property PROGRAM.FILE {/media/engin/StorageA/FPGA/graphics/graphics.runs/impl_1/graphicstop.bit} [get_hw_devices xc7z020_1]
+program_hw_devices [get_hw_devices xc7z020_1]
+refresh_hw_device [lindex [get_hw_devices xc7z020_1] 0]
+close_hw_manager
+reset_run synth_1
+launch_runs synth_1 -jobs 16
+wait_on_run synth_1
+reset_run synth_1
+launch_runs synth_1 -jobs 16
+wait_on_run synth_1
+reset_run synth_1
+launch_runs impl_1 -jobs 16
+wait_on_run impl_1
+launch_runs impl_1 -to_step write_bitstream -jobs 16
+wait_on_run impl_1
+open_hw_manager
+connect_hw_server -allow_non_jtag
+open_hw_target
+set_property PROGRAM.FILE {/media/engin/StorageA/FPGA/graphics/graphics.runs/impl_1/graphicstop.bit} [get_hw_devices xc7z020_1]
+current_hw_device [get_hw_devices xc7z020_1]
+refresh_hw_device -update_hw_probes false [lindex [get_hw_devices xc7z020_1] 0]
+set_property PROBES.FILE {} [get_hw_devices xc7z020_1]
+set_property FULL_PROBES.FILE {} [get_hw_devices xc7z020_1]
+set_property PROGRAM.FILE {/media/engin/StorageA/FPGA/graphics/graphics.runs/impl_1/graphicstop.bit} [get_hw_devices xc7z020_1]
+program_hw_devices [get_hw_devices xc7z020_1]
+refresh_hw_device [lindex [get_hw_devices xc7z020_1] 0]
+close_hw_manager
+reset_run impl_1
+launch_runs impl_1 -jobs 16
+wait_on_run impl_1
+reset_run synth_1
+launch_runs impl_1 -jobs 16
+wait_on_run impl_1
+launch_runs impl_1 -to_step write_bitstream -jobs 16
+wait_on_run impl_1
+open_hw_manager
+connect_hw_server -allow_non_jtag
+open_hw_target
+set_property PROGRAM.FILE {/media/engin/StorageA/FPGA/graphics/graphics.runs/impl_1/graphicstop.bit} [get_hw_devices xc7z020_1]
+current_hw_device [get_hw_devices xc7z020_1]
+refresh_hw_device -update_hw_probes false [lindex [get_hw_devices xc7z020_1] 0]
+set_property PROBES.FILE {} [get_hw_devices xc7z020_1]
+set_property FULL_PROBES.FILE {} [get_hw_devices xc7z020_1]
+set_property PROGRAM.FILE {/media/engin/StorageA/FPGA/graphics/graphics.runs/impl_1/graphicstop.bit} [get_hw_devices xc7z020_1]
+program_hw_devices [get_hw_devices xc7z020_1]
+refresh_hw_device [lindex [get_hw_devices xc7z020_1] 0]
+close_hw_manager
+reset_run synth_1
+launch_runs synth_1 -jobs 16
+wait_on_run synth_1
+launch_runs impl_1 -jobs 16
+wait_on_run impl_1
+reset_run synth_1
+launch_runs synth_1 -jobs 16
+wait_on_run synth_1
+launch_runs impl_1 -jobs 16
+wait_on_run impl_1
+launch_runs impl_1 -to_step write_bitstream -jobs 16
+wait_on_run impl_1
+open_hw_manager
+connect_hw_server -allow_non_jtag
+open_hw_target
+set_property PROGRAM.FILE {/media/engin/StorageA/FPGA/graphics/graphics.runs/impl_1/graphicstop.bit} [get_hw_devices xc7z020_1]
+current_hw_device [get_hw_devices xc7z020_1]
+refresh_hw_device -update_hw_probes false [lindex [get_hw_devices xc7z020_1] 0]
+set_property PROBES.FILE {} [get_hw_devices xc7z020_1]
+set_property FULL_PROBES.FILE {} [get_hw_devices xc7z020_1]
+set_property PROGRAM.FILE {/media/engin/StorageA/FPGA/graphics/graphics.runs/impl_1/graphicstop.bit} [get_hw_devices xc7z020_1]
+program_hw_devices [get_hw_devices xc7z020_1]
+refresh_hw_device [lindex [get_hw_devices xc7z020_1] 0]
+close_hw_manager
+launch_simulation
+open_wave_config /media/engin/StorageA/FPGA/graphics/graphicstop_behav.wcfg
+source graphicstop.tcl
+add_force {/graphicstop/rst_i} -radix hex {0 0ns}
+add_force {/graphicstop/clk_i} -radix hex {0 0ns} {1 4000ps} -repeat_every 8000ps
+restart
+run all
+relaunch_sim
+add_force {/graphicstop/rst_i} -radix hex {0 0ns}
+add_force {/graphicstop/clk_i} -radix hex {0 0ns} {1 4000ps} -repeat_every 8000ps
+restart
+run all
+restart
+run all
+restart
+run all
+save_wave_config {/media/engin/StorageA/FPGA/graphics/graphicstop_behav.wcfg}
+relaunch_sim
+add_force {/graphicstop/rst_i} -radix hex {0 0ns}
+add_force {/graphicstop/clk_i} -radix hex {0 0ns} {1 4000ps} -repeat_every 8000ps
+restart
+run all
+close_sim
+reset_run synth_1
+launch_runs synth_1 -jobs 16
+wait_on_run synth_1
+launch_runs impl_1 -jobs 16
+wait_on_run impl_1
+launch_runs impl_1 -to_step write_bitstream -jobs 16
+wait_on_run impl_1
+open_hw_manager
+connect_hw_server -allow_non_jtag
+open_hw_target
+set_property PROGRAM.FILE {/media/engin/StorageA/FPGA/graphics/graphics.runs/impl_1/graphicstop.bit} [get_hw_devices xc7z020_1]
+current_hw_device [get_hw_devices xc7z020_1]
+refresh_hw_device -update_hw_probes false [lindex [get_hw_devices xc7z020_1] 0]
+set_property PROBES.FILE {} [get_hw_devices xc7z020_1]
+set_property FULL_PROBES.FILE {} [get_hw_devices xc7z020_1]
+set_property PROGRAM.FILE {/media/engin/StorageA/FPGA/graphics/graphics.runs/impl_1/graphicstop.bit} [get_hw_devices xc7z020_1]
+program_hw_devices [get_hw_devices xc7z020_1]
+refresh_hw_device [lindex [get_hw_devices xc7z020_1] 0]
+close_hw_manager
+launch_simulation
+open_wave_config /media/engin/StorageA/FPGA/graphics/graphicstop_behav.wcfg
+source graphicstop.tcl
+restart
+add_force {/graphicstop/rst_i} -radix hex {0 0ns}
+add_force {/graphicstop/clk_i} -radix hex {0 0ns} {1 4000ps} -repeat_every 8000ps
+run all
+close_sim
+reset_run impl_1
+launch_runs impl_1 -jobs 16
+wait_on_run impl_1
+reset_run impl_1
+reset_run synth_1
+launch_runs synth_1 -jobs 16
+wait_on_run synth_1
+launch_runs impl_1 -jobs 16
+wait_on_run impl_1
+reset_run synth_1
+launch_runs synth_1 -jobs 16
+wait_on_run synth_1
+launch_runs impl_1 -jobs 16
+wait_on_run impl_1
+open_run impl_1
+close_design
+reset_run synth_1
+launch_runs synth_1 -jobs 16
+wait_on_run synth_1
+launch_runs impl_1 -jobs 16
+wait_on_run impl_1
+reset_run synth_1
+launch_runs synth_1 -jobs 16
+wait_on_run synth_1
+launch_runs impl_1 -jobs 16
+wait_on_run impl_1
+launch_runs impl_1 -to_step write_bitstream -jobs 16
+wait_on_run impl_1
+open_hw_manager
+connect_hw_server -allow_non_jtag
+open_hw_target
+set_property PROGRAM.FILE {/media/engin/StorageA/FPGA/graphics/graphics.runs/impl_1/graphicstop.bit} [get_hw_devices xc7z020_1]
+current_hw_device [get_hw_devices xc7z020_1]
+refresh_hw_device -update_hw_probes false [lindex [get_hw_devices xc7z020_1] 0]
+set_property PROBES.FILE {} [get_hw_devices xc7z020_1]
+set_property FULL_PROBES.FILE {} [get_hw_devices xc7z020_1]
+set_property PROGRAM.FILE {/media/engin/StorageA/FPGA/graphics/graphics.runs/impl_1/graphicstop.bit} [get_hw_devices xc7z020_1]
+program_hw_devices [get_hw_devices xc7z020_1]
+refresh_hw_device [lindex [get_hw_devices xc7z020_1] 0]
+close_hw_manager
+launch_simulation
+open_wave_config /media/engin/StorageA/FPGA/graphics/graphicstop_behav.wcfg
+source graphicstop.tcl
+add_force {/graphicstop/rst_i} -radix hex {0 0ns}
+add_force {/graphicstop/clk_i} -radix hex {0 0ns} {1 4000ps} -repeat_every 8000ps
+restart
+run all
+close_sim
+reset_run synth_1
+launch_runs synth_1 -jobs 16
+wait_on_run synth_1
+open_run synth_1 -name synth_1
+close_design
+launch_runs impl_1 -jobs 16
+wait_on_run impl_1
+launch_runs impl_1 -to_step write_bitstream -jobs 16
+wait_on_run impl_1
+open_hw_manager
+connect_hw_server -allow_non_jtag
+open_hw_target
+set_property PROGRAM.FILE {/media/engin/StorageA/FPGA/graphics/graphics.runs/impl_1/graphicstop.bit} [get_hw_devices xc7z020_1]
+current_hw_device [get_hw_devices xc7z020_1]
+refresh_hw_device -update_hw_probes false [lindex [get_hw_devices xc7z020_1] 0]
+set_property PROBES.FILE {} [get_hw_devices xc7z020_1]
+set_property FULL_PROBES.FILE {} [get_hw_devices xc7z020_1]
+set_property PROGRAM.FILE {/media/engin/StorageA/FPGA/graphics/graphics.runs/impl_1/graphicstop.bit} [get_hw_devices xc7z020_1]
+program_hw_devices [get_hw_devices xc7z020_1]
+refresh_hw_device [lindex [get_hw_devices xc7z020_1] 0]
+close_hw_manager
+reset_run synth_1
+launch_runs synth_1 -jobs 16
+wait_on_run synth_1
+launch_runs impl_1 -jobs 16
+wait_on_run impl_1
+launch_runs impl_1 -to_step write_bitstream -jobs 16
+wait_on_run impl_1
+open_hw_manager
+connect_hw_server -allow_non_jtag
+open_hw_target
+set_property PROGRAM.FILE {/media/engin/StorageA/FPGA/graphics/graphics.runs/impl_1/graphicstop.bit} [get_hw_devices xc7z020_1]
+current_hw_device [get_hw_devices xc7z020_1]
+refresh_hw_device -update_hw_probes false [lindex [get_hw_devices xc7z020_1] 0]
+set_property PROBES.FILE {} [get_hw_devices xc7z020_1]
+set_property FULL_PROBES.FILE {} [get_hw_devices xc7z020_1]
+set_property PROGRAM.FILE {/media/engin/StorageA/FPGA/graphics/graphics.runs/impl_1/graphicstop.bit} [get_hw_devices xc7z020_1]
+program_hw_devices [get_hw_devices xc7z020_1]
+refresh_hw_device [lindex [get_hw_devices xc7z020_1] 0]
+close_hw_manager
+reset_target all [get_files  /media/engin/StorageA/FPGA/graphics/graphics.srcs/sources_1/ip/blk_mem_gen_0/blk_mem_gen_0.xci]
+export_ip_user_files -of_objects  [get_files  /media/engin/StorageA/FPGA/graphics/graphics.srcs/sources_1/ip/blk_mem_gen_0/blk_mem_gen_0.xci] -sync -no_script -force -quiet
+reset_run synth_1
+launch_runs synth_1 -jobs 16
+wait_on_run synth_1
+launch_runs impl_1 -jobs 16
+wait_on_run impl_1
+launch_runs impl_1 -to_step write_bitstream -jobs 16
+wait_on_run impl_1
+open_hw_manager
+connect_hw_server -allow_non_jtag
+open_hw_target
+set_property PROGRAM.FILE {/media/engin/StorageA/FPGA/graphics/graphics.runs/impl_1/graphicstop.bit} [get_hw_devices xc7z020_1]
+current_hw_device [get_hw_devices xc7z020_1]
+refresh_hw_device -update_hw_probes false [lindex [get_hw_devices xc7z020_1] 0]
+set_property PROBES.FILE {} [get_hw_devices xc7z020_1]
+set_property FULL_PROBES.FILE {} [get_hw_devices xc7z020_1]
+set_property PROGRAM.FILE {/media/engin/StorageA/FPGA/graphics/graphics.runs/impl_1/graphicstop.bit} [get_hw_devices xc7z020_1]
+program_hw_devices [get_hw_devices xc7z020_1]
+refresh_hw_device [lindex [get_hw_devices xc7z020_1] 0]
+close_hw_manager
+reset_run synth_1
+launch_runs synth_1 -jobs 16
+wait_on_run synth_1
+launch_runs impl_1 -jobs 16
+wait_on_run impl_1
+launch_runs impl_1 -to_step write_bitstream -jobs 16
+wait_on_run impl_1
+open_hw_manager
+connect_hw_server -allow_non_jtag
+open_hw_target
+set_property PROGRAM.FILE {/media/engin/StorageA/FPGA/graphics/graphics.runs/impl_1/graphicstop.bit} [get_hw_devices xc7z020_1]
+current_hw_device [get_hw_devices xc7z020_1]
+refresh_hw_device -update_hw_probes false [lindex [get_hw_devices xc7z020_1] 0]
+set_property PROBES.FILE {} [get_hw_devices xc7z020_1]
+set_property FULL_PROBES.FILE {} [get_hw_devices xc7z020_1]
+set_property PROGRAM.FILE {/media/engin/StorageA/FPGA/graphics/graphics.runs/impl_1/graphicstop.bit} [get_hw_devices xc7z020_1]
+program_hw_devices [get_hw_devices xc7z020_1]
+refresh_hw_device [lindex [get_hw_devices xc7z020_1] 0]
+close_hw_manager
+open_hw_manager
+connect_hw_server -allow_non_jtag
+open_hw_target
+set_property PROGRAM.FILE {/media/engin/StorageA/FPGA/graphics/graphics.runs/impl_1/graphicstop.bit} [get_hw_devices xc7z020_1]
+current_hw_device [get_hw_devices xc7z020_1]
+refresh_hw_device -update_hw_probes false [lindex [get_hw_devices xc7z020_1] 0]
+set_property PROBES.FILE {} [get_hw_devices xc7z020_1]
+set_property FULL_PROBES.FILE {} [get_hw_devices xc7z020_1]
+set_property PROGRAM.FILE {/media/engin/StorageA/FPGA/graphics/graphics.runs/impl_1/graphicstop.bit} [get_hw_devices xc7z020_1]
+program_hw_devices [get_hw_devices xc7z020_1]
+refresh_hw_device [lindex [get_hw_devices xc7z020_1] 0]
+close_hw_manager
+set_property strategy Flow_PerfOptimized_high [get_runs synth_1]
+set_property strategy Performance_ExplorePostRoutePhysOpt [get_runs impl_1]
+reset_run synth_1
+launch_runs synth_1 -jobs 16
+wait_on_run synth_1
+launch_runs impl_1 -jobs 16
+wait_on_run impl_1
+launch_runs impl_1 -to_step write_bitstream -jobs 16
+wait_on_run impl_1
+open_hw_manager
+connect_hw_server -allow_non_jtag
+open_hw_target
+set_property PROGRAM.FILE {/media/engin/StorageA/FPGA/graphics/graphics.runs/impl_1/graphicstop.bit} [get_hw_devices xc7z020_1]
+current_hw_device [get_hw_devices xc7z020_1]
+refresh_hw_device -update_hw_probes false [lindex [get_hw_devices xc7z020_1] 0]
+set_property PROBES.FILE {} [get_hw_devices xc7z020_1]
+set_property FULL_PROBES.FILE {} [get_hw_devices xc7z020_1]
+set_property PROGRAM.FILE {/media/engin/StorageA/FPGA/graphics/graphics.runs/impl_1/graphicstop.bit} [get_hw_devices xc7z020_1]
+program_hw_devices [get_hw_devices xc7z020_1]
+refresh_hw_device [lindex [get_hw_devices xc7z020_1] 0]
+close_hw_manager
+reset_run synth_1
+launch_runs synth_1 -jobs 16
+wait_on_run synth_1
+launch_runs impl_1 -jobs 16
+wait_on_run impl_1
+launch_runs impl_1 -to_step write_bitstream -jobs 16
+wait_on_run impl_1
+open_hw_manager
+connect_hw_server -allow_non_jtag
+open_hw_target
+set_property PROGRAM.FILE {/media/engin/StorageA/FPGA/graphics/graphics.runs/impl_1/graphicstop.bit} [get_hw_devices xc7z020_1]
+current_hw_device [get_hw_devices xc7z020_1]
+refresh_hw_device -update_hw_probes false [lindex [get_hw_devices xc7z020_1] 0]
+set_property PROBES.FILE {} [get_hw_devices xc7z020_1]
+set_property FULL_PROBES.FILE {} [get_hw_devices xc7z020_1]
+set_property PROGRAM.FILE {/media/engin/StorageA/FPGA/graphics/graphics.runs/impl_1/graphicstop.bit} [get_hw_devices xc7z020_1]
+program_hw_devices [get_hw_devices xc7z020_1]
+refresh_hw_device [lindex [get_hw_devices xc7z020_1] 0]
+archive_project /media/engin/StorageA/FPGA/graphics.xpr.zip -force -include_local_ip_cache -include_config_settings
+close_hw_manager
+reset_target all [get_files  /media/engin/StorageA/FPGA/graphics/graphics.srcs/sources_1/ip/blk_mem_gen_0/blk_mem_gen_0.xci]
+export_ip_user_files -of_objects  [get_files  /media/engin/StorageA/FPGA/graphics/graphics.srcs/sources_1/ip/blk_mem_gen_0/blk_mem_gen_0.xci] -sync -no_script -force -quiet
+reset_run synth_1
+launch_runs synth_1 -jobs 16
+wait_on_run synth_1
+launch_runs impl_1 -jobs 16
+wait_on_run impl_1
+launch_runs impl_1 -to_step write_bitstream -jobs 16
+wait_on_run impl_1
+open_hw_manager
+connect_hw_server -allow_non_jtag
+open_hw_target
+set_property PROGRAM.FILE {/media/engin/StorageA/FPGA/graphics/graphics.runs/impl_1/graphicstop.bit} [get_hw_devices xc7z020_1]
+current_hw_device [get_hw_devices xc7z020_1]
+refresh_hw_device -update_hw_probes false [lindex [get_hw_devices xc7z020_1] 0]
+set_property PROBES.FILE {} [get_hw_devices xc7z020_1]
+set_property FULL_PROBES.FILE {} [get_hw_devices xc7z020_1]
+set_property PROGRAM.FILE {/media/engin/StorageA/FPGA/graphics/graphics.runs/impl_1/graphicstop.bit} [get_hw_devices xc7z020_1]
+program_hw_devices [get_hw_devices xc7z020_1]
+refresh_hw_device [lindex [get_hw_devices xc7z020_1] 0]
+close_hw_manager
+reset_target all [get_files  /media/engin/StorageA/FPGA/graphics/graphics.srcs/sources_1/ip/blk_mem_gen_0/blk_mem_gen_0.xci]
+export_ip_user_files -of_objects  [get_files  /media/engin/StorageA/FPGA/graphics/graphics.srcs/sources_1/ip/blk_mem_gen_0/blk_mem_gen_0.xci] -sync -no_script -force -quiet
+reset_run synth_1
+launch_runs synth_1 -jobs 16
+wait_on_run synth_1
+launch_runs impl_1 -jobs 16
+wait_on_run impl_1
+launch_runs impl_1 -to_step write_bitstream -jobs 16
+wait_on_run impl_1
+open_hw_manager
+connect_hw_server -allow_non_jtag
+open_hw_target
+set_property PROGRAM.FILE {/media/engin/StorageA/FPGA/graphics/graphics.runs/impl_1/graphicstop.bit} [get_hw_devices xc7z020_1]
+current_hw_device [get_hw_devices xc7z020_1]
+refresh_hw_device -update_hw_probes false [lindex [get_hw_devices xc7z020_1] 0]
+set_property PROBES.FILE {} [get_hw_devices xc7z020_1]
+set_property FULL_PROBES.FILE {} [get_hw_devices xc7z020_1]
+set_property PROGRAM.FILE {/media/engin/StorageA/FPGA/graphics/graphics.runs/impl_1/graphicstop.bit} [get_hw_devices xc7z020_1]
+program_hw_devices [get_hw_devices xc7z020_1]
+refresh_hw_device [lindex [get_hw_devices xc7z020_1] 0]
+close_hw_manager
+reset_target all [get_files  /media/engin/StorageA/FPGA/graphics/graphics.srcs/sources_1/ip/blk_mem_gen_0/blk_mem_gen_0.xci]
+export_ip_user_files -of_objects  [get_files  /media/engin/StorageA/FPGA/graphics/graphics.srcs/sources_1/ip/blk_mem_gen_0/blk_mem_gen_0.xci] -sync -no_script -force -quiet
+reset_run synth_1
+launch_runs synth_1 -jobs 16
+wait_on_run synth_1
+launch_runs impl_1 -jobs 16
+wait_on_run impl_1
+launch_runs impl_1 -to_step write_bitstream -jobs 16
+wait_on_run impl_1
+open_hw_manager
+connect_hw_server -allow_non_jtag
+open_hw_target
+set_property PROGRAM.FILE {/media/engin/StorageA/FPGA/graphics/graphics.runs/impl_1/graphicstop.bit} [get_hw_devices xc7z020_1]
+current_hw_device [get_hw_devices xc7z020_1]
+refresh_hw_device -update_hw_probes false [lindex [get_hw_devices xc7z020_1] 0]
+set_property PROBES.FILE {} [get_hw_devices xc7z020_1]
+set_property FULL_PROBES.FILE {} [get_hw_devices xc7z020_1]
+set_property PROGRAM.FILE {/media/engin/StorageA/FPGA/graphics/graphics.runs/impl_1/graphicstop.bit} [get_hw_devices xc7z020_1]
+program_hw_devices [get_hw_devices xc7z020_1]
+refresh_hw_device [lindex [get_hw_devices xc7z020_1] 0]
+set_property PROBES.FILE {} [get_hw_devices xc7z020_1]
+set_property FULL_PROBES.FILE {} [get_hw_devices xc7z020_1]
+set_property PROGRAM.FILE {/media/engin/StorageA/FPGA/graphics/graphics.runs/impl_1/graphicstop.bit} [get_hw_devices xc7z020_1]
+program_hw_devices [get_hw_devices xc7z020_1]
+refresh_hw_device [lindex [get_hw_devices xc7z020_1] 0]
+close_hw_manager
+reset_target all [get_files  /media/engin/StorageA/FPGA/graphics/graphics.srcs/sources_1/ip/blk_mem_gen_0/blk_mem_gen_0.xci]
+export_ip_user_files -of_objects  [get_files  /media/engin/StorageA/FPGA/graphics/graphics.srcs/sources_1/ip/blk_mem_gen_0/blk_mem_gen_0.xci] -sync -no_script -force -quiet
+set_property strategy Performance_Explore [get_runs impl_1]
+reset_run synth_1
+launch_runs synth_1 -jobs 16
+wait_on_run synth_1
+launch_runs impl_1 -jobs 16
+wait_on_run impl_1
+launch_runs impl_1 -to_step write_bitstream -jobs 16
+wait_on_run impl_1
+open_hw_manager
+connect_hw_server -allow_non_jtag
+open_hw_target
+set_property PROGRAM.FILE {/media/engin/StorageA/FPGA/graphics/graphics.runs/impl_1/graphicstop.bit} [get_hw_devices xc7z020_1]
+current_hw_device [get_hw_devices xc7z020_1]
+refresh_hw_device -update_hw_probes false [lindex [get_hw_devices xc7z020_1] 0]
+set_property PROBES.FILE {} [get_hw_devices xc7z020_1]
+set_property FULL_PROBES.FILE {} [get_hw_devices xc7z020_1]
+set_property PROGRAM.FILE {/media/engin/StorageA/FPGA/graphics/graphics.runs/impl_1/graphicstop.bit} [get_hw_devices xc7z020_1]
+program_hw_devices [get_hw_devices xc7z020_1]
+refresh_hw_device [lindex [get_hw_devices xc7z020_1] 0]
+close_hw_manager
+set_property strategy {Vivado Implementation Defaults} [get_runs impl_1]
+set_property strategy {Vivado Synthesis Defaults} [get_runs synth_1]
+reset_run synth_1
+launch_runs synth_1 -jobs 16
+wait_on_run synth_1
+launch_runs impl_1 -jobs 16
+wait_on_run impl_1
+launch_runs impl_1 -to_step write_bitstream -jobs 16
+wait_on_run impl_1
+open_hw_manager
+connect_hw_server -allow_non_jtag
+open_hw_target
+set_property PROGRAM.FILE {/media/engin/StorageA/FPGA/graphics/graphics.runs/impl_1/graphicstop.bit} [get_hw_devices xc7z020_1]
+current_hw_device [get_hw_devices xc7z020_1]
+refresh_hw_device -update_hw_probes false [lindex [get_hw_devices xc7z020_1] 0]
+set_property PROBES.FILE {} [get_hw_devices xc7z020_1]
+set_property FULL_PROBES.FILE {} [get_hw_devices xc7z020_1]
+set_property PROGRAM.FILE {/media/engin/StorageA/FPGA/graphics/graphics.runs/impl_1/graphicstop.bit} [get_hw_devices xc7z020_1]
+program_hw_devices [get_hw_devices xc7z020_1]
+refresh_hw_device [lindex [get_hw_devices xc7z020_1] 0]
+close_hw_manager
+generate_target Simulation [get_files /media/engin/StorageA/FPGA/graphics/graphics.srcs/sources_1/ip/blk_mem_gen_0/blk_mem_gen_0.xci]
+export_ip_user_files -of_objects [get_files /media/engin/StorageA/FPGA/graphics/graphics.srcs/sources_1/ip/blk_mem_gen_0/blk_mem_gen_0.xci] -no_script -sync -force -quiet
+export_simulation -of_objects [get_files /media/engin/StorageA/FPGA/graphics/graphics.srcs/sources_1/ip/blk_mem_gen_0/blk_mem_gen_0.xci] -directory /media/engin/StorageA/FPGA/graphics/graphics.ip_user_files/sim_scripts -ip_user_files_dir /media/engin/StorageA/FPGA/graphics/graphics.ip_user_files -ipstatic_source_dir /media/engin/StorageA/FPGA/graphics/graphics.ip_user_files/ipstatic -lib_map_path [list {modelsim=/media/engin/StorageA/FPGA/graphics/graphics.cache/compile_simlib/modelsim} {questa=/media/engin/StorageA/FPGA/graphics/graphics.cache/compile_simlib/questa} {ies=/media/engin/StorageA/FPGA/graphics/graphics.cache/compile_simlib/ies} {xcelium=/media/engin/StorageA/FPGA/graphics/graphics.cache/compile_simlib/xcelium} {vcs=/media/engin/StorageA/FPGA/graphics/graphics.cache/compile_simlib/vcs} {riviera=/media/engin/StorageA/FPGA/graphics/graphics.cache/compile_simlib/riviera}] -use_ip_compiled_libs -force -quiet
+launch_simulation
+open_wave_config /media/engin/StorageA/FPGA/graphics/graphicstop_behav.wcfg
+source graphicstop.tcl
+add_force {/graphicstop/rst_i} -radix hex {0 0ns}
+add_force {/graphicstop/clk_i} -radix hex {0 0ns} {1 4000ps} -repeat_every 8000ps
+restart
+run all
+run all
+save_wave_config {/media/engin/StorageA/FPGA/graphics/graphicstop_behav.wcfg}
+close_sim
+reset_run synth_1
+launch_runs synth_1 -jobs 16
+wait_on_run synth_1
+reset_run synth_1
+launch_runs synth_1 -jobs 16
+wait_on_run synth_1
+reset_run synth_1
+launch_runs synth_1 -jobs 16
+wait_on_run synth_1
+launch_runs impl_1 -jobs 16
+wait_on_run impl_1
+launch_runs impl_1 -to_step write_bitstream -jobs 16
+wait_on_run impl_1
+open_hw_manager
+connect_hw_server -allow_non_jtag
+open_hw_target
+set_property PROGRAM.FILE {/media/engin/StorageA/FPGA/graphics/graphics.runs/impl_1/graphicstop.bit} [get_hw_devices xc7z020_1]
+current_hw_device [get_hw_devices xc7z020_1]
+refresh_hw_device -update_hw_probes false [lindex [get_hw_devices xc7z020_1] 0]
+set_property PROBES.FILE {} [get_hw_devices xc7z020_1]
+set_property FULL_PROBES.FILE {} [get_hw_devices xc7z020_1]
+set_property PROGRAM.FILE {/media/engin/StorageA/FPGA/graphics/graphics.runs/impl_1/graphicstop.bit} [get_hw_devices xc7z020_1]
+program_hw_devices [get_hw_devices xc7z020_1]
+refresh_hw_device [lindex [get_hw_devices xc7z020_1] 0]
+close_hw_manager
+launch_simulation
+open_wave_config /media/engin/StorageA/FPGA/graphics/graphicstop_behav.wcfg
+source graphicstop.tcl
+restart
+add_force {/graphicstop/rst_i} -radix hex {0 0ns}
+add_force {/graphicstop/clk_i} -radix hex {0 0ns} {1 4000ps} -repeat_every 8000ps
+run all
+run all
+save_wave_config {/media/engin/StorageA/FPGA/graphics/graphicstop_behav.wcfg}
+relaunch_sim
+add_force {/graphicstop/rst_i} -radix hex {0 0ns}
+add_force {/graphicstop/clk_i} -radix hex {0 0ns} {1 4000ps} -repeat_every 8000ps
+restart
+run all
+run all
+add_bp {/media/engin/StorageA/FPGA/graphics/graphics.srcs/sources_1/imports/new/muldivrem.sv} 65
+remove_bps -file {/media/engin/StorageA/FPGA/graphics/graphics.srcs/sources_1/imports/new/muldivrem.sv} -line 65
+relaunch_sim
+add_bp {/media/engin/StorageA/FPGA/graphics/graphics.srcs/sources_1/imports/new/muldivrem.sv} 64
+add_force {/graphicstop/rst_i} -radix hex {0 0ns}
+add_force {/graphicstop/clk_i} -radix hex {0 0ns} {1 4000ps} -repeat_every 8000ps
+run all
+remove_bps -file {/media/engin/StorageA/FPGA/graphics/graphics.srcs/sources_1/imports/new/muldivrem.sv} -line 64
+run all
+add_bp {/media/engin/StorageA/FPGA/graphics/graphics.srcs/sources_1/imports/new/muldivrem.sv} 64
+run all
+step
+step
+step
+step
+step
+step
+step
+step
+step
+run all
+step
+step
+step
+step
+step
+step
+step
+step
+run all
+step
+step
+step
+step
+step
+step
+step
+step
+step
+run all
+step
+step
+step
+step
+run all
+step
+step
+run all
+step
+step
+step
+step
+step
+run all
+step
+step
+add_bp {/media/engin/StorageA/FPGA/graphics/graphics.srcs/sources_1/imports/new/muldivrem.sv} 74
+remove_bps -file {/media/engin/StorageA/FPGA/graphics/graphics.srcs/sources_1/imports/new/muldivrem.sv} -line 64
+run all
+remove_bps -file {/media/engin/StorageA/FPGA/graphics/graphics.srcs/sources_1/imports/new/muldivrem.sv} -line 74
+run all
+add_bp {/media/engin/StorageA/FPGA/graphics/graphics.srcs/sources_1/imports/new/muldivrem.sv} 62
+run all
+remove_bps -file {/media/engin/StorageA/FPGA/graphics/graphics.srcs/sources_1/imports/new/muldivrem.sv} -line 62
+run all
+run all
+relaunch_sim
+relaunch_sim
+restart
+add_force {/graphicstop/rst_i} -radix hex {0 0ns}
+add_force {/graphicstop/clk_i} -radix hex {0 0ns} {1 4000ps} -repeat_every 8000ps
+run all
+close_sim
+reset_run synth_1
+launch_runs synth_1 -jobs 16
+wait_on_run synth_1
+launch_runs impl_1 -jobs 16
+wait_on_run impl_1
+launch_runs impl_1 -to_step write_bitstream -jobs 16
+wait_on_run impl_1
+open_hw_manager
+connect_hw_server -allow_non_jtag
+open_hw_target
+set_property PROGRAM.FILE {/media/engin/StorageA/FPGA/graphics/graphics.runs/impl_1/graphicstop.bit} [get_hw_devices xc7z020_1]
+current_hw_device [get_hw_devices xc7z020_1]
+refresh_hw_device -update_hw_probes false [lindex [get_hw_devices xc7z020_1] 0]
+set_property PROBES.FILE {} [get_hw_devices xc7z020_1]
+set_property FULL_PROBES.FILE {} [get_hw_devices xc7z020_1]
+set_property PROGRAM.FILE {/media/engin/StorageA/FPGA/graphics/graphics.runs/impl_1/graphicstop.bit} [get_hw_devices xc7z020_1]
+program_hw_devices [get_hw_devices xc7z020_1]
+refresh_hw_device [lindex [get_hw_devices xc7z020_1] 0]
+close_hw_manager
+reset_run synth_1
+launch_runs synth_1 -jobs 16
+wait_on_run synth_1
+launch_runs impl_1 -jobs 16
+wait_on_run impl_1
+launch_runs impl_1 -to_step write_bitstream -jobs 16
+wait_on_run impl_1
+open_hw_manager
+connect_hw_server -allow_non_jtag
+open_hw_target
+set_property PROGRAM.FILE {/media/engin/StorageA/FPGA/graphics/graphics.runs/impl_1/graphicstop.bit} [get_hw_devices xc7z020_1]
+current_hw_device [get_hw_devices xc7z020_1]
+refresh_hw_device -update_hw_probes false [lindex [get_hw_devices xc7z020_1] 0]
+set_property PROBES.FILE {} [get_hw_devices xc7z020_1]
+set_property FULL_PROBES.FILE {} [get_hw_devices xc7z020_1]
+set_property PROGRAM.FILE {/media/engin/StorageA/FPGA/graphics/graphics.runs/impl_1/graphicstop.bit} [get_hw_devices xc7z020_1]
+program_hw_devices [get_hw_devices xc7z020_1]
+refresh_hw_device [lindex [get_hw_devices xc7z020_1] 0]
+close_hw_manager
+archive_project /media/engin/StorageA/FPGA/graphics.xpr.zip -force -include_local_ip_cache -include_config_settings
+reset_run synth_1
+launch_runs synth_1 -jobs 16
+wait_on_run synth_1
+launch_runs impl_1 -jobs 16
+wait_on_run impl_1
+launch_runs impl_1 -to_step write_bitstream -jobs 16
+wait_on_run impl_1
+open_hw_manager
+connect_hw_server -allow_non_jtag
+open_hw_target
+set_property PROGRAM.FILE {/media/engin/StorageA/FPGA/graphics/graphics.runs/impl_1/graphicstop.bit} [get_hw_devices xc7z020_1]
+current_hw_device [get_hw_devices xc7z020_1]
+refresh_hw_device -update_hw_probes false [lindex [get_hw_devices xc7z020_1] 0]
+set_property PROBES.FILE {} [get_hw_devices xc7z020_1]
+set_property FULL_PROBES.FILE {} [get_hw_devices xc7z020_1]
+set_property PROGRAM.FILE {/media/engin/StorageA/FPGA/graphics/graphics.runs/impl_1/graphicstop.bit} [get_hw_devices xc7z020_1]
+program_hw_devices [get_hw_devices xc7z020_1]
+refresh_hw_device [lindex [get_hw_devices xc7z020_1] 0]
+close_hw_manager
+archive_project /media/engin/StorageA/FPGA/graphics.xpr.zip -force -include_local_ip_cache -include_config_settings
+launch_simulation
+open_wave_config /media/engin/StorageA/FPGA/graphics/graphicstop_behav.wcfg
+source graphicstop.tcl
+add_force {/graphicstop/rst_i} -radix hex {0 0ns}
+add_force {/graphicstop/clk_i} -radix hex {0 0ns} {1 4000ps} -repeat_every 8000ps
+restart
+run all
+close_sim
+reset_run synth_1
+launch_runs synth_1 -jobs 16
+wait_on_run synth_1
+launch_runs impl_1 -jobs 16
+wait_on_run impl_1
+launch_runs impl_1 -to_step write_bitstream -jobs 16
+wait_on_run impl_1
+open_hw_manager
+connect_hw_server -allow_non_jtag
+open_hw_target
+set_property PROGRAM.FILE {/media/engin/StorageA/FPGA/graphics/graphics.runs/impl_1/graphicstop.bit} [get_hw_devices xc7z020_1]
+current_hw_device [get_hw_devices xc7z020_1]
+refresh_hw_device -update_hw_probes false [lindex [get_hw_devices xc7z020_1] 0]
+set_property PROBES.FILE {} [get_hw_devices xc7z020_1]
+set_property FULL_PROBES.FILE {} [get_hw_devices xc7z020_1]
+set_property PROGRAM.FILE {/media/engin/StorageA/FPGA/graphics/graphics.runs/impl_1/graphicstop.bit} [get_hw_devices xc7z020_1]
+program_hw_devices [get_hw_devices xc7z020_1]
+refresh_hw_device [lindex [get_hw_devices xc7z020_1] 0]
+archive_project /media/engin/StorageA/FPGA/graphics.xpr.zip -force -include_local_ip_cache -include_config_settings
