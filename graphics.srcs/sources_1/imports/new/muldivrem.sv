@@ -22,12 +22,11 @@ assign multiplier_result = (func3 == 3'b000) ? result[31:0] : result[63:32];
 
 endmodule
 
-/*module unsigneddivider(
+module unsigneddivider(
     input wire logic clk,
     input wire logic reset,
     input wire logic start,          // start signal
     output     logic busy,           // calculation in progress
-    output     logic dbz,            // divide by zero flag
     output     logic divdone,
     input wire logic [31:0] dividend,
     input wire logic [31:0] divisor,
@@ -46,13 +45,20 @@ always @(posedge clk) begin
 		divdone = 1'b1;
 	end else begin
 		if (start) begin
-			Q = dividend;
-			M_neg = ({1'b0, divisor}^33'h1FFFFFFFF) + 33'd1;
-			A = 33'd0;
-			prevA = 33'd0;
-			n = 32;
-			busy = 1'b1;
-			divdone = 1'b0;
+			if (divisor[30:0] == 31'd0) begin // Handle divide by zero
+				quotient = 32'hFFFFFFFF;
+				remainder = dividend;
+				busy = 1'b0;
+				divdone = 1'b1;
+			end else begin
+				Q = dividend;
+				M_neg = ({1'b0, divisor}^33'h1FFFFFFFF) + 33'd1;
+				A = 33'd0;
+				prevA = 33'd0;
+				n = 32;
+				busy = 1'b1;
+				divdone = 1'b0;
+			end
 		end else begin
 			if (busy) begin
 				if (n == 0) begin
@@ -76,14 +82,13 @@ always @(posedge clk) begin
 	end
 end
 
-endmodule */
+endmodule
 
 module signeddivider(
     input wire logic clk,
     input wire logic reset,
     input wire logic start,          // start signal
     output     logic busy,           // calculation in progress
-    output     logic dbz,            // divide by zero flag
     output     logic divdone,
     input wire logic [31:0] dividend,
     input wire logic [31:0] divisor,
@@ -104,14 +109,21 @@ always @(posedge clk) begin
 		divdone = 1'b1;
 	end else begin
 		if (start) begin
-			signflip <= (divisor[31]^dividend[31]);
-			Q = dividend[31] ? ((dividend^32'hFFFFFFFF)+32'd1)&32'h7FFFFFFF : dividend;
-			M_neg = ((extendeddivisor[32]==1'b1 ? ((extendeddivisor^33'h1FFFFFFFF)+33'd1)&33'h0FFFFFFFF : extendeddivisor)^33'h1FFFFFFFF) + 33'd1;
-			A = 33'd0;
-			prevA = 33'd0;
-			n = 32;
-			busy = 1'b1;
-			divdone = 1'b0;
+			if (divisor[30:0] == 31'd0) begin // Handle divide by zero
+				quotient = 32'hFFFFFFFF;
+				remainder = dividend;
+				busy = 1'b0;
+				divdone = 1'b1;
+			end else begin
+				signflip <= (divisor[31]^dividend[31]);
+				Q = dividend[31] ? ((dividend^32'hFFFFFFFF)+32'd1)&32'h7FFFFFFF : dividend;
+				M_neg = ((extendeddivisor[32]==1'b1 ? ((extendeddivisor^33'h1FFFFFFFF)+33'd1)&33'h0FFFFFFFF : extendeddivisor)^33'h1FFFFFFFF) + 33'd1;
+				A = 33'd0;
+				prevA = 33'd0;
+				n = 32;
+				busy = 1'b1;
+				divdone = 1'b0;
+			end
 		end else begin
 			if (busy) begin
 				if (n == 0) begin

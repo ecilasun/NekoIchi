@@ -1,6 +1,7 @@
 `default_nettype none
 `timescale 1ns / 1ps
 
+`include "cpuops.vh"
 `include "aluops.vh"
 
 module ALU(
@@ -19,35 +20,34 @@ wire [31:0] multiplier_result;
 // H/L signedxsigned, signedxunsigned, unsigned all included
 multiplier themul(.func3(func3), .A(val1), .B(val2), .multiplier_result(multiplier_result));
 
-// Integer division unit
-wire [31:0] quotient;
-wire [31:0] remainder;
-wire divbusy;
-wire divdone;
-wire divbyzero;
-/*unsigneddivider thediv (
+// Integer division units for signed and unsigned
+wire [31:0] quotient, quotientu;
+wire [31:0] remainder, remainderu;
+wire divbusy, divbusyu;
+wire divdone, divdoneu;
+
+unsigneddivider thedivu (
 	.reset(reset),
 	.clk(clock),
-	.start(divstart),	// start signal
-	.busy(divbusy),		// calculation in progress
-	.divdone(divdone),	// division complete
-	.dbz(divbyzero),	// divide by zero
-	.dividend(val1),
-	.divisor(val2),
-	.quotient(quotient),
-	.remainder(remainder)
-);*/
+	.start(divstart),		// start signal
+	.busy(divbusyu),		// calculation in progress
+	.divdone(divdoneu),		// division complete
+	.dividend(val1),		// dividend
+	.divisor(val2),			// divisor
+	.quotient(quotientu),	// result: quotient
+	.remainder(remainderu)	// result: remainer
+);
+
 signeddivider thediv (
 	.reset(reset),
 	.clk(clock),
-	.start(divstart),	// start signal
-	.busy(divbusy),		// calculation in progress
-	.divdone(divdone),	// division complete
-	.dbz(divbyzero),	// divide by zero
-	.dividend(val1),
-	.divisor(val2),
-	.quotient(quotient),
-	.remainder(remainder)
+	.start(divstart),		// start signal
+	.busy(divbusy),			// calculation in progress
+	.divdone(divdone),		// division complete
+	.dividend(val1),		// dividend
+	.divisor(val2),			// divisor
+	.quotient(quotient),	// result: quotient
+	.remainder(remainder)	// result: remainder
 );
 
 // Integet ALU
@@ -74,8 +74,8 @@ always @(*) begin
     
             // M
             `ALU_MUL:  begin aluout = multiplier_result; end
-            `ALU_DIV:  begin if(divdone) aluout = quotient; end
-            `ALU_REM:  begin if(divdone) aluout = remainder; end
+            `ALU_DIV:  begin if(divdone) aluout = func3==`F3_DIV ? quotient : quotientu; end // DIV or DIVU
+            `ALU_REM:  begin if(divdone) aluout = func3==`F3_REM ? remainder : remainderu; end // REM or REMU
     
             // BRANCH ALU
             `ALU_EQ:   begin aluout = val1 == val2 ? 32'd1 : 32'd0; end
