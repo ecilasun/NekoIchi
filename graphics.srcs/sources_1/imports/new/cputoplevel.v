@@ -122,12 +122,14 @@ instructiondecompressor rv32cdecompress(.instr_lowword(instrlo), .instr_highword
 // ALU
 wire alustall;
 wire divstart = (cpustate[`CPUFETCH]==1'b1 & (~icachemissed)) & (aluop==`ALU_DIV | aluop==`ALU_REM); // High only during FETCH when cache is not missed
+wire mulstart = (cpustate[`CPUFETCH]==1'b1 & (~icachemissed)) & (aluop==`ALU_MUL);
 //wire mulstart = (cpustate[`CPUFETCH]==1'b1 & (~icachemissed)) & (aluop==`ALU_MUL);
 //wire fdivstart = (cpustate[CPUFETCH]==1'b1 & (~icachemissed)) && (faluop==`ALU_FDIV); // High only during FETCH when cache is not missed
 ALU aluunit(
 	.reset(reset),
 	.clock(clock),
 	.divstart(divstart),
+	.mulstart(mulstart),
 	//.mulstart(mulstart),
 	.aluout(aluout),
 	.func3(func3),
@@ -170,7 +172,7 @@ always @(posedge clock) begin
 					icacheloadcounter <= 5'd0;
 					cpustate[`CPUCACHEFILLWAIT] <= 1'b1; // Jump to read delay stages (block RAM has 1 cycle latency for read)
 				end else begin
-					if ( alustall | ((opcode == `OPCODE_OP) & (aluop==`ALU_MUL)) ) begin // Skip one cycle for MUL to complete or wait for DIV
+					if ( alustall /*| ((opcode == `OPCODE_OP) & (aluop==`ALU_MUL))*/ ) begin // Skip one cycle for MUL to complete or wait for DIV
 						cpustate[`CPUSTALL] <= 1'b1;
 					end else begin
 						cpustate[`CPUEXEC] <= 1'b1;

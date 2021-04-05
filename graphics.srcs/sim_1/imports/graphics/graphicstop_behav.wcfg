@@ -12,15 +12,15 @@
       </db_ref>
    </db_ref_list>
    <zoom_setting>
-      <ZoomStartTime time="437870900fs"></ZoomStartTime>
-      <ZoomEndTime time="437997501fs"></ZoomEndTime>
-      <Cursor1Time time="437900000fs"></Cursor1Time>
+      <ZoomStartTime time="138815000fs"></ZoomStartTime>
+      <ZoomEndTime time="393215001fs"></ZoomEndTime>
+      <Cursor1Time time="304515006fs"></Cursor1Time>
    </zoom_setting>
    <column_width_setting>
       <NameColumnWidth column_width="228"></NameColumnWidth>
-      <ValueColumnWidth column_width="87"></ValueColumnWidth>
+      <ValueColumnWidth column_width="75"></ValueColumnWidth>
    </column_width_setting>
-   <WVObjectSize size="104" />
+   <WVObjectSize size="129" />
    <wvobject fp_name="divider1095" type="divider">
       <obj_property name="label">ICACHE</obj_property>
       <obj_property name="DisplayName">label</obj_property>
@@ -282,6 +282,7 @@
    <wvobject type="array" fp_name="/graphicstop/RV32CPU/regs/registers">
       <obj_property name="ElementShortName">registers[0:31][31:0]</obj_property>
       <obj_property name="ObjectShortName">registers[0:31][31:0]</obj_property>
+      <obj_property name="isExpanded"></obj_property>
    </wvobject>
    <wvobject fp_name="divider85" type="divider">
       <obj_property name="label">ALU</obj_property>
@@ -323,10 +324,6 @@
       <obj_property name="ElementShortName">alustall</obj_property>
       <obj_property name="ObjectShortName">alustall</obj_property>
    </wvobject>
-   <wvobject type="array" fp_name="/graphicstop/RV32CPU/aluunit/multiplier_result">
-      <obj_property name="ElementShortName">multiplier_result[31:0]</obj_property>
-      <obj_property name="ObjectShortName">multiplier_result[31:0]</obj_property>
-   </wvobject>
    <wvobject type="array" fp_name="/graphicstop/RV32CPU/aluunit/quotient">
       <obj_property name="ElementShortName">quotient[31:0]</obj_property>
       <obj_property name="ObjectShortName">quotient[31:0]</obj_property>
@@ -343,11 +340,67 @@
       <obj_property name="ElementShortName">divdone</obj_property>
       <obj_property name="ObjectShortName">divdone</obj_property>
    </wvobject>
-   <wvobject type="logic" fp_name="/graphicstop/RV32CPU/aluunit/divbyzero">
-      <obj_property name="ElementShortName">divbyzero</obj_property>
-      <obj_property name="ObjectShortName">divbyzero</obj_property>
-   </wvobject>
    <wvobject fp_name="divider1493" type="divider">
+      <obj_property name="label">DIVU</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/graphicstop/RV32CPU/aluunit/thedivu/clk">
+      <obj_property name="ElementShortName">clk</obj_property>
+      <obj_property name="ObjectShortName">clk</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/graphicstop/RV32CPU/aluunit/thedivu/reset">
+      <obj_property name="ElementShortName">reset</obj_property>
+      <obj_property name="ObjectShortName">reset</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/graphicstop/RV32CPU/aluunit/thedivu/start">
+      <obj_property name="ElementShortName">start</obj_property>
+      <obj_property name="ObjectShortName">start</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/graphicstop/RV32CPU/aluunit/thedivu/busy">
+      <obj_property name="ElementShortName">busy</obj_property>
+      <obj_property name="ObjectShortName">busy</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/graphicstop/RV32CPU/aluunit/thedivu/divdone">
+      <obj_property name="ElementShortName">divdone</obj_property>
+      <obj_property name="ObjectShortName">divdone</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/graphicstop/RV32CPU/aluunit/thedivu/dividend">
+      <obj_property name="ElementShortName">dividend[31:0]</obj_property>
+      <obj_property name="ObjectShortName">dividend[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/graphicstop/RV32CPU/aluunit/thedivu/divisor">
+      <obj_property name="ElementShortName">divisor[31:0]</obj_property>
+      <obj_property name="ObjectShortName">divisor[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/graphicstop/RV32CPU/aluunit/thedivu/quotient">
+      <obj_property name="ElementShortName">quotient[31:0]</obj_property>
+      <obj_property name="ObjectShortName">quotient[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/graphicstop/RV32CPU/aluunit/thedivu/remainder">
+      <obj_property name="ElementShortName">remainder[31:0]</obj_property>
+      <obj_property name="ObjectShortName">remainder[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/graphicstop/RV32CPU/aluunit/thedivu/M_neg">
+      <obj_property name="ElementShortName">M_neg[32:0]</obj_property>
+      <obj_property name="ObjectShortName">M_neg[32:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/graphicstop/RV32CPU/aluunit/thedivu/A">
+      <obj_property name="ElementShortName">A[32:0]</obj_property>
+      <obj_property name="ObjectShortName">A[32:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/graphicstop/RV32CPU/aluunit/thedivu/prevA">
+      <obj_property name="ElementShortName">prevA[32:0]</obj_property>
+      <obj_property name="ObjectShortName">prevA[32:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/graphicstop/RV32CPU/aluunit/thedivu/Q">
+      <obj_property name="ElementShortName">Q[31:0]</obj_property>
+      <obj_property name="ObjectShortName">Q[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/graphicstop/RV32CPU/aluunit/thedivu/n">
+      <obj_property name="ElementShortName">n[5:0]</obj_property>
+      <obj_property name="ObjectShortName">n[5:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="divider133" type="divider">
       <obj_property name="label">DIV</obj_property>
       <obj_property name="DisplayName">label</obj_property>
    </wvobject>
@@ -366,10 +419,6 @@
    <wvobject type="logic" fp_name="/graphicstop/RV32CPU/aluunit/thediv/busy">
       <obj_property name="ElementShortName">busy</obj_property>
       <obj_property name="ObjectShortName">busy</obj_property>
-   </wvobject>
-   <wvobject type="logic" fp_name="/graphicstop/RV32CPU/aluunit/thediv/dbz">
-      <obj_property name="ElementShortName">dbz</obj_property>
-      <obj_property name="ObjectShortName">dbz</obj_property>
    </wvobject>
    <wvobject type="logic" fp_name="/graphicstop/RV32CPU/aluunit/thediv/divdone">
       <obj_property name="ElementShortName">divdone</obj_property>
@@ -395,21 +444,17 @@
       <obj_property name="ElementShortName">M_neg[32:0]</obj_property>
       <obj_property name="ObjectShortName">M_neg[32:0]</obj_property>
    </wvobject>
-   <wvobject type="array" fp_name="/graphicstop/RV32CPU/aluunit/thediv/M">
-      <obj_property name="ElementShortName">M[32:0]</obj_property>
-      <obj_property name="ObjectShortName">M[32:0]</obj_property>
-   </wvobject>
    <wvobject type="array" fp_name="/graphicstop/RV32CPU/aluunit/thediv/A">
       <obj_property name="ElementShortName">A[32:0]</obj_property>
       <obj_property name="ObjectShortName">A[32:0]</obj_property>
    </wvobject>
-   <wvobject type="array" fp_name="/graphicstop/RV32CPU/aluunit/thediv/Q">
-      <obj_property name="ElementShortName">Q[31:0]</obj_property>
-      <obj_property name="ObjectShortName">Q[31:0]</obj_property>
-   </wvobject>
    <wvobject type="array" fp_name="/graphicstop/RV32CPU/aluunit/thediv/prevA">
       <obj_property name="ElementShortName">prevA[32:0]</obj_property>
       <obj_property name="ObjectShortName">prevA[32:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/graphicstop/RV32CPU/aluunit/thediv/Q">
+      <obj_property name="ElementShortName">Q[31:0]</obj_property>
+      <obj_property name="ObjectShortName">Q[31:0]</obj_property>
    </wvobject>
    <wvobject type="array" fp_name="/graphicstop/RV32CPU/aluunit/thediv/n">
       <obj_property name="ElementShortName">n[5:0]</obj_property>
@@ -419,28 +464,84 @@
       <obj_property name="ElementShortName">signflip</obj_property>
       <obj_property name="ObjectShortName">signflip</obj_property>
    </wvobject>
+   <wvobject type="array" fp_name="/graphicstop/RV32CPU/aluunit/thediv/extendeddivisor">
+      <obj_property name="ElementShortName">extendeddivisor[32:0]</obj_property>
+      <obj_property name="ObjectShortName">extendeddivisor[32:0]</obj_property>
+   </wvobject>
    <wvobject fp_name="divider1511" type="divider">
       <obj_property name="label">MUL</obj_property>
       <obj_property name="DisplayName">label</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/graphicstop/RV32CPU/aluunit/themul/clk">
+      <obj_property name="ElementShortName">clk</obj_property>
+      <obj_property name="ObjectShortName">clk</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/graphicstop/RV32CPU/aluunit/themul/reset">
+      <obj_property name="ElementShortName">reset</obj_property>
+      <obj_property name="ObjectShortName">reset</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/graphicstop/RV32CPU/aluunit/themul/start">
+      <obj_property name="ElementShortName">start</obj_property>
+      <obj_property name="ObjectShortName">start</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/graphicstop/RV32CPU/aluunit/themul/busy">
+      <obj_property name="ElementShortName">busy</obj_property>
+      <obj_property name="ObjectShortName">busy</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/graphicstop/RV32CPU/aluunit/themul/muldone">
+      <obj_property name="ElementShortName">muldone</obj_property>
+      <obj_property name="ObjectShortName">muldone</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/graphicstop/RV32CPU/aluunit/themul/wideproduct">
+      <obj_property name="ElementShortName">wideproduct[63:0]</obj_property>
+      <obj_property name="ObjectShortName">wideproduct[63:0]</obj_property>
    </wvobject>
    <wvobject type="array" fp_name="/graphicstop/RV32CPU/aluunit/themul/func3">
       <obj_property name="ElementShortName">func3[2:0]</obj_property>
       <obj_property name="ObjectShortName">func3[2:0]</obj_property>
    </wvobject>
+   <wvobject type="array" fp_name="/graphicstop/RV32CPU/aluunit/themul/multiplicand">
+      <obj_property name="ElementShortName">multiplicand[31:0]</obj_property>
+      <obj_property name="ObjectShortName">multiplicand[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/graphicstop/RV32CPU/aluunit/themul/multiplier">
+      <obj_property name="ElementShortName">multiplier[31:0]</obj_property>
+      <obj_property name="ObjectShortName">multiplier[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/graphicstop/RV32CPU/aluunit/themul/product">
+      <obj_property name="ElementShortName">product[31:0]</obj_property>
+      <obj_property name="ObjectShortName">product[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/graphicstop/RV32CPU/aluunit/themul/M">
+      <obj_property name="ElementShortName">M[31:0]</obj_property>
+      <obj_property name="ObjectShortName">M[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/graphicstop/RV32CPU/aluunit/themul/Q">
+      <obj_property name="ElementShortName">Q[31:0]</obj_property>
+      <obj_property name="ObjectShortName">Q[31:0]</obj_property>
+   </wvobject>
    <wvobject type="array" fp_name="/graphicstop/RV32CPU/aluunit/themul/A">
       <obj_property name="ElementShortName">A[31:0]</obj_property>
       <obj_property name="ObjectShortName">A[31:0]</obj_property>
    </wvobject>
-   <wvobject type="array" fp_name="/graphicstop/RV32CPU/aluunit/themul/B">
-      <obj_property name="ElementShortName">B[31:0]</obj_property>
-      <obj_property name="ObjectShortName">B[31:0]</obj_property>
+   <wvobject type="logic" fp_name="/graphicstop/RV32CPU/aluunit/themul/C">
+      <obj_property name="ElementShortName">C</obj_property>
+      <obj_property name="ObjectShortName">C</obj_property>
    </wvobject>
-   <wvobject type="array" fp_name="/graphicstop/RV32CPU/aluunit/themul/multiplier_result">
-      <obj_property name="ElementShortName">multiplier_result[31:0]</obj_property>
-      <obj_property name="ObjectShortName">multiplier_result[31:0]</obj_property>
+   <wvobject type="array" fp_name="/graphicstop/RV32CPU/aluunit/themul/n">
+      <obj_property name="ElementShortName">n[5:0]</obj_property>
+      <obj_property name="ObjectShortName">n[5:0]</obj_property>
    </wvobject>
-   <wvobject type="array" fp_name="/graphicstop/RV32CPU/aluunit/themul/result">
-      <obj_property name="ElementShortName">result[63:0]</obj_property>
-      <obj_property name="ObjectShortName">result[63:0]</obj_property>
+   <wvobject type="logic" fp_name="/graphicstop/RV32CPU/aluunit/themul/signflip">
+      <obj_property name="ElementShortName">signflip</obj_property>
+      <obj_property name="ObjectShortName">signflip</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/graphicstop/RV32CPU/aluunit/themul/flipmultiplicand">
+      <obj_property name="ElementShortName">flipmultiplicand</obj_property>
+      <obj_property name="ObjectShortName">flipmultiplicand</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/graphicstop/RV32CPU/aluunit/themul/flipmultiplier">
+      <obj_property name="ElementShortName">flipmultiplier</obj_property>
+      <obj_property name="ObjectShortName">flipmultiplier</obj_property>
    </wvobject>
 </wave_config>

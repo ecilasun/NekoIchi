@@ -8,6 +8,7 @@ module ALU(
 	input wire clock,
 	input wire reset,
 	input wire divstart,
+	input wire mulstart,
 	output reg [31:0] aluout,
 	input wire [2:0] func3,
 	input wire [31:0] val1,
@@ -16,9 +17,21 @@ module ALU(
 	output wire alustall );
 
 // Integer multiplication unit
-wire [31:0] multiplier_result;
+wire mulbusy;
+wire muldone;
+wire [31:0] product;
 // H/L signedxsigned, signedxunsigned, unsigned all included
-multiplier themul(.func3(func3), .A(val1), .B(val2), .multiplier_result(multiplier_result));
+//multiplier themul(.func3(func3), .A(val1), .B(val2), .multiplier_result(product));
+multiplier themul(
+    .clk(clock),
+    .reset(reset),
+    .start(mulstart),
+    .busy(mulbusy),           // calculation in progress
+    .muldone(muldone),
+    .func3(func3),
+    .multiplicand(val1),
+    .multiplier(val2),
+    .product(product) );
 
 // Integer division units for signed and unsigned
 wire [31:0] quotient, quotientu;
@@ -27,8 +40,8 @@ wire divbusy, divbusyu;
 wire divdone, divdoneu;
 
 unsigneddivider thedivu (
-	.reset(reset),
 	.clk(clock),
+	.reset(reset),
 	.start(divstart),		// start signal
 	.busy(divbusyu),		// calculation in progress
 	.divdone(divdoneu),		// division complete
@@ -39,8 +52,8 @@ unsigneddivider thedivu (
 );
 
 signeddivider thediv (
-	.reset(reset),
 	.clk(clock),
+	.reset(reset),
 	.start(divstart),		// start signal
 	.busy(divbusy),			// calculation in progress
 	.divdone(divdone),		// division complete
@@ -73,7 +86,7 @@ always @(*) begin
             `ALU_AND:  begin aluout = val1 & val2; end
     
             // M
-            `ALU_MUL:  begin aluout = multiplier_result; end
+            `ALU_MUL:  begin if(muldone) aluout = product; end
             `ALU_DIV:  begin if(divdone) aluout = func3==`F3_DIV ? quotient : quotientu; end // DIV or DIVU
             `ALU_REM:  begin if(divdone) aluout = func3==`F3_REM ? remainder : remainderu; end // REM or REMU
     
@@ -95,6 +108,6 @@ end
 
 // If this is set to high, the CPU will stall until it's cleared
 // Use this to wait for any long ALU operation to complete
-assign alustall = ~reset & (divstart | divbusy);
+assign alustall = ~reset & ((divstart | divbusy | divbusyu) | (mulstart | mulbusy));
 
 endmodule
