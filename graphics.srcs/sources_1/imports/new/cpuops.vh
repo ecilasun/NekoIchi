@@ -1,23 +1,25 @@
 // ======================== CPU States ==========================
 `define CPUSTAGECOUNT           9
+
 `define CPUFETCH				0
-`define CPUCACHEFILLWAIT		1
-`define CPUICACHEFILL			2
-`define CPULOADCOMPLETE			3
-`define CPULOADWAIT				4
-`define CPUSTORE				5
-`define CPUEXEC					6
-`define CPURETIREINSTRUCTION	7
-`define CPUSTALL				8
+`define CPUSTALLM				1
+`define CPUCACHEFILLBEGIN		2
+`define CPUICACHEFILL			3
+`define CPUEXEC					4
+`define CPULOADCOMPLETE			5
+`define CPULOADWAIT				6
+`define CPUSTORE				7
+`define CPURETIREINSTRUCTION	8
+
 `define CPUFETCH_MASK				9'b000000001
-`define CPUCACHEFILLWAIT_MASK		9'b000000010
-`define CPUICACHEFILL_MASK			9'b000000100
-`define CPULOADCOMPLETE_MASK		9'b000001000
-`define CPULOADWAIT_MASK			9'b000010000
-`define CPUSTORE_MASK				9'b000100000
-`define CPUEXEC_MASK				9'b001000000
-`define CPURETIREINSTRUCTION_MASK	9'b010000000
-`define CPUSTALL_MASK				9'b100000000
+`define CPUSTALLM_MASK				9'b000000010
+`define CPUCACHEFILLBEGIN_MASK		9'b000000100
+`define CPUICACHEFILL_MASK			9'b000001000
+`define CPUEXEC_MASK				9'b000010000
+`define CPULOADCOMPLETE_MASK		9'b000100000
+`define CPULOADWAIT_MASK			9'b001000000
+`define CPUSTORE_MASK				9'b010000000
+`define CPURETIREINSTRUCTION_MASK	9'b100000000
 // ==============================================================
 
 // ======================== RV32 I ==============================

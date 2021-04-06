@@ -73,12 +73,56 @@ wire [31:0] rval2;
 
 // ALU/immediate and decoder wires
 wire [4:0] aluop;
-//wire [4:0] faluop;
 wire [31:0] aluout;
 wire [31:0] imm;
 wire selectimmedasrval2;
 wire [31:0] fullinstruction;
 wire is_compressed;
+
+// Integer multiplication unit
+wire mulbusy;
+wire muldone;
+wire [31:0] product;
+multiplier themul(
+    .clk(clock),
+    .reset(reset),
+    .start(mulstart),
+    .busy(mulbusy),           // calculation in progress
+    .muldone(muldone),
+    .func3(func3),
+    .multiplicand(rval1),
+    .multiplier(rval2),
+    .product(product) );
+
+// Integer division units for signed and unsigned
+wire [31:0] quotient, quotientu;
+wire [31:0] remainder, remainderu;
+wire divbusy, divbusyu;
+wire divdone, divdoneu;
+
+unsigneddivider thedivu (
+	.clk(clock),
+	.reset(reset),
+	.start(divstart),		// start signal
+	.busy(divbusyu),		// calculation in progress
+	.divdone(divdoneu),		// division complete
+	.dividend(rval1),		// dividend
+	.divisor(rval2),		// divisor
+	.quotient(quotientu),	// result: quotient
+	.remainder(remainderu)	// result: remainer
+);
+
+signeddivider thediv (
+	.clk(clock),
+	.reset(reset),
+	.start(divstart),		// start signal
+	.busy(divbusy),			// calculation in progress
+	.divdone(divdone),		// division complete
+	.dividend(rval1),		// dividend
+	.divisor(rval2),		// divisor
+	.quotient(quotient),	// result: quotient
+	.remainder(remainder)	// result: remainder
+);
 
 decoder idecode(
 	.clock(clock),
@@ -108,6 +152,9 @@ registerfile regs(
 	.rval1(rval1),
 	.rval2(rval2) );
 
+// High during mul/div/rem operations
+wire muldivstall = (divstart | divbusy | divbusyu) | (mulstart | mulbusy);
+
 // Selectors / precalcs / instruction decompressor related
 wire [31:0] rval2selector = selectimmedasrval2 ? imm : rval2;
 wire [31:0] incrementedpc = is_compressed ? PC + 32'd2 : PC + 32'd4;
@@ -119,24 +166,19 @@ wire [15:0] instrhi = icachemissed ? 16'h0000 : cachedinstrhigh[31:16];
 wire [15:0] instrlo = icachemissed ? {9'd0,`ADDI} : cachedinstrhigh[15:0];
 instructiondecompressor rv32cdecompress(.instr_lowword(instrlo), .instr_highword(instrhi), .is_compressed(is_compressed), .fullinstr(fullinstruction));
 
-// ALU
-wire alustall;
-wire divstart = (cpustate[`CPUFETCH]==1'b1 & (~icachemissed)) & (aluop==`ALU_DIV | aluop==`ALU_REM); // High only during FETCH when cache is not missed
+// Pulses to kick math operations
 wire mulstart = (cpustate[`CPUFETCH]==1'b1 & (~icachemissed)) & (aluop==`ALU_MUL);
-//wire mulstart = (cpustate[`CPUFETCH]==1'b1 & (~icachemissed)) & (aluop==`ALU_MUL);
-//wire fdivstart = (cpustate[CPUFETCH]==1'b1 & (~icachemissed)) && (faluop==`ALU_FDIV); // High only during FETCH when cache is not missed
+wire divstart = (cpustate[`CPUFETCH]==1'b1 & (~icachemissed)) & (aluop==`ALU_DIV | aluop==`ALU_REM); // High only during FETCH when cache is not missed
+
+// ALU
 ALU aluunit(
 	.reset(reset),
 	.clock(clock),
-	.divstart(divstart),
-	.mulstart(mulstart),
-	//.mulstart(mulstart),
 	.aluout(aluout),
 	.func3(func3),
 	.val1(rval1),
 	.val2(rval2selector), // Either source register 2 or immediate
-	.aluop(aluop),
-	.alustall(alustall) );
+	.aluop(aluop));
 	
 // The CPU: central state machine
 always @(posedge clock) begin
@@ -170,26 +212,35 @@ always @(posedge clock) begin
 				if (icachemissed) begin // Still in instruction cache?
 					memaddress <= {PC[31:5], 5'b00000}; // Set load address to top of the cache page
 					icacheloadcounter <= 5'd0;
-					cpustate[`CPUCACHEFILLWAIT] <= 1'b1; // Jump to read delay stages (block RAM has 1 cycle latency for read)
+					cpustate[`CPUCACHEFILLBEGIN] <= 1'b1; // Jump to read delay stages (block RAM has 1 cycle latency for read)
 				end else begin
-					if ( alustall /*| ((opcode == `OPCODE_OP) & (aluop==`ALU_MUL))*/ ) begin // Skip one cycle for MUL to complete or wait for DIV
-						cpustate[`CPUSTALL] <= 1'b1;
+					if ((aluop==`ALU_MUL) | (aluop==`ALU_DIV) | (aluop==`ALU_REM)) begin
+						cpustate[`CPUSTALLM] <= 1'b1;
 					end else begin
 						cpustate[`CPUEXEC] <= 1'b1;
 					end
 					memaddress <= 32'd0; // Point at nothing
 				end
 			end
-			
-			cpustate[`CPUSTALL]: begin
-				if (~alustall) begin
-					cpustate[`CPUEXEC] <= 1'b1;
+
+			cpustate[`CPUSTALLM]: begin
+				if (muldivstall) begin
+					cpustate[`CPUSTALLM] <= 1'b1;
 				end else begin
-					cpustate[`CPUSTALL] <= 1'b1;
+					registerWriteEnable <= wren;
+					cpustate <= nextstage;
+					memaddress <= 32'd0;
+					nextPC <= incrementedpc;
+					if (aluop==`ALU_MUL)
+						data <= product;
+					if (aluop==`ALU_DIV)
+						data <= func3==`F3_DIV ? quotient : quotientu;
+					if (aluop==`ALU_REM)
+						data <= func3==`F3_REM ? remainder : remainderu;
 				end
 			end
 
-			cpustate[`CPUCACHEFILLWAIT]: begin
+			cpustate[`CPUCACHEFILLBEGIN]: begin
 				// Step address by 4 bytes for next read
 				memaddress <= memaddress + 32'd4;
 				icacheaddress <= memaddress[5:2]; // Previous memaddress
@@ -342,9 +393,6 @@ always @(posedge clock) begin
 				cpustate[`CPUFETCH] <= 1'b1;
 			end
 
-			default : begin
-				cpustate[`CPUSTALL] <= 1'b1;
-			end
 		endcase
 	end
 end
