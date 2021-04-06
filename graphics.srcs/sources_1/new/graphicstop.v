@@ -12,14 +12,16 @@ module graphicstop(
 	output wire dvi_tx2_p_o,
 	output wire dvi_tx2_n_o );
 	
-wire clockDVI, clock100, clocksLocked;
+wire sysclock, peripheralclk, clockALocked, /*clockBLocked,*/ clocksLocked;
 
-clk_wiz_0 Clocks(
+clk_wiz_0 SClock(
 	.clk_in1(clk_i),
 	.resetn(~rst_i),
-	.clock100(clock100),
-	.locked(clocksLocked) );
-	
+	.sysclock(sysclock),
+	.peripheralclk(peripheralclk),
+	.locked(clockALocked) );
+
+wire clocksLocked = clockALocked /*& clockBLocked*/;
 wire reset_p = rst_i | (~clocksLocked);
 wire reset_n = (~rst_i) & clocksLocked;
 
@@ -32,8 +34,9 @@ wire [31:0] vram_data;
 wire [11:0] video_x, video_y;
 wire [7:0] blue, red, green;
 
+wire clockDVI; // DVIOut instantiates an MMCM for this internally
 VRAM VRAMController(
-		.clock100(clock100),
+		.sysclock(sysclock),
 		.clockDVI(clockDVI),
 		.reset_n(reset_n),
 		.video_x(video_x),
@@ -47,14 +50,14 @@ VRAM VRAMController(
 
 blk_mem_gen_0 SYSRAM(
 	.addra(memaddress[16:2]), // 128Kb RAM, 32768 DWORDs, 15 bit address space
-	.clka(clock100),
+	.clka(sysclock),
 	.dina(writeword),
 	.douta(mem_data),
 	.ena(reset_n),
 	.wea(memaddress[31]==1'b0 ? mem_writeena : 4'b0000) ); // address below 0x80000000
 
 cputoplevel RV32CPU(
-	.clock(clock100),
+	.clock(sysclock),
 	.reset(reset_p),
 	.memaddress(memaddress),
 	.writeword(writeword),

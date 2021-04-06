@@ -1,7 +1,7 @@
 `timescale 1ns / 1ps
 
 module VRAM(
-		input wire clock100,
+		input wire sysclock,
 		input wire clockDVI,
 		input wire reset_n,
 		input wire [11:0] video_x,
@@ -34,7 +34,7 @@ assign green = {1'b0, videooutbyte[2:0], 4'b0000};
 
 blk_mem_gen_1 videomemory(
 	.addra(memaddress[15:2]), // 256x192x8bpp buffer, 12288 DWORDs, 14 bit address space
-	.clka(clock100),
+	.clka(sysclock),
 	.dina(writeword),
 	.ena(reset_n),
 	.wea(memaddress[31]==1'b1 ? mem_writeena : 4'b0000), // address on or above 0x80000000
