@@ -12,7 +12,7 @@ module graphicstop(
 	output wire dvi_tx2_p_o,
 	output wire dvi_tx2_n_o );
 	
-wire sysclock, peripheralclk, clockALocked, /*clockBLocked,*/ clocksLocked;
+wire sysclock, peripheralclk, clockALocked;
 
 clk_wiz_0 SClock(
 	.clk_in1(clk_i),
