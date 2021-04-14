@@ -5,3 +5,5 @@ Please note that the riscvtool repo is aimed at my other risc-v CPU with UART, s
 I'm working on adding UART support by enabling the PL (the ARM cores) which apparently have the only connection to the on-board USB-UART bridge, and have to act as bypass for the FPGA)
 
 Once that's working, it should be possible to use riscvtool to upload binaries and share the BIOS between the two risc-v SoC versions.
+
+Utilizes https://github.com/bpeptena/graphics_fpga for the DVI output.
