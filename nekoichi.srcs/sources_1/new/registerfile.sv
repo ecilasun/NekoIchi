@@ -12,7 +12,7 @@ module registerfile(
 	output wire [31:0] rval1,	// Register values for rs1 and rs2
 	output wire [31:0] rval2 );
 
-reg [31:0] registers[0:31]; 
+logic [31:0] registers[0:31]; 
 
 always @(posedge clock) begin
 	if (wren && rd != 5'd0)

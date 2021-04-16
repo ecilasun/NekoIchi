@@ -175,7 +175,7 @@ always_comb begin
 			
 			`OPCODE_FLOAT_OP: begin
 				unique case (func7)
-					`FADD,`FSUB,`FMUL,`FDIV,`FSGNJ,`FCVTWS,`FCVTSW,`FSQRT,`FEQ: begin // FCVTWUS and FCVTSWU implied by FCVTWS and FCVTSW, FSGNJ includes FSGNJN and FSGNJX, FEQ includes FLT and FLE
+					`FADD,`FSUB,`FMUL,`FDIV,`FSGNJ,`FCVTWS,`FCVTSW,`FSQRT,`FEQ,`FMIN: begin // FCVTWUS and FCVTSWU implied by FCVTWS and FCVTSW, FSGNJ includes FSGNJN and FSGNJX, FEQ includes FLT and FLE, FMIN includes FMAX
 						// For fcvtws (float to int) and FEQ/FLT/FLE, result is written back to integer register
 						// All other output goes into float registers 
 						wren = ((func7 == `FCVTWS)|(func7 == `FEQ)) ? 1'b1 : 1'b0;
@@ -199,7 +199,7 @@ always_comb begin
 						aluop = `ALU_NONE;
 						imm = 32'd0;
 					end
-					default: begin // MIN/MAX
+					default: begin // unknown
 						wren = 1'b0;
 						fwren = 1'b0; // NOTE: Skip these for now
 						nextstage = `CPURETIREINSTRUCTION_MASK;

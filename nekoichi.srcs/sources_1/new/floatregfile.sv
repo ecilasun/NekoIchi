@@ -14,7 +14,7 @@ module floatregisterfile(
 	output wire [31:0] rval2,
 	output wire [31:0] rval3 );
 
-reg [31:0] registers[0:31]; 
+logic [31:0] registers[0:31]; 
 
 always @(posedge clock) begin
 	if (wren)

@@ -115,12 +115,12 @@
 `define FSGNJX      7'b0010000    //+            010
 
 // Comparison / classification
-`define FMIN        7'b0010100    //             000
-`define FMAX        7'b0010100    //             001
+`define FMIN        7'b0010100    //+            000
+`define FMAX        7'b0010100    //+            001
 `define FEQ         7'b1010000    //+            010
 `define FLT         7'b1010000    //+            001
 `define FLE         7'b1010000    //+            000
-`define FCLASS      7'b1110000    //~ 00000      001
+`define FCLASS      7'b1110000    //  00000      001
 
 // Conversion from/to integer
 `define FCVTWS      7'b1100000    //+ 00000

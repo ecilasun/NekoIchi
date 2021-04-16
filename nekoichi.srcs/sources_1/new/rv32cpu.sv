@@ -5,6 +5,8 @@
 module rv32cpu(
 	input wire reset,
 	input wire clock,
+	output logic[31:0] gpufifocommand,
+	output logic gpufifowe,
 	output logic[31:0] memaddress = 32'h80000000,
 	output logic [31:0] writeword = 32'h00000000,
 	input wire [31:0] mem_data,
@@ -259,7 +261,7 @@ fp_eq floateq(
 	.m_axis_result_tdata(feqresult),
 	.m_axis_result_tvalid(feqresultvalid) );
 
-wire fltvalid = (cpustate[`CPUDECODE]==1'b1) & (opcode==`OPCODE_FLOAT_OP) & (func7==`FEQ) & (func3==3'b001); // FLT
+wire fltvalid = (cpustate[`CPUDECODE]==1'b1) & (opcode==`OPCODE_FLOAT_OP) & ( (func7 == `FMIN) | (func7 == `FMAX) | ((func7==`FEQ) & (func3==3'b001))); // FLT
 logic [7:0] fltresult;
 logic fltresultvalid;
 fp_lt floatlt(
@@ -390,6 +392,8 @@ always_ff @(posedge clock) begin
 		fregisterWriteEnable <= 1'b0;
 		fregisterdata <= 32'd0;
 		fcsr <= 32'd0; // [7:5] == 000 -> RNE (round to nearest even), [4:0] -> NotValid|DivbyZero|OverFlow|UnderFlow|iNeXact (exceptions), ignored for now
+		gpufifocommand <= 32'd0;
+		gpufifowe <= 1'b0;
 
 	end else begin
 
@@ -481,14 +485,12 @@ always_ff @(posedge clock) begin
 									fregisterdata <= {frval1[31]^frval2[31], frval1[30:0]};
 								end
 							endcase
-						end
-						if (func7 == `FMVXW) begin // Float to Int register (overlaps `FCLASS)
+						end else if (func7 == `FMVXW) begin // Float to Int register (overlaps `FCLASS)
 							if (func3 == 3'b000) //FMVXW
 								registerdata <= frval1;
 							else // FCLASS
 								registerdata <= 32'd0; // TBD
-						end
-						if (func7 == `FMVWX) begin // Int to Float register
+						end else if (func7 == `FMVWX) begin // Int to Float register
 							fregisterdata <= rval1;
 						end
 					end
@@ -572,6 +574,12 @@ always_ff @(posedge clock) begin
 							else //if (func3==3'b000) // FLE
 								registerdata <= {31'd0,fleresult[0]};
 						end
+						`FMIN: begin
+							if (func3==3'b000) // FMIN
+								fregisterdata <= fltresult[0]==1'b0 ? frval2 : frval1;
+							else // FMAX
+								fregisterdata <= fltresult[0]==1'b0 ? frval1 : frval2;
+						end
 						default: begin
 							fregisterdata <= 32'd0;
 						end
@@ -638,28 +646,34 @@ always_ff @(posedge clock) begin
 			end
 
 			cpustate[`CPUSTORE]: begin
-				unique case (func3)
-					// Byte
-					3'b000: begin
-						case (memaddress[1:0]) // synthesis full_case
-							2'b11: begin mem_writeena <= 4'b1000; writeword <= {registerdata[7:0], 24'd0}; end
-							2'b10: begin mem_writeena <= 4'b0100; writeword <= {8'd0, registerdata[7:0], 16'd0}; end
-							2'b01: begin mem_writeena <= 4'b0010; writeword <= {16'd0, registerdata[7:0], 8'd0}; end
-							2'b00: begin mem_writeena <= 4'b0001; writeword <= {24'd0, registerdata[7:0]}; end
-						endcase
-					end
-					// Short
-					3'b001: begin
-						case (memaddress[1]) // synthesis full_case
-							1'b1: begin mem_writeena <= 4'b1100; writeword <= {registerdata[15:0], 16'd0}; end
-							1'b0: begin mem_writeena <= 4'b0011; writeword <= {16'd0, registerdata[15:0]}; end
-						endcase
-					end
-					// Word
-					default: begin
-						mem_writeena <= 4'b1111; writeword <= registerdata;
-					end
-				endcase
+				if (memaddress[31]) begin // 0x80000000 GPU command queue, VRAM write command (4'b0001) 
+					// GPU commands are always 32 bits, no byte writes possible to this address range
+					gpufifocommand <= registerdata;
+					gpufifowe <= 1'b1;
+				end else begin
+					unique case (func3)
+						// Byte
+						3'b000: begin
+							case (memaddress[1:0]) // synthesis full_case
+								2'b11: begin mem_writeena <= 4'b1000; writeword <= {registerdata[7:0], 24'd0}; end
+								2'b10: begin mem_writeena <= 4'b0100; writeword <= {8'd0, registerdata[7:0], 16'd0}; end
+								2'b01: begin mem_writeena <= 4'b0010; writeword <= {16'd0, registerdata[7:0], 8'd0}; end
+								2'b00: begin mem_writeena <= 4'b0001; writeword <= {24'd0, registerdata[7:0]}; end
+							endcase
+						end
+						// Short
+						3'b001: begin
+							case (memaddress[1]) // synthesis full_case
+								1'b1: begin mem_writeena <= 4'b1100; writeword <= {registerdata[15:0], 16'd0}; end
+								1'b0: begin mem_writeena <= 4'b0011; writeword <= {16'd0, registerdata[15:0]}; end
+							endcase
+						end
+						// Word
+						default: begin
+							mem_writeena <= 4'b1111; writeword <= registerdata;
+						end
+					endcase
+				end
 				cpustate[`CPURETIREINSTRUCTION] <= 1'b1;
 			end
 
@@ -671,6 +685,8 @@ always_ff @(posedge clock) begin
 			end
 
 			cpustate[`CPURETIREINSTRUCTION]: begin
+				// Stop GPU fifo writes
+				gpufifowe <= 1'b0;
 				// Stop register writes
 				registerWriteEnable <= 1'b0;
 				fregisterWriteEnable <= 1'b0;
