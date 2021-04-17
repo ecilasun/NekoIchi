@@ -24,6 +24,11 @@ wire [31:0] writeword;
 wire [31:0] mem_data;
 wire [3:0] mem_writeena;
 
+wire [31:0] dmaaddress;
+wire [31:0] dmaword;
+wire [31:0] dma_data;
+wire [3:0] dma_writeena;
+
 wire clockDVI;
 wire sysclock, clockALocked;
 
@@ -43,16 +48,26 @@ wire reset_n = (~rst_i) & clocksLocked;
 
 
 // =====================================================================================================
-// CPU + System RAM
+// CPU + GPU + System RAM (true dual port) / GPU FIFO (1024 DWORDs)
 // =====================================================================================================
 
+// Address below 0x80000000 reside in SYSRAM
+// Addresses on or above 0x80000000 write to the GPU FIFO
 blk_mem_gen_1 SYSRAM(
+	// CPU bus for CPU read-write
 	.addra(memaddress[16:2]), // 128Kb RAM, 32768 DWORDs, 15 bit address space
 	.clka(sysclock),
 	.dina(writeword),
 	.douta(mem_data),
+	.wea(memaddress[31]==1'b0 ? mem_writeena : 4'b0000),
 	.ena(reset_n),
-	.wea(memaddress[31]==1'b0 ? mem_writeena : 4'b0000) ); // Address below 0x80000000 are system ram
+	// DMA bus for GPU read-write
+	.addrb(dmaaddress[16:2]),
+	.clkb(sysclock),
+	.dinb(dmaword),
+	.doutb(dma_data),
+	.web(dma_writeena),
+	.enb(reset_n) );
 
 wire fifowrfull;
 wire fifordempty;
@@ -100,7 +115,7 @@ end
 
 wire [13:0] vramaddress;
 wire [3:0] vramwe;
-wire [31:0] vramdata;
+wire [31:0] vramwriteword;
 wire [11:0] lanemask;
 GPU rv32gpu(
 	.clock(sysclock),
@@ -111,8 +126,12 @@ GPU rv32gpu(
 	// VRAM output
 	.vramaddress(vramaddress),
 	.vramwe(vramwe),
-	.vramdata(vramdata),
-	.lanemask(lanemask) );
+	.vramwriteword(vramwriteword),
+	.lanemask(lanemask),
+	.dmaaddress(dmaaddress[16:2]),
+	.dmaword(dmaword),
+	.dma_data(dma_data),
+	.dmawe(dma_writeena) );
 
 rv32cpu rv32cpu(
 	.clock(sysclock),
@@ -139,7 +158,7 @@ videocontroller VideoUnit(
 		.video_y(video_y),
 		.memaddress(vramaddress),
 		.mem_writeena(vramwe), // Will recognize and trap its own writes using top address bit
-		.writeword(vramdata),
+		.writeword(vramwriteword),
 		.lanemask(lanemask),
 		.red(red),
 		.green(green),

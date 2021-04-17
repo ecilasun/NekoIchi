@@ -12,15 +12,15 @@
       </db_ref>
    </db_ref_list>
    <zoom_setting>
-      <ZoomStartTime time="0fs"></ZoomStartTime>
-      <ZoomEndTime time="531200001fs"></ZoomEndTime>
-      <Cursor1Time time="82126945fs"></Cursor1Time>
+      <ZoomStartTime time="781457798fs"></ZoomStartTime>
+      <ZoomEndTime time="781989799fs"></ZoomEndTime>
+      <Cursor1Time time="781583998fs"></Cursor1Time>
    </zoom_setting>
    <column_width_setting>
-      <NameColumnWidth column_width="125"></NameColumnWidth>
+      <NameColumnWidth column_width="121"></NameColumnWidth>
       <ValueColumnWidth column_width="66"></ValueColumnWidth>
    </column_width_setting>
-   <WVObjectSize size="325" />
+   <WVObjectSize size="354" />
    <wvobject type="logic" fp_name="/nekoichitop/clk_i">
       <obj_property name="ElementShortName">clk_i</obj_property>
       <obj_property name="ObjectShortName">clk_i</obj_property>
@@ -221,6 +221,58 @@
       <obj_property name="ElementShortName">videooutbyte[7:0]</obj_property>
       <obj_property name="ObjectShortName">videooutbyte[7:0]</obj_property>
    </wvobject>
+   <wvobject fp_name="divider352" type="divider">
+      <obj_property name="label">SYSRAM</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/nekoichitop/SYSRAM/clka">
+      <obj_property name="ElementShortName">clka</obj_property>
+      <obj_property name="ObjectShortName">clka</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/nekoichitop/SYSRAM/ena">
+      <obj_property name="ElementShortName">ena</obj_property>
+      <obj_property name="ObjectShortName">ena</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/nekoichitop/SYSRAM/wea">
+      <obj_property name="ElementShortName">wea[0:0]</obj_property>
+      <obj_property name="ObjectShortName">wea[0:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/nekoichitop/SYSRAM/addra">
+      <obj_property name="ElementShortName">addra[14:0]</obj_property>
+      <obj_property name="ObjectShortName">addra[14:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/nekoichitop/SYSRAM/dina">
+      <obj_property name="ElementShortName">dina[31:0]</obj_property>
+      <obj_property name="ObjectShortName">dina[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/nekoichitop/SYSRAM/douta">
+      <obj_property name="ElementShortName">douta[31:0]</obj_property>
+      <obj_property name="ObjectShortName">douta[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/nekoichitop/SYSRAM/clkb">
+      <obj_property name="ElementShortName">clkb</obj_property>
+      <obj_property name="ObjectShortName">clkb</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/nekoichitop/SYSRAM/enb">
+      <obj_property name="ElementShortName">enb</obj_property>
+      <obj_property name="ObjectShortName">enb</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/nekoichitop/SYSRAM/web">
+      <obj_property name="ElementShortName">web[0:0]</obj_property>
+      <obj_property name="ObjectShortName">web[0:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/nekoichitop/SYSRAM/addrb">
+      <obj_property name="ElementShortName">addrb[14:0]</obj_property>
+      <obj_property name="ObjectShortName">addrb[14:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/nekoichitop/SYSRAM/dinb">
+      <obj_property name="ElementShortName">dinb[31:0]</obj_property>
+      <obj_property name="ObjectShortName">dinb[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/nekoichitop/SYSRAM/doutb">
+      <obj_property name="ElementShortName">doutb[31:0]</obj_property>
+      <obj_property name="ObjectShortName">doutb[31:0]</obj_property>
+   </wvobject>
    <wvobject fp_name="divider320" type="divider">
       <obj_property name="label">GPUFIFO</obj_property>
       <obj_property name="DisplayName">label</obj_property>
@@ -273,21 +325,21 @@
       <obj_property name="ElementShortName">reset</obj_property>
       <obj_property name="ObjectShortName">reset</obj_property>
    </wvobject>
-   <wvobject type="logic" fp_name="/nekoichitop/rv32gpu/gpupulse">
-      <obj_property name="ElementShortName">gpupulse</obj_property>
-      <obj_property name="ObjectShortName">gpupulse</obj_property>
-   </wvobject>
    <wvobject type="array" fp_name="/nekoichitop/rv32gpu/gpucommand">
       <obj_property name="ElementShortName">gpucommand[31:0]</obj_property>
       <obj_property name="ObjectShortName">gpucommand[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/nekoichitop/rv32gpu/gpupulse">
+      <obj_property name="ElementShortName">gpupulse</obj_property>
+      <obj_property name="ObjectShortName">gpupulse</obj_property>
    </wvobject>
    <wvobject type="logic" fp_name="/nekoichitop/rv32gpu/gpuready">
       <obj_property name="ElementShortName">gpuready</obj_property>
       <obj_property name="ObjectShortName">gpuready</obj_property>
    </wvobject>
-   <wvobject type="array" fp_name="/nekoichitop/rv32gpu/gpustate">
-      <obj_property name="ElementShortName">gpustate[1:0]</obj_property>
-      <obj_property name="ObjectShortName">gpustate[1:0]</obj_property>
+   <wvobject type="array" fp_name="/nekoichitop/rv32gpu/vramaddress">
+      <obj_property name="ElementShortName">vramaddress[13:0]</obj_property>
+      <obj_property name="ObjectShortName">vramaddress[13:0]</obj_property>
    </wvobject>
    <wvobject type="array" fp_name="/nekoichitop/rv32gpu/vramwe">
       <obj_property name="ElementShortName">vramwe[3:0]</obj_property>
@@ -297,21 +349,69 @@
       <obj_property name="ElementShortName">vramdata[31:0]</obj_property>
       <obj_property name="ObjectShortName">vramdata[31:0]</obj_property>
    </wvobject>
-   <wvobject type="array" fp_name="/nekoichitop/rv32gpu/vramaddress">
-      <obj_property name="ElementShortName">vramaddress[13:0]</obj_property>
-      <obj_property name="ObjectShortName">vramaddress[13:0]</obj_property>
+   <wvobject type="array" fp_name="/nekoichitop/rv32gpu/lanemask">
+      <obj_property name="ElementShortName">lanemask[11:0]</obj_property>
+      <obj_property name="ObjectShortName">lanemask[11:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/nekoichitop/rv32gpu/dmaaddress">
+      <obj_property name="ElementShortName">dmaaddress[31:0]</obj_property>
+      <obj_property name="ObjectShortName">dmaaddress[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/nekoichitop/rv32gpu/dmaword">
+      <obj_property name="ElementShortName">dmaword[31:0]</obj_property>
+      <obj_property name="ObjectShortName">dmaword[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/nekoichitop/rv32gpu/dmawe">
+      <obj_property name="ElementShortName">dmawe[3:0]</obj_property>
+      <obj_property name="ObjectShortName">dmawe[3:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/nekoichitop/rv32gpu/dma_data">
+      <obj_property name="ElementShortName">dma_data[31:0]</obj_property>
+      <obj_property name="ObjectShortName">dma_data[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/nekoichitop/rv32gpu/gpustate">
+      <obj_property name="ElementShortName">gpustate[3:0]</obj_property>
+      <obj_property name="ObjectShortName">gpustate[3:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/nekoichitop/rv32gpu/commandlatch">
+      <obj_property name="ElementShortName">commandlatch[31:0]</obj_property>
+      <obj_property name="ObjectShortName">commandlatch[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/nekoichitop/rv32gpu/rdatain">
+      <obj_property name="ElementShortName">rdatain[31:0]</obj_property>
+      <obj_property name="ObjectShortName">rdatain[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/nekoichitop/rv32gpu/rval1">
+      <obj_property name="ElementShortName">rval1[31:0]</obj_property>
+      <obj_property name="ObjectShortName">rval1[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/nekoichitop/rv32gpu/rval2">
+      <obj_property name="ElementShortName">rval2[31:0]</obj_property>
+      <obj_property name="ObjectShortName">rval2[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/nekoichitop/rv32gpu/rwren">
+      <obj_property name="ElementShortName">rwren</obj_property>
+      <obj_property name="ObjectShortName">rwren</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/nekoichitop/rv32gpu/rs1">
+      <obj_property name="ElementShortName">rs1[2:0]</obj_property>
+      <obj_property name="ObjectShortName">rs1[2:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/nekoichitop/rv32gpu/rs2">
+      <obj_property name="ElementShortName">rs2[2:0]</obj_property>
+      <obj_property name="ObjectShortName">rs2[2:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/nekoichitop/rv32gpu/rd">
+      <obj_property name="ElementShortName">rd[2:0]</obj_property>
+      <obj_property name="ObjectShortName">rd[2:0]</obj_property>
    </wvobject>
    <wvobject type="array" fp_name="/nekoichitop/rv32gpu/cmd">
       <obj_property name="ElementShortName">cmd[3:0]</obj_property>
       <obj_property name="ObjectShortName">cmd[3:0]</obj_property>
    </wvobject>
-   <wvobject type="array" fp_name="/nekoichitop/rv32gpu/gpuregs/rs">
-      <obj_property name="ElementShortName">rs[2:0]</obj_property>
-      <obj_property name="ObjectShortName">rs[2:0]</obj_property>
-   </wvobject>
-   <wvobject type="array" fp_name="/nekoichitop/rv32gpu/gpuregs/rd">
-      <obj_property name="ElementShortName">rd[2:0]</obj_property>
-      <obj_property name="ObjectShortName">rd[2:0]</obj_property>
+   <wvobject type="array" fp_name="/nekoichitop/rv32gpu/dmacount">
+      <obj_property name="ElementShortName">dmacount[13:0]</obj_property>
+      <obj_property name="ObjectShortName">dmacount[13:0]</obj_property>
    </wvobject>
    <wvobject type="array" fp_name="/nekoichitop/rv32gpu/immshort">
       <obj_property name="ElementShortName">immshort[21:0]</obj_property>
@@ -321,6 +421,18 @@
       <obj_property name="ElementShortName">imm[27:0]</obj_property>
       <obj_property name="ObjectShortName">imm[27:0]</obj_property>
    </wvobject>
+   <wvobject type="array" fp_name="/nekoichitop/rv32gpu/gpuregs/rs1">
+      <obj_property name="ElementShortName">rs1[2:0]</obj_property>
+      <obj_property name="ObjectShortName">rs1[2:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/nekoichitop/rv32gpu/gpuregs/rs2">
+      <obj_property name="ElementShortName">rs2[2:0]</obj_property>
+      <obj_property name="ObjectShortName">rs2[2:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/nekoichitop/rv32gpu/gpuregs/rd">
+      <obj_property name="ElementShortName">rd[2:0]</obj_property>
+      <obj_property name="ObjectShortName">rd[2:0]</obj_property>
+   </wvobject>
    <wvobject type="logic" fp_name="/nekoichitop/rv32gpu/gpuregs/wren">
       <obj_property name="ElementShortName">wren</obj_property>
       <obj_property name="ObjectShortName">wren</obj_property>
@@ -329,9 +441,13 @@
       <obj_property name="ElementShortName">datain[31:0]</obj_property>
       <obj_property name="ObjectShortName">datain[31:0]</obj_property>
    </wvobject>
-   <wvobject type="array" fp_name="/nekoichitop/rv32gpu/gpuregs/rval">
-      <obj_property name="ElementShortName">rval[31:0]</obj_property>
-      <obj_property name="ObjectShortName">rval[31:0]</obj_property>
+   <wvobject type="array" fp_name="/nekoichitop/rv32gpu/gpuregs/rval1">
+      <obj_property name="ElementShortName">rval1[31:0]</obj_property>
+      <obj_property name="ObjectShortName">rval1[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/nekoichitop/rv32gpu/gpuregs/rval2">
+      <obj_property name="ElementShortName">rval2[31:0]</obj_property>
+      <obj_property name="ObjectShortName">rval2[31:0]</obj_property>
    </wvobject>
    <wvobject type="array" fp_name="/nekoichitop/rv32gpu/gpuregs/registers">
       <obj_property name="ElementShortName">registers[0:7][31:0]</obj_property>
