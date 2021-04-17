@@ -10,7 +10,10 @@ module rv32cpu(
 	output logic[31:0] memaddress = 32'h80000000,
 	output logic [31:0] writeword = 32'h00000000,
 	input wire [31:0] mem_data,
-	output logic [3:0] mem_writeena = 4'b0000 );
+	output logic [3:0] mem_writeena = 4'b0000,
+	input wire gpuready,
+	input wire gpufifoempty,
+	input wire gpufifofull );
 	
 // =====================================================================================================
 // CPU Internal State & Instruction Decomposition
@@ -598,44 +601,50 @@ always_ff @(posedge clock) begin
 			end
 
 			cpustate[`CPULOADCOMPLETE]: begin
-				unique case (func3) // lb:000 lh:001 lw:010 lbu:100 lhu:101
-					3'b000: begin
-						// Byte alignment based on {address[1:0]} with sign extension
-						case (memaddress[1:0]) // synthesis full_case
-							2'b11: begin registerdata <= {{24{mem_data[31]}},mem_data[31:24]}; end
-							2'b10: begin registerdata <= {{24{mem_data[23]}},mem_data[23:16]}; end
-							2'b01: begin registerdata <= {{24{mem_data[15]}},mem_data[15:8]}; end
-							2'b00: begin registerdata <= {{24{mem_data[7]}},mem_data[7:0]}; end
-						endcase
-					end
-					3'b001: begin
-						// short alignment based on {address[1],1'b0} with sign extension
-						case (memaddress[1]) // synthesis full_case
-							1'b1: begin registerdata <= {{16{mem_data[31]}},mem_data[31:16]}; end
-							1'b0: begin registerdata <= {{16{mem_data[15]}},mem_data[15:0]}; end
-						endcase
-					end
-					3'b010: begin
-						// Already aligned on read, regular DWORD read
-						registerdata <= mem_data[31:0];
-					end
-					3'b100: begin
-						// Byte alignment based on {address[1:0]} with zero extension
-						case (memaddress[1:0]) // synthesis full_case
-							2'b11: begin registerdata <= {24'd0, mem_data[31:24]}; end
-							2'b10: begin registerdata <= {24'd0, mem_data[23:16]}; end
-							2'b01: begin registerdata <= {24'd0, mem_data[15:8]}; end
-							2'b00: begin registerdata <= {24'd0, mem_data[7:0]}; end
-						endcase
-					end
-					3'b101: begin
-						// short alignment based on {address[1],1'b0} with zero extension
-						case (memaddress[1]) // synthesis full_case
-							1'b1: begin registerdata <= {16'd0,mem_data[31:16]}; end
-							1'b0: begin registerdata <= {16'd0,mem_data[15:0]}; end
-						endcase
-					end
-				endcase
+				if (memaddress[31] == 1'b1) begin // Reads from 0x8...0 return GPU ready flag
+					// 0x80000000 : GPUREADY
+					// 0x80000004 : GPUFIFOEMPTY
+					registerdata <= memaddress[2] == 1'b0 ? {31'd0, gpuready} : {31'd0, gpufifoempty};
+				end else begin
+					unique case (func3) // lb:000 lh:001 lw:010 lbu:100 lhu:101
+						3'b000: begin
+							// Byte alignment based on {address[1:0]} with sign extension
+							case (memaddress[1:0]) // synthesis full_case
+								2'b11: begin registerdata <= {{24{mem_data[31]}},mem_data[31:24]}; end
+								2'b10: begin registerdata <= {{24{mem_data[23]}},mem_data[23:16]}; end
+								2'b01: begin registerdata <= {{24{mem_data[15]}},mem_data[15:8]}; end
+								2'b00: begin registerdata <= {{24{mem_data[7]}},mem_data[7:0]}; end
+							endcase
+						end
+						3'b001: begin
+							// short alignment based on {address[1],1'b0} with sign extension
+							case (memaddress[1]) // synthesis full_case
+								1'b1: begin registerdata <= {{16{mem_data[31]}},mem_data[31:16]}; end
+								1'b0: begin registerdata <= {{16{mem_data[15]}},mem_data[15:0]}; end
+							endcase
+						end
+						3'b010: begin
+							// Already aligned on read, regular DWORD read
+							registerdata <= mem_data[31:0];
+						end
+						3'b100: begin
+							// Byte alignment based on {address[1:0]} with zero extension
+							case (memaddress[1:0]) // synthesis full_case
+								2'b11: begin registerdata <= {24'd0, mem_data[31:24]}; end
+								2'b10: begin registerdata <= {24'd0, mem_data[23:16]}; end
+								2'b01: begin registerdata <= {24'd0, mem_data[15:8]}; end
+								2'b00: begin registerdata <= {24'd0, mem_data[7:0]}; end
+							endcase
+						end
+						3'b101: begin
+							// short alignment based on {address[1],1'b0} with zero extension
+							case (memaddress[1]) // synthesis full_case
+								1'b1: begin registerdata <= {16'd0,mem_data[31:16]}; end
+								1'b0: begin registerdata <= {16'd0,mem_data[15:0]}; end
+							endcase
+						end
+					endcase
+				end
 				cpustate[`CPURETIREINSTRUCTION] <= 1'b1;
 			end
 
@@ -646,10 +655,16 @@ always_ff @(posedge clock) begin
 			end
 
 			cpustate[`CPUSTORE]: begin
-				if (memaddress[31]) begin // 0x80000000 GPU command queue, VRAM write command (4'b0001) 
-					// GPU commands are always 32 bits, no byte writes possible to this address range
-					gpufifocommand <= registerdata;
-					gpufifowe <= 1'b1;
+				if (memaddress[31]) begin // 0x80000000 GPU command queue, VRAM write command (4'b0001)
+					if (gpufifofull) begin
+						// Stall writes until GPU processes more data
+						cpustate[`CPUSTORE] <= 1'b1;
+					end else begin
+						// GPU commands are always 32 bits, no byte writes possible to this address range
+						gpufifocommand <= registerdata;
+						gpufifowe <= 1'b1;
+						cpustate[`CPURETIREINSTRUCTION] <= 1'b1;
+					end
 				end else begin
 					unique case (func3)
 						// Byte
@@ -673,8 +688,8 @@ always_ff @(posedge clock) begin
 							mem_writeena <= 4'b1111; writeword <= registerdata;
 						end
 					endcase
+					cpustate[`CPURETIREINSTRUCTION] <= 1'b1;
 				end
-				cpustate[`CPURETIREINSTRUCTION] <= 1'b1;
 			end
 
 			cpustate[`CPUSTOREF]: begin

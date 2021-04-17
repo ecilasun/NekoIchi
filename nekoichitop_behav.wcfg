@@ -8,20 +8,19 @@
             <top_module name="glbl" />
             <top_module name="graphics" />
             <top_module name="nekoichitop" />
-            <top_module name="vcomponents" />
          </top_modules>
       </db_ref>
    </db_ref_list>
    <zoom_setting>
-      <ZoomStartTime time="6780499fs"></ZoomStartTime>
-      <ZoomEndTime time="8106500fs"></ZoomEndTime>
-      <Cursor1Time time="7273999fs"></Cursor1Time>
+      <ZoomStartTime time="0fs"></ZoomStartTime>
+      <ZoomEndTime time="531200001fs"></ZoomEndTime>
+      <Cursor1Time time="82126945fs"></Cursor1Time>
    </zoom_setting>
    <column_width_setting>
-      <NameColumnWidth column_width="129"></NameColumnWidth>
+      <NameColumnWidth column_width="125"></NameColumnWidth>
       <ValueColumnWidth column_width="66"></ValueColumnWidth>
    </column_width_setting>
-   <WVObjectSize size="327" />
+   <WVObjectSize size="325" />
    <wvobject type="logic" fp_name="/nekoichitop/clk_i">
       <obj_property name="ElementShortName">clk_i</obj_property>
       <obj_property name="ObjectShortName">clk_i</obj_property>
@@ -215,8 +214,8 @@
       <obj_property name="ObjectShortName">videobyteselect[1:0]</obj_property>
    </wvobject>
    <wvobject type="array" fp_name="/nekoichitop/VideoUnit/vram_data">
-      <obj_property name="ElementShortName">vram_data[31:0]</obj_property>
-      <obj_property name="ObjectShortName">vram_data[31:0]</obj_property>
+      <obj_property name="ElementShortName">vram_data[0:11][31:0]</obj_property>
+      <obj_property name="ObjectShortName">vram_data[0:11][31:0]</obj_property>
    </wvobject>
    <wvobject type="array" fp_name="/nekoichitop/VideoUnit/videooutbyte">
       <obj_property name="ElementShortName">videooutbyte[7:0]</obj_property>
@@ -226,17 +225,13 @@
       <obj_property name="label">GPUFIFO</obj_property>
       <obj_property name="DisplayName">label</obj_property>
    </wvobject>
-   <wvobject type="logic" fp_name="/nekoichitop/gpurwqueue/rst">
-      <obj_property name="ElementShortName">rst</obj_property>
-      <obj_property name="ObjectShortName">rst</obj_property>
+   <wvobject type="logic" fp_name="/nekoichitop/gpurwqueue/clk">
+      <obj_property name="ElementShortName">clk</obj_property>
+      <obj_property name="ObjectShortName">clk</obj_property>
    </wvobject>
-   <wvobject type="logic" fp_name="/nekoichitop/gpurwqueue/wr_clk">
-      <obj_property name="ElementShortName">wr_clk</obj_property>
-      <obj_property name="ObjectShortName">wr_clk</obj_property>
-   </wvobject>
-   <wvobject type="logic" fp_name="/nekoichitop/gpurwqueue/rd_clk">
-      <obj_property name="ElementShortName">rd_clk</obj_property>
-      <obj_property name="ObjectShortName">rd_clk</obj_property>
+   <wvobject type="logic" fp_name="/nekoichitop/gpurwqueue/srst">
+      <obj_property name="ElementShortName">srst</obj_property>
+      <obj_property name="ObjectShortName">srst</obj_property>
    </wvobject>
    <wvobject type="array" fp_name="/nekoichitop/gpurwqueue/din">
       <obj_property name="ElementShortName">din[31:0]</obj_property>
@@ -294,10 +289,6 @@
       <obj_property name="ElementShortName">gpustate[1:0]</obj_property>
       <obj_property name="ObjectShortName">gpustate[1:0]</obj_property>
    </wvobject>
-   <wvobject type="array" fp_name="/nekoichitop/rv32gpu/commandlatch">
-      <obj_property name="ElementShortName">commandlatch[31:0]</obj_property>
-      <obj_property name="ObjectShortName">commandlatch[31:0]</obj_property>
-   </wvobject>
    <wvobject type="array" fp_name="/nekoichitop/rv32gpu/vramwe">
       <obj_property name="ElementShortName">vramwe[3:0]</obj_property>
       <obj_property name="ObjectShortName">vramwe[3:0]</obj_property>
@@ -345,7 +336,6 @@
    <wvobject type="array" fp_name="/nekoichitop/rv32gpu/gpuregs/registers">
       <obj_property name="ElementShortName">registers[0:7][31:0]</obj_property>
       <obj_property name="ObjectShortName">registers[0:7][31:0]</obj_property>
-      <obj_property name="isExpanded"></obj_property>
    </wvobject>
    <wvobject fp_name="divider120" type="divider">
       <obj_property name="label">CPU</obj_property>

@@ -1,5 +1,7 @@
 `timescale 1ns / 1ps
 
+`include "gpuops.vh"
+
 module gpuregisterfile(
 	input wire reset,
 	input wire clock,
@@ -30,8 +32,8 @@ module GPU (
 	output logic [3:0] vramwe,
 	output logic [31:0] vramdata );
 	
-logic [1:0] gpustate = 2'b00;
-logic [31:0] commandlatch;
+logic [`GPUOPWIDTH-1:0] gpustate = `GPUSTATEIDLE_MASK;
+logic [31:0] commandlatch = 32'd0;
 
 logic [31:0] rdatain = 32'd0;
 wire [31:0] rval;
@@ -49,6 +51,11 @@ gpuregisterfile gpuregs(
 	.wren(rwren),
 	.datain(rdatain),
 	.rval(rval) );
+	
+always_comb begin
+	if (gpupulse == 1'b1)
+		commandlatch = gpucommand;
+end
 
 always_comb begin
 
@@ -72,42 +79,47 @@ always_comb begin
 
 	// MEMWRITE: Write contents of sr to address A
 	// [----AAAAAAAAAAAAAA WWWW][---][SSS][0010]
+
+	// CLEAR: Clear the video memory using contents of register rs
+	// [------------------ ----][---][SSS][0011]
 end
 
 always_ff @(posedge clock) begin
 	if (reset) begin
 
-		commandlatch <= 64'd0;
 		gpuready <= 1'b1;
-		gpustate <= 2'b00;
+		gpustate <= `GPUSTATEIDLE_MASK;
 		vramaddress <= 14'd0;
 		vramdata <= 32'd0;
 		vramwe <= 4'b0000;
 
 	end else begin
 	
-		unique case (gpustate)
+		gpustate <= `GPUSTATENONE_MASK;
+	
+		unique case (1'b1)
 		
-			2'b00: begin
-				// Stop writes
+			gpustate[`GPUSTATEIDLE]: begin
+				// Stop writes to memory and registers
 				vramwe <= 4'b0000;
 				rwren <= 1'b0;
 
 				// Check for pulse, execute if there's an incoming command
 				if (gpupulse) begin
-					commandlatch <= gpucommand;
-					gpustate <= 2'b01;
+					gpustate[`GPUSTATEEXEC] <= 1'b1;
 					gpuready <= 1'b0;
 				end else begin
-					gpustate <= 2'b00;
+					gpustate[`GPUSTATEIDLE] <= 1'b1;
 					gpuready <= 1'b1;
 				end
 			end
 	
 			// Command execute state
-			2'b01: begin
+			gpustate[`GPUSTATEEXEC]: begin
+				gpuready <= 1'b1;
 				unique case (cmd) // 4'bxxxx
 					4'b0000: begin // NOOP
+						gpustate[`GPUSTATEIDLE] <= 1'b1;
 					end
 					4'b0001: begin // REGSETLOW/HI
 						rwren <= 1'b1;
@@ -115,46 +127,77 @@ always_ff @(posedge clock) begin
 							rdatain <= {rval[31:10], immshort};
 						else // set HIGH if source register is not zero register
 							rdatain <= {immshort[9:0], rval[21:0]};
+						gpustate[`GPUSTATEIDLE] <= 1'b1;
 					end
 					4'b0010: begin // MEMWRITE
 						vramaddress <= immshort[17:4];
 						vramdata <= rval;
 						vramwe <= immshort[3:0];
+						gpustate[`GPUSTATEIDLE] <= 1'b1;
 					end
-					4'b0011: begin // 
+					4'b0011: begin // CLEAR
+						vramaddress <= 14'd0;
+						vramdata <= rval;
+						vramwe <= 4'b1111;
+						gpuready <= 1'b0; 
+						gpustate[`GPUSTATECLEAR] <= 1'b1;
 					end
 					4'b0100: begin // 
+						gpustate[`GPUSTATEIDLE] <= 1'b1;
 					end
 					4'b0101: begin // 
+						gpustate[`GPUSTATEIDLE] <= 1'b1;
 					end
 					4'b0110: begin // 
+						gpustate[`GPUSTATEIDLE] <= 1'b1;
 					end
 					4'b0111: begin // 
+						gpustate[`GPUSTATEIDLE] <= 1'b1;
 					end
 					4'b1000: begin // 
+						gpustate[`GPUSTATEIDLE] <= 1'b1;
 					end
 					4'b1001: begin // 
+						gpustate[`GPUSTATEIDLE] <= 1'b1;
 					end
 					4'b1010: begin // 
+						gpustate[`GPUSTATEIDLE] <= 1'b1;
 					end
 					4'b1011: begin // 
+						gpustate[`GPUSTATEIDLE] <= 1'b1;
 					end
 					4'b1100: begin // 
+						gpustate[`GPUSTATEIDLE] <= 1'b1;
 					end
 					4'b1101: begin // 
+						gpustate[`GPUSTATEIDLE] <= 1'b1;
 					end
 					4'b1110: begin // 
+						gpustate[`GPUSTATEIDLE] <= 1'b1;
 					end
 					4'b1111: begin // 
+						gpustate[`GPUSTATEIDLE] <= 1'b1;
 					end
 				endcase
-				gpustate <= 2'b00;
-				gpuready <= 1'b1;
 			end
 			
-			default: begin
-				// TODO: Nothing to do here
+			gpustate[`GPUSTATECLEAR]: begin // CLEAR
+				if (vramaddress == 14'h3000) begin // 256*192/4 (DWORD address)
+					gpuready <= 1'b1;
+					gpustate[`GPUSTATEIDLE] <= 1'b1;
+				end else begin
+					vramaddress <= vramaddress + 14'd1;
+					// Loop in same state
+					gpustate[`GPUSTATECLEAR] <= 1'b1;
+					gpuready <= 1'b0;
+				end
 			end
+
+			gpustate[`GPUSTATEDMA]: begin // Unused for now
+				gpuready <= 1'b1;
+				gpustate[`GPUSTATEIDLE] <= 1'b1;
+			end
+			
 		endcase
 	end
 end

@@ -61,8 +61,8 @@ wire [31:0] gpufifocommand;  // < from CPU
 wire gpufifowe; // < from CPU
 wire gpuready; // < from GPU
 logic fifore = 1'b0;
-logic [63:0] fifodataout;
-logic [63:0] gpucommand;
+logic [31:0] fifodataout;
+logic [31:0] gpucommand;
 logic gpupulse = 1'b0;
 opqueue gpurwqueue(
 	// write
@@ -74,9 +74,8 @@ opqueue gpurwqueue(
 	.dout(fifodataout),
 	.rd_en(fifore),
 	// ctl
-	.wr_clk(sysclock),
-	.rd_clk(sysclock),
-	.rst(reset_p),
+	.clk(sysclock),
+	.srst(reset_p),
 	.valid(fifodatavalid) );
 
 // Stream from command queue to GPU
@@ -86,7 +85,7 @@ always_ff @(posedge sysclock) begin
 	gpupulse <= 1'b0;
 	fifore <= 1'b0;
 
-	// Trigger read
+	// Trigger read when FIFO not empty and if GPU is ready
 	if ((fifore == 1'b0) & (fifordempty == 1'b0) & gpuready) begin
 		fifore <= 1'b1;
 	end
@@ -121,7 +120,10 @@ rv32cpu rv32cpu(
 	.memaddress(memaddress),
 	.writeword(writeword),
 	.mem_data(mem_data),
-	.mem_writeena(mem_writeena) );
+	.mem_writeena(mem_writeena),
+	.gpuready(gpuready),
+	.gpufifoempty(fifordempty),
+	.gpufifofull(fifowrfull) );
 
 // =====================================================================================================
 // Video Unit
