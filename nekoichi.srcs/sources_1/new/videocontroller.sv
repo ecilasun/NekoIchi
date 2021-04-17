@@ -9,6 +9,7 @@ module videocontroller(
 		input wire [13:0] memaddress,
 		input wire [3:0] mem_writeena,
 		input wire [31:0] writeword,
+		input wire [11:0] lanemask,
 		output wire [7:0] red,
 		output wire [7:0] green,
 		output wire [7:0] blue);
@@ -40,8 +41,10 @@ generate for (slicegen = 0; slicegen < 12; slicegen = slicegen + 1) begin : vram
 		.addra(memaddress[9:0]),
 		.clka(sysclock),
 		.dina(writeword),
-		.ena(reset_n & (memaddress[13:10]==slicegen[3:0] ? 1'b1:1'b0)),
-		.wea(memaddress[13:10]==slicegen[3:0] ? mem_writeena : 4'b0000),
+		.ena(reset_n),
+		// If lane mask is enabled or if this vram slice is in the correct address range, enable writes
+		// NOTE: lane mask enable still uses the mem_writeena to control which bytes to update
+		.wea( (lanemask[slicegen] | (memaddress[13:10]==slicegen[3:0])) ? mem_writeena : 4'b0000 ),
 		// Read out to respective vram_data elements for each slice
 		.addrb(scanoutaddress[9:0]),
 		.enb(reset_n & (scanoutaddress[13:10]==slicegen[3:0] ? 1'b1:1'b0)),

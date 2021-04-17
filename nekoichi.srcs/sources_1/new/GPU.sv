@@ -30,12 +30,13 @@ module GPU (
 	output logic gpuready = 1'b1,
 	output logic [13:0] vramaddress,
 	output logic [3:0] vramwe,
-	output logic [31:0] vramdata );
+	output logic [31:0] vramdata,
+	output logic [11:0] lanemask );
 	
 logic [`GPUOPWIDTH-1:0] gpustate = `GPUSTATEIDLE_MASK;
 logic [31:0] commandlatch = 32'd0;
 
-logic [31:0] rdatain = 32'd0;
+logic [31:0] rdatain;
 wire [31:0] rval;
 logic rwren = 1'b0;
 logic [2:0] rs;
@@ -92,6 +93,8 @@ always_ff @(posedge clock) begin
 		vramaddress <= 14'd0;
 		vramdata <= 32'd0;
 		vramwe <= 4'b0000;
+		lanemask <= 12'h000;
+		rdatain <= 32'd0;
 
 	end else begin
 	
@@ -103,6 +106,9 @@ always_ff @(posedge clock) begin
 				// Stop writes to memory and registers
 				vramwe <= 4'b0000;
 				rwren <= 1'b0;
+
+				// Also turn off parallel writes
+				lanemask <= 12'h000;
 
 				// Check for pulse, execute if there's an incoming command
 				if (gpupulse) begin
@@ -138,8 +144,10 @@ always_ff @(posedge clock) begin
 					4'b0011: begin // CLEAR
 						vramaddress <= 14'd0;
 						vramdata <= rval;
+						// Enable all 4 bytes since clears are 32bit per write
 						vramwe <= 4'b1111;
-						gpuready <= 1'b0; 
+						lanemask <= 12'hFFF; // Turn on all lanes for parallel writes
+						gpuready <= 1'b0;
 						gpustate[`GPUSTATECLEAR] <= 1'b1;
 					end
 					4'b0100: begin // 
@@ -182,14 +190,14 @@ always_ff @(posedge clock) begin
 			end
 			
 			gpustate[`GPUSTATECLEAR]: begin // CLEAR
-				if (vramaddress == 14'h3000) begin // 256*192/4 (DWORD address)
+				if (vramaddress == 14'h400) begin // 12*(256*192/4) (DWORD addresses) -> 0xC*0x400
 					gpuready <= 1'b1;
 					gpustate[`GPUSTATEIDLE] <= 1'b1;
 				end else begin
 					vramaddress <= vramaddress + 14'd1;
 					// Loop in same state
-					gpustate[`GPUSTATECLEAR] <= 1'b1;
 					gpuready <= 1'b0;
+					gpustate[`GPUSTATECLEAR] <= 1'b1;
 				end
 			end
 

@@ -101,6 +101,7 @@ end
 wire [13:0] vramaddress;
 wire [3:0] vramwe;
 wire [31:0] vramdata;
+wire [11:0] lanemask;
 GPU rv32gpu(
 	.clock(sysclock),
 	.reset(reset_p),
@@ -110,7 +111,8 @@ GPU rv32gpu(
 	// VRAM output
 	.vramaddress(vramaddress),
 	.vramwe(vramwe),
-	.vramdata(vramdata) );
+	.vramdata(vramdata),
+	.lanemask(lanemask) );
 
 rv32cpu rv32cpu(
 	.clock(sysclock),
@@ -138,6 +140,7 @@ videocontroller VideoUnit(
 		.memaddress(vramaddress),
 		.mem_writeena(vramwe), // Will recognize and trap its own writes using top address bit
 		.writeword(vramdata),
+		.lanemask(lanemask),
 		.red(red),
 		.green(green),
 		.blue(blue));
