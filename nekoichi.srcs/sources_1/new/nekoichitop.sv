@@ -74,11 +74,9 @@ wire fifordempty;
 wire fifodatavalid;
 wire [31:0] gpufifocommand;  // < from CPU
 wire gpufifowe; // < from CPU
-wire gpuready; // < from GPU
-logic fifore = 1'b0;
-logic [31:0] fifodataout;
-logic [31:0] gpucommand;
-logic gpupulse = 1'b0;
+wire fifore;
+wire [31:0] fifodataout;
+
 opqueue gpurwqueue(
 	// write
 	.full(fifowrfull),
@@ -93,26 +91,6 @@ opqueue gpurwqueue(
 	.srst(reset_p),
 	.valid(fifodatavalid) );
 
-// Stream from command queue to GPU
-always_ff @(posedge sysclock) begin
-
-	// Turn off pulse and read enable if either were set on last clock
-	gpupulse <= 1'b0;
-	fifore <= 1'b0;
-
-	// Trigger read when FIFO not empty and if GPU is ready
-	if ((fifore == 1'b0) & (fifordempty == 1'b0) & gpuready) begin
-		fifore <= 1'b1;
-	end
-
-	// Complete read from fifo and apply operation in the command bits
-	if (fifodatavalid) begin
-		gpucommand <= fifodataout;
-		gpupulse <= 1'b1;
-	end
-
-end
-
 wire [13:0] vramaddress;
 wire [3:0] vramwe;
 wire [31:0] vramwriteword;
@@ -120,9 +98,11 @@ wire [11:0] lanemask;
 GPU rv32gpu(
 	.clock(sysclock),
 	.reset(reset_p),
-	.gpucommand(gpucommand),
-	.gpupulse(gpupulse),
-	.gpuready(gpuready),
+	// FIFO control
+	.fifoempty(fifordempty),
+	.fifodout(fifodataout),
+	.fifdoutvalid(fifodatavalid),
+	.fiford_en(fifore),
 	// VRAM output
 	.vramaddress(vramaddress),
 	.vramwe(vramwe),
@@ -142,8 +122,6 @@ rv32cpu rv32cpu(
 	.writeword(writeword),
 	.mem_data(mem_data),
 	.mem_writeena(mem_writeena),
-	.gpuready(gpuready),
-	.gpufifoempty(fifordempty),
 	.gpufifofull(fifowrfull) );
 
 // =====================================================================================================

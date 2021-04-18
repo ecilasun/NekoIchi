@@ -1,17 +1,19 @@
 // ======================== GPU States ==========================
-`define GPUOPWIDTH 4
+`define GPUOPWIDTH 5
 
-`define GPUSTATEIDLE	0
-`define GPUSTATEEXEC	1
-`define GPUSTATECLEAR	2
-`define GPUSTATEDMA		3
+`define GPUSTATEIDLE			0
+`define GPUSTATELATCHCOMMAND	1
+`define GPUSTATEEXEC			2
+`define GPUSTATECLEAR			3
+`define GPUSTATEDMA				4
 
-`define GPUSTATENONE_MASK	4'b0000
+`define GPUSTATENONE_MASK			5'b00000
 
-`define GPUSTATEIDLE_MASK	4'b0001
-`define GPUSTATEEXEC_MASK	4'b0010
-`define GPUSTATECLEAR_MASK	4'b0100
-`define GPUSTATEDMA_MASK	4'b1000
+`define GPUSTATEIDLE_MASK			5'b00001
+`define GPUSTATELATCHCOMMAND_MASK	5'b00010
+`define GPUSTATEEXEC_MASK			5'b00100
+`define GPUSTATECLEAR_MASK			5'b01000
+`define GPUSTATEDMA_MASK			5'b10000
 // ==============================================================
 
 // =================== GPU Commands =============================
@@ -36,4 +38,7 @@
 	// SYSDMA: Transfer from SYSRAM to VRAM (from address rs to address rd) by C DWORDs
 	// TODO: Source byte mask / destination byte mask?
 	// [---- ---- CCCCCCCCCCCCCC][DDD][SSS][0100]
+	
+	// VSYNC: Wait for first scanline to be reached
+	// [---- ---- --------------][---][---][0101]
 // ==============================================================

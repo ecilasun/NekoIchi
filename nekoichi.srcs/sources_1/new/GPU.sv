@@ -29,17 +29,17 @@ module GPU (
 	input wire clock,
 	input wire reset,
 	// GPU FIFO
-	input wire [31:0] gpucommand,
-	input wire gpupulse,
-	// GPU State
-	output logic gpuready = 1'b1,
+	input wire fifoempty,
+	input wire [31:0] fifodout,
+	input wire fifdoutvalid,
+	output logic fiford_en,
 	// VRAM
 	output logic [13:0] vramaddress,
 	output logic [3:0] vramwe,
 	output logic [31:0] vramwriteword,
 	output logic [11:0] lanemask,
 	// SYSRAM DMA channel
-	output logic [31:0] dmaaddress,
+	output logic [14:0] dmaaddress,
 	output logic [31:0] dmaword,
 	output logic [3:0] dmawe,
 	input wire [31:0] dma_data );
@@ -70,11 +70,6 @@ gpuregisterfile gpuregs(
 	.rval2(rval2) );
 	
 always_comb begin
-	if (gpupulse == 1'b1)
-		commandlatch = gpucommand;
-end
-
-always_comb begin
 	cmd = commandlatch[3:0];		// command
 	rs1 = commandlatch[6:4];		// source register 1
 	rs2 = commandlatch[9:7];		// source register 2 (==destination register)
@@ -86,17 +81,17 @@ end
 always_ff @(posedge clock) begin
 	if (reset) begin
 
-		gpuready <= 1'b1;
 		gpustate <= `GPUSTATEIDLE_MASK;
 		vramaddress <= 14'd0;
 		vramwriteword <= 32'd0;
 		vramwe <= 4'b0000;
 		lanemask <= 12'h000;
 		rdatain <= 32'd0;
-		dmaaddress <= 32'd0;
+		dmaaddress <= 15'd0;
 		dmaword <= 32'd0;
 		dmawe <= 4'b0000;
 		dmacount <= 14'd0;
+		fiford_en <= 1'b0;
 
 	end else begin
 	
@@ -108,26 +103,35 @@ always_ff @(posedge clock) begin
 				// Stop writes to memory and registers
 				vramwe <= 4'b0000;
 				rwren <= 1'b0;
-
 				// Also turn off parallel writes
 				lanemask <= 12'h000;
-				
 				// And DMA writes
 				dmawe <= 4'b0000;
-
-				// Check for pulse, execute if there's an incoming command
-				if (gpupulse) begin
-					gpustate[`GPUSTATEEXEC] <= 1'b1;
-					gpuready <= 1'b0;
+				
+				// See if there's something on the fifo
+				if (~fifoempty) begin
+					fiford_en <= 1'b1;
+					gpustate[`GPUSTATELATCHCOMMAND] <= 1'b1;
 				end else begin
 					gpustate[`GPUSTATEIDLE] <= 1'b1;
-					gpuready <= 1'b1;
+				end
+			end
+			
+			gpustate[`GPUSTATELATCHCOMMAND]: begin
+				// Turn off fifo read request on the next clock
+				fiford_en <= 1'b0;
+				if (fifdoutvalid) begin
+					// Data is available, latch and jump to execute
+					commandlatch <= fifodout;
+					gpustate[`GPUSTATEEXEC] <= 1'b1;
+				end else begin
+					// Data is not available yet, spin
+					gpustate[`GPUSTATELATCHCOMMAND] <= 1'b1;
 				end
 			end
 	
 			// Command execute state
 			gpustate[`GPUSTATEEXEC]: begin
-				gpuready <= 1'b1;
 				unique case (cmd) // 4'bxxxx
 					4'b0000: begin // NOOP
 						gpustate[`GPUSTATEIDLE] <= 1'b1;
@@ -135,7 +139,7 @@ always_ff @(posedge clock) begin
 					4'b0001: begin // REGSETLOW/HI
 						rwren <= 1'b1;
 						if (rs1==3'd0) // set LOW if source register is zero register
-							rdatain <= {rval1[31:10], immshort};
+							rdatain <= {10'd0, immshort};
 						else // set HIGH if source register is not zero register
 							rdatain <= {immshort[9:0], rval1[21:0]};
 						gpustate[`GPUSTATEIDLE] <= 1'b1;
@@ -152,17 +156,15 @@ always_ff @(posedge clock) begin
 						// Enable all 4 bytes since clears are 32bit per write
 						vramwe <= 4'b1111;
 						lanemask <= 12'hFFF; // Turn on all lanes for parallel writes
-						gpuready <= 1'b0;
 						gpustate[`GPUSTATECLEAR] <= 1'b1;
 					end
 					4'b0100: begin // SYSDMA
-						dmaaddress <= rval1; // rs
-						vramaddress <= rval2;
-						dmacount <= immshort[13:0];
+						dmaaddress <= rval1[14:0]; // rs1: source
+						dmacount <= 14'd0;
 						dmawe <= 4'b0000; // Reading from SYSRAM
 						gpustate[`GPUSTATEDMA] <= 1'b1;
 					end
-					4'b0101: begin // 
+					4'b0101: begin //
 						gpustate[`GPUSTATEIDLE] <= 1'b1;
 					end
 					4'b0110: begin // 
@@ -174,7 +176,7 @@ always_ff @(posedge clock) begin
 					4'b1000: begin // 
 						gpustate[`GPUSTATEIDLE] <= 1'b1;
 					end
-					4'b1001: begin // 
+					4'b1001: begin //
 						gpustate[`GPUSTATEIDLE] <= 1'b1;
 					end
 					4'b1010: begin // 
@@ -200,28 +202,24 @@ always_ff @(posedge clock) begin
 			
 			gpustate[`GPUSTATECLEAR]: begin // CLEAR
 				if (vramaddress == 14'h400) begin // 12*(256*192/4) (DWORD addresses) -> 0xC*0x400
-					gpuready <= 1'b1;
 					gpustate[`GPUSTATEIDLE] <= 1'b1;
 				end else begin
 					vramaddress <= vramaddress + 14'd1;
 					// Loop in same state
-					gpuready <= 1'b0;
 					gpustate[`GPUSTATECLEAR] <= 1'b1;
 				end
 			end
 
 			gpustate[`GPUSTATEDMA]: begin // SYSDMA
-				if (dmacount == 14'd0) begin
+				if (dmacount == immshort[13:0]) begin
 					// DMA done
-					gpuready <= 1'b1;
 					gpustate[`GPUSTATEIDLE] <= 1'b1;
 				end else begin
+					vramwe <= 4'b1111; // Write to all lanes
 					vramwriteword <= dma_data;
-					dmaaddress <= dmaaddress + 31'd1;
-					vramaddress <= vramaddress + 31'd1;
-					vramwe <= 4'b1111; // All lanes (note: write starts one clock after read) 
-					dmacount <= dmacount - 14'd1;
-					gpuready <= 1'b0;
+					dmaaddress <= dmaaddress + 15'd1;
+					vramaddress <= rval2[13:0] + dmacount; // rs2: target (walks one behind read address)
+					dmacount <= dmacount + 14'd1;
 					gpustate[`GPUSTATEDMA] <= 1'b1;
 				end
 			end

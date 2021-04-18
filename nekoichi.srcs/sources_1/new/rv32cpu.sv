@@ -11,8 +11,6 @@ module rv32cpu(
 	output logic [31:0] writeword = 32'h00000000,
 	input wire [31:0] mem_data,
 	output logic [3:0] mem_writeena = 4'b0000,
-	input wire gpuready,
-	input wire gpufifoempty,
 	input wire gpufifofull );
 	
 // =====================================================================================================
@@ -65,6 +63,11 @@ wire divbusy, divbusyu;
 // CPU Components
 // =====================================================================================================
 
+wire isdecoding = cpustate[`CPUDECODE]==1'b1;
+wire isdecodingfloatop = isdecoding & (opcode==`OPCODE_FLOAT_OP);
+
+// Pulses to kick math operations
+wire mulstart = isdecoding & (aluop==`ALU_MUL) & (opcode == `OPCODE_OP);
 multiplier themul(
     .clk(clock),
     .reset(reset),
@@ -75,6 +78,7 @@ multiplier themul(
     .multiplier(rval2),
     .product(product) );
 
+wire divstart = isdecoding & (aluop==`ALU_DIV | aluop==`ALU_REM) & (opcode == `OPCODE_OP); // High only during DECODE and if opcode is regular ALU op
 DIVU unsigneddivider (
 	.clk(clock),
 	.reset(reset),
@@ -97,7 +101,7 @@ DIV signeddivider (
 	.remainder(remainder)	// result: remainder
 );
 
-wire fmaddvalid = (cpustate[`CPUDECODE]==1'b1) & (opcode==`OPCODE_FLOAT_MADD);
+wire fmaddvalid = isdecoding & (opcode==`OPCODE_FLOAT_MADD);
 logic [31:0] fmaddresult;
 logic fmaddresultvalid;
 fp_madd floatfmadd(
@@ -111,7 +115,7 @@ fp_madd floatfmadd(
 	.m_axis_result_tdata(fmaddresult),
 	.m_axis_result_tvalid(fmaddresultvalid) );
 
-wire fmsubvalid = (cpustate[`CPUDECODE]==1'b1) & (opcode==`OPCODE_FLOAT_MSUB);
+wire fmsubvalid = isdecoding & (opcode==`OPCODE_FLOAT_MSUB);
 logic [31:0] fmsubresult;
 logic fmsubresultvalid;
 fp_msub floatfmsub(
@@ -125,7 +129,7 @@ fp_msub floatfmsub(
 	.m_axis_result_tdata(fmsubresult),
 	.m_axis_result_tvalid(fmsubresultvalid) );
 
-wire fnmsubvalid = (cpustate[`CPUDECODE]==1'b1) & (opcode==`OPCODE_FLOAT_NMSUB); // is actually MADD!
+wire fnmsubvalid = isdecoding & (opcode==`OPCODE_FLOAT_NMSUB); // is actually MADD!
 logic [31:0] fnmsubresult;
 logic fnmsubresultvalid; 
 fp_madd floatfnmsub(
@@ -139,7 +143,7 @@ fp_madd floatfnmsub(
 	.m_axis_result_tdata(fnmsubresult),
 	.m_axis_result_tvalid(fnmsubresultvalid) );
 
-wire fnmaddvalid = (cpustate[`CPUDECODE]==1'b1) & (opcode==`OPCODE_FLOAT_NMADD); // is actually MSUB!
+wire fnmaddvalid = isdecoding & (opcode==`OPCODE_FLOAT_NMADD); // is actually MSUB!
 logic [31:0] fnmaddresult;
 logic fnmaddresultvalid;
 fp_msub floatfnmadd(
@@ -153,7 +157,7 @@ fp_msub floatfnmadd(
 	.m_axis_result_tdata(fnmaddresult),
 	.m_axis_result_tvalid(fnmaddresultvalid) );
 
-wire faddvalid = (cpustate[`CPUDECODE]==1'b1) & (opcode==`OPCODE_FLOAT_OP) & (func7==`FADD);
+wire faddvalid = isdecodingfloatop & (func7==`FADD);
 logic [31:0] faddresult;
 logic faddresultvalid;
 fp_add floatadd(
@@ -165,7 +169,7 @@ fp_add floatadd(
 	.m_axis_result_tdata(faddresult),
 	.m_axis_result_tvalid(faddresultvalid) );
 
-wire fsubvalid = (cpustate[`CPUDECODE]==1'b1) & (opcode==`OPCODE_FLOAT_OP) & (func7==`FSUB);	
+wire fsubvalid = isdecodingfloatop & (func7==`FSUB);	
 logic [31:0] fsubresult;
 logic fsubresultvalid;
 fp_sub floatsub(
@@ -177,7 +181,7 @@ fp_sub floatsub(
 	.m_axis_result_tdata(fsubresult),
 	.m_axis_result_tvalid(fsubresultvalid) );
 
-wire fmulvalid = (cpustate[`CPUDECODE]==1'b1) & (opcode==`OPCODE_FLOAT_OP) & (func7==`FMUL);	
+wire fmulvalid = isdecodingfloatop & (func7==`FMUL);	
 logic [31:0] fmulresult;
 logic fmulresultvalid;
 fp_mul floatmul(
@@ -189,7 +193,7 @@ fp_mul floatmul(
 	.m_axis_result_tdata(fmulresult),
 	.m_axis_result_tvalid(fmulresultvalid) );
 
-wire fdivvalid = (cpustate[`CPUDECODE]==1'b1) & (opcode==`OPCODE_FLOAT_OP) & (func7==`FDIV);	
+wire fdivvalid = isdecodingfloatop & (func7==`FDIV);	
 logic [31:0] fdivresult;
 logic fdivresultvalid;
 fp_div floatdiv(
@@ -201,7 +205,7 @@ fp_div floatdiv(
 	.m_axis_result_tdata(fdivresult),
 	.m_axis_result_tvalid(fdivresultvalid) );
 
-wire fi2fvalid = (cpustate[`CPUDECODE]==1'b1) & (opcode==`OPCODE_FLOAT_OP) & (func7==`FCVTSW) & (rs2==5'b00000); // Signed
+wire fi2fvalid = isdecodingfloatop & (func7==`FCVTSW) & (rs2==5'b00000); // Signed
 logic [31:0] fi2fresult;
 logic fi2fresultvalid;
 fp_i2f floati2f(
@@ -211,7 +215,7 @@ fp_i2f floati2f(
 	.m_axis_result_tdata(fi2fresult),
 	.m_axis_result_tvalid(fi2fresultvalid) );
 	
-wire fui2fvalid = (cpustate[`CPUDECODE]==1'b1) & (opcode==`OPCODE_FLOAT_OP) & (func7==`FCVTSW) & (rs2==5'b00001); // Unsigned
+wire fui2fvalid = isdecodingfloatop & (func7==`FCVTSW) & (rs2==5'b00001); // Unsigned
 logic [31:0] fui2fresult;
 logic fui2fresultvalid;
 fp_ui2f floatui2f(
@@ -221,7 +225,7 @@ fp_ui2f floatui2f(
 	.m_axis_result_tdata(fui2fresult),
 	.m_axis_result_tvalid(fui2fresultvalid) );
 
-wire ff2ivalid = (cpustate[`CPUDECODE]==1'b1) & (opcode==`OPCODE_FLOAT_OP) & (func7==`FCVTWS) & (rs2==5'b00000); // Signed
+wire ff2ivalid = isdecodingfloatop & (func7==`FCVTWS) & (rs2==5'b00000); // Signed
 logic [31:0] ff2iresult;
 logic ff2iresultvalid;
 fp_f2i floatf2i(
@@ -231,7 +235,7 @@ fp_f2i floatf2i(
 	.m_axis_result_tdata(ff2iresult),
 	.m_axis_result_tvalid(ff2iresultvalid) );
 
-wire ff2uivalid = (cpustate[`CPUDECODE]==1'b1) & (opcode==`OPCODE_FLOAT_OP) & (func7==`FCVTWS) & (rs2==5'b00001); // Unsigned
+wire ff2uivalid = isdecodingfloatop & (func7==`FCVTWS) & (rs2==5'b00001); // Unsigned
 logic [31:0] ff2uiresult;
 logic ff2uiresultvalid;
 // NOTE: Sharing same logic with f2i here, ignoring sign bit instead
@@ -242,7 +246,7 @@ fp_f2i floatf2ui(
 	.m_axis_result_tdata(ff2uiresult),
 	.m_axis_result_tvalid(ff2uiresultvalid) );
 	
-wire fsqrtvalid = (cpustate[`CPUDECODE]==1'b1) & (opcode==`OPCODE_FLOAT_OP) & (func7==`FSQRT);
+wire fsqrtvalid = isdecodingfloatop & (func7==`FSQRT);
 logic [31:0] fsqrtresult;
 logic fsqrtresultvalid;
 fp_sqrt floatsqrt(
@@ -252,7 +256,7 @@ fp_sqrt floatsqrt(
 	.m_axis_result_tdata(fsqrtresult),
 	.m_axis_result_tvalid(fsqrtresultvalid) );
 
-wire feqvalid = (cpustate[`CPUDECODE]==1'b1) & (opcode==`OPCODE_FLOAT_OP) & (func7==`FEQ) & (func3==3'b010); // FEQ
+wire feqvalid = isdecodingfloatop & (func7==`FEQ) & (func3==3'b010); // FEQ
 logic [7:0] feqresult;
 logic feqresultvalid;
 fp_eq floateq(
@@ -264,7 +268,7 @@ fp_eq floateq(
 	.m_axis_result_tdata(feqresult),
 	.m_axis_result_tvalid(feqresultvalid) );
 
-wire fltvalid = (cpustate[`CPUDECODE]==1'b1) & (opcode==`OPCODE_FLOAT_OP) & ( (func7 == `FMIN) | (func7 == `FMAX) | ((func7==`FEQ) & (func3==3'b001))); // FLT
+wire fltvalid = isdecodingfloatop & ( (func7 == `FMIN) | (func7 == `FMAX) | ((func7==`FEQ) & (func3==3'b001))); // FLT
 logic [7:0] fltresult;
 logic fltresultvalid;
 fp_lt floatlt(
@@ -276,7 +280,7 @@ fp_lt floatlt(
 	.m_axis_result_tdata(fltresult),
 	.m_axis_result_tvalid(fltresultvalid) );
 
-wire flevalid = (cpustate[`CPUDECODE]==1'b1) & (opcode==`OPCODE_FLOAT_OP) & (func7==`FEQ) & (func3==3'b000); // FLE
+wire flevalid = isdecodingfloatop & (func7==`FEQ) & (func3==3'b000); // FLE
 logic [7:0] fleresult;
 logic fleresultvalid;
 fp_le floatle(
@@ -370,10 +374,6 @@ end
 // =====================================================================================================
 // Math Unit Logic
 // =====================================================================================================
-
-// Pulses to kick math operations
-wire mulstart = (cpustate[`CPUDECODE]==1'b1 /*& (~icachemissed)*/) & (aluop==`ALU_MUL) & (opcode == `OPCODE_OP);
-wire divstart = (cpustate[`CPUDECODE]==1'b1 /*& (~icachemissed)*/) & (aluop==`ALU_DIV | aluop==`ALU_REM) & (opcode == `OPCODE_OP); // High only during DECODE and if opcode is regular ALU op
 
 // High during mul/div/rem operations
 wire muldivstall = (divstart | divbusy | divbusyu) | (mulstart | mulbusy);
@@ -601,50 +601,44 @@ always_ff @(posedge clock) begin
 			end
 
 			cpustate[`CPULOADCOMPLETE]: begin
-				if (memaddress[31] == 1'b1) begin // Reads from 0x8...0 return GPU ready flag
-					// 0x80000000 : GPUREADY
-					// 0x80000004 : GPUFIFOEMPTY
-					registerdata <= memaddress[2] == 1'b0 ? {31'd0, gpuready} : {31'd0, gpufifoempty};
-				end else begin
-					unique case (func3) // lb:000 lh:001 lw:010 lbu:100 lhu:101
-						3'b000: begin
-							// Byte alignment based on {address[1:0]} with sign extension
-							case (memaddress[1:0]) // synthesis full_case
-								2'b11: begin registerdata <= {{24{mem_data[31]}},mem_data[31:24]}; end
-								2'b10: begin registerdata <= {{24{mem_data[23]}},mem_data[23:16]}; end
-								2'b01: begin registerdata <= {{24{mem_data[15]}},mem_data[15:8]}; end
-								2'b00: begin registerdata <= {{24{mem_data[7]}},mem_data[7:0]}; end
-							endcase
-						end
-						3'b001: begin
-							// short alignment based on {address[1],1'b0} with sign extension
-							case (memaddress[1]) // synthesis full_case
-								1'b1: begin registerdata <= {{16{mem_data[31]}},mem_data[31:16]}; end
-								1'b0: begin registerdata <= {{16{mem_data[15]}},mem_data[15:0]}; end
-							endcase
-						end
-						3'b010: begin
-							// Already aligned on read, regular DWORD read
-							registerdata <= mem_data[31:0];
-						end
-						3'b100: begin
-							// Byte alignment based on {address[1:0]} with zero extension
-							case (memaddress[1:0]) // synthesis full_case
-								2'b11: begin registerdata <= {24'd0, mem_data[31:24]}; end
-								2'b10: begin registerdata <= {24'd0, mem_data[23:16]}; end
-								2'b01: begin registerdata <= {24'd0, mem_data[15:8]}; end
-								2'b00: begin registerdata <= {24'd0, mem_data[7:0]}; end
-							endcase
-						end
-						3'b101: begin
-							// short alignment based on {address[1],1'b0} with zero extension
-							case (memaddress[1]) // synthesis full_case
-								1'b1: begin registerdata <= {16'd0,mem_data[31:16]}; end
-								1'b0: begin registerdata <= {16'd0,mem_data[15:0]}; end
-							endcase
-						end
-					endcase
-				end
+				unique case (func3) // lb:000 lh:001 lw:010 lbu:100 lhu:101
+					3'b000: begin
+						// Byte alignment based on {address[1:0]} with sign extension
+						unique case (memaddress[1:0])
+							2'b11: begin registerdata <= {{24{mem_data[31]}},mem_data[31:24]}; end
+							2'b10: begin registerdata <= {{24{mem_data[23]}},mem_data[23:16]}; end
+							2'b01: begin registerdata <= {{24{mem_data[15]}},mem_data[15:8]}; end
+							2'b00: begin registerdata <= {{24{mem_data[7]}},mem_data[7:0]}; end
+						endcase
+					end
+					3'b001: begin
+						// short alignment based on {address[1],1'b0} with sign extension
+						unique case (memaddress[1])
+							1'b1: begin registerdata <= {{16{mem_data[31]}},mem_data[31:16]}; end
+							1'b0: begin registerdata <= {{16{mem_data[15]}},mem_data[15:0]}; end
+						endcase
+					end
+					3'b010: begin
+						// Already aligned on read, regular DWORD read
+						registerdata <= mem_data[31:0];
+					end
+					3'b100: begin
+						// Byte alignment based on {address[1:0]} with zero extension
+						unique case (memaddress[1:0])
+							2'b11: begin registerdata <= {24'd0, mem_data[31:24]}; end
+							2'b10: begin registerdata <= {24'd0, mem_data[23:16]}; end
+							2'b01: begin registerdata <= {24'd0, mem_data[15:8]}; end
+							2'b00: begin registerdata <= {24'd0, mem_data[7:0]}; end
+						endcase
+					end
+					3'b101: begin
+						// short alignment based on {address[1],1'b0} with zero extension
+						unique case (memaddress[1])
+							1'b1: begin registerdata <= {16'd0,mem_data[31:16]}; end
+							1'b0: begin registerdata <= {16'd0,mem_data[15:0]}; end
+						endcase
+					end
+				endcase
 				cpustate[`CPURETIREINSTRUCTION] <= 1'b1;
 			end
 
@@ -669,7 +663,7 @@ always_ff @(posedge clock) begin
 					unique case (func3)
 						// Byte
 						3'b000: begin
-							case (memaddress[1:0]) // synthesis full_case
+							unique case (memaddress[1:0])
 								2'b11: begin mem_writeena <= 4'b1000; writeword <= {registerdata[7:0], 24'd0}; end
 								2'b10: begin mem_writeena <= 4'b0100; writeword <= {8'd0, registerdata[7:0], 16'd0}; end
 								2'b01: begin mem_writeena <= 4'b0010; writeword <= {16'd0, registerdata[7:0], 8'd0}; end
@@ -678,7 +672,7 @@ always_ff @(posedge clock) begin
 						end
 						// Short
 						3'b001: begin
-							case (memaddress[1]) // synthesis full_case
+							unique case (memaddress[1])
 								1'b1: begin mem_writeena <= 4'b1100; writeword <= {registerdata[15:0], 16'd0}; end
 								1'b0: begin mem_writeena <= 4'b0011; writeword <= {16'd0, registerdata[15:0]}; end
 							endcase
