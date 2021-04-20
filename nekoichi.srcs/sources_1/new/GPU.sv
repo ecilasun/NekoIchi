@@ -28,6 +28,7 @@ endmodule
 module GPU (
 	input wire clock,
 	input wire reset,
+	input wire vsync,
 	// GPU FIFO
 	input wire fifoempty,
 	input wire [31:0] fifodout,
@@ -133,8 +134,11 @@ always_ff @(posedge clock) begin
 			// Command execute state
 			gpustate[`GPUSTATEEXEC]: begin
 				unique case (cmd) // 4'bxxxx
-					4'b0000: begin // NOOP
-						gpustate[`GPUSTATEIDLE] <= 1'b1;
+					4'b0000: begin // NOOP/VSYNC
+						if (vsync)
+							gpustate[`GPUSTATEIDLE] <= 1'b1;
+						else
+							gpustate[`GPUSTATEEXEC] <= 1'b1;
 					end
 					4'b0001: begin // REGSETLOW/HI
 						rwren <= 1'b1;
@@ -215,10 +219,15 @@ always_ff @(posedge clock) begin
 					// DMA done
 					gpustate[`GPUSTATEIDLE] <= 1'b1;
 				end else begin
-					vramwe <= 4'b1111; // Write to all lanes
+
+					// Write the previous DWORD to absolute address
 					vramwriteword <= dma_data;
+					vramaddress <= rval2[13:0] + dmacount;
+					vramwe <= 4'b1111;
+
+					// Step to next DWORD to read
 					dmaaddress <= dmaaddress + 15'd1;
-					vramaddress <= rval2[13:0] + dmacount; // rs2: target (walks one behind read address)
+
 					dmacount <= dmacount + 14'd1;
 					gpustate[`GPUSTATEDMA] <= 1'b1;
 				end

@@ -18,7 +18,8 @@ ENTITY dvi_tx IS
    SIGNAL blue          : in std_logic_vector(7 downto 0);
           counter_x     : out std_logic_vector(11 downto 0);
           counter_y     : out std_logic_vector(11 downto 0);
-   SIGNAL pixel_clock   : out std_logic );
+          pixel_clock   : out std_logic;
+   SIGNAL vsync_signal  : out std_logic);
 END ENTITY dvi_tx;
 
 ARCHITECTURE dvi_tx_a OF dvi_tx IS
@@ -38,6 +39,7 @@ ARCHITECTURE dvi_tx_a OF dvi_tx IS
   SIGNAL green_x       : std_logic_vector(7 downto 0);
   SIGNAL blue_x        : std_logic_vector(7 downto 0);
 BEGIN
+
    pixel_clock <= pixel_clk_x;
 
    dvi_tx_clkgen_inst : ENTITY work.dvi_tx_clkgen
@@ -54,7 +56,8 @@ BEGIN
                  vsync_o => vsync_x,
                  blank_o => blank_x,
                  counter_x => counter_x,
-                 counter_y => counter_y);
+                 counter_y => counter_y,
+                 vsynctrigger_o => vsync_signal );
      
    counter_inst: ENTITY work.counter
       GENERIC MAP(max => 800*525)

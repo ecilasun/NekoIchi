@@ -32,6 +32,19 @@ wire [3:0] dma_writeena;
 wire clockDVI;
 wire sysclock, clockALocked;
 
+wire fifowrfull;
+wire fifordempty;
+wire fifodatavalid;
+wire [31:0] gpufifocommand;  // < from CPU
+wire gpufifowe; // < from CPU
+wire fifore;
+wire [31:0] fifodataout;
+
+wire [13:0] vramaddress;
+wire [3:0] vramwe;
+wire [31:0] vramwriteword;
+wire [11:0] lanemask;
+
 // =====================================================================================================
 // CPU Clock
 // =====================================================================================================
@@ -69,14 +82,6 @@ blk_mem_gen_1 SYSRAM(
 	.web(dma_writeena),
 	.enb(reset_n) );
 
-wire fifowrfull;
-wire fifordempty;
-wire fifodatavalid;
-wire [31:0] gpufifocommand;  // < from CPU
-wire gpufifowe; // < from CPU
-wire fifore;
-wire [31:0] fifodataout;
-
 opqueue gpurwqueue(
 	// write
 	.full(fifowrfull),
@@ -91,13 +96,40 @@ opqueue gpurwqueue(
 	.srst(reset_p),
 	.valid(fifodatavalid) );
 
-wire [13:0] vramaddress;
-wire [3:0] vramwe;
-wire [31:0] vramwriteword;
-wire [11:0] lanemask;
+// Cross clock domain for vsync, from DVI to sys
+wire vsync_fastdomain;
+wire vsyncfifoempty;
+wire vsyncfifofull;
+wire vsyncfifovalid;
+wire vsync_we;
+logic vsync_signal = 1'b0;
+logic vsync_re;
+domaincrosssignalfifo gpucpusync(
+	.full(vsyncfifofull),
+	.din(1'b1),
+	.wr_en(vsync_we),
+	.empty(vsyncfifoempty),
+	.dout(vsync_fastdomain),
+	.rd_en(vsync_re),
+	.wr_clk(clockDVI),
+	.rd_clk(sysclock),
+	.rst(reset_p),
+	.valid(vsyncfifovalid) );
+
+// Drain the vsync fifo and set vsync signal for the GPU every time we find one
+always @(posedge sysclock) begin
+	vsync_re <= 1'b0;
+	vsync_signal <= 1'b0;
+	if (~vsyncfifoempty) begin
+		vsync_re <= 1'b1;
+		vsync_signal <= 1'b1;
+	end
+end
+
 GPU rv32gpu(
 	.clock(sysclock),
 	.reset(reset_p),
+	.vsync(vsync_signal),
 	// FIFO control
 	.fifoempty(fifordempty),
 	.fifodout(fifodataout),
@@ -158,6 +190,7 @@ dvi_tx DVIScanOut(
 	.blue(blue),
 	.counter_x(video_x),
 	.counter_y(video_y),
-	.pixel_clock(clockDVI) );
+	.pixel_clock(clockDVI),
+	.vsync_signal(vsync_we));
 
 endmodule

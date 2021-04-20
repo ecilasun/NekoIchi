@@ -10,7 +10,8 @@ ENTITY rgb_timing IS
         vsync_o : OUT std_logic;
         blank_o : OUT std_logic;
         counter_x : OUT std_logic_vector(11 downto 0);
-        counter_y : OUT std_logic_vector(11 downto 0));
+        counter_y : OUT std_logic_vector(11 downto 0);
+  SIGNAL vsynctrigger_o : OUT std_logic );
 END ENTITY rgb_timing;
 
 ARCHITECTURE rgb_timing_a OF rgb_timing IS
@@ -61,6 +62,7 @@ BEGIN
   timing : PROCESS(clk_i)
   BEGIN
     IF rising_edge(clk_i) THEN
+        vsynctrigger_o <= '0';
         IF (x = C_RES_X - 1) THEN
             blank_o <= '1';
         ELSIF ((x = C_TOTAL_X - 1) AND ((y < C_RES_Y - 1) or (y = C_TOTAL_Y - 1))) THEN
@@ -77,6 +79,7 @@ BEGIN
             x <= (OTHERS => '0');
             IF (y = C_RES_Y + C_VFRONT - 1) THEN
                 vsync_o  <= '1';
+                vsynctrigger_o <= '1';
             ELSIF (y = C_RES_Y + C_VFRONT + C_VSYNC - 1) THEN
                 vsync_o  <= '0';
             END IF;
