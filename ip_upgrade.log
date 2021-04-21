@@ -1,6 +1,40 @@
 Copyright 1986-2020 Xilinx, Inc. All Rights Reserved.
 ------------------------------------------------------------------------------------
 | Tool Version : Vivado v.2020.2 (lin64) Build 3064766 Wed Nov 18 09:12:47 MST 2020
+| Date         : Tue Apr 20 18:49:36 2021
+| Host         : encilinux running 64-bit Ubuntu 20.04.2 LTS
+| Command      : upgrade_ip
+| Device       : xc7z020clg400-1
+------------------------------------------------------------------------------------
+
+Upgrade Log for IP 'blk_mem_gen_1'
+
+1. Summary
+----------
+
+CAUTION (success, with warnings) in the conversion of blk_mem_gen_1 (xilinx.com:ip:blk_mem_gen:8.4 (Rev. 4)) to Vivado generation flows.
+
+After upgrade, an IP may have parameter and port differences compared to the original customization. Please review the parameters within the IP customization GUI to ensure proper functionality. Also, please review the updated IP instantiation template to ensure proper connectivity, and update your design if required.
+
+2. Connection Warnings
+----------------------
+
+Detected external port differences while upgrading 'blk_mem_gen_1'. These changes may impact your design.
+
+
+-Upgraded port 'addra' width 15 differs from original width 16
+
+-Upgraded port 'addrb' width 15 differs from original width 16
+
+
+
+
+
+
+
+Copyright 1986-2020 Xilinx, Inc. All Rights Reserved.
+------------------------------------------------------------------------------------
+| Tool Version : Vivado v.2020.2 (lin64) Build 3064766 Wed Nov 18 09:12:47 MST 2020
 | Date         : Mon Apr 19 14:11:14 2021
 | Host         : encilinux running 64-bit Ubuntu 20.04.2 LTS
 | Command      : upgrade_ip

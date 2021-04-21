@@ -15,8 +15,12 @@ module registerfile(
 logic [31:0] registers[0:31]; 
 
 always @(posedge clock) begin
-	if (wren && rd != 5'd0)
-		registers[rd] <= datain;
+	if (reset) begin
+		// noop
+	end else begin
+		if (wren && rd != 5'd0)
+			registers[rd] <= datain;
+	end
 end
 
 assign rval1 = rs1==0 ? 32'd0 : registers[rs1];
