@@ -30,6 +30,39 @@ assign rval2 = rs2 == 0 ? 32'd0 : registers[rs2];
 
 endmodule
 
+// Idea based on Larrabee rasterizer
+// NOTE: No barycentric / gradient generation yet
+module LineRasterMask(
+	input wire reset,
+	input wire signed [8:0] tileX,
+	input wire signed [8:0] tileY,
+	input wire signed [8:0] x0,
+	input wire signed [8:0] y0,
+	input wire signed [8:0] x1,
+	input wire signed [8:0] y1,
+	output wire outmask );
+
+logic signed [8:0] B;
+logic signed [8:0] C;
+logic signed [8:0] dX;
+logic signed [8:0] dY;
+logic signed [17:0] mask;
+always_comb begin
+	if (reset) begin
+		mask = 0;
+	end else begin
+		B = y1-y0;
+		C = x0-x1;
+		dX = tileX-x0;
+		dY = tileY-y0; 
+		mask = (B*dX) + (C*dY);
+	end
+end
+
+assign outmask = mask[17]; // Only care about the sign bit
+
+endmodule
+
 module GPU (
 	input wire clock,
 	input wire reset,
@@ -52,6 +85,7 @@ module GPU (
 	
 logic [`GPUSTATEBITS-1:0] gpustate = `GPUSTATEIDLE_MASK;
 logic [31:0] commandlatch = 32'd0;
+logic [31:0] fillcolor = 32'd0;
 
 logic [31:0] rdatain;
 wire [31:0] rval1;
@@ -83,6 +117,47 @@ always_comb begin
 	rd = commandlatch[9:7];			// destination register
 	immshort = commandlatch[31:10];	// 22 bit immediate
 	imm = commandlatch[31:4];		// 28 bit immediate
+end
+
+// Dynamic tile scanner with 4 check points
+logic [7:0] tileXCount, tileYCount;
+logic signed [8:0] tileX0, tileY0;
+logic signed [8:0] x0, y0, x1, y1, x2, y2;
+
+// 4x1 pixel tile
+wire [3:0] tilemask;
+// Masks for each edge
+wire [11:0] edgemask;
+// Edge 0
+LineRasterMask m0(reset, tileX0,tileY0, x0,y0, x1,y1, edgemask[0]);
+LineRasterMask m1(reset, tileX0+1,tileY0, x0,y0, x1,y1, edgemask[1]);
+LineRasterMask m2(reset, tileX0+2,tileY0, x0,y0, x1,y1, edgemask[2]);
+LineRasterMask m3(reset, tileX0+3,tileY0, x0,y0, x1,y1, edgemask[3]);
+// Edge 1
+LineRasterMask m4(reset, tileX0,tileY0, x1,y1, x2,y2, edgemask[4]);
+LineRasterMask m5(reset, tileX0+1,tileY0, x1,y1, x2,y2, edgemask[5]);
+LineRasterMask m6(reset, tileX0+2,tileY0, x1,y1, x2,y2, edgemask[6]);
+LineRasterMask m7(reset, tileX0+3,tileY0, x1,y1, x2,y2, edgemask[7]);
+// Edge 2
+LineRasterMask m8(reset, tileX0,tileY0, x2,y2, x0,y0, edgemask[8]);
+LineRasterMask m9(reset, tileX0+1,tileY0, x2,y2, x0,y0, edgemask[9]);
+LineRasterMask m10(reset, tileX0+2,tileY0, x2,y2, x0,y0, edgemask[10]);
+LineRasterMask m11(reset, tileX0+3,tileY0, x2,y2, x0,y0, edgemask[11]);
+// Mask for 3 edges to form a triangle
+assign tilemask = edgemask[3:0] & edgemask[7:4] & edgemask[11:8];
+
+// Tile scan area min-max calculation
+logic signed [8:0] minXval, maxXval;
+logic signed [8:0] minYval, maxYval;
+always_comb begin
+	minXval = x0 < x1 ? x0 : x1;
+	minXval = minXval < x2 ? minXval : x2;
+	maxXval = x0 < x1 ? x1 : x0;
+	maxXval = maxXval < x2 ? x2 : maxXval;
+	minYval = y0 < y1 ? y0 : y1;
+	minYval = minYval < y2 ? minYval : y2;
+	maxYval = y0 < y1 ? y1 : y0;
+	maxYval = maxYval < y2 ? y2 : maxYval;
 end
 
 always_ff @(posedge clock) begin
@@ -174,8 +249,16 @@ always_ff @(posedge clock) begin
 						dmawe <= 4'b0000; // Reading from SYSRAM
 						gpustate[`GPUSTATEDMAKICK] <= 1'b1;
 					end
-					3'b101: begin // TBD
-						gpustate[`GPUSTATEIDLE] <= 1'b1;
+					3'b101: begin // RASTERIZE
+						// Grab primitive vertex data from rs+rd
+						x0 <= {1'b0, rval1[7:0]};
+						y0 <= {1'b0, rval1[15:8]};
+						x1 <= {1'b0, rval1[23:16]};
+						y1 <= {1'b0, rval1[31:24]};
+						x2 <= {1'b0, rval2[7:0]};
+						y2 <= {1'b0, rval2[15:8]};
+						fillcolor <= {rval2[23:16], rval2[23:16], rval2[23:16], rval2[23:16]};
+						gpustate[`GPUSTATERASTERKICK] <= 1'b1;
 					end
 					3'b110: begin // TBD
 						gpustate[`GPUSTATEIDLE] <= 1'b1;
@@ -217,6 +300,41 @@ always_ff @(posedge clock) begin
 					dmaaddress <= dmaaddress + 15'd1;
 					dmacount <= dmacount + 14'd1;
 					gpustate[`GPUSTATEDMA] <= 1'b1;
+				end
+			end
+
+			gpustate[`GPUSTATERASTERKICK]: begin
+				// Set up scan extents (4x1 tiles for a 4bit mask)
+				tileX0 <= minXval;
+				tileY0 <= minYval;
+				tileXCount <= ((maxXval-minXval)>>2)+1; // W/4+1
+				tileYCount <= (maxYval-minYval)+1; // H+1
+				gpustate[`GPUSTATERASTER] <= 1'b1;
+			end
+
+			gpustate[`GPUSTATERASTER]: begin
+				// Output tile mask for this tile
+				if (tileYCount == 0) begin
+					gpustate[`GPUSTATEIDLE] <= 1'b1;
+				end else begin
+					if (tileXCount == 1'd0) begin
+						tileXCount <= ((maxXval-minXval)>>2)+1;
+						tileYCount <= tileYCount - 8'd1;
+						tileY0 <= tileY0+9'd1;
+						tileX0 <= minXval; 
+					end else begin
+						tileXCount <= tileXCount - 8'd1;
+						tileX0 <= tileX0+9'd4;
+					end
+
+					// Output mask data from previous tile
+					// TODO: We have 4 bits output for 1 row of 4 pixels
+					// Could wire up a dedicated 4bit raster memory with some resolve hardware
+					// so it can write resolved output to VRAM or SYSRAM (16bits->128bits (4 DWORDs) expansion)
+					vramaddress <= {tileY0[7:0], tileX0[7:2]};
+					vramwriteword <= fillcolor; // TODO: Use the color from rval2 to fill during development
+					vramwe <= tilemask; // Fill with color only when all three edges have a set bit
+					gpustate[`GPUSTATERASTER] <= 1'b1;
 				end
 			end
 			

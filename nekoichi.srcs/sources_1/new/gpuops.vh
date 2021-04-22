@@ -1,5 +1,5 @@
 // ======================== GPU States ==========================
-`define GPUSTATEBITS 6
+`define GPUSTATEBITS 8
 
 `define GPUSTATEIDLE			0
 `define GPUSTATELATCHCOMMAND	1
@@ -7,15 +7,19 @@
 `define GPUSTATECLEAR			3
 `define GPUSTATEDMAKICK			4
 `define GPUSTATEDMA				5
+`define GPUSTATERASTERKICK		6
+`define GPUSTATERASTER			7
 
-`define GPUSTATENONE_MASK			6'b000000
+`define GPUSTATENONE_MASK			8'b00000000
 
-`define GPUSTATEIDLE_MASK			6'b000001
-`define GPUSTATELATCHCOMMAND_MASK	6'b000010
-`define GPUSTATEEXEC_MASK			6'b000100
-`define GPUSTATECLEAR_MASK			6'b001000
-`define GPUSTATEDMAKICK_MASK		6'b010000
-`define GPUSTATEDMA_MASK			6'b100000
+`define GPUSTATEIDLE_MASK			8'b00000001
+`define GPUSTATELATCHCOMMAND_MASK	8'b00000010
+`define GPUSTATEEXEC_MASK			8'b00000100
+`define GPUSTATECLEAR_MASK			8'b00001000
+`define GPUSTATEDMAKICK_MASK		8'b00010000
+`define GPUSTATEDMA_MASK			8'b00100000
+`define GPUSTATERASTERKICK_MASK		8'b01000000
+`define GPUSTATERASTER_MASK			8'b10000000
 // ==============================================================
 
 // =================== GPU Commands =============================
@@ -41,8 +45,8 @@
 	// TODO: Source byte mask / destination byte mask?
 	// [---- ---- CCCCCCCCCCCCCC][DDD][SSS][-100]
 	
-	// TBD
-	// [---- ---- --------------][---][---][-101]
+	// RASTER: Rasterize one edge packed in rs
+	// [---- ---- --------------][---][SSS][-101]
 
 	// TBD	
 	// [---- ---- --------------][---][---][-110]

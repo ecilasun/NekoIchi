@@ -104,7 +104,7 @@ wire vsyncfifovalid;
 wire vsync_we;
 logic vsync_signal = 1'b0;
 logic vsync_re;
-domaincrosssignalfifo gpucpusync(
+domaincrosssignalfifo gpudvisync(
 	.full(vsyncfifofull),
 	.din(1'b1),
 	.wr_en(vsync_we),

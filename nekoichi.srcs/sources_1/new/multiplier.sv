@@ -45,7 +45,7 @@ always_ff @(posedge clk) begin
 		if (start) begin
 			A = multiplicand;
 			B = multiplier;
-			n = 6;
+			n = 7;
 			busy = 1'b1;
 		end else begin
 			if (busy) begin // 1 clock latency for multipliers on ArtyZ7-20
