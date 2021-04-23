@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Product Version: Vivado v2020.2 (64-bit)              -->
+<!-- Product Version: Vivado v2020.2.2 (64-bit)              -->
 <!--                                                         -->
-<!-- Copyright 1986-2020 Xilinx, Inc. All Rights Reserved.   -->
+<!-- Copyright 1986-2021 Xilinx, Inc. All Rights Reserved.   -->
 
 <Project Version="7" Minor="54" Path="/media/engin/StorageA/FPGA/nekoichi/nekoichi.xpr">
   <DefaultLaunch Dir="$PRUNDIR"/>
@@ -46,20 +46,20 @@
     <Option Name="IPStaticSourceDir" Val="$PIPUSERFILESDIR/ipstatic"/>
     <Option Name="EnableBDX" Val="FALSE"/>
     <Option Name="DSABoardId" Val="arty-z7-20"/>
-    <Option Name="WTXSimLaunchSim" Val="215"/>
+    <Option Name="WTXSimLaunchSim" Val="255"/>
     <Option Name="WTModelSimLaunchSim" Val="0"/>
     <Option Name="WTQuestaLaunchSim" Val="0"/>
     <Option Name="WTIesLaunchSim" Val="0"/>
     <Option Name="WTVcsLaunchSim" Val="0"/>
     <Option Name="WTRivieraLaunchSim" Val="0"/>
     <Option Name="WTActivehdlLaunchSim" Val="0"/>
-    <Option Name="WTXSimExportSim" Val="231"/>
-    <Option Name="WTModelSimExportSim" Val="231"/>
-    <Option Name="WTQuestaExportSim" Val="231"/>
-    <Option Name="WTIesExportSim" Val="231"/>
-    <Option Name="WTVcsExportSim" Val="231"/>
-    <Option Name="WTRivieraExportSim" Val="231"/>
-    <Option Name="WTActivehdlExportSim" Val="231"/>
+    <Option Name="WTXSimExportSim" Val="238"/>
+    <Option Name="WTModelSimExportSim" Val="238"/>
+    <Option Name="WTQuestaExportSim" Val="238"/>
+    <Option Name="WTIesExportSim" Val="238"/>
+    <Option Name="WTVcsExportSim" Val="238"/>
+    <Option Name="WTRivieraExportSim" Val="238"/>
+    <Option Name="WTActivehdlExportSim" Val="238"/>
     <Option Name="GenerateIPUpgradeLog" Val="TRUE"/>
     <Option Name="XSimRadix" Val="hex"/>
     <Option Name="XSimTimeUnit" Val="ns"/>

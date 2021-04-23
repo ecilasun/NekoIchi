@@ -3,6 +3,9 @@
 `include "cpuops.vh"
 `include "gpuops.vh"
 
+// ==============================================================
+// GPU register file
+// ==============================================================
 module gpuregisterfile(
 	input wire reset,
 	input wire clock,
@@ -30,8 +33,10 @@ assign rval2 = rs2 == 0 ? 32'd0 : registers[rs2];
 
 endmodule
 
+// ==============================================================
 // Idea based on Larrabee rasterizer
 // NOTE: No barycentric / gradient generation yet
+// ==============================================================
 module LineRasterMask(
 	input wire reset,
 	input wire signed [8:0] tileX,
@@ -49,12 +54,17 @@ logic signed [8:0] dY;
 logic signed [17:0] mask;
 always_comb begin
 	if (reset) begin
-		mask = 0;
+		// mask = 0;
 	end else begin
 		B = y1-y0;
 		C = x0-x1;
-		dX = tileX-x0;
-		dY = tileY-y0; 
+		// Need to add one here to the result since:
+		// - pixel coordinate is at upper left corner
+		// - line coordinates are at centers of pixels
+		// - adding one approximates adding 0.5, rounded up
+		// - this way we don't miss lines crossing the pixel (i.e. dx/dy==0) 
+		dX = (tileX-x0)+1;
+		dY = (tileY-y0)+1; 
 		mask = (B*dX) + (C*dY);
 	end
 end
@@ -63,6 +73,9 @@ assign outmask = mask[17]; // Only care about the sign bit
 
 endmodule
 
+// ==============================================================
+// GPU main
+// ==============================================================
 module GPU (
 	input wire clock,
 	input wire reset,
@@ -85,7 +98,6 @@ module GPU (
 	
 logic [`GPUSTATEBITS-1:0] gpustate = `GPUSTATEIDLE_MASK;
 logic [31:0] commandlatch = 32'd0;
-logic [31:0] fillcolor = 32'd0;
 
 logic [31:0] rdatain;
 wire [31:0] rval1;
@@ -108,7 +120,10 @@ gpuregisterfile gpuregs(
 	.datain(rdatain),
 	.rval1(rval1),
 	.rval2(rval2) );
-	
+
+// ==============================================================
+// Decoder
+// ==============================================================
 always_comb begin
 	cmd = commandlatch[2:0];		// command
 	// commandlatch[3] unused for now
@@ -119,9 +134,11 @@ always_comb begin
 	imm = commandlatch[31:4];		// 28 bit immediate
 end
 
+// ==============================================================
 // Dynamic tile scanner with 4 check points
+// ==============================================================
 logic [7:0] tileXCount, tileYCount;
-logic signed [8:0] tileX0, tileY0;
+logic signed [8:0] tileX0, tileY0, tileXSweepDirection;
 logic signed [8:0] x0, y0, x1, y1, x2, y2;
 
 // 4x1 pixel tile
@@ -146,20 +163,40 @@ LineRasterMask m11(reset, tileX0+3,tileY0, x2,y2, x0,y0, edgemask[11]);
 // Mask for 3 edges to form a triangle
 assign tilemask = edgemask[3:0] & edgemask[7:4] & edgemask[11:8];
 
+// ==============================================================
 // Tile scan area min-max calculation
+// ==============================================================
 logic signed [8:0] minXval, maxXval;
 logic signed [8:0] minYval, maxYval;
 always_comb begin
+	// 0-1 selection
 	minXval = x0 < x1 ? x0 : x1;
-	minXval = minXval < x2 ? minXval : x2;
 	maxXval = x0 < x1 ? x1 : x0;
-	maxXval = maxXval < x2 ? x2 : maxXval;
 	minYval = y0 < y1 ? y0 : y1;
-	minYval = minYval < y2 ? minYval : y2;
 	maxYval = y0 < y1 ? y1 : y0;
+
+	// 2-self selection
+	minXval = minXval < x2 ? minXval : x2; // minXval = min(x0,min(x1,x2)) etc
+	maxXval = maxXval < x2 ? x2 : maxXval;
+	minYval = minYval < y2 ? minYval : y2;
 	maxYval = maxYval < y2 ? y2 : maxYval;
+
+	// Clamp to viewport min coords (0,0)
+	minXval = minXval < 0 ? 0 : minXval;
+	maxXval = maxXval < 0 ? 0 : maxXval;
+	minYval = minYval < 0 ? 0 : minYval;
+	maxYval = maxYval < 0 ? 0 : maxYval;
+
+	// Clamp to viewport max coords (255,191)
+	minXval = minXval < 256 ? minXval : 255;
+	maxXval = maxXval < 256 ? maxXval : 255;
+	minYval = minYval < 192 ? minYval : 191;
+	maxYval = maxYval < 192 ? maxYval : 191;
 end
 
+// ==============================================================
+// Main state machine
+// ==============================================================
 always_ff @(posedge clock) begin
 	if (reset) begin
 
@@ -257,7 +294,7 @@ always_ff @(posedge clock) begin
 						y1 <= {1'b0, rval1[31:24]};
 						x2 <= {1'b0, rval2[7:0]};
 						y2 <= {1'b0, rval2[15:8]};
-						fillcolor <= {rval2[23:16], rval2[23:16], rval2[23:16], rval2[23:16]};
+						vramwriteword <= {rval2[23:16], rval2[23:16], rval2[23:16], rval2[23:16]}; // TODO: Use the color from rval2 to fill during development
 						gpustate[`GPUSTATERASTERKICK] <= 1'b1;
 					end
 					3'b110: begin // TBD
@@ -305,11 +342,34 @@ always_ff @(posedge clock) begin
 
 			gpustate[`GPUSTATERASTERKICK]: begin
 				// Set up scan extents (4x1 tiles for a 4bit mask)
-				tileX0 <= minXval;
-				tileY0 <= minYval;
-				tileXCount <= ((maxXval-minXval)>>2)+1; // W/4+1
-				tileYCount <= (maxYval-minYval)+1; // H+1
-				gpustate[`GPUSTATERASTER] <= 1'b1;
+				tileX0 <= {minXval[8:2],2'b0}; // 1/4th coordinate, tile width=4
+				tileY0 <= minYval[8:0]; // full coordinate, tile height=1
+				tileXCount <= ((maxXval-minXval)>>2); // W/4
+				tileYCount <= (maxYval-minYval); // H
+				tileXSweepDirection <= 9'd4;
+				// Start by figuring out if we have something to rasterize
+				// on this scanline.
+				// No pixels found means we're backfacing and can bail out early
+				gpustate[`GPUSTATERASTERDETECT] <= 1'b1;
+			end
+			
+			gpustate[`GPUSTATERASTERDETECT]: begin
+				// Did we find a valid mask here?
+				if (|tilemask) begin
+					// Yes, we can start rasterizing from this spot
+					gpustate[`GPUSTATERASTER] <= 1'b1;
+				end else begin
+					// Did we reach the end and still no mask?
+					if (tileXCount == 1'd0) begin
+						// Abort, this polygon won't rasterize
+						gpustate[`GPUSTATEIDLE] <= 1'b1;
+					end else begin
+						// Continue scanning
+						tileXCount <= tileXCount - 8'd1;
+						tileX0 <= tileX0 + tileXSweepDirection;
+						gpustate[`GPUSTATERASTERDETECT] <= 1'b1;
+					end
+				end
 			end
 
 			gpustate[`GPUSTATERASTER]: begin
@@ -317,25 +377,36 @@ always_ff @(posedge clock) begin
 				if (tileYCount == 0) begin
 					gpustate[`GPUSTATEIDLE] <= 1'b1;
 				end else begin
-					if (tileXCount == 1'd0) begin
-						tileXCount <= ((maxXval-minXval)>>2)+1;
-						tileYCount <= tileYCount - 8'd1;
-						tileY0 <= tileY0+9'd1;
-						tileX0 <= minXval; 
-					end else begin
-						tileXCount <= tileXCount - 8'd1;
-						tileX0 <= tileX0+9'd4;
-					end
 
-					// Output mask data from previous tile
-					// TODO: We have 4 bits output for 1 row of 4 pixels
-					// Could wire up a dedicated 4bit raster memory with some resolve hardware
-					// so it can write resolved output to VRAM or SYSRAM (16bits->128bits (4 DWORDs) expansion)
+					// Record current value
+					// NOTE: We could have a zero mask OR be at the end
+					// tile. Record the value regardless just in case
+					// otherwise we'll have gaps when landing on the last tile with full value in it.
 					vramaddress <= {tileY0[7:0], tileX0[7:2]};
-					vramwriteword <= fillcolor; // TODO: Use the color from rval2 to fill during development
-					vramwe <= tilemask; // Fill with color only when all three edges have a set bit
-					gpustate[`GPUSTATERASTER] <= 1'b1;
+					vramwe <= tilemask;
+
+					// Did we run out of tiles in this direction, or hit a zero tile mask?
+					if (((|tilemask)==1'b0) | (tileXCount == 1'd0)) begin
+						// Reverse direction
+						tileXSweepDirection = -tileXSweepDirection;
+						// Step one down 
+						tileY0 <= tileY0 + 9'd1;
+						tileXCount <= ((maxXval-minXval)>>2); // W/4
+						tileYCount <= tileYCount - 8'd1;
+						// Search for a nonzero tile mask
+						gpustate[`GPUSTATERASTERDETECT] <= 1'b1;
+					end else begin
+						// Step to next tile on scanline
+						tileXCount <= tileXCount - 8'd1;
+						tileX0 <= tileX0 + tileXSweepDirection;
+						// Repeat
+						gpustate[`GPUSTATERASTER] <= 1'b1;
+					end
 				end
+			end
+			
+			default: begin
+				// noop
 			end
 			
 		endcase

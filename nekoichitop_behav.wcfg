@@ -12,15 +12,15 @@
       </db_ref>
    </db_ref_list>
    <zoom_setting>
-      <ZoomStartTime time="81651112fs"></ZoomStartTime>
-      <ZoomEndTime time="94696113fs"></ZoomEndTime>
-      <Cursor1Time time="105271946fs"></Cursor1Time>
+      <ZoomStartTime time="25539566fs"></ZoomStartTime>
+      <ZoomEndTime time="25802467fs"></ZoomEndTime>
+      <Cursor1Time time="25590666fs"></Cursor1Time>
    </zoom_setting>
    <column_width_setting>
-      <NameColumnWidth column_width="172"></NameColumnWidth>
+      <NameColumnWidth column_width="152"></NameColumnWidth>
       <ValueColumnWidth column_width="66"></ValueColumnWidth>
    </column_width_setting>
-   <WVObjectSize size="207" />
+   <WVObjectSize size="212" />
    <wvobject type="logic" fp_name="/nekoichitop/clk_i">
       <obj_property name="ElementShortName">clk_i</obj_property>
       <obj_property name="ObjectShortName">clk_i</obj_property>
@@ -374,8 +374,10 @@
       <obj_property name="ObjectShortName">dmawe[3:0]</obj_property>
    </wvobject>
    <wvobject type="array" fp_name="/nekoichitop/rv32gpu/gpustate">
-      <obj_property name="ElementShortName">gpustate[7:0]</obj_property>
-      <obj_property name="ObjectShortName">gpustate[7:0]</obj_property>
+      <obj_property name="ElementShortName">gpustate[8:0]</obj_property>
+      <obj_property name="ObjectShortName">gpustate[8:0]</obj_property>
+      <obj_property name="CustomSignalColor">#F0E68C</obj_property>
+      <obj_property name="UseCustomSignalColor">true</obj_property>
    </wvobject>
    <wvobject type="array" fp_name="/nekoichitop/rv32gpu/commandlatch">
       <obj_property name="ElementShortName">commandlatch[31:0]</obj_property>
@@ -460,7 +462,6 @@
    <wvobject type="array" fp_name="/nekoichitop/rv32gpu/gpuregs/registers">
       <obj_property name="ElementShortName">registers[0:7][31:0]</obj_property>
       <obj_property name="ObjectShortName">registers[0:7][31:0]</obj_property>
-      <obj_property name="isExpanded"></obj_property>
    </wvobject>
    <wvobject type="array" fp_name="/nekoichitop/rv32gpu/m0/x0">
       <obj_property name="ElementShortName">x0[8:0]</obj_property>
@@ -486,21 +487,21 @@
       <obj_property name="ElementShortName">y2[8:0]</obj_property>
       <obj_property name="ObjectShortName">y2[8:0]</obj_property>
    </wvobject>
-   <wvobject type="array" fp_name="/nekoichitop/rv32gpu/maxXval">
-      <obj_property name="ElementShortName">maxXval[9:0]</obj_property>
-      <obj_property name="ObjectShortName">maxXval[9:0]</obj_property>
-   </wvobject>
-   <wvobject type="array" fp_name="/nekoichitop/rv32gpu/maxYval">
-      <obj_property name="ElementShortName">maxYval[9:0]</obj_property>
-      <obj_property name="ObjectShortName">maxYval[9:0]</obj_property>
-   </wvobject>
    <wvobject type="array" fp_name="/nekoichitop/rv32gpu/minXval">
-      <obj_property name="ElementShortName">minXval[9:0]</obj_property>
-      <obj_property name="ObjectShortName">minXval[9:0]</obj_property>
+      <obj_property name="ElementShortName">minXval[8:0]</obj_property>
+      <obj_property name="ObjectShortName">minXval[8:0]</obj_property>
    </wvobject>
    <wvobject type="array" fp_name="/nekoichitop/rv32gpu/minYval">
-      <obj_property name="ElementShortName">minYval[9:0]</obj_property>
-      <obj_property name="ObjectShortName">minYval[9:0]</obj_property>
+      <obj_property name="ElementShortName">minYval[8:0]</obj_property>
+      <obj_property name="ObjectShortName">minYval[8:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/nekoichitop/rv32gpu/maxXval">
+      <obj_property name="ElementShortName">maxXval[8:0]</obj_property>
+      <obj_property name="ObjectShortName">maxXval[8:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/nekoichitop/rv32gpu/maxYval">
+      <obj_property name="ElementShortName">maxYval[8:0]</obj_property>
+      <obj_property name="ObjectShortName">maxYval[8:0]</obj_property>
    </wvobject>
    <wvobject type="array" fp_name="/nekoichitop/rv32gpu/tileXCount">
       <obj_property name="ElementShortName">tileXCount[7:0]</obj_property>
@@ -510,9 +511,26 @@
       <obj_property name="ElementShortName">tileYCount[7:0]</obj_property>
       <obj_property name="ObjectShortName">tileYCount[7:0]</obj_property>
    </wvobject>
+   <wvobject type="array" fp_name="/nekoichitop/rv32gpu/tileXSweepDirection">
+      <obj_property name="ElementShortName">tileXSweepDirection[8:0]</obj_property>
+      <obj_property name="ObjectShortName">tileXSweepDirection[8:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/nekoichitop/rv32gpu/tileX0">
+      <obj_property name="ElementShortName">tileX0[8:0]</obj_property>
+      <obj_property name="ObjectShortName">tileX0[8:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/nekoichitop/rv32gpu/tileY0">
+      <obj_property name="ElementShortName">tileY0[8:0]</obj_property>
+      <obj_property name="ObjectShortName">tileY0[8:0]</obj_property>
+   </wvobject>
    <wvobject type="array" fp_name="/nekoichitop/rv32gpu/tilemask">
-      <obj_property name="ElementShortName">tilemask[11:0]</obj_property>
-      <obj_property name="ObjectShortName">tilemask[11:0]</obj_property>
+      <obj_property name="ElementShortName">tilemask[3:0]</obj_property>
+      <obj_property name="ObjectShortName">tilemask[3:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/nekoichitop/rv32gpu/edgemask">
+      <obj_property name="ElementShortName">edgemask[11:0]</obj_property>
+      <obj_property name="ObjectShortName">edgemask[11:0]</obj_property>
+      <obj_property name="isExpanded"></obj_property>
    </wvobject>
    <wvobject fp_name="divider120" type="divider">
       <obj_property name="label">CPU</obj_property>
@@ -779,22 +797,39 @@
    <wvobject type="array" fp_name="/nekoichitop/rv32cpu/floatregs/datain">
       <obj_property name="ElementShortName">datain[31:0]</obj_property>
       <obj_property name="ObjectShortName">datain[31:0]</obj_property>
+      <obj_property name="Radix">REALRADIX</obj_property>
+      <obj_property name="radix_realType">FLOATINGPOINTRADIX</obj_property>
+      <obj_property name="radix_fractionWidth">24</obj_property>
+      <obj_property name="radix_otherWidth">8</obj_property>
    </wvobject>
    <wvobject type="array" fp_name="/nekoichitop/rv32cpu/floatregs/rval1">
       <obj_property name="ElementShortName">rval1[31:0]</obj_property>
       <obj_property name="ObjectShortName">rval1[31:0]</obj_property>
+      <obj_property name="Radix">REALRADIX</obj_property>
+      <obj_property name="radix_realType">FLOATINGPOINTRADIX</obj_property>
+      <obj_property name="radix_fractionWidth">24</obj_property>
+      <obj_property name="radix_otherWidth">8</obj_property>
    </wvobject>
    <wvobject type="array" fp_name="/nekoichitop/rv32cpu/floatregs/rval2">
       <obj_property name="ElementShortName">rval2[31:0]</obj_property>
       <obj_property name="ObjectShortName">rval2[31:0]</obj_property>
+      <obj_property name="Radix">REALRADIX</obj_property>
+      <obj_property name="radix_realType">FLOATINGPOINTRADIX</obj_property>
+      <obj_property name="radix_fractionWidth">24</obj_property>
+      <obj_property name="radix_otherWidth">8</obj_property>
    </wvobject>
    <wvobject type="array" fp_name="/nekoichitop/rv32cpu/floatregs/rval3">
       <obj_property name="ElementShortName">rval3[31:0]</obj_property>
       <obj_property name="ObjectShortName">rval3[31:0]</obj_property>
+      <obj_property name="Radix">REALRADIX</obj_property>
+      <obj_property name="radix_realType">FLOATINGPOINTRADIX</obj_property>
+      <obj_property name="radix_fractionWidth">24</obj_property>
+      <obj_property name="radix_otherWidth">8</obj_property>
    </wvobject>
    <wvobject type="array" fp_name="/nekoichitop/rv32cpu/floatregs/registers">
       <obj_property name="ElementShortName">registers[0:31][31:0]</obj_property>
       <obj_property name="ObjectShortName">registers[0:31][31:0]</obj_property>
+      <obj_property name="isExpanded"></obj_property>
    </wvobject>
    <wvobject fp_name="divider204" type="divider">
       <obj_property name="label">DECODE</obj_property>
@@ -863,5 +898,9 @@
    <wvobject type="logic" fp_name="/nekoichitop/rv32cpu/idecode/selectimmedasrval2">
       <obj_property name="ElementShortName">selectimmedasrval2</obj_property>
       <obj_property name="ObjectShortName">selectimmedasrval2</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/nekoichitop/rst_i">
+      <obj_property name="ElementShortName">rst_i</obj_property>
+      <obj_property name="ObjectShortName">rst_i</obj_property>
    </wvobject>
 </wave_config>
