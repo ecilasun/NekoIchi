@@ -1,5 +1,5 @@
 # NekoIchi
-A simple risc-v CPU  running on an Arty Z7-20 FPGA board
+A simple risc-v CPU with a custom GPU running on an Arty Z7-20 FPGA board
 
 ## NOTES:
 
