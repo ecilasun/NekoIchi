@@ -26,14 +26,14 @@ always_comb begin
 
         wren = 1'b0;
         fwren = 1'b0;
-		opcode = 7'd0;
-		rs1 = 5'd0;
-		rs2 = 5'd0;
-		rs3 = 5'd0;
-		rd = 5'd0;
-		func3 = 3'd0;
-		func7 = 7'd0;
-		imm = 32'd0;
+		//opcode = 7'd0;
+		//rs1 = 5'd0;
+		//rs2 = 5'd0;
+		//rs3 = 5'd0;
+		//rd = 5'd0;
+		//func3 = 3'd0;
+		//func7 = 7'd0;
+		//imm = 32'd0;
 		selectimmedasrval2 = 1'b0;
 		aluop = `ALU_NONE;
 		nextstage = `CPURETIREINSTRUCTION_MASK;

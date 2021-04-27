@@ -24,7 +24,7 @@ assign quotient = reg_q;
 
 always @(posedge clk or posedge reset)begin
     if(reset)begin
-        count<=0;
+        //count<=0;
         busy<=0;
         busy2<=0;
     end else begin
@@ -76,7 +76,7 @@ assign quotient = (divisor[31]^dividend[31])?(~reg_q+1):reg_q;
 
 always @(posedge clk or posedge reset)begin
     if(reset)begin
-        count<=0;
+        //count<=0;
         busy<=0;
         busy2<=0;
     end

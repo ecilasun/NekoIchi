@@ -12,15 +12,15 @@
       </db_ref>
    </db_ref_list>
    <zoom_setting>
-      <ZoomStartTime time="25539566fs"></ZoomStartTime>
-      <ZoomEndTime time="25802467fs"></ZoomEndTime>
-      <Cursor1Time time="25590666fs"></Cursor1Time>
+      <ZoomStartTime time="78810832fs"></ZoomStartTime>
+      <ZoomEndTime time="131790833fs"></ZoomEndTime>
+      <Cursor1Time time="88990832fs"></Cursor1Time>
    </zoom_setting>
    <column_width_setting>
-      <NameColumnWidth column_width="152"></NameColumnWidth>
+      <NameColumnWidth column_width="132"></NameColumnWidth>
       <ValueColumnWidth column_width="66"></ValueColumnWidth>
    </column_width_setting>
-   <WVObjectSize size="212" />
+   <WVObjectSize size="233" />
    <wvobject type="logic" fp_name="/nekoichitop/clk_i">
       <obj_property name="ElementShortName">clk_i</obj_property>
       <obj_property name="ObjectShortName">clk_i</obj_property>
@@ -329,6 +329,10 @@
       <obj_property name="ElementShortName">vsync_signal</obj_property>
       <obj_property name="ObjectShortName">vsync_signal</obj_property>
    </wvobject>
+   <wvobject fp_name="divider291" type="divider">
+      <obj_property name="label">FINERASTER</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+   </wvobject>
    <wvobject fp_name="divider296" type="divider">
       <obj_property name="label">GPU</obj_property>
       <obj_property name="DisplayName">label</obj_property>
@@ -466,71 +470,234 @@
    <wvobject type="array" fp_name="/nekoichitop/rv32gpu/m0/x0">
       <obj_property name="ElementShortName">x0[8:0]</obj_property>
       <obj_property name="ObjectShortName">x0[8:0]</obj_property>
+      <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
    </wvobject>
    <wvobject type="array" fp_name="/nekoichitop/rv32gpu/m0/y0">
       <obj_property name="ElementShortName">y0[8:0]</obj_property>
       <obj_property name="ObjectShortName">y0[8:0]</obj_property>
+      <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
    </wvobject>
    <wvobject type="array" fp_name="/nekoichitop/rv32gpu/m0/x1">
       <obj_property name="ElementShortName">x1[8:0]</obj_property>
       <obj_property name="ObjectShortName">x1[8:0]</obj_property>
+      <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
    </wvobject>
    <wvobject type="array" fp_name="/nekoichitop/rv32gpu/m0/y1">
       <obj_property name="ElementShortName">y1[8:0]</obj_property>
       <obj_property name="ObjectShortName">y1[8:0]</obj_property>
+      <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
    </wvobject>
    <wvobject type="array" fp_name="/nekoichitop/rv32gpu/x2">
       <obj_property name="ElementShortName">x2[8:0]</obj_property>
       <obj_property name="ObjectShortName">x2[8:0]</obj_property>
+      <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
    </wvobject>
    <wvobject type="array" fp_name="/nekoichitop/rv32gpu/y2">
       <obj_property name="ElementShortName">y2[8:0]</obj_property>
       <obj_property name="ObjectShortName">y2[8:0]</obj_property>
+      <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/nekoichitop/rv32gpu/polydet">
+      <obj_property name="ElementShortName">polydet[17:0]</obj_property>
+      <obj_property name="ObjectShortName">polydet[17:0]</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/nekoichitop/rv32gpu/triFacing">
+      <obj_property name="ElementShortName">triFacing</obj_property>
+      <obj_property name="ObjectShortName">triFacing</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/nekoichitop/rv32gpu/widetilemask">
+      <obj_property name="ElementShortName">widetilemask</obj_property>
+      <obj_property name="ObjectShortName">widetilemask</obj_property>
+      <obj_property name="CustomSignalColor">#F0E68C</obj_property>
+      <obj_property name="UseCustomSignalColor">true</obj_property>
    </wvobject>
    <wvobject type="array" fp_name="/nekoichitop/rv32gpu/minXval">
       <obj_property name="ElementShortName">minXval[8:0]</obj_property>
       <obj_property name="ObjectShortName">minXval[8:0]</obj_property>
+      <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
    </wvobject>
    <wvobject type="array" fp_name="/nekoichitop/rv32gpu/minYval">
       <obj_property name="ElementShortName">minYval[8:0]</obj_property>
       <obj_property name="ObjectShortName">minYval[8:0]</obj_property>
+      <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
    </wvobject>
    <wvobject type="array" fp_name="/nekoichitop/rv32gpu/maxXval">
       <obj_property name="ElementShortName">maxXval[8:0]</obj_property>
       <obj_property name="ObjectShortName">maxXval[8:0]</obj_property>
+      <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
    </wvobject>
    <wvobject type="array" fp_name="/nekoichitop/rv32gpu/maxYval">
       <obj_property name="ElementShortName">maxYval[8:0]</obj_property>
       <obj_property name="ObjectShortName">maxYval[8:0]</obj_property>
+      <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
    </wvobject>
    <wvobject type="array" fp_name="/nekoichitop/rv32gpu/tileXCount">
       <obj_property name="ElementShortName">tileXCount[7:0]</obj_property>
       <obj_property name="ObjectShortName">tileXCount[7:0]</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
    </wvobject>
    <wvobject type="array" fp_name="/nekoichitop/rv32gpu/tileYCount">
       <obj_property name="ElementShortName">tileYCount[7:0]</obj_property>
       <obj_property name="ObjectShortName">tileYCount[7:0]</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
    </wvobject>
    <wvobject type="array" fp_name="/nekoichitop/rv32gpu/tileXSweepDirection">
       <obj_property name="ElementShortName">tileXSweepDirection[8:0]</obj_property>
       <obj_property name="ObjectShortName">tileXSweepDirection[8:0]</obj_property>
+      <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
    </wvobject>
    <wvobject type="array" fp_name="/nekoichitop/rv32gpu/tileX0">
       <obj_property name="ElementShortName">tileX0[8:0]</obj_property>
       <obj_property name="ObjectShortName">tileX0[8:0]</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
    </wvobject>
    <wvobject type="array" fp_name="/nekoichitop/rv32gpu/tileY0">
       <obj_property name="ElementShortName">tileY0[8:0]</obj_property>
       <obj_property name="ObjectShortName">tileY0[8:0]</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
    </wvobject>
-   <wvobject type="array" fp_name="/nekoichitop/rv32gpu/tilemask">
-      <obj_property name="ElementShortName">tilemask[3:0]</obj_property>
-      <obj_property name="ObjectShortName">tilemask[3:0]</obj_property>
+   <wvobject type="array" fp_name="/nekoichitop/rv32gpu/tileYW0">
+      <obj_property name="ElementShortName">tileYW0[8:0]</obj_property>
+      <obj_property name="ObjectShortName">tileYW0[8:0]</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
    </wvobject>
-   <wvobject type="array" fp_name="/nekoichitop/rv32gpu/edgemask">
-      <obj_property name="ElementShortName">edgemask[11:0]</obj_property>
-      <obj_property name="ObjectShortName">edgemask[11:0]</obj_property>
-      <obj_property name="isExpanded"></obj_property>
+   <wvobject type="logic" fp_name="/nekoichitop/rv32gpu/tilemask">
+      <obj_property name="ElementShortName">tilemask</obj_property>
+      <obj_property name="ObjectShortName">tilemask</obj_property>
+   </wvobject>
+   <wvobject type="vbus" fp_name="vbus841">
+      <obj_property name="label">E0</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+      <obj_property name="CustomSignalColor">#00FF00</obj_property>
+      <obj_property name="UseCustomSignalColor">true</obj_property>
+      <wvobject type="logic" fp_name="/nekoichitop/rv32gpu/edgemask[11]">
+         <obj_property name="ElementShortName">[11]</obj_property>
+         <obj_property name="ObjectShortName">[11]</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/nekoichitop/rv32gpu/edgemask[10]">
+         <obj_property name="ElementShortName">[10]</obj_property>
+         <obj_property name="ObjectShortName">[10]</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/nekoichitop/rv32gpu/edgemask[9]">
+         <obj_property name="ElementShortName">[9]</obj_property>
+         <obj_property name="ObjectShortName">[9]</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/nekoichitop/rv32gpu/edgemask[8]">
+         <obj_property name="ElementShortName">[8]</obj_property>
+         <obj_property name="ObjectShortName">[8]</obj_property>
+      </wvobject>
+   </wvobject>
+   <wvobject type="vbus" fp_name="vbus850">
+      <obj_property name="label">E1</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+      <obj_property name="CustomSignalColor">#00FF00</obj_property>
+      <obj_property name="UseCustomSignalColor">true</obj_property>
+      <wvobject type="logic" fp_name="/nekoichitop/rv32gpu/edgemask[7]">
+         <obj_property name="ElementShortName">[7]</obj_property>
+         <obj_property name="ObjectShortName">[7]</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/nekoichitop/rv32gpu/edgemask[6]">
+         <obj_property name="ElementShortName">[6]</obj_property>
+         <obj_property name="ObjectShortName">[6]</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/nekoichitop/rv32gpu/edgemask[5]">
+         <obj_property name="ElementShortName">[5]</obj_property>
+         <obj_property name="ObjectShortName">[5]</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/nekoichitop/rv32gpu/edgemask[4]">
+         <obj_property name="ElementShortName">[4]</obj_property>
+         <obj_property name="ObjectShortName">[4]</obj_property>
+      </wvobject>
+   </wvobject>
+   <wvobject type="vbus" fp_name="vbus855">
+      <obj_property name="label">E2</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+      <obj_property name="CustomSignalColor">#00FF00</obj_property>
+      <obj_property name="UseCustomSignalColor">true</obj_property>
+      <wvobject type="logic" fp_name="/nekoichitop/rv32gpu/edgemask[3]">
+         <obj_property name="ElementShortName">[3]</obj_property>
+         <obj_property name="ObjectShortName">[3]</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/nekoichitop/rv32gpu/edgemask[2]">
+         <obj_property name="ElementShortName">[2]</obj_property>
+         <obj_property name="ObjectShortName">[2]</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/nekoichitop/rv32gpu/edgemask[1]">
+         <obj_property name="ElementShortName">[1]</obj_property>
+         <obj_property name="ObjectShortName">[1]</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/nekoichitop/rv32gpu/edgemask[0]">
+         <obj_property name="ElementShortName">[0]</obj_property>
+         <obj_property name="ObjectShortName">[0]</obj_property>
+      </wvobject>
+   </wvobject>
+   <wvobject type="array" fp_name="/nekoichitop/rv32gpu/m0/lineedge">
+      <obj_property name="ElementShortName">lineedge[17:0]</obj_property>
+      <obj_property name="ObjectShortName">lineedge[17:0]</obj_property>
+      <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/nekoichitop/rv32gpu/m1/lineedge">
+      <obj_property name="ElementShortName">lineedge[17:0]</obj_property>
+      <obj_property name="ObjectShortName">lineedge[17:0]</obj_property>
+      <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/nekoichitop/rv32gpu/m2/lineedge">
+      <obj_property name="ElementShortName">lineedge[17:0]</obj_property>
+      <obj_property name="ObjectShortName">lineedge[17:0]</obj_property>
+      <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/nekoichitop/rv32gpu/m3/lineedge">
+      <obj_property name="ElementShortName">lineedge[17:0]</obj_property>
+      <obj_property name="ObjectShortName">lineedge[17:0]</obj_property>
+      <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/nekoichitop/rv32gpu/m4/lineedge">
+      <obj_property name="ElementShortName">lineedge[17:0]</obj_property>
+      <obj_property name="ObjectShortName">lineedge[17:0]</obj_property>
+      <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/nekoichitop/rv32gpu/m5/lineedge">
+      <obj_property name="ElementShortName">lineedge[17:0]</obj_property>
+      <obj_property name="ObjectShortName">lineedge[17:0]</obj_property>
+      <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/nekoichitop/rv32gpu/m6/lineedge">
+      <obj_property name="ElementShortName">lineedge[17:0]</obj_property>
+      <obj_property name="ObjectShortName">lineedge[17:0]</obj_property>
+      <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/nekoichitop/rv32gpu/m7/lineedge">
+      <obj_property name="ElementShortName">lineedge[17:0]</obj_property>
+      <obj_property name="ObjectShortName">lineedge[17:0]</obj_property>
+      <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/nekoichitop/rv32gpu/m8/lineedge">
+      <obj_property name="ElementShortName">lineedge[17:0]</obj_property>
+      <obj_property name="ObjectShortName">lineedge[17:0]</obj_property>
+      <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/nekoichitop/rv32gpu/m9/lineedge">
+      <obj_property name="ElementShortName">lineedge[17:0]</obj_property>
+      <obj_property name="ObjectShortName">lineedge[17:0]</obj_property>
+      <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/nekoichitop/rv32gpu/m10/lineedge">
+      <obj_property name="ElementShortName">lineedge[17:0]</obj_property>
+      <obj_property name="ObjectShortName">lineedge[17:0]</obj_property>
+      <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/nekoichitop/rv32gpu/m11/lineedge">
+      <obj_property name="ElementShortName">lineedge[17:0]</obj_property>
+      <obj_property name="ObjectShortName">lineedge[17:0]</obj_property>
+      <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/nekoichitop/rv32gpu/frfifowe">
+      <obj_property name="ElementShortName">frfifowe</obj_property>
+      <obj_property name="ObjectShortName">frfifowe</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/nekoichitop/rv32gpu/frfifodatain">
+      <obj_property name="ElementShortName">frfifodatain[23:0]</obj_property>
+      <obj_property name="ObjectShortName">frfifodatain[23:0]</obj_property>
    </wvobject>
    <wvobject fp_name="divider120" type="divider">
       <obj_property name="label">CPU</obj_property>

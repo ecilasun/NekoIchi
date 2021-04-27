@@ -46,20 +46,20 @@
     <Option Name="IPStaticSourceDir" Val="$PIPUSERFILESDIR/ipstatic"/>
     <Option Name="EnableBDX" Val="FALSE"/>
     <Option Name="DSABoardId" Val="arty-z7-20"/>
-    <Option Name="WTXSimLaunchSim" Val="255"/>
+    <Option Name="WTXSimLaunchSim" Val="287"/>
     <Option Name="WTModelSimLaunchSim" Val="0"/>
     <Option Name="WTQuestaLaunchSim" Val="0"/>
     <Option Name="WTIesLaunchSim" Val="0"/>
     <Option Name="WTVcsLaunchSim" Val="0"/>
     <Option Name="WTRivieraLaunchSim" Val="0"/>
     <Option Name="WTActivehdlLaunchSim" Val="0"/>
-    <Option Name="WTXSimExportSim" Val="238"/>
-    <Option Name="WTModelSimExportSim" Val="238"/>
-    <Option Name="WTQuestaExportSim" Val="238"/>
-    <Option Name="WTIesExportSim" Val="238"/>
-    <Option Name="WTVcsExportSim" Val="238"/>
-    <Option Name="WTRivieraExportSim" Val="238"/>
-    <Option Name="WTActivehdlExportSim" Val="238"/>
+    <Option Name="WTXSimExportSim" Val="244"/>
+    <Option Name="WTModelSimExportSim" Val="244"/>
+    <Option Name="WTQuestaExportSim" Val="244"/>
+    <Option Name="WTIesExportSim" Val="244"/>
+    <Option Name="WTVcsExportSim" Val="244"/>
+    <Option Name="WTRivieraExportSim" Val="244"/>
+    <Option Name="WTActivehdlExportSim" Val="244"/>
     <Option Name="GenerateIPUpgradeLog" Val="TRUE"/>
     <Option Name="XSimRadix" Val="hex"/>
     <Option Name="XSimTimeUnit" Val="ns"/>
@@ -76,13 +76,6 @@
     <FileSet Name="sources_1" Type="DesignSrcs" RelSrcDir="$PSRCDIR/sources_1" RelGenDir="$PGENDIR/sources_1">
       <Filter Type="Srcs"/>
       <File Path="$PSRCDIR/sources_1/ip/blk_mem_gen_0/blk_mem_gen_0.xci">
-        <FileInfo>
-          <Attr Name="UsedIn" Val="synthesis"/>
-          <Attr Name="UsedIn" Val="implementation"/>
-          <Attr Name="UsedIn" Val="simulation"/>
-        </FileInfo>
-      </File>
-      <File Path="$PSRCDIR/sources_1/ip/opqueue/opqueue.xci">
         <FileInfo>
           <Attr Name="UsedIn" Val="synthesis"/>
           <Attr Name="UsedIn" Val="implementation"/>
@@ -539,6 +532,33 @@
         <Option Name="UseBlackboxStub" Val="1"/>
       </Config>
     </FileSet>
+    <FileSet Name="opqueue" Type="BlockSrcs" RelSrcDir="$PSRCDIR/opqueue" RelGenDir="$PGENDIR/opqueue">
+      <File Path="$PSRCDIR/sources_1/ip/opqueue/opqueue.xci">
+        <FileInfo>
+          <Attr Name="UsedIn" Val="synthesis"/>
+          <Attr Name="UsedIn" Val="implementation"/>
+          <Attr Name="UsedIn" Val="simulation"/>
+        </FileInfo>
+      </File>
+      <Config>
+        <Option Name="TopModule" Val="opqueue"/>
+        <Option Name="UseBlackboxStub" Val="1"/>
+      </Config>
+    </FileSet>
+    <FileSet Name="finerastertilefifo" Type="BlockSrcs" RelSrcDir="$PSRCDIR/finerastertilefifo" RelGenDir="$PGENDIR/finerastertilefifo">
+      <File Path="$PSRCDIR/sources_1/ip/finerastertilefifo/finerastertilefifo.xci">
+        <FileInfo>
+          <Attr Name="AutoDisabled" Val="1"/>
+          <Attr Name="UsedIn" Val="synthesis"/>
+          <Attr Name="UsedIn" Val="implementation"/>
+          <Attr Name="UsedIn" Val="simulation"/>
+        </FileInfo>
+      </File>
+      <Config>
+        <Option Name="TopModule" Val="finerastertilefifo"/>
+        <Option Name="UseBlackboxStub" Val="1"/>
+      </Config>
+    </FileSet>
   </FileSets>
   <Simulators>
     <Simulator Name="XSim">
@@ -746,6 +766,26 @@
       <RQSFiles/>
     </Run>
     <Run Id="mult_UU_synth_1" Type="Ft3:Synth" SrcSet="mult_UU" Part="xc7z020clg400-1" ConstrsSet="mult_UU" Description="Vivado Synthesis Defaults" AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" Dir="$PRUNDIR/mult_UU_synth_1" IncludeInArchive="true" AutoIncrementalDir="$PSRCDIR/utils_1/imports/mult_UU_synth_1">
+      <Strategy Version="1" Minor="2">
+        <StratHandle Name="Vivado Synthesis Defaults" Flow="Vivado Synthesis 2020"/>
+        <Step Id="synth_design"/>
+      </Strategy>
+      <GeneratedRun Dir="$PRUNDIR" File="gen_run.xml"/>
+      <ReportStrategy Name="Vivado Synthesis Default Reports" Flow="Vivado Synthesis 2020"/>
+      <Report Name="ROUTE_DESIGN.REPORT_METHODOLOGY" Enabled="1"/>
+      <RQSFiles/>
+    </Run>
+    <Run Id="opqueue_synth_1" Type="Ft3:Synth" SrcSet="opqueue" Part="xc7z020clg400-1" ConstrsSet="opqueue" Description="Vivado Synthesis Defaults" AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" Dir="$PRUNDIR/opqueue_synth_1" IncludeInArchive="true" AutoIncrementalDir="$PSRCDIR/utils_1/imports/opqueue_synth_1">
+      <Strategy Version="1" Minor="2">
+        <StratHandle Name="Vivado Synthesis Defaults" Flow="Vivado Synthesis 2020"/>
+        <Step Id="synth_design"/>
+      </Strategy>
+      <GeneratedRun Dir="$PRUNDIR" File="gen_run.xml"/>
+      <ReportStrategy Name="Vivado Synthesis Default Reports" Flow="Vivado Synthesis 2020"/>
+      <Report Name="ROUTE_DESIGN.REPORT_METHODOLOGY" Enabled="1"/>
+      <RQSFiles/>
+    </Run>
+    <Run Id="finerastertilefifo_synth_1" Type="Ft3:Synth" SrcSet="finerastertilefifo" Part="xc7z020clg400-1" ConstrsSet="finerastertilefifo" Description="Vivado Synthesis Defaults" AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" Dir="$PRUNDIR/finerastertilefifo_synth_1" IncludeInArchive="true" AutoIncrementalDir="$PSRCDIR/utils_1/imports/finerastertilefifo_synth_1">
       <Strategy Version="1" Minor="2">
         <StratHandle Name="Vivado Synthesis Defaults" Flow="Vivado Synthesis 2020"/>
         <Step Id="synth_design"/>
@@ -1069,6 +1109,40 @@
       <RQSFiles/>
     </Run>
     <Run Id="mult_UU_impl_1" Type="Ft2:EntireDesign" Part="xc7z020clg400-1" ConstrsSet="mult_UU" Description="Default settings for Implementation." AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" SynthRun="mult_UU_synth_1" IncludeInArchive="false" GenFullBitstream="true" AutoIncrementalDir="$PSRCDIR/utils_1/imports/mult_UU_impl_1">
+      <Strategy Version="1" Minor="2">
+        <StratHandle Name="Vivado Implementation Defaults" Flow="Vivado Implementation 2020"/>
+        <Step Id="init_design"/>
+        <Step Id="opt_design"/>
+        <Step Id="power_opt_design"/>
+        <Step Id="place_design"/>
+        <Step Id="post_place_power_opt_design"/>
+        <Step Id="phys_opt_design"/>
+        <Step Id="route_design"/>
+        <Step Id="post_route_phys_opt_design"/>
+        <Step Id="write_bitstream"/>
+      </Strategy>
+      <ReportStrategy Name="Vivado Implementation Default Reports" Flow="Vivado Implementation 2020"/>
+      <Report Name="ROUTE_DESIGN.REPORT_METHODOLOGY" Enabled="1"/>
+      <RQSFiles/>
+    </Run>
+    <Run Id="opqueue_impl_1" Type="Ft2:EntireDesign" Part="xc7z020clg400-1" ConstrsSet="opqueue" Description="Default settings for Implementation." AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" SynthRun="opqueue_synth_1" IncludeInArchive="false" GenFullBitstream="true" AutoIncrementalDir="$PSRCDIR/utils_1/imports/opqueue_impl_1">
+      <Strategy Version="1" Minor="2">
+        <StratHandle Name="Vivado Implementation Defaults" Flow="Vivado Implementation 2020"/>
+        <Step Id="init_design"/>
+        <Step Id="opt_design"/>
+        <Step Id="power_opt_design"/>
+        <Step Id="place_design"/>
+        <Step Id="post_place_power_opt_design"/>
+        <Step Id="phys_opt_design"/>
+        <Step Id="route_design"/>
+        <Step Id="post_route_phys_opt_design"/>
+        <Step Id="write_bitstream"/>
+      </Strategy>
+      <ReportStrategy Name="Vivado Implementation Default Reports" Flow="Vivado Implementation 2020"/>
+      <Report Name="ROUTE_DESIGN.REPORT_METHODOLOGY" Enabled="1"/>
+      <RQSFiles/>
+    </Run>
+    <Run Id="finerastertilefifo_impl_1" Type="Ft2:EntireDesign" Part="xc7z020clg400-1" ConstrsSet="finerastertilefifo" Description="Default settings for Implementation." AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" SynthRun="finerastertilefifo_synth_1" IncludeInArchive="false" GenFullBitstream="true" AutoIncrementalDir="$PSRCDIR/utils_1/imports/finerastertilefifo_impl_1">
       <Strategy Version="1" Minor="2">
         <StratHandle Name="Vivado Implementation Defaults" Flow="Vivado Implementation 2020"/>
         <Step Id="init_design"/>

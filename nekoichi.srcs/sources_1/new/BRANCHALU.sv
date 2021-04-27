@@ -27,7 +27,7 @@ always_comb begin
             `ALU_GE:   begin branchout = $signed(val1) >= $signed(val2) ? 1'b1 : 1'b0; end
             `ALU_LU:   begin branchout = val1 < val2 ? 1'b1 : 1'b0; end
             `ALU_GEU:  begin branchout = val1 >= val2 ? 1'b1 : 1'b0; end
-            default:  begin branchout = 1'b0; end
+            //default:  begin branchout = 1'b0; end
         endcase
 
     end

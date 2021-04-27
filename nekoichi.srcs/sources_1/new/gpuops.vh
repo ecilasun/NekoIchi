@@ -57,3 +57,18 @@
 	// [---- ---- --------------][---][---][-111]
 
 // ==============================================================
+
+// ===================Fine Raster States=========================
+
+`define FRSTATEBITS 3
+
+`define FRSTATEIDLE			0
+`define FRSTATELATCH		1
+`define FRSTATERASTERIZE	2
+
+`define FRSTATENONE_MASK		3'b000
+
+`define FRSTATEIDLE_MASK		3'b001
+`define FRSTATELATCH_MASK		3'b010
+`define FRSTATERASTERIZE_MASK	3'b100
+// ==============================================================

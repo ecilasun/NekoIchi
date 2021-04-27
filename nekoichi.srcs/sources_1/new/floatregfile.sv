@@ -17,8 +17,12 @@ module floatregisterfile(
 logic [31:0] registers[0:31]; 
 
 always @(posedge clock) begin
-	if (wren)
-		registers[rd] <= datain;
+	if (reset) begin
+		// 
+	end else begin
+		if (wren)
+			registers[rd] <= datain;
+	end
 end
 
 assign rval1 = registers[rs1];
