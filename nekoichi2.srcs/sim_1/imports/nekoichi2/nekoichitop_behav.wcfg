@@ -1,0 +1,527 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wave_config>
+   <wave_state>
+   </wave_state>
+   <db_ref_list>
+      <db_ref path="nekoichitop_behav.wdb" id="1">
+         <top_modules>
+            <top_module name="glbl" />
+            <top_module name="nekoichitop" />
+         </top_modules>
+      </db_ref>
+   </db_ref_list>
+   <zoom_setting>
+      <ZoomStartTime time="30674333fs"></ZoomStartTime>
+      <ZoomEndTime time="33280334fs"></ZoomEndTime>
+      <Cursor1Time time="32248332fs"></Cursor1Time>
+   </zoom_setting>
+   <column_width_setting>
+      <NameColumnWidth column_width="169"></NameColumnWidth>
+      <ValueColumnWidth column_width="73"></ValueColumnWidth>
+   </column_width_setting>
+   <WVObjectSize size="123" />
+   <wvobject fp_name="divider45" type="divider">
+      <obj_property name="label">SYS</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/nekoichitop/CLK_I">
+      <obj_property name="ElementShortName">CLK_I</obj_property>
+      <obj_property name="ObjectShortName">CLK_I</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/nekoichitop/RST_I">
+      <obj_property name="ElementShortName">RST_I</obj_property>
+      <obj_property name="ObjectShortName">RST_I</obj_property>
+   </wvobject>
+   <wvobject fp_name="divider46" type="divider">
+      <obj_property name="label">CPU</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/nekoichitop/rv32cpu/reset">
+      <obj_property name="ElementShortName">reset</obj_property>
+      <obj_property name="ObjectShortName">reset</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/nekoichitop/rv32cpu/clock">
+      <obj_property name="ElementShortName">clock</obj_property>
+      <obj_property name="ObjectShortName">clock</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/nekoichitop/rv32cpu/cpustate">
+      <obj_property name="ElementShortName">cpustate[12:0]</obj_property>
+      <obj_property name="ObjectShortName">cpustate[12:0]</obj_property>
+      <obj_property name="CustomSignalColor">#FFD700</obj_property>
+      <obj_property name="UseCustomSignalColor">true</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/nekoichitop/rv32cpu/fullinstruction">
+      <obj_property name="ElementShortName">fullinstruction[31:0]</obj_property>
+      <obj_property name="ObjectShortName">fullinstruction[31:0]</obj_property>
+      <obj_property name="CustomSignalColor">#00FFFF</obj_property>
+      <obj_property name="UseCustomSignalColor">true</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/nekoichitop/rv32cpu/PC">
+      <obj_property name="ElementShortName">PC[31:0]</obj_property>
+      <obj_property name="ObjectShortName">PC[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/nekoichitop/rv32cpu/memaddress">
+      <obj_property name="ElementShortName">memaddress[31:0]</obj_property>
+      <obj_property name="ObjectShortName">memaddress[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/nekoichitop/rv32cpu/writeword">
+      <obj_property name="ElementShortName">writeword[31:0]</obj_property>
+      <obj_property name="ObjectShortName">writeword[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/nekoichitop/rv32cpu/mem_data">
+      <obj_property name="ElementShortName">mem_data[31:0]</obj_property>
+      <obj_property name="ObjectShortName">mem_data[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/nekoichitop/rv32cpu/mem_writeena">
+      <obj_property name="ElementShortName">mem_writeena[3:0]</obj_property>
+      <obj_property name="ObjectShortName">mem_writeena[3:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/nekoichitop/rv32cpu/rs1">
+      <obj_property name="ElementShortName">rs1[4:0]</obj_property>
+      <obj_property name="ObjectShortName">rs1[4:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/nekoichitop/rv32cpu/rs2">
+      <obj_property name="ElementShortName">rs2[4:0]</obj_property>
+      <obj_property name="ObjectShortName">rs2[4:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/nekoichitop/rv32cpu/rs3">
+      <obj_property name="ElementShortName">rs3[4:0]</obj_property>
+      <obj_property name="ObjectShortName">rs3[4:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/nekoichitop/rv32cpu/rd">
+      <obj_property name="ElementShortName">rd[4:0]</obj_property>
+      <obj_property name="ObjectShortName">rd[4:0]</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/nekoichitop/rv32cpu/registerWriteEnable">
+      <obj_property name="ElementShortName">registerWriteEnable</obj_property>
+      <obj_property name="ObjectShortName">registerWriteEnable</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/nekoichitop/rv32cpu/registerdata">
+      <obj_property name="ElementShortName">registerdata[31:0]</obj_property>
+      <obj_property name="ObjectShortName">registerdata[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/nekoichitop/rv32cpu/regs/registers">
+      <obj_property name="ElementShortName">registers[0:31][31:0]</obj_property>
+      <obj_property name="ObjectShortName">registers[0:31][31:0]</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/nekoichitop/rv32cpu/fregisterWriteEnable">
+      <obj_property name="ElementShortName">fregisterWriteEnable</obj_property>
+      <obj_property name="ObjectShortName">fregisterWriteEnable</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/nekoichitop/rv32cpu/fregisterdata">
+      <obj_property name="ElementShortName">fregisterdata[31:0]</obj_property>
+      <obj_property name="ObjectShortName">fregisterdata[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/nekoichitop/rv32cpu/floatregs/registers">
+      <obj_property name="DisplayName">label</obj_property>
+      <obj_property name="ElementShortName">registers[0:31][31:0]</obj_property>
+      <obj_property name="ObjectShortName">registers[0:31][31:0]</obj_property>
+      <obj_property name="label">fregisters[0:31][31:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="divider289" type="divider">
+      <obj_property name="label">GPUFIFO</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/nekoichitop/GPUCommands/din">
+      <obj_property name="ElementShortName">din[31:0]</obj_property>
+      <obj_property name="ObjectShortName">din[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/nekoichitop/GPUCommands/wr_en">
+      <obj_property name="ElementShortName">wr_en</obj_property>
+      <obj_property name="ObjectShortName">wr_en</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/nekoichitop/GPUCommands/rd_en">
+      <obj_property name="ElementShortName">rd_en</obj_property>
+      <obj_property name="ObjectShortName">rd_en</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/nekoichitop/GPUCommands/dout">
+      <obj_property name="ElementShortName">dout[31:0]</obj_property>
+      <obj_property name="ObjectShortName">dout[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/nekoichitop/GPUCommands/full">
+      <obj_property name="ElementShortName">full</obj_property>
+      <obj_property name="ObjectShortName">full</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/nekoichitop/GPUCommands/empty">
+      <obj_property name="ElementShortName">empty</obj_property>
+      <obj_property name="ObjectShortName">empty</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/nekoichitop/GPUCommands/valid">
+      <obj_property name="ElementShortName">valid</obj_property>
+      <obj_property name="ObjectShortName">valid</obj_property>
+   </wvobject>
+   <wvobject fp_name="divider299" type="divider">
+      <obj_property name="label">GPU</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/nekoichitop/rv32gpu/reset">
+      <obj_property name="ElementShortName">reset</obj_property>
+      <obj_property name="ObjectShortName">reset</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/nekoichitop/rv32gpu/clock">
+      <obj_property name="ElementShortName">clock</obj_property>
+      <obj_property name="ObjectShortName">clock</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/nekoichitop/rv32gpu/gpustate">
+      <obj_property name="ElementShortName">gpustate[8:0]</obj_property>
+      <obj_property name="ObjectShortName">gpustate[8:0]</obj_property>
+      <obj_property name="CustomSignalColor">#FFFF00</obj_property>
+      <obj_property name="UseCustomSignalColor">true</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/nekoichitop/rv32gpu/commandlatch">
+      <obj_property name="ElementShortName">commandlatch[31:0]</obj_property>
+      <obj_property name="ObjectShortName">commandlatch[31:0]</obj_property>
+      <obj_property name="CustomSignalColor">#00FFFF</obj_property>
+      <obj_property name="UseCustomSignalColor">true</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/nekoichitop/rv32gpu/tilemask">
+      <obj_property name="ElementShortName">tilemask</obj_property>
+      <obj_property name="ObjectShortName">tilemask</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/nekoichitop/rv32gpu/widetilemask">
+      <obj_property name="ElementShortName">widetilemask</obj_property>
+      <obj_property name="ObjectShortName">widetilemask</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/nekoichitop/rv32gpu/triFacing">
+      <obj_property name="ElementShortName">triFacing</obj_property>
+      <obj_property name="ObjectShortName">triFacing</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/nekoichitop/rv32gpu/gpuregs/registers">
+      <obj_property name="DisplayName">label</obj_property>
+      <obj_property name="ElementShortName">registers[0:7][31:0]</obj_property>
+      <obj_property name="ObjectShortName">registers[0:7][31:0]</obj_property>
+      <obj_property name="label">gpuregisters[0:7][31:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="divider325" type="divider">
+      <obj_property name="label">VIDEOUNIT</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/nekoichitop/VideoUnit/gpuclock">
+      <obj_property name="ElementShortName">gpuclock</obj_property>
+      <obj_property name="ObjectShortName">gpuclock</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/nekoichitop/VideoUnit/reset_n">
+      <obj_property name="ElementShortName">reset_n</obj_property>
+      <obj_property name="ObjectShortName">reset_n</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/nekoichitop/VideoUnit/video_x">
+      <obj_property name="ElementShortName">video_x[11:0]</obj_property>
+      <obj_property name="ObjectShortName">video_x[11:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/nekoichitop/VideoUnit/video_y">
+      <obj_property name="ElementShortName">video_y[11:0]</obj_property>
+      <obj_property name="ObjectShortName">video_y[11:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/nekoichitop/VideoUnit/memaddress">
+      <obj_property name="ElementShortName">memaddress[13:0]</obj_property>
+      <obj_property name="ObjectShortName">memaddress[13:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/nekoichitop/VideoUnit/mem_writeena">
+      <obj_property name="ElementShortName">mem_writeena[3:0]</obj_property>
+      <obj_property name="ObjectShortName">mem_writeena[3:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/nekoichitop/VideoUnit/writeword">
+      <obj_property name="ElementShortName">writeword[31:0]</obj_property>
+      <obj_property name="ObjectShortName">writeword[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/nekoichitop/VideoUnit/lanemask">
+      <obj_property name="ElementShortName">lanemask[11:0]</obj_property>
+      <obj_property name="ObjectShortName">lanemask[11:0]</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/nekoichitop/VideoUnit/isCachingRow">
+      <obj_property name="ElementShortName">isCachingRow</obj_property>
+      <obj_property name="ObjectShortName">isCachingRow</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/nekoichitop/VideoUnit/inDisplayWindow">
+      <obj_property name="ElementShortName">inDisplayWindow</obj_property>
+      <obj_property name="ObjectShortName">inDisplayWindow</obj_property>
+   </wvobject>
+   <wvobject fp_name="divider354" type="divider">
+      <obj_property name="label">GPUVSYNC</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/nekoichitop/GPUVGAVSyncQueue/rst">
+      <obj_property name="ElementShortName">rst</obj_property>
+      <obj_property name="ObjectShortName">rst</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/nekoichitop/GPUVGAVSyncQueue/wr_clk">
+      <obj_property name="ElementShortName">wr_clk</obj_property>
+      <obj_property name="ObjectShortName">wr_clk</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/nekoichitop/GPUVGAVSyncQueue/rd_clk">
+      <obj_property name="ElementShortName">rd_clk</obj_property>
+      <obj_property name="ObjectShortName">rd_clk</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/nekoichitop/GPUVGAVSyncQueue/din">
+      <obj_property name="ElementShortName">din[0:0]</obj_property>
+      <obj_property name="ObjectShortName">din[0:0]</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/nekoichitop/GPUVGAVSyncQueue/wr_en">
+      <obj_property name="ElementShortName">wr_en</obj_property>
+      <obj_property name="ObjectShortName">wr_en</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/nekoichitop/GPUVGAVSyncQueue/rd_en">
+      <obj_property name="ElementShortName">rd_en</obj_property>
+      <obj_property name="ObjectShortName">rd_en</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/nekoichitop/GPUVGAVSyncQueue/dout">
+      <obj_property name="ElementShortName">dout[0:0]</obj_property>
+      <obj_property name="ObjectShortName">dout[0:0]</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/nekoichitop/GPUVGAVSyncQueue/full">
+      <obj_property name="ElementShortName">full</obj_property>
+      <obj_property name="ObjectShortName">full</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/nekoichitop/GPUVGAVSyncQueue/empty">
+      <obj_property name="ElementShortName">empty</obj_property>
+      <obj_property name="ObjectShortName">empty</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/nekoichitop/GPUVGAVSyncQueue/valid">
+      <obj_property name="ElementShortName">valid</obj_property>
+      <obj_property name="ObjectShortName">valid</obj_property>
+   </wvobject>
+   <wvobject fp_name="divider103" type="divider">
+      <obj_property name="label">ALU</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/nekoichitop/rv32cpu/aluunit/clock">
+      <obj_property name="ElementShortName">clock</obj_property>
+      <obj_property name="ObjectShortName">clock</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/nekoichitop/rv32cpu/aluunit/reset">
+      <obj_property name="ElementShortName">reset</obj_property>
+      <obj_property name="ObjectShortName">reset</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/nekoichitop/rv32cpu/aluunit/aluout">
+      <obj_property name="ElementShortName">aluout[31:0]</obj_property>
+      <obj_property name="ObjectShortName">aluout[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/nekoichitop/rv32cpu/aluunit/func3">
+      <obj_property name="ElementShortName">func3[2:0]</obj_property>
+      <obj_property name="ObjectShortName">func3[2:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/nekoichitop/rv32cpu/aluunit/val1">
+      <obj_property name="ElementShortName">val1[31:0]</obj_property>
+      <obj_property name="ObjectShortName">val1[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/nekoichitop/rv32cpu/aluunit/val2">
+      <obj_property name="ElementShortName">val2[31:0]</obj_property>
+      <obj_property name="ObjectShortName">val2[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/nekoichitop/rv32cpu/aluunit/aluop">
+      <obj_property name="ElementShortName">aluop[4:0]</obj_property>
+      <obj_property name="ObjectShortName">aluop[4:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="divider182" type="divider">
+      <obj_property name="label">UARTTX</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/nekoichitop/UART_transmit/clk">
+      <obj_property name="ElementShortName">clk</obj_property>
+      <obj_property name="ObjectShortName">clk</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/nekoichitop/UART_transmit/TxD_start">
+      <obj_property name="ElementShortName">TxD_start</obj_property>
+      <obj_property name="ObjectShortName">TxD_start</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/nekoichitop/UART_transmit/TxD_data">
+      <obj_property name="ElementShortName">TxD_data[7:0]</obj_property>
+      <obj_property name="ObjectShortName">TxD_data[7:0]</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/nekoichitop/UART_transmit/TxD">
+      <obj_property name="ElementShortName">TxD</obj_property>
+      <obj_property name="ObjectShortName">TxD</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/nekoichitop/UART_transmit/TxD_busy">
+      <obj_property name="ElementShortName">TxD_busy</obj_property>
+      <obj_property name="ObjectShortName">TxD_busy</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/nekoichitop/UART_transmit/BitTick">
+      <obj_property name="ElementShortName">BitTick</obj_property>
+      <obj_property name="ObjectShortName">BitTick</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/nekoichitop/UART_transmit/TxD_state">
+      <obj_property name="ElementShortName">TxD_state[3:0]</obj_property>
+      <obj_property name="ObjectShortName">TxD_state[3:0]</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/nekoichitop/UART_transmit/TxD_ready">
+      <obj_property name="ElementShortName">TxD_ready</obj_property>
+      <obj_property name="ObjectShortName">TxD_ready</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/nekoichitop/UART_transmit/TxD_shift">
+      <obj_property name="ElementShortName">TxD_shift[7:0]</obj_property>
+      <obj_property name="ObjectShortName">TxD_shift[7:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/nekoichitop/UART_transmit/ClkFrequency">
+      <obj_property name="ElementShortName">ClkFrequency[31:0]</obj_property>
+      <obj_property name="ObjectShortName">ClkFrequency[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/nekoichitop/UART_transmit/Baud">
+      <obj_property name="ElementShortName">Baud[31:0]</obj_property>
+      <obj_property name="ObjectShortName">Baud[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/nekoichitop/UART_out_fifo/rst">
+      <obj_property name="ElementShortName">rst</obj_property>
+      <obj_property name="ObjectShortName">rst</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/nekoichitop/UART_out_fifo/wr_clk">
+      <obj_property name="ElementShortName">wr_clk</obj_property>
+      <obj_property name="ObjectShortName">wr_clk</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/nekoichitop/UART_out_fifo/rd_clk">
+      <obj_property name="ElementShortName">rd_clk</obj_property>
+      <obj_property name="ObjectShortName">rd_clk</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/nekoichitop/UART_out_fifo/din">
+      <obj_property name="ElementShortName">din[7:0]</obj_property>
+      <obj_property name="ObjectShortName">din[7:0]</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/nekoichitop/UART_out_fifo/wr_en">
+      <obj_property name="ElementShortName">wr_en</obj_property>
+      <obj_property name="ObjectShortName">wr_en</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/nekoichitop/UART_out_fifo/rd_en">
+      <obj_property name="ElementShortName">rd_en</obj_property>
+      <obj_property name="ObjectShortName">rd_en</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/nekoichitop/UART_out_fifo/dout">
+      <obj_property name="ElementShortName">dout[7:0]</obj_property>
+      <obj_property name="ObjectShortName">dout[7:0]</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/nekoichitop/UART_out_fifo/full">
+      <obj_property name="ElementShortName">full</obj_property>
+      <obj_property name="ObjectShortName">full</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/nekoichitop/UART_out_fifo/empty">
+      <obj_property name="ElementShortName">empty</obj_property>
+      <obj_property name="ObjectShortName">empty</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/nekoichitop/UART_out_fifo/valid">
+      <obj_property name="ElementShortName">valid</obj_property>
+      <obj_property name="ObjectShortName">valid</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/nekoichitop/UART_out_fifo/rd_data_count">
+      <obj_property name="ElementShortName">rd_data_count[9:0]</obj_property>
+      <obj_property name="ObjectShortName">rd_data_count[9:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="divider334" type="divider">
+      <obj_property name="label">UARTRX</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/nekoichitop/UART_receive/clk">
+      <obj_property name="ElementShortName">clk</obj_property>
+      <obj_property name="ObjectShortName">clk</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/nekoichitop/UART_receive/RxD">
+      <obj_property name="ElementShortName">RxD</obj_property>
+      <obj_property name="ObjectShortName">RxD</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/nekoichitop/UART_receive/RxD_data_ready">
+      <obj_property name="ElementShortName">RxD_data_ready</obj_property>
+      <obj_property name="ObjectShortName">RxD_data_ready</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/nekoichitop/UART_receive/RxD_data">
+      <obj_property name="ElementShortName">RxD_data[7:0]</obj_property>
+      <obj_property name="ObjectShortName">RxD_data[7:0]</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/nekoichitop/UART_receive/RxD_idle">
+      <obj_property name="ElementShortName">RxD_idle</obj_property>
+      <obj_property name="ObjectShortName">RxD_idle</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/nekoichitop/UART_receive/RxD_endofpacket">
+      <obj_property name="ElementShortName">RxD_endofpacket</obj_property>
+      <obj_property name="ObjectShortName">RxD_endofpacket</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/nekoichitop/UART_receive/RxD_state">
+      <obj_property name="ElementShortName">RxD_state[3:0]</obj_property>
+      <obj_property name="ObjectShortName">RxD_state[3:0]</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/nekoichitop/UART_receive/OversamplingTick">
+      <obj_property name="ElementShortName">OversamplingTick</obj_property>
+      <obj_property name="ObjectShortName">OversamplingTick</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/nekoichitop/UART_receive/RxD_sync">
+      <obj_property name="ElementShortName">RxD_sync[1:0]</obj_property>
+      <obj_property name="ObjectShortName">RxD_sync[1:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/nekoichitop/UART_receive/Filter_cnt">
+      <obj_property name="ElementShortName">Filter_cnt[1:0]</obj_property>
+      <obj_property name="ObjectShortName">Filter_cnt[1:0]</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/nekoichitop/UART_receive/RxD_bit">
+      <obj_property name="ElementShortName">RxD_bit</obj_property>
+      <obj_property name="ObjectShortName">RxD_bit</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/nekoichitop/UART_receive/OversamplingCnt">
+      <obj_property name="ElementShortName">OversamplingCnt[2:0]</obj_property>
+      <obj_property name="ObjectShortName">OversamplingCnt[2:0]</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/nekoichitop/UART_receive/sampleNow">
+      <obj_property name="ElementShortName">sampleNow</obj_property>
+      <obj_property name="ObjectShortName">sampleNow</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/nekoichitop/UART_receive/GapCnt">
+      <obj_property name="ElementShortName">GapCnt[5:0]</obj_property>
+      <obj_property name="ObjectShortName">GapCnt[5:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/nekoichitop/UART_receive/ClkFrequency">
+      <obj_property name="ElementShortName">ClkFrequency[31:0]</obj_property>
+      <obj_property name="ObjectShortName">ClkFrequency[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/nekoichitop/UART_receive/Baud">
+      <obj_property name="ElementShortName">Baud[31:0]</obj_property>
+      <obj_property name="ObjectShortName">Baud[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/nekoichitop/UART_receive/Oversampling">
+      <obj_property name="ElementShortName">Oversampling[31:0]</obj_property>
+      <obj_property name="ObjectShortName">Oversampling[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/nekoichitop/UART_receive/l2o">
+      <obj_property name="ElementShortName">l2o[31:0]</obj_property>
+      <obj_property name="ObjectShortName">l2o[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/nekoichitop/UART_in_fifo/rst">
+      <obj_property name="ElementShortName">rst</obj_property>
+      <obj_property name="ObjectShortName">rst</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/nekoichitop/UART_in_fifo/wr_clk">
+      <obj_property name="ElementShortName">wr_clk</obj_property>
+      <obj_property name="ObjectShortName">wr_clk</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/nekoichitop/UART_in_fifo/rd_clk">
+      <obj_property name="ElementShortName">rd_clk</obj_property>
+      <obj_property name="ObjectShortName">rd_clk</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/nekoichitop/UART_in_fifo/din">
+      <obj_property name="ElementShortName">din[7:0]</obj_property>
+      <obj_property name="ObjectShortName">din[7:0]</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/nekoichitop/UART_in_fifo/wr_en">
+      <obj_property name="ElementShortName">wr_en</obj_property>
+      <obj_property name="ObjectShortName">wr_en</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/nekoichitop/UART_in_fifo/rd_en">
+      <obj_property name="ElementShortName">rd_en</obj_property>
+      <obj_property name="ObjectShortName">rd_en</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/nekoichitop/UART_in_fifo/dout">
+      <obj_property name="ElementShortName">dout[7:0]</obj_property>
+      <obj_property name="ObjectShortName">dout[7:0]</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/nekoichitop/UART_in_fifo/full">
+      <obj_property name="ElementShortName">full</obj_property>
+      <obj_property name="ObjectShortName">full</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/nekoichitop/UART_in_fifo/empty">
+      <obj_property name="ElementShortName">empty</obj_property>
+      <obj_property name="ObjectShortName">empty</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/nekoichitop/UART_in_fifo/valid">
+      <obj_property name="ElementShortName">valid</obj_property>
+      <obj_property name="ObjectShortName">valid</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/nekoichitop/UART_in_fifo/rd_data_count">
+      <obj_property name="ElementShortName">rd_data_count[9:0]</obj_property>
+      <obj_property name="ObjectShortName">rd_data_count[9:0]</obj_property>
+   </wvobject>
+</wave_config>
