@@ -28,11 +28,10 @@ wire gpufifowe; // < from CPU
 wire fifore;
 wire [31:0] fifodataout;
 
-// GPU clock: 75Mhz
-// System clock: 60Mhz
-// UART clock: 10Mhz
-// VGA clock: 25Mhz
-wire sysclock, gpuclock, uartbase, vgaclock, clocksLocked;
+// UART clock: 10Mhz, VGA clock: 25Mhz
+// GPU and CPU clocks vary, default at CPU@60Mhz & GPU@80Mhz
+wire sysclock, gpuclock, uartclk, vgaclock;
+wire clockALocked, clockBLocked, clockCLocked;
 
 wire [31:0] memaddress, dmaaddress;
 wire [31:0] writeword, dmawriteword;
@@ -43,7 +42,8 @@ wire [11:0] video_x;
 wire [11:0] video_y;
 wire vsync_we;
 
-wire vsync_fastdomain;
+logic [31:0] vsynccounter;
+wire [31:0] vsync_fastdomain;
 wire vsyncfifoempty;
 wire vsyncfifofull;
 wire vsyncfifovalid;
@@ -52,17 +52,29 @@ wire vsyncfifovalid;
 // CPU Clock
 // =====================================================================================================
 
-SystemClockGen SysClock(
+SystemClockGen SysClockUnit(
 	.clk_in1(CLK_I),
 	.resetn(~RST_I),
 	.sysclock(sysclock),
 	.vgaclock(vgaclock),
-	.gpuclock(gpuclock),
-	.uartbase(uartbase),
-	.locked(clocksLocked) );
+	.locked(clockALocked) );
 
-wire reset_p = RST_I | (~clocksLocked);
-wire reset_n = (~RST_I) & clocksLocked;
+GPUClockGen GpuClockUnit(
+	.clk_in1(CLK_I),
+	.resetn(~RST_I),
+	.gpuclock(gpuclock),
+	.locked(clockBLocked) );
+	
+PeripheralClockGen PeripheralClockUnit(
+	.clk_in1(CLK_I),
+	.resetn(~RST_I),
+	.uartclk(uartclk),
+	.locked(clockCLocked) );
+
+wire allClocksLocked = clockALocked & clockBLocked & clockCLocked;
+
+wire reset_p = RST_I | (~allClocksLocked);
+wire reset_n = (~RST_I) & allClocksLocked;
 
 // =====================================================================================================
 // UART (Tx/Rx) @115200
@@ -89,7 +101,7 @@ logic txstate = 1'b0;
 // Transmitter (CPU -> FIFO -> Tx)
 // ---------------------------------
 async_transmitter UART_transmit(
-	.clk(uartbase),
+	.clk(uartclk),
 	.TxD_start(transmitbyte),
 	.TxD_data(datatotransmit),
 	.TxD(uart_rxd_out),
@@ -105,12 +117,12 @@ UARTFifoGen UART_out_fifo(
     .dout(outfifoout), // to transmitter
     .rd_en(outfifore), // transmitter can send
     .wr_clk(sysclock), // CPU write clock
-    .rd_clk(uartbase), // transmitter runs slower
+    .rd_clk(uartclk), // transmitter runs slower
     .valid(outfifovalid),
     .rd_data_count(outfifodatacount) );
 
 // Fifo output serializer
-always @(posedge(uartbase)) begin
+always @(posedge(uartclk)) begin
 	if (txstate == 1'b0) begin // IDLE_STATE
 		if (~uarttxbusy & (transmitbyte == 1'b0)) begin // Safe to attempt send, UART not busy or triggered
 			if (~outfifoempty) begin // Something in FIFO? Trigger read and go to transmit 
@@ -141,7 +153,7 @@ end
 // Receiver (Rx -> FIFO -> CPU)
 // ---------------------------------
 async_receiver UART_receive(
-	.clk(uartbase),
+	.clk(uartclk),
 	.RxD(uart_txd_in),
 	.RxD_data_ready(uartbyteavailable),
 	.RxD_data(uartbytein),
@@ -157,13 +169,13 @@ UARTFifoGen UART_in_fifo(
     .empty(infifoempty),
     .dout(infifoout),
     .rd_en(infifore),
-    .wr_clk(uartbase),
+    .wr_clk(uartclk),
     .rd_clk(sysclock),
     .valid(infifovalid),
     .rd_data_count(infifodatacount) );
 
 // Fifo input control
-always @(posedge(uartbase)) begin
+always @(posedge(uartclk)) begin
 	if (uartbyteavailable) begin
 		infifowe <= 1'b1;
 		inuartbyte <= uartbytein;
@@ -212,11 +224,11 @@ GPUCommandFIFO GPUCommands(
 	.valid(fifodatavalid) );
 
 // Cross clock domain for vsync, from DVI to sys
-logic vsync_signal = 1'b0;
+logic [31:0] vsync_signal = 32'd0;
 logic vsync_re;
 DomainCrossSignalFifo GPUVGAVSyncQueue(
 	.full(vsyncfifofull),
-	.din(1'b1),
+	.din(vsynccounter),
 	.wr_en(vsync_we),
 	.empty(vsyncfifoempty),
 	.dout(vsync_fastdomain),
@@ -229,10 +241,11 @@ DomainCrossSignalFifo GPUVGAVSyncQueue(
 // Drain the vsync fifo and set vsync signal for the GPU every time we find one
 always @(posedge gpuclock) begin
 	vsync_re <= 1'b0;
-	vsync_signal <= 1'b0;
 	if (~vsyncfifoempty) begin
 		vsync_re <= 1'b1;
-		vsync_signal <= 1'b1;
+	end
+	if (vsyncfifovalid) begin
+		vsync_signal <= vsync_fastdomain;
 	end
 end
 
@@ -295,11 +308,13 @@ VideoControllerGen VideoUnit(
 	.blue(VGA_B) );
 
 vgatimer VGAScanout(
+		.rst_i(),
 		.clk_i(vgaclock),
         .hsync_o(VGA_HS_O),
         .vsync_o(VGA_VS_O),
         .counter_x(video_x),
         .counter_y(video_y),
-        .vsynctrigger_o(vsync_we) );
+        .vsynctrigger_o(vsync_we),
+        .vsynccounter(vsynccounter) );
 
 endmodule

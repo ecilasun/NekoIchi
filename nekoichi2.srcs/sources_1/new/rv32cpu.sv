@@ -14,7 +14,6 @@ module rv32cpu(
 	output logic uartfifore,
 	input wire [7:0] uartindata,
 	input wire [9:0] uartinputbytecount,
-	input wire [7:0] infifoout,
 	output logic[31:0] memaddress = 32'h80000000,
 	output logic [31:0] writeword = 32'h00000000,
 	input wire [31:0] mem_data,

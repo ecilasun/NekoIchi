@@ -151,7 +151,7 @@ endmodule
 module GPU (
 	input wire clock,
 	input wire reset,
-	input wire vsync,
+	input wire [31:0] vsync,
 	// GPU FIFO
 	input wire fifoempty,
 	input wire [31:0] fifodout,
@@ -169,7 +169,6 @@ module GPU (
 	input wire [31:0] dma_data );
 	
 logic [`GPUSTATEBITS-1:0] gpustate = `GPUSTATEIDLE_MASK;
-logic [31:0] commandlatch = 32'd0;
 
 logic [31:0] rdatain;
 wire [31:0] rval1;
@@ -192,19 +191,6 @@ gpuregisterfile gpuregs(
 	.datain(rdatain),
 	.rval1(rval1),
 	.rval2(rval2) );
-
-// ==============================================================
-// Decoder
-// ==============================================================
-always_comb begin
-	cmd = commandlatch[2:0];		// command
-	// commandlatch[3] unused for now
-	rs1 = commandlatch[6:4];		// source register 1
-	rs2 = commandlatch[9:7];		// source register 2 (==destination register)
-	rd = commandlatch[9:7];			// destination register
-	immshort = commandlatch[31:10];	// 22 bit immediate
-	imm = commandlatch[31:4];		// 28 bit immediate
-end
 
 // ==============================================================
 // Fine rasterizer instance
@@ -338,6 +324,7 @@ end
 // ==============================================================
 // Main state machine
 // ==============================================================
+logic [31:0] vsyncrequestpoint = 32'd0;
 always_ff @(posedge clock) begin
 	if (reset) begin
 		gpustate <= `GPUSTATEIDLE_MASK;
@@ -375,6 +362,7 @@ always_ff @(posedge clock) begin
 				end else begin
 					gpustate[`GPUSTATEIDLE] <= 1'b1;
 				end
+			
 			end
 			
 			gpustate[`GPUSTATELATCHCOMMAND]: begin
@@ -382,7 +370,14 @@ always_ff @(posedge clock) begin
 				fiford_en <= 1'b0;
 				if (fifdoutvalid) begin
 					// Data is available, latch and jump to execute
-					commandlatch <= fifodout;
+					cmd <= fifodout[2:0];		// command
+					// fifodout[3] unused for now
+					rs1 <= fifodout[6:4];		// source register 1
+					rs2 <= fifodout[9:7];		// source register 2 (==destination register)
+					rd <= fifodout[9:7];			// destination register
+					immshort <= fifodout[31:10];	// 22 bit immediate
+					imm <= fifodout[31:4];		// 28 bit immediate
+					vsyncrequestpoint <= vsync;
 					gpustate[`GPUSTATEEXEC] <= 1'b1;
 				end else begin
 					// Data is not available yet, spin
@@ -394,7 +389,7 @@ always_ff @(posedge clock) begin
 			gpustate[`GPUSTATEEXEC]: begin
 				unique case (cmd) // 4'bxxxx
 					3'b000: begin // VSYNC0.00001068
-						if (vsync)
+						if (vsync > vsyncrequestpoint)
 							gpustate[`GPUSTATEIDLE] <= 1'b1;
 						else
 							gpustate[`GPUSTATEEXEC] <= 1'b1;

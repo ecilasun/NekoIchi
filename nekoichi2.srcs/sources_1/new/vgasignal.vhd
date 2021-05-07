@@ -11,8 +11,8 @@ ENTITY vgatimer IS
         vsync_o : OUT std_logic;
         counter_x : OUT std_logic_vector(11 downto 0);
         counter_y : OUT std_logic_vector(11 downto 0);
-        pixel_clock   : out std_logic;
-  SIGNAL vsynctrigger_o : OUT std_logic );
+  SIGNAL vsynctrigger_o : OUT std_logic;
+  SIGNAL vsynccounter : OUT std_logic_vector(31 downto 0) );
 END ENTITY vgatimer;
 
 ARCHITECTURE vgatimer_a OF vgatimer IS
@@ -53,11 +53,13 @@ ARCHITECTURE vgatimer_a OF vgatimer IS
 
 	signal x: unsigned(11 downto 0) := (OTHERS => '0');
 	signal y: unsigned(11 downto 0) := (OTHERS => '0');
+	signal vscnt : unsigned(31 downto 0) := (OTHERS => '0');
 BEGIN
 
   counter_x <= std_logic_vector(x);
   counter_y <= std_logic_vector(y);
-  
+  vsynccounter <= std_logic_vector(vscnt);
+
   timing : PROCESS(clk_i)
   BEGIN
     IF rising_edge(clk_i) THEN
@@ -73,6 +75,7 @@ BEGIN
             x <= (OTHERS => '0');
             IF (y = C_RES_Y + C_VFRONT - 1) THEN
                 vsync_o  <= '1';
+                vscnt <= vscnt + 1;
                 vsynctrigger_o <= '1';
             ELSIF (y = C_RES_Y + C_VFRONT + C_VSYNC - 1) THEN
                 vsync_o  <= '0';

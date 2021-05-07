@@ -64,7 +64,7 @@ always_ff @(posedge clk) begin
 							product = DSPproductUU[63:32];
 						end
 						/*default: begin
-							product = 0; // Illegal multiply opcode
+							product = 0; // Do not enable 
 						end*/
 					endcase
 					busy = 1'b0;
