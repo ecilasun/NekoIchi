@@ -6,6 +6,7 @@
 // ==============================================================
 // Edge equation / mask generator
 // ==============================================================
+
 module LineRasterMask(
 	input wire reset,
 	input wire signed [8:0] pX,
@@ -30,94 +31,9 @@ assign outmask = lineedge[17]; // Only care about the sign bit
 endmodule
 
 // ==============================================================
-// Fine rasterizer
-// ==============================================================
-/*
-module FineRaster(
-	input wire reset,
-	input wire clock,
-	output wire frfifofull,
-	input wire [23:0] frfifodatain, // 4 bit coverage, 8 bit color, 6 bit tileX, 6 bit tileY
-	input wire frfifowe,
-	output logic [13:0] vramaddress,
-	output logic [31:0] vramwriteword,
-	output logic [3:0] vramwe = 4'b0000 );
-
-logic frfifore = 1'b0;
-wire [23:0] frfifodataout;
-wire frfifordempty;
-wire frfifodatavalid;
-
-logic [5:0] tileX;
-logic [5:0] tileY;
-logic [3:0] coverage;
-logic [7:0] color;
-
-finerastertilefifo finerastertiles(
-	// write
-	.full(frfifofull),
-	.din(frfifodatain),
-	.wr_en(frfifowe),
-	// read
-	.empty(frfifordempty),
-	.dout(frfifodataout),
-	.rd_en(frfifore),
-	// ctl
-	.clk(clock),
-	.srst(reset),
-	.valid(frfifodatavalid) );
-	
-logic [`FRSTATEBITS-1:0] frstate = `FRSTATEIDLE_MASK;
-
-// 4x4 point-in-triangle tests
-//LineRasterMask m0(reset, tileX,tileY, x0,y0, x1,y1, edgemask[0]); ...
-
-always @(posedge clock) begin
-	if (reset) begin
-		frstate <= `FRSTATEIDLE_MASK;
-	end else begin
-
-		frstate <= `FRSTATENONE_MASK;
-
-		unique case (1'b1)
-			frstate[`FRSTATEIDLE]: begin
-				vramwe <= 4'b0000;
-				frfifore <= 1'b0;
-				if (~frfifordempty) begin
-					frfifore <= 1'b1;
-					frstate[`FRSTATELATCH] <= 1'b1;
-				end else begin
-					frstate[`FRSTATEIDLE] <= 1'b1;
-				end
-			end
-
-			frstate[`FRSTATELATCH]: begin
-				if (frfifodatavalid) begin
-					tileX <= frfifodataout[23:18];
-					tileY <= frfifodataout[17:12];
-					coverage <= frfifodataout[11:8];
-					color <= frfifodataout[7:0];
-					frstate[`FRSTATERASTERIZE] <= 1'b1;
-				end else begin
-					frstate[`FRSTATELATCH] <= 1'b1;
-				end
-			end
-
-			frstate[`FRSTATERASTERIZE]: begin
-				vramaddress <= {tileY[7:0], tileX[7:2]};
-				vramwriteword <= {color, color, color, color};
-				vramwe <= 4'b1111;
-				frstate[`FRSTATEIDLE] <= 1'b1;
-			end
-		endcase
-	end
-end
-
-endmodule
-*/
-// ==============================================================
 // GPU register file
 // ==============================================================
+
 module gpuregisterfile(
 	input wire reset,
 	input wire clock,
@@ -148,6 +64,7 @@ endmodule
 // ==============================================================
 // GPU main
 // ==============================================================
+
 module GPU (
 	input wire clock,
 	input wire reset,
@@ -163,7 +80,7 @@ module GPU (
 	output logic [31:0] vramwriteword,
 	output logic [11:0] lanemask,
 	// SYSRAM DMA channel
-	output logic [14:0] dmaaddress,
+	output logic [31:0] dmaaddress,
 	output logic [31:0] dmawriteword,
 	output logic [3:0] dmawe,
 	input wire [31:0] dma_data );
@@ -193,20 +110,10 @@ gpuregisterfile gpuregs(
 	.rval2(rval2) );
 
 // ==============================================================
-// Fine rasterizer instance
-// ==============================================================
-
-//wire frfifofull;
-// 4 bit coverage, 8 bit color, 6 bit tileX, 6 bit tileY
-//logic [23:0] frfifodatain;
-//logic frfifowe;
-
-//FineRaster finerasterizer(.clock(clock), .reset(reset), .frfifofull(frfifofull), .frfifodatain(frfifodatain), .frfifowe(frfifowe) );
-
-// ==============================================================
 // Coarse rasterizer
 // ==============================================================
-logic signed [8:0] tileXCount, tileYCount;
+
+logic [8:0] tileXCount, tileYCount;
 logic signed [8:0] tileX0, tileY0, tileXSweepDirection;
 logic signed [8:0] x0, y0, x1, y1, x2, y2;
 wire signed [8:0] tileYW0;
@@ -283,24 +190,30 @@ assign triFacing = polydet[17];
 // ==============================================================
 // Tile scan area min-max calculation
 // ==============================================================
+
 logic signed [8:0] minXval, maxXval;
 logic signed [8:0] minYval, maxYval;
+
+wire signed [8:0] minx01 = x0 < x1 ? x0 : x1;
+wire signed [8:0] minx12 = x1 < x2 ? x1 : x2;
+wire signed [8:0] maxx01 = x0 >= x1 ? x0 : x1;
+wire signed [8:0] maxx12 = x1 >= x2 ? x1 : x2;
+
+wire signed [8:0] miny01 = y0 < y1 ? y0 : y1;
+wire signed [8:0] miny12 = y1 < y2 ? y1 : y2;
+wire signed [8:0] maxy01 = y0 >= y1 ? y0 : y1;
+wire signed [8:0] maxy12 = y1 >= y2 ? y1 : y2;
+
 always_comb begin
 	if (reset) begin
 		// 
 	end else begin
-		// 0-1 selection
-		minXval = x0 < x1 ? x0 : x1;
-		maxXval = x0 < x1 ? x1 : x0;
-		minYval = y0 < y1 ? y0 : y1;
-		maxYval = y0 < y1 ? y1 : y0;
-	
-		// 2-self selection
-		minXval = minXval < x2 ? minXval : x2; // minXval = min(x0,min(x1,x2)) etc
-		maxXval = maxXval < x2 ? x2 : maxXval;
-		minYval = minYval < y2 ? minYval : y2;
-		maxYval = maxYval < y2 ? y2 : maxYval;
-	
+		// Pick actual min/max
+		minXval = minx01 < minx12 ? minx01 : minx12;
+		maxXval = maxx01 >= maxx12 ? maxx01 : maxx12;
+		minYval = miny01 < miny12 ? miny01 : miny12;
+		maxYval = maxy01 >= maxy12 ? maxy01 : maxy12;
+
 		// Clamp to viewport min coords (0,0)
 		minXval = minXval < 0 ? 0 : minXval;
 		maxXval = maxXval < 0 ? 0 : maxXval;
@@ -333,7 +246,7 @@ always_ff @(posedge clock) begin
 		vramwe <= 4'b0000;
 		lanemask <= 12'h000;
 		//rdatain <= 32'd0;
-		//dmaaddress <= 15'd0;
+		//dmaaddress <= 32'd0;
 		//dmawriteword <= 32'd0;
 		dmawe <= 4'b0000;
 		//dmacount <= 14'd0;
@@ -362,9 +275,8 @@ always_ff @(posedge clock) begin
 				end else begin
 					gpustate[`GPUSTATEIDLE] <= 1'b1;
 				end
-			
 			end
-			
+
 			gpustate[`GPUSTATELATCHCOMMAND]: begin
 				// Turn off fifo read request on the next clock
 				fiford_en <= 1'b0;
@@ -384,17 +296,18 @@ always_ff @(posedge clock) begin
 					gpustate[`GPUSTATELATCHCOMMAND] <= 1'b1;
 				end
 			end
-	
+
 			// Command execute state
 			gpustate[`GPUSTATEEXEC]: begin
-				unique case (cmd) // 4'bxxxx
-					3'b000: begin // VSYNC0.00001068
+				unique case (cmd)
+					`GPUCMD_VSYNC: begin
 						if (vsync > vsyncrequestpoint)
 							gpustate[`GPUSTATEIDLE] <= 1'b1;
 						else
 							gpustate[`GPUSTATEEXEC] <= 1'b1;
 					end
-					3'b001: begin // REGSETLOW/HI
+
+					`GPUCMD_SETREG: begin
 						rwren <= 1'b1;
 						if (rs1==3'd0) // set LOW if source register is zero register
 							rdatain <= {10'd0, immshort};
@@ -402,13 +315,15 @@ always_ff @(posedge clock) begin
 							rdatain <= {immshort[9:0], rval1[21:0]};
 						gpustate[`GPUSTATEIDLE] <= 1'b1;
 					end
-					3'b010: begin // MEMWRITE
+
+					`GPUCMD_MEMOUT: begin
 						vramaddress <= immshort[17:4];
 						vramwriteword <= rval1;
 						vramwe <= immshort[3:0];
 						gpustate[`GPUSTATEIDLE] <= 1'b1;
 					end
-					3'b011: begin // CLEAR
+
+					`GPUCMD_CLEAR: begin
 						vramaddress <= 14'd0;
 						vramwriteword <= rval1;
 						// Enable all 4 bytes since clears are 32bit per write
@@ -416,27 +331,39 @@ always_ff @(posedge clock) begin
 						lanemask <= 12'hFFF; // Turn on all lanes for parallel writes
 						gpustate[`GPUSTATECLEAR] <= 1'b1;
 					end
-					3'b100: begin // SYSDMA
-						dmaaddress <= rval1[14:0]; // rs1: source
+
+					`GPUCMD_SYSDMA: begin
+						dmaaddress <= rval1; // rs1: source
 						dmacount <= 14'd0;
 						dmawe <= 4'b0000; // Reading from SYSRAM
 						gpustate[`GPUSTATEDMAKICK] <= 1'b1;
 					end
-					3'b101: begin // RASTERIZE
-						// Grab primitive vertex data from rs+rd
+
+					`GPUCMD_RASTER: begin
+						// Grab primitive vertex data from rs&rd
 						x0 <= {1'b0, rval1[7:0]};
 						y0 <= {1'b0, rval1[15:8]};
 						x1 <= {1'b0, rval1[23:16]};
 						y1 <= {1'b0, rval1[31:24]};
 						x2 <= {1'b0, rval2[7:0]};
 						y2 <= {1'b0, rval2[15:8]};
-						vramwriteword <= {rval2[23:16], rval2[23:16], rval2[23:16], rval2[23:16]}; // TODO: Use the color from rval2 to fill during development
+
+						// DEBUG: Solid color output during development
+						// Full DWORD color from r2, mask selects which to write
+						vramwriteword <= {rval2[23:16], rval2[23:16], rval2[23:16], rval2[23:16]};
+
 						gpustate[`GPUSTATERASTERKICK] <= 1'b1;
 					end
-					3'b110: begin // TBD
+
+					`GPUCMD_SYSMEMOUT: begin
+						dmaaddress <= rval2; // rs1: source
+						dmawriteword <= rval1; // rs2: output word (same as rd)
+						dmawe <= 4'b1111;
 						gpustate[`GPUSTATEIDLE] <= 1'b1;
 					end
-					3'b111: begin // TBD
+
+					`GPUCMD_UNUSED1: begin
+						// WiP
 						gpustate[`GPUSTATEIDLE] <= 1'b1;
 					end
 				endcase
@@ -451,10 +378,10 @@ always_ff @(posedge clock) begin
 					gpustate[`GPUSTATECLEAR] <= 1'b1;
 				end
 			end
-			
+
 			gpustate[`GPUSTATEDMAKICK]: begin
 				// Delay for first read
-				dmaaddress <= dmaaddress + 15'd1;
+				dmaaddress <= dmaaddress + 32'd4;
 				gpustate[`GPUSTATEDMA] <= 1'b1;
 			end
 
@@ -477,7 +404,7 @@ always_ff @(posedge clock) begin
 					end
 
 					// Step to next DWORD to read
-					dmaaddress <= dmaaddress + 15'd1;
+					dmaaddress <= dmaaddress + 32'd4;
 					dmacount <= dmacount + 14'd1;
 					gpustate[`GPUSTATEDMA] <= 1'b1;
 				end
@@ -494,37 +421,10 @@ always_ff @(posedge clock) begin
 					// Start by figuring out if we have something to rasterize
 					// on this scanline.
 					// No pixels found means we're backfacing and can bail out early
-					gpustate[`GPUSTATERASTERDETECT] <= 1'b1;
+					gpustate[`GPUSTATERASTER] <= 1'b1;
 				end else begin
 					// Backfacing polygons don't go into raster state
 					gpustate[`GPUSTATEIDLE] <= 1'b1;
-				end
-			end
-
-			gpustate[`GPUSTATERASTERDETECT]: begin
-				// Detect the first start tile for bi-directional scan
-				if (widetilemask) begin
-					gpustate[`GPUSTATERASTER] <= 1'b1;
-				end else begin
-					if ((tileYCount <= 0) | (tileXCount <= 0)) begin
-						gpustate[`GPUSTATEIDLE] <= 1'b1;
-					end else begin
-						// Keep sweeping
-						/*if (tileXCount == 1'd0) begin
-							// Reverse direction
-							tileXSweepDirection = -tileXSweepDirection;
-							// Step one tile down
-							tileY0 <= tileY0 + 9'd4;
-							tileXCount <= (maxXval-minXval)>>2; // W/4
-							tileYCount <= tileYCount - 9'sd4; // 4 pixels down during search
-							// Search for a nonzero tile mask
-						end else begin*/
-							// Step to next tile on scanline
-							tileXCount <= tileXCount - 9'sd1;
-							tileX0 <= tileX0 + tileXSweepDirection;
-						//end
-						gpustate[`GPUSTATERASTERDETECT] <= 1'b1;
-					end
 				end
 			end
 
@@ -533,16 +433,12 @@ always_ff @(posedge clock) begin
 				// Stop fifo writes from previous clock
 				//frfifowe <= 1'b0;
 
-				// Output tile mask for this tile
-				if (tileYCount <= 0) begin
+				if (tileYCount == 0) begin
+					// We have exhausted all rows to rasterize
 					gpustate[`GPUSTATEIDLE] <= 1'b1;
 				end else begin
-
-					// Pass this tile to fine rasterizer's FIFO when mask != 0
-					/*if (~frfifofull & tilemask) begin
-						frfifodatain <= {tileX0, tileY0, tilecoverage, rval2[23:16]}; // TILEX:TILEY:COVERAGEMASK:COLOR
-						frfifowe <= 1'b1;
-					end*/
+				
+					// Output tile mask for this tile
 
 					// Record current value
 					// NOTE: We could have a zero mask OR be at the end
@@ -550,24 +446,25 @@ always_ff @(posedge clock) begin
 					// otherwise we'll have gaps when landing on the last tile with full value in it.
 					vramaddress <= {tileY0[7:0], tileX0[7:2]};
 					//vramwriteword <= {28'd0, tilecoverage}; // DEBUG
+					// This effectively turns off writes for unoccupied tiles since tilecoverage == 0
 					vramwe <= tilecoverage;//{4{tilemask}};
 
 					// Did we run out of tiles in this direction, or hit a zero tile mask?
-					if ((~widetilemask) | tileXCount == 1'd0) begin
+					if (/*(~widetilemask) |*/ tileXCount == 0) begin
 						// Reverse direction
-						tileXSweepDirection = -tileXSweepDirection;
+						//tileXSweepDirection = -tileXSweepDirection;
+						tileX0 <= {minXval[8:2],2'b0}; // <<
 						// Step one tile down
 						tileY0 <= tileY0 + 9'd1; // tile height=1
+						// Actually this is too large but since we stop at empty tiles anyways, doesn't seem to hurt
 						tileXCount <= (maxXval-minXval)>>2; // W/4
 						tileYCount <= tileYCount - 9'sd1;
-						// Search for a nonzero tile mask
-						gpustate[`GPUSTATERASTERDETECT] <= 1'b1;
 					end else begin
 						// Step to next tile on scanline
 						tileXCount <= tileXCount - 9'sd1;
 						tileX0 <= tileX0 + tileXSweepDirection;
-						gpustate[`GPUSTATERASTER] <= 1'b1;
 					end
+					gpustate[`GPUSTATERASTER] <= 1'b1;
 				end
 			end
 

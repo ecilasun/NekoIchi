@@ -263,7 +263,7 @@ GPU rv32gpu(
 	.vramwe(gpuwriteena),
 	.vramwriteword(gpuwriteword),
 	.lanemask(gpulanewritemask),
-	.dmaaddress(dmaaddress[16:2]),
+	.dmaaddress(dmaaddress),
 	.dmawriteword(dmawriteword),
 	.dma_data(dma_data),
 	.dmawe(dma_writeena) );
