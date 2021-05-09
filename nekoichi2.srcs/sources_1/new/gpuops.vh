@@ -33,7 +33,7 @@
 `define GPUCMD_SYSDMA		3'b100
 `define GPUCMD_RASTER		3'b101
 `define GPUCMD_SYSMEMOUT	3'b110
-`define GPUCMD_UNUSED1		3'b111
+`define GPUCMD_SETVPAGE		3'b111
 
 	// Instruction forms
 	// Form 0 (immshort + rd + rs + cmd)
@@ -76,8 +76,8 @@
 	// This is to be used as a means to signal CPU from GPU
 	// [---- ---- --------------][DDD][SSS][-110]
 	
-	// GPUCMD_UNUSED1
-	// WiP
+	// GPUCMD_SETVPAGE
+	// Sets VRAM page for write to rs, and video scanout to ~rs
 	// [---- ---- --------------][---][---][-111]
 
 // ==============================================================

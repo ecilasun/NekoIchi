@@ -11,12 +11,12 @@
       </db_ref>
    </db_ref_list>
    <zoom_setting>
-      <ZoomStartTime time="371543500fs"></ZoomStartTime>
-      <ZoomEndTime time="372135501fs"></ZoomEndTime>
-      <Cursor1Time time="371902000fs"></Cursor1Time>
+      <ZoomStartTime time="390900100fs"></ZoomStartTime>
+      <ZoomEndTime time="391427301fs"></ZoomEndTime>
+      <Cursor1Time time="391045500fs"></Cursor1Time>
    </zoom_setting>
    <column_width_setting>
-      <NameColumnWidth column_width="149"></NameColumnWidth>
+      <NameColumnWidth column_width="145"></NameColumnWidth>
       <ValueColumnWidth column_width="66"></ValueColumnWidth>
    </column_width_setting>
    <WVObjectSize size="107" />
@@ -177,8 +177,8 @@
       <obj_property name="ObjectShortName">wea[3:0]</obj_property>
    </wvobject>
    <wvobject type="array" fp_name="/nekoichitop/SYSRAM/addra">
-      <obj_property name="ElementShortName">addra[14:0]</obj_property>
-      <obj_property name="ObjectShortName">addra[14:0]</obj_property>
+      <obj_property name="ElementShortName">addra[15:0]</obj_property>
+      <obj_property name="ObjectShortName">addra[15:0]</obj_property>
    </wvobject>
    <wvobject type="array" fp_name="/nekoichitop/SYSRAM/dina">
       <obj_property name="ElementShortName">dina[31:0]</obj_property>
@@ -201,8 +201,8 @@
       <obj_property name="ObjectShortName">web[3:0]</obj_property>
    </wvobject>
    <wvobject type="array" fp_name="/nekoichitop/SYSRAM/addrb">
-      <obj_property name="ElementShortName">addrb[14:0]</obj_property>
-      <obj_property name="ObjectShortName">addrb[14:0]</obj_property>
+      <obj_property name="ElementShortName">addrb[15:0]</obj_property>
+      <obj_property name="ObjectShortName">addrb[15:0]</obj_property>
    </wvobject>
    <wvobject type="array" fp_name="/nekoichitop/SYSRAM/dinb">
       <obj_property name="ElementShortName">dinb[31:0]</obj_property>
@@ -266,13 +266,6 @@
       <obj_property name="ElementShortName">vsync[31:0]</obj_property>
       <obj_property name="ObjectShortName">vsync[31:0]</obj_property>
    </wvobject>
-   <wvobject type="array" fp_name="/nekoichitop/rv32gpu/gpuregs/registers">
-      <obj_property name="DisplayName">label</obj_property>
-      <obj_property name="ElementShortName">registers[0:7][31:0]</obj_property>
-      <obj_property name="ObjectShortName">registers[0:7][31:0]</obj_property>
-      <obj_property name="label">gpuregisters[0:7][31:0]</obj_property>
-      <obj_property name="isExpanded"></obj_property>
-   </wvobject>
    <wvobject type="array" fp_name="/nekoichitop/rv32gpu/vsync">
       <obj_property name="ElementShortName">vsync[31:0]</obj_property>
       <obj_property name="ObjectShortName">vsync[31:0]</obj_property>
@@ -280,6 +273,17 @@
    <wvobject type="array" fp_name="/nekoichitop/rv32gpu/vsyncrequestpoint">
       <obj_property name="ElementShortName">vsyncrequestpoint[31:0]</obj_property>
       <obj_property name="ObjectShortName">vsyncrequestpoint[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/nekoichitop/rv32gpu/rastertargetbase">
+      <obj_property name="ElementShortName">rastertargetbase[31:0]</obj_property>
+      <obj_property name="ObjectShortName">rastertargetbase[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/nekoichitop/rv32gpu/gpuregs/registers">
+      <obj_property name="DisplayName">label</obj_property>
+      <obj_property name="ElementShortName">registers[0:7][31:0]</obj_property>
+      <obj_property name="ObjectShortName">registers[0:7][31:0]</obj_property>
+      <obj_property name="label">gpuregisters[0:7][31:0]</obj_property>
+      <obj_property name="isExpanded"></obj_property>
    </wvobject>
    <wvobject fp_name="divider185" type="divider">
       <obj_property name="label">RASTER</obj_property>
@@ -316,10 +320,6 @@
    <wvobject type="logic" fp_name="/nekoichitop/rv32gpu/tilemask">
       <obj_property name="ElementShortName">tilemask</obj_property>
       <obj_property name="ObjectShortName">tilemask</obj_property>
-   </wvobject>
-   <wvobject type="logic" fp_name="/nekoichitop/rv32gpu/widetilemask">
-      <obj_property name="ElementShortName">widetilemask</obj_property>
-      <obj_property name="ObjectShortName">widetilemask</obj_property>
    </wvobject>
    <wvobject type="array" fp_name="/nekoichitop/rv32gpu/minXval">
       <obj_property name="ElementShortName">minXval[8:0]</obj_property>
@@ -362,8 +362,8 @@
       <obj_property name="ObjectShortName">dmawe[3:0]</obj_property>
    </wvobject>
    <wvobject type="array" fp_name="/nekoichitop/rv32gpu/dmaaddress">
-      <obj_property name="ElementShortName">dmaaddress[14:0]</obj_property>
-      <obj_property name="ObjectShortName">dmaaddress[14:0]</obj_property>
+      <obj_property name="ElementShortName">dmaaddress[31:0]</obj_property>
+      <obj_property name="ObjectShortName">dmaaddress[31:0]</obj_property>
    </wvobject>
    <wvobject type="array" fp_name="/nekoichitop/rv32gpu/dmawriteword">
       <obj_property name="ElementShortName">dmawriteword[31:0]</obj_property>

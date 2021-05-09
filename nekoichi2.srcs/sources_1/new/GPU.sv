@@ -18,11 +18,15 @@ module LineRasterMask(
 	output wire outmask );
 
 logic signed [17:0] lineedge;
+wire signed [8:0] A = (pY-y0);
+wire signed [8:0] B = (pX-x0);
+wire signed [8:0] dy = (y1-y0);
+wire signed [8:0] dx = (x0-x1);
 always_comb begin
 	if (reset) begin
 		// lineedge = 0;
 	end else begin
-		lineedge = (pX-x0)*(y1-y0) + (pY-y0)*(x0-x1);
+		lineedge = A*dx + B*dy;
 	end
 end
 
@@ -69,6 +73,7 @@ module GPU (
 	input wire clock,
 	input wire reset,
 	input wire [31:0] vsync,
+	output logic videopage = 1'b0,
 	// GPU FIFO
 	input wire fifoempty,
 	input wire [31:0] fifodout,
@@ -114,19 +119,23 @@ gpuregisterfile gpuregs(
 // ==============================================================
 
 logic [8:0] tileXCount, tileYCount;
-logic signed [8:0] tileX0, tileY0, tileXSweepDirection;
+logic signed [8:0] tileX0, tileY0;
 logic signed [8:0] x0, y0, x1, y1, x2, y2;
 wire signed [8:0] tileYW0;
 
 assign tileYW0 = {tileY0[8:2],2'b0}; // wide tile height=4
 
 // Tile crossing mask
-wire tilemask, widetilemask;
+wire tilemask;
+//wire widetilemask;
 wire [3:0] tilecoverage;
 
 // Masks for individual wide and narrow tiles
 wire [11:0] edgemask;
-wire [11:0] wideedgemask;
+//wire [11:0] wideedgemask;
+
+// Triangle facing flag
+logic triFacing;
 
 // Narrow mask for edge 0
 LineRasterMask m0(reset, tileX0,         tileY0,        x0,y0, x1,y1, edgemask[0]);
@@ -147,7 +156,7 @@ LineRasterMask m10(reset, tileX0+9'sd2,  tileY0,        x2,y2, x0,y0, edgemask[1
 LineRasterMask m11(reset, tileX0+9'sd3,  tileY0,        x2,y2, x0,y0, edgemask[11]);
 
 // Wide mask for edge 0
-LineRasterMask mw0(reset, tileX0,        tileYW0,       x0,y0, x1,y1, wideedgemask[0]);
+/*LineRasterMask mw0(reset, tileX0,        tileYW0,       x0,y0, x1,y1, wideedgemask[0]);
 LineRasterMask mw1(reset, tileX0+9'sd3,  tileYW0,       x0,y0, x1,y1, wideedgemask[1]);
 LineRasterMask mw2(reset, tileX0,        tileYW0+9'sd3, x0,y0, x1,y1, wideedgemask[2]);
 LineRasterMask mw3(reset, tileX0+9'sd3,  tileYW0+9'sd3, x0,y0, x1,y1, wideedgemask[3]);
@@ -162,30 +171,19 @@ LineRasterMask mw7(reset, tileX0+9'sd3,  tileYW0+9'sd3, x1,y1, x2,y2, wideedgema
 LineRasterMask mw8(reset,  tileX0,       tileYW0,       x2,y2, x0,y0, wideedgemask[8]);
 LineRasterMask mw9(reset,  tileX0+9'sd3, tileYW0,       x2,y2, x0,y0, wideedgemask[9]);
 LineRasterMask mw10(reset, tileX0,       tileYW0+9'sd3, x2,y2, x0,y0, wideedgemask[10]);
-LineRasterMask mw11(reset, tileX0+9'sd3, tileYW0+9'sd3, x2,y2, x0,y0, wideedgemask[11]);
+LineRasterMask mw11(reset, tileX0+9'sd3, tileYW0+9'sd3, x2,y2, x0,y0, wideedgemask[11]);*/
+
+// Triangle facing
+LineRasterMask tfc(reset, x2, y2, x0,y0, x1,y1, triFacing);
 
 // Composite tile mask
 // If any bit of a tile is set, an edge crosses it
 // If all edges cross a tile, it's inside the triangle
 assign tilemask = (|edgemask[3:0]) & (|edgemask[7:4]) & (|edgemask[11:8]);
 assign tilecoverage = edgemask[3:0] & edgemask[7:4] & edgemask[11:8];
+
 // Wide mask (4x4) for fast sweep
-assign widetilemask = (|wideedgemask[3:0]) & (|wideedgemask[7:4]) & (|wideedgemask[11:8]);
-
-// ==============================================================
-// Polygon facing check
-// ==============================================================
-
-logic [17:0] polydet;
-logic triFacing;
-always_comb begin
-	if (reset) begin
-		//
-	end else begin
-		polydet = (x2-x0)*(y1-y0) + (y2-y0)*(x0-x1);
-	end
-end
-assign triFacing = polydet[17];
+//assign widetilemask = (|wideedgemask[3:0]) & (|wideedgemask[7:4]) & (|wideedgemask[11:8]);
 
 // ==============================================================
 // Tile scan area min-max calculation
@@ -226,17 +224,18 @@ always_comb begin
 		minYval = minYval < 192 ? minYval : 191;
 		maxYval = maxYval < 192 ? maxYval : 191;
 		
-		// Truncate X and Y min/max to nearest multiple of 4
+		// Truncate X min/max to nearest multiple of 4
 		minXval = {minXval[8:2],2'b00};
 		maxXval = {maxXval[8:2],2'b00};
-		minYval = {minYval[8:2],2'b00};
-		maxYval = {maxYval[8:2],2'b00};
+		//minYval = {minYval[8:2],2'b00};
+		//maxYval = {maxYval[8:2],2'b00};
 	end
 end
 
 // ==============================================================
 // Main state machine
 // ==============================================================
+
 logic [31:0] vsyncrequestpoint = 32'd0;
 always_ff @(posedge clock) begin
 	if (reset) begin
@@ -362,8 +361,8 @@ always_ff @(posedge clock) begin
 						gpustate[`GPUSTATEIDLE] <= 1'b1;
 					end
 
-					`GPUCMD_UNUSED1: begin
-						// WiP
+					`GPUCMD_SETVPAGE: begin
+						videopage <= rval1;
 						gpustate[`GPUSTATEIDLE] <= 1'b1;
 					end
 				endcase
@@ -416,7 +415,6 @@ always_ff @(posedge clock) begin
 				tileY0 <= minYval; // tile height=1 (but using 4 aligned at start)
 				tileXCount <= (maxXval-minXval)>>2; // W/4
 				tileYCount <= (maxYval-minYval); // H/1
-				tileXSweepDirection <= 9'd4;
 				if (triFacing == 1'b1) begin
 					// Start by figuring out if we have something to rasterize
 					// on this scanline.
@@ -429,30 +427,18 @@ always_ff @(posedge clock) begin
 			end
 
 			gpustate[`GPUSTATERASTER]: begin
-
-				// Stop fifo writes from previous clock
-				//frfifowe <= 1'b0;
-
 				if (tileYCount == 0) begin
 					// We have exhausted all rows to rasterize
 					gpustate[`GPUSTATEIDLE] <= 1'b1;
 				end else begin
 				
 					// Output tile mask for this tile
-
-					// Record current value
-					// NOTE: We could have a zero mask OR be at the end
-					// tile. Record the value regardless just in case
-					// otherwise we'll have gaps when landing on the last tile with full value in it.
 					vramaddress <= {tileY0[7:0], tileX0[7:2]};
-					//vramwriteword <= {28'd0, tilecoverage}; // DEBUG
 					// This effectively turns off writes for unoccupied tiles since tilecoverage == 0
-					vramwe <= tilecoverage;//{4{tilemask}};
+					vramwe <= tilecoverage;
 
 					// Did we run out of tiles in this direction, or hit a zero tile mask?
 					if (/*(~widetilemask) |*/ tileXCount == 0) begin
-						// Reverse direction
-						//tileXSweepDirection = -tileXSweepDirection;
 						tileX0 <= {minXval[8:2],2'b0}; // <<
 						// Step one tile down
 						tileY0 <= tileY0 + 9'd1; // tile height=1
@@ -462,7 +448,7 @@ always_ff @(posedge clock) begin
 					end else begin
 						// Step to next tile on scanline
 						tileXCount <= tileXCount - 9'sd1;
-						tileX0 <= tileX0 + tileXSweepDirection;
+						tileX0 <= tileX0 + 9'd4;
 					end
 					gpustate[`GPUSTATERASTER] <= 1'b1;
 				end

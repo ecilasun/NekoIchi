@@ -199,7 +199,7 @@ FastSystemMemory SYSRAM(
 	.wea(memaddress[31]==1'b0 ? mem_writeena : 4'b0000),
 	.ena(reset_n),
 	// ----------------------------
-	// DMA bus for GPU read-write
+	// DMA bus for GPU read/write
 	// ----------------------------
 	.addrb(dmaaddress[16:2]),
 	.clkb(gpuclock),
@@ -249,10 +249,13 @@ always @(posedge gpuclock) begin
 	end
 end
 
+wire videopage;
+
 GPU rv32gpu(
 	.clock(gpuclock),
 	.reset(reset_p),
 	.vsync(vsync_signal),
+	.videopage(videopage),
 	// FIFO control
 	.fifoempty(fifordempty),
 	.fifodout(fifodataout),
@@ -293,19 +296,50 @@ rv32cpu rv32cpu(
 // Video Unit
 // =====================================================================================================
 
-VideoControllerGen VideoUnit(
+wire [3:0] VGA_R_ONE;
+wire [3:0] VGA_G_ONE;
+wire [3:0] VGA_B_ONE;
+wire [3:0] VGA_R_TWO;
+wire [3:0] VGA_G_TWO;
+wire [3:0] VGA_B_TWO;
+
+VideoControllerGen VideoUnitA(
 	.gpuclock(gpuclock),
 	.vgaclock(vgaclock),
 	.reset_n(reset_n),
+	.writesenabled(videopage),
 	.video_x(video_x),
 	.video_y(video_y),
+	// Wire input
 	.memaddress(gpuwriteaddress),
 	.mem_writeena(gpuwriteena),
 	.writeword(gpuwriteword),
 	.lanemask(gpulanewritemask),
-	.red(VGA_R),
-	.green(VGA_G),
-	.blue(VGA_B) );
+	// Video output
+	.red(VGA_R_ONE),
+	.green(VGA_G_ONE),
+	.blue(VGA_B_ONE) );
+
+VideoControllerGen VideoUnitB(
+	.gpuclock(gpuclock),
+	.vgaclock(vgaclock),
+	.reset_n(reset_n),
+	.writesenabled(~videopage),
+	.video_x(video_x),
+	.video_y(video_y),
+	// Wire input
+	.memaddress(gpuwriteaddress),
+	.mem_writeena(gpuwriteena),
+	.writeword(gpuwriteword),
+	.lanemask(gpulanewritemask),
+	// Video output
+	.red(VGA_R_TWO),
+	.green(VGA_G_TWO),
+	.blue(VGA_B_TWO) );
+
+assign VGA_R = videopage == 1'b0 ? VGA_R_ONE : VGA_R_TWO;
+assign VGA_G = videopage == 1'b0 ? VGA_G_ONE : VGA_G_TWO;
+assign VGA_B = videopage == 1'b0 ? VGA_B_ONE : VGA_B_TWO;
 
 vgatimer VGAScanout(
 		.rst_i(),
