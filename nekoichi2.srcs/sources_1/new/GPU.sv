@@ -423,7 +423,7 @@ always_ff @(posedge clock) begin
 
 					// Did we run out of tiles in this direction, or hit a zero tile mask?
 					if (/*(~widetilemask) |*/ tileXCount == 0) begin
-						tileX0 <= minXval; // <<
+						tileX0 <= minXval;
 						// Step one tile down
 						tileY0 <= tileY0 + 16'sd1; // tile height=1
 						// Actually this is too large but since we stop at empty tiles anyways, doesn't seem to hurt

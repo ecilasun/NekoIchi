@@ -5,6 +5,7 @@
 module rv32cpu(
 	input wire reset,
 	input wire clock,
+	input wire wallclock,
 	input wire gpufifofull,
 	output logic[31:0] gpufifocommand,
 	output logic gpufifowe,
@@ -64,6 +65,25 @@ wire [31:0] product;
 wire [31:0] quotient, quotientu;
 wire [31:0] remainder, remainderu;
 wire divbusy, divbusyu;
+
+// =====================================================================================================
+// Cycle/Timer/Reti CSRs
+// =====================================================================================================
+
+logic [63:0] CSRCycle = 64'd0;
+logic [63:0] CSRTime = 64'd0;
+logic [63:0] CSRReti = 64'd0;
+
+// Advancing cycles is simple since clocks = cycles
+always @(posedge clock) begin
+	CSRCycle <= CSRCycle + 64'd1;
+end
+
+// Time is also simple since we know we have 10M ticks per second
+// from which we can derive seconds elapsed
+always @(posedge wallclock) begin
+	CSRTime <= CSRTime + 64'd1;
+end
 
 // =====================================================================================================
 // CPU Components
@@ -485,6 +505,22 @@ always_ff @(posedge clock) begin
 						registerdata <= rval2;
 						memaddress <= rval1 + imm;
 					end
+					`OPCODE_FENCE: begin
+						// TODO:
+					end
+					`OPCODE_SYSTEM: begin
+						// Only implements timer CSR reads for now
+						if (func3 == 3'b010) begin // CSRRS
+							case ({func7,rs2}) // csr index
+								12'hC00: begin registerdata <= CSRCycle[31:0]; end
+								12'hC01: begin registerdata <= CSRTime[31:0]; end
+								12'hC02: begin registerdata <= CSRReti[31:0]; end
+								12'hC80: begin registerdata <= CSRCycle[63:32]; end
+								12'hC81: begin registerdata <= CSRTime[63:32]; end
+								12'hC82: begin registerdata <= CSRReti[63:32]; end
+							endcase
+						end
+					end
 					`OPCODE_FLOAT_OP: begin
 						// Sign injection is handled here, then retired.
 						// Rest of the float operations fall through to stall states.
@@ -740,6 +776,8 @@ always_ff @(posedge clock) begin
 				PC <= {nextPC[31:1],1'b0}; // Truncate to 16bit aligned addresses to align to instructions
 				// Also reflect to the memaddress so we end up reading next instruction
 				memaddress <= {nextPC[31:1], 1'b0};
+				// Update retired instruction CRS
+				CSRReti <= CSRReti + 64'd1;
 				// Loop back to fetch (actually fetch wait) state
 				cpustate[`CPUFETCH] <= 1'b1;
 			end

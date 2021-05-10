@@ -30,7 +30,8 @@ wire [31:0] fifodataout;
 
 // UART clock: 10Mhz, VGA clock: 25Mhz
 // GPU and CPU clocks vary, default at CPU@60Mhz & GPU@80Mhz
-wire sysclock, gpuclock, uartclk, vgaclock;
+// Wall clock is for time CSR and runs at 10Mhz
+wire sysclock, wallclock, gpuclock, uartclk, vgaclock;
 wire clockALocked, clockBLocked, clockCLocked;
 
 wire [31:0] memaddress, dmaaddress;
@@ -57,6 +58,7 @@ SystemClockGen SysClockUnit(
 	.resetn(~RST_I),
 	.sysclock(sysclock),
 	.vgaclock(vgaclock),
+	.wallclock(wallclock),
 	.locked(clockALocked) );
 
 GPUClockGen GpuClockUnit(
@@ -273,6 +275,7 @@ GPU rv32gpu(
 
 rv32cpu rv32cpu(
 	.clock(sysclock),
+	.wallclock(wallclock),
 	.reset(reset_p),
 	// GPU
 	.gpufifofull(fifowrfull),
