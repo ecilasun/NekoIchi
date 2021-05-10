@@ -208,7 +208,7 @@ always_comb begin
 					end
 				endcase
 			end
-			
+
 			`OPCODE_FLOAT_MSUB, `OPCODE_FLOAT_MADD, `OPCODE_FLOAT_NMSUB, `OPCODE_FLOAT_NMADD: begin
 				wren = 1'b0;
 				fwren = 1'b1;

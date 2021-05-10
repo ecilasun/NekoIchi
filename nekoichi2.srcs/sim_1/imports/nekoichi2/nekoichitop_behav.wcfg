@@ -11,15 +11,15 @@
       </db_ref>
    </db_ref_list>
    <zoom_setting>
-      <ZoomStartTime time="390900100fs"></ZoomStartTime>
-      <ZoomEndTime time="391427301fs"></ZoomEndTime>
-      <Cursor1Time time="391045500fs"></Cursor1Time>
+      <ZoomStartTime time="35085832fs"></ZoomStartTime>
+      <ZoomEndTime time="36370833fs"></ZoomEndTime>
+      <Cursor1Time time="35765000fs"></Cursor1Time>
    </zoom_setting>
    <column_width_setting>
-      <NameColumnWidth column_width="145"></NameColumnWidth>
-      <ValueColumnWidth column_width="66"></ValueColumnWidth>
+      <NameColumnWidth column_width="187"></NameColumnWidth>
+      <ValueColumnWidth column_width="90"></ValueColumnWidth>
    </column_width_setting>
-   <WVObjectSize size="107" />
+   <WVObjectSize size="212" />
    <wvobject fp_name="divider45" type="divider">
       <obj_property name="label">SYS</obj_property>
       <obj_property name="DisplayName">label</obj_property>
@@ -106,6 +106,26 @@
       <obj_property name="ElementShortName">rd[4:0]</obj_property>
       <obj_property name="ObjectShortName">rd[4:0]</obj_property>
    </wvobject>
+   <wvobject type="array" fp_name="/nekoichitop/rv32cpu/rval1">
+      <obj_property name="ElementShortName">rval1[31:0]</obj_property>
+      <obj_property name="ObjectShortName">rval1[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/nekoichitop/rv32cpu/rval2">
+      <obj_property name="ElementShortName">rval2[31:0]</obj_property>
+      <obj_property name="ObjectShortName">rval2[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/nekoichitop/rv32cpu/frval1">
+      <obj_property name="ElementShortName">frval1[31:0]</obj_property>
+      <obj_property name="ObjectShortName">frval1[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/nekoichitop/rv32cpu/frval2">
+      <obj_property name="ElementShortName">frval2[31:0]</obj_property>
+      <obj_property name="ObjectShortName">frval2[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/nekoichitop/rv32cpu/frval3">
+      <obj_property name="ElementShortName">frval3[31:0]</obj_property>
+      <obj_property name="ObjectShortName">frval3[31:0]</obj_property>
+   </wvobject>
    <wvobject type="array" fp_name="/nekoichitop/rv32cpu/imm">
       <obj_property name="ElementShortName">imm[31:0]</obj_property>
       <obj_property name="ObjectShortName">imm[31:0]</obj_property>
@@ -159,6 +179,7 @@
       <obj_property name="ElementShortName">registers[0:31][31:0]</obj_property>
       <obj_property name="ObjectShortName">registers[0:31][31:0]</obj_property>
       <obj_property name="label">fregisters[0:31][31:0]</obj_property>
+      <obj_property name="isExpanded"></obj_property>
    </wvobject>
    <wvobject fp_name="divider619" type="divider">
       <obj_property name="label">SYSRAM</obj_property>
@@ -177,8 +198,8 @@
       <obj_property name="ObjectShortName">wea[3:0]</obj_property>
    </wvobject>
    <wvobject type="array" fp_name="/nekoichitop/SYSRAM/addra">
-      <obj_property name="ElementShortName">addra[15:0]</obj_property>
-      <obj_property name="ObjectShortName">addra[15:0]</obj_property>
+      <obj_property name="ElementShortName">addra[14:0]</obj_property>
+      <obj_property name="ObjectShortName">addra[14:0]</obj_property>
    </wvobject>
    <wvobject type="array" fp_name="/nekoichitop/SYSRAM/dina">
       <obj_property name="ElementShortName">dina[31:0]</obj_property>
@@ -201,8 +222,8 @@
       <obj_property name="ObjectShortName">web[3:0]</obj_property>
    </wvobject>
    <wvobject type="array" fp_name="/nekoichitop/SYSRAM/addrb">
-      <obj_property name="ElementShortName">addrb[15:0]</obj_property>
-      <obj_property name="ObjectShortName">addrb[15:0]</obj_property>
+      <obj_property name="ElementShortName">addrb[14:0]</obj_property>
+      <obj_property name="ObjectShortName">addrb[14:0]</obj_property>
    </wvobject>
    <wvobject type="array" fp_name="/nekoichitop/SYSRAM/dinb">
       <obj_property name="ElementShortName">dinb[31:0]</obj_property>
@@ -274,44 +295,39 @@
       <obj_property name="ElementShortName">vsyncrequestpoint[31:0]</obj_property>
       <obj_property name="ObjectShortName">vsyncrequestpoint[31:0]</obj_property>
    </wvobject>
-   <wvobject type="array" fp_name="/nekoichitop/rv32gpu/rastertargetbase">
-      <obj_property name="ElementShortName">rastertargetbase[31:0]</obj_property>
-      <obj_property name="ObjectShortName">rastertargetbase[31:0]</obj_property>
-   </wvobject>
    <wvobject type="array" fp_name="/nekoichitop/rv32gpu/gpuregs/registers">
       <obj_property name="DisplayName">label</obj_property>
       <obj_property name="ElementShortName">registers[0:7][31:0]</obj_property>
       <obj_property name="ObjectShortName">registers[0:7][31:0]</obj_property>
       <obj_property name="label">gpuregisters[0:7][31:0]</obj_property>
-      <obj_property name="isExpanded"></obj_property>
    </wvobject>
    <wvobject fp_name="divider185" type="divider">
       <obj_property name="label">RASTER</obj_property>
       <obj_property name="DisplayName">label</obj_property>
    </wvobject>
    <wvobject type="array" fp_name="/nekoichitop/rv32gpu/x0">
-      <obj_property name="ElementShortName">x0[8:0]</obj_property>
-      <obj_property name="ObjectShortName">x0[8:0]</obj_property>
+      <obj_property name="ElementShortName">x0[15:0]</obj_property>
+      <obj_property name="ObjectShortName">x0[15:0]</obj_property>
    </wvobject>
    <wvobject type="array" fp_name="/nekoichitop/rv32gpu/y0">
-      <obj_property name="ElementShortName">y0[8:0]</obj_property>
-      <obj_property name="ObjectShortName">y0[8:0]</obj_property>
+      <obj_property name="ElementShortName">y0[15:0]</obj_property>
+      <obj_property name="ObjectShortName">y0[15:0]</obj_property>
    </wvobject>
    <wvobject type="array" fp_name="/nekoichitop/rv32gpu/x1">
-      <obj_property name="ElementShortName">x1[8:0]</obj_property>
-      <obj_property name="ObjectShortName">x1[8:0]</obj_property>
+      <obj_property name="ElementShortName">x1[15:0]</obj_property>
+      <obj_property name="ObjectShortName">x1[15:0]</obj_property>
    </wvobject>
    <wvobject type="array" fp_name="/nekoichitop/rv32gpu/y1">
-      <obj_property name="ElementShortName">y1[8:0]</obj_property>
-      <obj_property name="ObjectShortName">y1[8:0]</obj_property>
+      <obj_property name="ElementShortName">y1[15:0]</obj_property>
+      <obj_property name="ObjectShortName">y1[15:0]</obj_property>
    </wvobject>
    <wvobject type="array" fp_name="/nekoichitop/rv32gpu/x2">
-      <obj_property name="ElementShortName">x2[8:0]</obj_property>
-      <obj_property name="ObjectShortName">x2[8:0]</obj_property>
+      <obj_property name="ElementShortName">x2[15:0]</obj_property>
+      <obj_property name="ObjectShortName">x2[15:0]</obj_property>
    </wvobject>
    <wvobject type="array" fp_name="/nekoichitop/rv32gpu/y2">
-      <obj_property name="ElementShortName">y2[8:0]</obj_property>
-      <obj_property name="ObjectShortName">y2[8:0]</obj_property>
+      <obj_property name="ElementShortName">y2[15:0]</obj_property>
+      <obj_property name="ObjectShortName">y2[15:0]</obj_property>
    </wvobject>
    <wvobject type="logic" fp_name="/nekoichitop/rv32gpu/triFacing">
       <obj_property name="ElementShortName">triFacing</obj_property>
@@ -322,36 +338,36 @@
       <obj_property name="ObjectShortName">tilemask</obj_property>
    </wvobject>
    <wvobject type="array" fp_name="/nekoichitop/rv32gpu/minXval">
-      <obj_property name="ElementShortName">minXval[8:0]</obj_property>
-      <obj_property name="ObjectShortName">minXval[8:0]</obj_property>
+      <obj_property name="ElementShortName">minXval[15:0]</obj_property>
+      <obj_property name="ObjectShortName">minXval[15:0]</obj_property>
    </wvobject>
    <wvobject type="array" fp_name="/nekoichitop/rv32gpu/maxXval">
-      <obj_property name="ElementShortName">maxXval[8:0]</obj_property>
-      <obj_property name="ObjectShortName">maxXval[8:0]</obj_property>
+      <obj_property name="ElementShortName">maxXval[15:0]</obj_property>
+      <obj_property name="ObjectShortName">maxXval[15:0]</obj_property>
    </wvobject>
    <wvobject type="array" fp_name="/nekoichitop/rv32gpu/minYval">
-      <obj_property name="ElementShortName">minYval[8:0]</obj_property>
-      <obj_property name="ObjectShortName">minYval[8:0]</obj_property>
+      <obj_property name="ElementShortName">minYval[15:0]</obj_property>
+      <obj_property name="ObjectShortName">minYval[15:0]</obj_property>
    </wvobject>
    <wvobject type="array" fp_name="/nekoichitop/rv32gpu/maxYval">
-      <obj_property name="ElementShortName">maxYval[8:0]</obj_property>
-      <obj_property name="ObjectShortName">maxYval[8:0]</obj_property>
+      <obj_property name="ElementShortName">maxYval[15:0]</obj_property>
+      <obj_property name="ObjectShortName">maxYval[15:0]</obj_property>
    </wvobject>
    <wvobject type="array" fp_name="/nekoichitop/rv32gpu/tileX0">
-      <obj_property name="ElementShortName">tileX0[8:0]</obj_property>
-      <obj_property name="ObjectShortName">tileX0[8:0]</obj_property>
+      <obj_property name="ElementShortName">tileX0[15:0]</obj_property>
+      <obj_property name="ObjectShortName">tileX0[15:0]</obj_property>
    </wvobject>
    <wvobject type="array" fp_name="/nekoichitop/rv32gpu/tileY0">
-      <obj_property name="ElementShortName">tileY0[8:0]</obj_property>
-      <obj_property name="ObjectShortName">tileY0[8:0]</obj_property>
+      <obj_property name="ElementShortName">tileY0[15:0]</obj_property>
+      <obj_property name="ObjectShortName">tileY0[15:0]</obj_property>
    </wvobject>
    <wvobject type="array" fp_name="/nekoichitop/rv32gpu/tileXCount">
-      <obj_property name="ElementShortName">tileXCount[8:0]</obj_property>
-      <obj_property name="ObjectShortName">tileXCount[8:0]</obj_property>
+      <obj_property name="ElementShortName">tileXCount[15:0]</obj_property>
+      <obj_property name="ObjectShortName">tileXCount[15:0]</obj_property>
    </wvobject>
    <wvobject type="array" fp_name="/nekoichitop/rv32gpu/tileYCount">
-      <obj_property name="ElementShortName">tileYCount[8:0]</obj_property>
-      <obj_property name="ObjectShortName">tileYCount[8:0]</obj_property>
+      <obj_property name="ElementShortName">tileYCount[15:0]</obj_property>
+      <obj_property name="ObjectShortName">tileYCount[15:0]</obj_property>
    </wvobject>
    <wvobject fp_name="divider129" type="divider">
       <obj_property name="label">GPUDMA</obj_property>
@@ -376,48 +392,6 @@
    <wvobject fp_name="divider325" type="divider">
       <obj_property name="label">VIDEOUNIT</obj_property>
       <obj_property name="DisplayName">label</obj_property>
-   </wvobject>
-   <wvobject type="logic" fp_name="/nekoichitop/VideoUnit/gpuclock">
-      <obj_property name="ElementShortName">gpuclock</obj_property>
-      <obj_property name="ObjectShortName">gpuclock</obj_property>
-   </wvobject>
-   <wvobject type="logic" fp_name="/nekoichitop/VideoUnit/reset_n">
-      <obj_property name="ElementShortName">reset_n</obj_property>
-      <obj_property name="ObjectShortName">reset_n</obj_property>
-   </wvobject>
-   <wvobject type="array" fp_name="/nekoichitop/VideoUnit/video_x">
-      <obj_property name="ElementShortName">video_x[11:0]</obj_property>
-      <obj_property name="ObjectShortName">video_x[11:0]</obj_property>
-   </wvobject>
-   <wvobject type="array" fp_name="/nekoichitop/VideoUnit/video_y">
-      <obj_property name="ElementShortName">video_y[11:0]</obj_property>
-      <obj_property name="ObjectShortName">video_y[11:0]</obj_property>
-   </wvobject>
-   <wvobject type="array" fp_name="/nekoichitop/VideoUnit/memaddress">
-      <obj_property name="ElementShortName">memaddress[13:0]</obj_property>
-      <obj_property name="ObjectShortName">memaddress[13:0]</obj_property>
-   </wvobject>
-   <wvobject type="array" fp_name="/nekoichitop/VideoUnit/mem_writeena">
-      <obj_property name="ElementShortName">mem_writeena[3:0]</obj_property>
-      <obj_property name="ObjectShortName">mem_writeena[3:0]</obj_property>
-   </wvobject>
-   <wvobject type="array" fp_name="/nekoichitop/VideoUnit/writeword">
-      <obj_property name="ElementShortName">writeword[31:0]</obj_property>
-      <obj_property name="ObjectShortName">writeword[31:0]</obj_property>
-   </wvobject>
-   <wvobject type="array" fp_name="/nekoichitop/VideoUnit/lanemask">
-      <obj_property name="ElementShortName">lanemask[11:0]</obj_property>
-      <obj_property name="ObjectShortName">lanemask[11:0]</obj_property>
-      <obj_property name="CustomSignalColor">#FFA500</obj_property>
-      <obj_property name="UseCustomSignalColor">true</obj_property>
-   </wvobject>
-   <wvobject type="logic" fp_name="/nekoichitop/VideoUnit/isCachingRow">
-      <obj_property name="ElementShortName">isCachingRow</obj_property>
-      <obj_property name="ObjectShortName">isCachingRow</obj_property>
-   </wvobject>
-   <wvobject type="logic" fp_name="/nekoichitop/VideoUnit/inDisplayWindow">
-      <obj_property name="ElementShortName">inDisplayWindow</obj_property>
-      <obj_property name="ObjectShortName">inDisplayWindow</obj_property>
    </wvobject>
    <wvobject type="array" fp_name="/nekoichitop/VGAScanout/vsynccounter">
       <obj_property name="ElementShortName">vsynccounter[31:0]</obj_property>
@@ -466,5 +440,449 @@
    <wvobject type="logic" fp_name="/nekoichitop/GPUVGAVSyncQueue/valid">
       <obj_property name="ElementShortName">valid</obj_property>
       <obj_property name="ObjectShortName">valid</obj_property>
+   </wvobject>
+   <wvobject fp_name="divider349" type="divider">
+      <obj_property name="label">FPU</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/nekoichitop/rv32cpu/floatfmadd/aclk">
+      <obj_property name="ElementShortName">aclk</obj_property>
+      <obj_property name="ObjectShortName">aclk</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/nekoichitop/rv32cpu/floatfmadd/s_axis_a_tvalid">
+      <obj_property name="ElementShortName">s_axis_a_tvalid</obj_property>
+      <obj_property name="ObjectShortName">s_axis_a_tvalid</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/nekoichitop/rv32cpu/floatfmadd/s_axis_a_tdata">
+      <obj_property name="ElementShortName">s_axis_a_tdata[31:0]</obj_property>
+      <obj_property name="ObjectShortName">s_axis_a_tdata[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/nekoichitop/rv32cpu/floatfmadd/s_axis_b_tvalid">
+      <obj_property name="ElementShortName">s_axis_b_tvalid</obj_property>
+      <obj_property name="ObjectShortName">s_axis_b_tvalid</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/nekoichitop/rv32cpu/floatfmadd/s_axis_b_tdata">
+      <obj_property name="ElementShortName">s_axis_b_tdata[31:0]</obj_property>
+      <obj_property name="ObjectShortName">s_axis_b_tdata[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/nekoichitop/rv32cpu/floatfmadd/s_axis_c_tvalid">
+      <obj_property name="ElementShortName">s_axis_c_tvalid</obj_property>
+      <obj_property name="ObjectShortName">s_axis_c_tvalid</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/nekoichitop/rv32cpu/floatfmadd/s_axis_c_tdata">
+      <obj_property name="ElementShortName">s_axis_c_tdata[31:0]</obj_property>
+      <obj_property name="ObjectShortName">s_axis_c_tdata[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/nekoichitop/rv32cpu/floatfmadd/m_axis_result_tvalid">
+      <obj_property name="ElementShortName">m_axis_result_tvalid</obj_property>
+      <obj_property name="ObjectShortName">m_axis_result_tvalid</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/nekoichitop/rv32cpu/floatfmadd/m_axis_result_tdata">
+      <obj_property name="ElementShortName">m_axis_result_tdata[31:0]</obj_property>
+      <obj_property name="ObjectShortName">m_axis_result_tdata[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/nekoichitop/rv32cpu/floatfmsub/aclk">
+      <obj_property name="ElementShortName">aclk</obj_property>
+      <obj_property name="ObjectShortName">aclk</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/nekoichitop/rv32cpu/floatfmsub/s_axis_a_tvalid">
+      <obj_property name="ElementShortName">s_axis_a_tvalid</obj_property>
+      <obj_property name="ObjectShortName">s_axis_a_tvalid</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/nekoichitop/rv32cpu/floatfmsub/s_axis_a_tdata">
+      <obj_property name="ElementShortName">s_axis_a_tdata[31:0]</obj_property>
+      <obj_property name="ObjectShortName">s_axis_a_tdata[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/nekoichitop/rv32cpu/floatfmsub/s_axis_b_tvalid">
+      <obj_property name="ElementShortName">s_axis_b_tvalid</obj_property>
+      <obj_property name="ObjectShortName">s_axis_b_tvalid</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/nekoichitop/rv32cpu/floatfmsub/s_axis_b_tdata">
+      <obj_property name="ElementShortName">s_axis_b_tdata[31:0]</obj_property>
+      <obj_property name="ObjectShortName">s_axis_b_tdata[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/nekoichitop/rv32cpu/floatfmsub/s_axis_c_tvalid">
+      <obj_property name="ElementShortName">s_axis_c_tvalid</obj_property>
+      <obj_property name="ObjectShortName">s_axis_c_tvalid</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/nekoichitop/rv32cpu/floatfmsub/s_axis_c_tdata">
+      <obj_property name="ElementShortName">s_axis_c_tdata[31:0]</obj_property>
+      <obj_property name="ObjectShortName">s_axis_c_tdata[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/nekoichitop/rv32cpu/floatfmsub/m_axis_result_tvalid">
+      <obj_property name="ElementShortName">m_axis_result_tvalid</obj_property>
+      <obj_property name="ObjectShortName">m_axis_result_tvalid</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/nekoichitop/rv32cpu/floatfmsub/m_axis_result_tdata">
+      <obj_property name="ElementShortName">m_axis_result_tdata[31:0]</obj_property>
+      <obj_property name="ObjectShortName">m_axis_result_tdata[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/nekoichitop/rv32cpu/floatfnmsub/aclk">
+      <obj_property name="ElementShortName">aclk</obj_property>
+      <obj_property name="ObjectShortName">aclk</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/nekoichitop/rv32cpu/floatfnmsub/s_axis_a_tvalid">
+      <obj_property name="ElementShortName">s_axis_a_tvalid</obj_property>
+      <obj_property name="ObjectShortName">s_axis_a_tvalid</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/nekoichitop/rv32cpu/floatfnmsub/s_axis_a_tdata">
+      <obj_property name="ElementShortName">s_axis_a_tdata[31:0]</obj_property>
+      <obj_property name="ObjectShortName">s_axis_a_tdata[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/nekoichitop/rv32cpu/floatfnmsub/s_axis_b_tvalid">
+      <obj_property name="ElementShortName">s_axis_b_tvalid</obj_property>
+      <obj_property name="ObjectShortName">s_axis_b_tvalid</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/nekoichitop/rv32cpu/floatfnmsub/s_axis_b_tdata">
+      <obj_property name="ElementShortName">s_axis_b_tdata[31:0]</obj_property>
+      <obj_property name="ObjectShortName">s_axis_b_tdata[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/nekoichitop/rv32cpu/floatfnmsub/s_axis_c_tvalid">
+      <obj_property name="ElementShortName">s_axis_c_tvalid</obj_property>
+      <obj_property name="ObjectShortName">s_axis_c_tvalid</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/nekoichitop/rv32cpu/floatfnmsub/s_axis_c_tdata">
+      <obj_property name="ElementShortName">s_axis_c_tdata[31:0]</obj_property>
+      <obj_property name="ObjectShortName">s_axis_c_tdata[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/nekoichitop/rv32cpu/floatfnmsub/m_axis_result_tvalid">
+      <obj_property name="ElementShortName">m_axis_result_tvalid</obj_property>
+      <obj_property name="ObjectShortName">m_axis_result_tvalid</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/nekoichitop/rv32cpu/floatfnmsub/m_axis_result_tdata">
+      <obj_property name="ElementShortName">m_axis_result_tdata[31:0]</obj_property>
+      <obj_property name="ObjectShortName">m_axis_result_tdata[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/nekoichitop/rv32cpu/floatfnmadd/aclk">
+      <obj_property name="ElementShortName">aclk</obj_property>
+      <obj_property name="ObjectShortName">aclk</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/nekoichitop/rv32cpu/floatfnmadd/s_axis_a_tvalid">
+      <obj_property name="ElementShortName">s_axis_a_tvalid</obj_property>
+      <obj_property name="ObjectShortName">s_axis_a_tvalid</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/nekoichitop/rv32cpu/floatfnmadd/s_axis_a_tdata">
+      <obj_property name="ElementShortName">s_axis_a_tdata[31:0]</obj_property>
+      <obj_property name="ObjectShortName">s_axis_a_tdata[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/nekoichitop/rv32cpu/floatfnmadd/s_axis_b_tvalid">
+      <obj_property name="ElementShortName">s_axis_b_tvalid</obj_property>
+      <obj_property name="ObjectShortName">s_axis_b_tvalid</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/nekoichitop/rv32cpu/floatfnmadd/s_axis_b_tdata">
+      <obj_property name="ElementShortName">s_axis_b_tdata[31:0]</obj_property>
+      <obj_property name="ObjectShortName">s_axis_b_tdata[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/nekoichitop/rv32cpu/floatfnmadd/s_axis_c_tvalid">
+      <obj_property name="ElementShortName">s_axis_c_tvalid</obj_property>
+      <obj_property name="ObjectShortName">s_axis_c_tvalid</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/nekoichitop/rv32cpu/floatfnmadd/s_axis_c_tdata">
+      <obj_property name="ElementShortName">s_axis_c_tdata[31:0]</obj_property>
+      <obj_property name="ObjectShortName">s_axis_c_tdata[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/nekoichitop/rv32cpu/floatfnmadd/m_axis_result_tvalid">
+      <obj_property name="ElementShortName">m_axis_result_tvalid</obj_property>
+      <obj_property name="ObjectShortName">m_axis_result_tvalid</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/nekoichitop/rv32cpu/floatfnmadd/m_axis_result_tdata">
+      <obj_property name="ElementShortName">m_axis_result_tdata[31:0]</obj_property>
+      <obj_property name="ObjectShortName">m_axis_result_tdata[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/nekoichitop/rv32cpu/floatadd/aclk">
+      <obj_property name="ElementShortName">aclk</obj_property>
+      <obj_property name="ObjectShortName">aclk</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/nekoichitop/rv32cpu/floatadd/s_axis_a_tvalid">
+      <obj_property name="ElementShortName">s_axis_a_tvalid</obj_property>
+      <obj_property name="ObjectShortName">s_axis_a_tvalid</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/nekoichitop/rv32cpu/floatadd/s_axis_a_tdata">
+      <obj_property name="ElementShortName">s_axis_a_tdata[31:0]</obj_property>
+      <obj_property name="ObjectShortName">s_axis_a_tdata[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/nekoichitop/rv32cpu/floatadd/s_axis_b_tvalid">
+      <obj_property name="ElementShortName">s_axis_b_tvalid</obj_property>
+      <obj_property name="ObjectShortName">s_axis_b_tvalid</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/nekoichitop/rv32cpu/floatadd/s_axis_b_tdata">
+      <obj_property name="ElementShortName">s_axis_b_tdata[31:0]</obj_property>
+      <obj_property name="ObjectShortName">s_axis_b_tdata[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/nekoichitop/rv32cpu/floatadd/m_axis_result_tvalid">
+      <obj_property name="ElementShortName">m_axis_result_tvalid</obj_property>
+      <obj_property name="ObjectShortName">m_axis_result_tvalid</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/nekoichitop/rv32cpu/floatadd/m_axis_result_tdata">
+      <obj_property name="ElementShortName">m_axis_result_tdata[31:0]</obj_property>
+      <obj_property name="ObjectShortName">m_axis_result_tdata[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/nekoichitop/rv32cpu/floatsub/aclk">
+      <obj_property name="ElementShortName">aclk</obj_property>
+      <obj_property name="ObjectShortName">aclk</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/nekoichitop/rv32cpu/floatsub/s_axis_a_tvalid">
+      <obj_property name="ElementShortName">s_axis_a_tvalid</obj_property>
+      <obj_property name="ObjectShortName">s_axis_a_tvalid</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/nekoichitop/rv32cpu/floatsub/s_axis_a_tdata">
+      <obj_property name="ElementShortName">s_axis_a_tdata[31:0]</obj_property>
+      <obj_property name="ObjectShortName">s_axis_a_tdata[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/nekoichitop/rv32cpu/floatsub/s_axis_b_tvalid">
+      <obj_property name="ElementShortName">s_axis_b_tvalid</obj_property>
+      <obj_property name="ObjectShortName">s_axis_b_tvalid</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/nekoichitop/rv32cpu/floatsub/s_axis_b_tdata">
+      <obj_property name="ElementShortName">s_axis_b_tdata[31:0]</obj_property>
+      <obj_property name="ObjectShortName">s_axis_b_tdata[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/nekoichitop/rv32cpu/floatsub/m_axis_result_tvalid">
+      <obj_property name="ElementShortName">m_axis_result_tvalid</obj_property>
+      <obj_property name="ObjectShortName">m_axis_result_tvalid</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/nekoichitop/rv32cpu/floatsub/m_axis_result_tdata">
+      <obj_property name="ElementShortName">m_axis_result_tdata[31:0]</obj_property>
+      <obj_property name="ObjectShortName">m_axis_result_tdata[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/nekoichitop/rv32cpu/floatmul/aclk">
+      <obj_property name="ElementShortName">aclk</obj_property>
+      <obj_property name="ObjectShortName">aclk</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/nekoichitop/rv32cpu/floatmul/s_axis_a_tvalid">
+      <obj_property name="ElementShortName">s_axis_a_tvalid</obj_property>
+      <obj_property name="ObjectShortName">s_axis_a_tvalid</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/nekoichitop/rv32cpu/floatmul/s_axis_a_tdata">
+      <obj_property name="ElementShortName">s_axis_a_tdata[31:0]</obj_property>
+      <obj_property name="ObjectShortName">s_axis_a_tdata[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/nekoichitop/rv32cpu/floatmul/s_axis_b_tvalid">
+      <obj_property name="ElementShortName">s_axis_b_tvalid</obj_property>
+      <obj_property name="ObjectShortName">s_axis_b_tvalid</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/nekoichitop/rv32cpu/floatmul/s_axis_b_tdata">
+      <obj_property name="ElementShortName">s_axis_b_tdata[31:0]</obj_property>
+      <obj_property name="ObjectShortName">s_axis_b_tdata[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/nekoichitop/rv32cpu/floatmul/m_axis_result_tvalid">
+      <obj_property name="ElementShortName">m_axis_result_tvalid</obj_property>
+      <obj_property name="ObjectShortName">m_axis_result_tvalid</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/nekoichitop/rv32cpu/floatmul/m_axis_result_tdata">
+      <obj_property name="ElementShortName">m_axis_result_tdata[31:0]</obj_property>
+      <obj_property name="ObjectShortName">m_axis_result_tdata[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/nekoichitop/rv32cpu/floatdiv/aclk">
+      <obj_property name="ElementShortName">aclk</obj_property>
+      <obj_property name="ObjectShortName">aclk</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/nekoichitop/rv32cpu/floatdiv/s_axis_a_tvalid">
+      <obj_property name="ElementShortName">s_axis_a_tvalid</obj_property>
+      <obj_property name="ObjectShortName">s_axis_a_tvalid</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/nekoichitop/rv32cpu/floatdiv/s_axis_a_tdata">
+      <obj_property name="ElementShortName">s_axis_a_tdata[31:0]</obj_property>
+      <obj_property name="ObjectShortName">s_axis_a_tdata[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/nekoichitop/rv32cpu/floatdiv/s_axis_b_tvalid">
+      <obj_property name="ElementShortName">s_axis_b_tvalid</obj_property>
+      <obj_property name="ObjectShortName">s_axis_b_tvalid</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/nekoichitop/rv32cpu/floatdiv/s_axis_b_tdata">
+      <obj_property name="ElementShortName">s_axis_b_tdata[31:0]</obj_property>
+      <obj_property name="ObjectShortName">s_axis_b_tdata[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/nekoichitop/rv32cpu/floatdiv/m_axis_result_tvalid">
+      <obj_property name="ElementShortName">m_axis_result_tvalid</obj_property>
+      <obj_property name="ObjectShortName">m_axis_result_tvalid</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/nekoichitop/rv32cpu/floatdiv/m_axis_result_tdata">
+      <obj_property name="ElementShortName">m_axis_result_tdata[31:0]</obj_property>
+      <obj_property name="ObjectShortName">m_axis_result_tdata[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/nekoichitop/rv32cpu/floati2f/aclk">
+      <obj_property name="ElementShortName">aclk</obj_property>
+      <obj_property name="ObjectShortName">aclk</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/nekoichitop/rv32cpu/floati2f/s_axis_a_tvalid">
+      <obj_property name="ElementShortName">s_axis_a_tvalid</obj_property>
+      <obj_property name="ObjectShortName">s_axis_a_tvalid</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/nekoichitop/rv32cpu/floati2f/s_axis_a_tdata">
+      <obj_property name="ElementShortName">s_axis_a_tdata[31:0]</obj_property>
+      <obj_property name="ObjectShortName">s_axis_a_tdata[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/nekoichitop/rv32cpu/floati2f/m_axis_result_tvalid">
+      <obj_property name="ElementShortName">m_axis_result_tvalid</obj_property>
+      <obj_property name="ObjectShortName">m_axis_result_tvalid</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/nekoichitop/rv32cpu/floati2f/m_axis_result_tdata">
+      <obj_property name="ElementShortName">m_axis_result_tdata[31:0]</obj_property>
+      <obj_property name="ObjectShortName">m_axis_result_tdata[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/nekoichitop/rv32cpu/floatui2f/aclk">
+      <obj_property name="ElementShortName">aclk</obj_property>
+      <obj_property name="ObjectShortName">aclk</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/nekoichitop/rv32cpu/floatui2f/s_axis_a_tvalid">
+      <obj_property name="ElementShortName">s_axis_a_tvalid</obj_property>
+      <obj_property name="ObjectShortName">s_axis_a_tvalid</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/nekoichitop/rv32cpu/floatui2f/s_axis_a_tdata">
+      <obj_property name="ElementShortName">s_axis_a_tdata[31:0]</obj_property>
+      <obj_property name="ObjectShortName">s_axis_a_tdata[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/nekoichitop/rv32cpu/floatui2f/m_axis_result_tvalid">
+      <obj_property name="ElementShortName">m_axis_result_tvalid</obj_property>
+      <obj_property name="ObjectShortName">m_axis_result_tvalid</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/nekoichitop/rv32cpu/floatui2f/m_axis_result_tdata">
+      <obj_property name="ElementShortName">m_axis_result_tdata[31:0]</obj_property>
+      <obj_property name="ObjectShortName">m_axis_result_tdata[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/nekoichitop/rv32cpu/floatf2i/aclk">
+      <obj_property name="ElementShortName">aclk</obj_property>
+      <obj_property name="ObjectShortName">aclk</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/nekoichitop/rv32cpu/floatf2i/s_axis_a_tvalid">
+      <obj_property name="ElementShortName">s_axis_a_tvalid</obj_property>
+      <obj_property name="ObjectShortName">s_axis_a_tvalid</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/nekoichitop/rv32cpu/floatf2i/s_axis_a_tdata">
+      <obj_property name="ElementShortName">s_axis_a_tdata[31:0]</obj_property>
+      <obj_property name="ObjectShortName">s_axis_a_tdata[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/nekoichitop/rv32cpu/floatf2i/m_axis_result_tvalid">
+      <obj_property name="ElementShortName">m_axis_result_tvalid</obj_property>
+      <obj_property name="ObjectShortName">m_axis_result_tvalid</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/nekoichitop/rv32cpu/floatf2i/m_axis_result_tdata">
+      <obj_property name="ElementShortName">m_axis_result_tdata[31:0]</obj_property>
+      <obj_property name="ObjectShortName">m_axis_result_tdata[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/nekoichitop/rv32cpu/floatf2ui/aclk">
+      <obj_property name="ElementShortName">aclk</obj_property>
+      <obj_property name="ObjectShortName">aclk</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/nekoichitop/rv32cpu/floatf2ui/s_axis_a_tvalid">
+      <obj_property name="ElementShortName">s_axis_a_tvalid</obj_property>
+      <obj_property name="ObjectShortName">s_axis_a_tvalid</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/nekoichitop/rv32cpu/floatf2ui/s_axis_a_tdata">
+      <obj_property name="ElementShortName">s_axis_a_tdata[31:0]</obj_property>
+      <obj_property name="ObjectShortName">s_axis_a_tdata[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/nekoichitop/rv32cpu/floatf2ui/m_axis_result_tvalid">
+      <obj_property name="ElementShortName">m_axis_result_tvalid</obj_property>
+      <obj_property name="ObjectShortName">m_axis_result_tvalid</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/nekoichitop/rv32cpu/floatf2ui/m_axis_result_tdata">
+      <obj_property name="ElementShortName">m_axis_result_tdata[31:0]</obj_property>
+      <obj_property name="ObjectShortName">m_axis_result_tdata[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/nekoichitop/rv32cpu/floatsqrt/aclk">
+      <obj_property name="ElementShortName">aclk</obj_property>
+      <obj_property name="ObjectShortName">aclk</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/nekoichitop/rv32cpu/floatsqrt/s_axis_a_tvalid">
+      <obj_property name="ElementShortName">s_axis_a_tvalid</obj_property>
+      <obj_property name="ObjectShortName">s_axis_a_tvalid</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/nekoichitop/rv32cpu/floatsqrt/s_axis_a_tdata">
+      <obj_property name="ElementShortName">s_axis_a_tdata[31:0]</obj_property>
+      <obj_property name="ObjectShortName">s_axis_a_tdata[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/nekoichitop/rv32cpu/floatsqrt/m_axis_result_tvalid">
+      <obj_property name="ElementShortName">m_axis_result_tvalid</obj_property>
+      <obj_property name="ObjectShortName">m_axis_result_tvalid</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/nekoichitop/rv32cpu/floatsqrt/m_axis_result_tdata">
+      <obj_property name="ElementShortName">m_axis_result_tdata[31:0]</obj_property>
+      <obj_property name="ObjectShortName">m_axis_result_tdata[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/nekoichitop/rv32cpu/floateq/aclk">
+      <obj_property name="ElementShortName">aclk</obj_property>
+      <obj_property name="ObjectShortName">aclk</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/nekoichitop/rv32cpu/floateq/s_axis_a_tvalid">
+      <obj_property name="ElementShortName">s_axis_a_tvalid</obj_property>
+      <obj_property name="ObjectShortName">s_axis_a_tvalid</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/nekoichitop/rv32cpu/floateq/s_axis_a_tdata">
+      <obj_property name="ElementShortName">s_axis_a_tdata[31:0]</obj_property>
+      <obj_property name="ObjectShortName">s_axis_a_tdata[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/nekoichitop/rv32cpu/floateq/s_axis_b_tvalid">
+      <obj_property name="ElementShortName">s_axis_b_tvalid</obj_property>
+      <obj_property name="ObjectShortName">s_axis_b_tvalid</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/nekoichitop/rv32cpu/floateq/s_axis_b_tdata">
+      <obj_property name="ElementShortName">s_axis_b_tdata[31:0]</obj_property>
+      <obj_property name="ObjectShortName">s_axis_b_tdata[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/nekoichitop/rv32cpu/floateq/m_axis_result_tvalid">
+      <obj_property name="ElementShortName">m_axis_result_tvalid</obj_property>
+      <obj_property name="ObjectShortName">m_axis_result_tvalid</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/nekoichitop/rv32cpu/floateq/m_axis_result_tdata">
+      <obj_property name="ElementShortName">m_axis_result_tdata[7:0]</obj_property>
+      <obj_property name="ObjectShortName">m_axis_result_tdata[7:0]</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/nekoichitop/rv32cpu/floatlt/aclk">
+      <obj_property name="ElementShortName">aclk</obj_property>
+      <obj_property name="ObjectShortName">aclk</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/nekoichitop/rv32cpu/floatlt/s_axis_a_tvalid">
+      <obj_property name="ElementShortName">s_axis_a_tvalid</obj_property>
+      <obj_property name="ObjectShortName">s_axis_a_tvalid</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/nekoichitop/rv32cpu/floatlt/s_axis_a_tdata">
+      <obj_property name="ElementShortName">s_axis_a_tdata[31:0]</obj_property>
+      <obj_property name="ObjectShortName">s_axis_a_tdata[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/nekoichitop/rv32cpu/floatlt/s_axis_b_tvalid">
+      <obj_property name="ElementShortName">s_axis_b_tvalid</obj_property>
+      <obj_property name="ObjectShortName">s_axis_b_tvalid</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/nekoichitop/rv32cpu/floatlt/s_axis_b_tdata">
+      <obj_property name="ElementShortName">s_axis_b_tdata[31:0]</obj_property>
+      <obj_property name="ObjectShortName">s_axis_b_tdata[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/nekoichitop/rv32cpu/floatlt/m_axis_result_tvalid">
+      <obj_property name="ElementShortName">m_axis_result_tvalid</obj_property>
+      <obj_property name="ObjectShortName">m_axis_result_tvalid</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/nekoichitop/rv32cpu/floatlt/m_axis_result_tdata">
+      <obj_property name="ElementShortName">m_axis_result_tdata[7:0]</obj_property>
+      <obj_property name="ObjectShortName">m_axis_result_tdata[7:0]</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/nekoichitop/rv32cpu/floatle/aclk">
+      <obj_property name="ElementShortName">aclk</obj_property>
+      <obj_property name="ObjectShortName">aclk</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/nekoichitop/rv32cpu/floatle/s_axis_a_tvalid">
+      <obj_property name="ElementShortName">s_axis_a_tvalid</obj_property>
+      <obj_property name="ObjectShortName">s_axis_a_tvalid</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/nekoichitop/rv32cpu/floatle/s_axis_a_tdata">
+      <obj_property name="ElementShortName">s_axis_a_tdata[31:0]</obj_property>
+      <obj_property name="ObjectShortName">s_axis_a_tdata[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/nekoichitop/rv32cpu/floatle/s_axis_b_tvalid">
+      <obj_property name="ElementShortName">s_axis_b_tvalid</obj_property>
+      <obj_property name="ObjectShortName">s_axis_b_tvalid</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/nekoichitop/rv32cpu/floatle/s_axis_b_tdata">
+      <obj_property name="ElementShortName">s_axis_b_tdata[31:0]</obj_property>
+      <obj_property name="ObjectShortName">s_axis_b_tdata[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/nekoichitop/rv32cpu/floatle/m_axis_result_tvalid">
+      <obj_property name="ElementShortName">m_axis_result_tvalid</obj_property>
+      <obj_property name="ObjectShortName">m_axis_result_tvalid</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/nekoichitop/rv32cpu/floatle/m_axis_result_tdata">
+      <obj_property name="ElementShortName">m_axis_result_tdata[7:0]</obj_property>
+      <obj_property name="ObjectShortName">m_axis_result_tdata[7:0]</obj_property>
    </wvobject>
 </wave_config>

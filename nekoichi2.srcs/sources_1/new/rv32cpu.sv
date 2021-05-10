@@ -477,7 +477,11 @@ always_ff @(posedge clock) begin
 					`OPCODE_FLOAT_LDW, `OPCODE_LOAD: begin
 						memaddress <= rval1 + imm;
 					end
-					`OPCODE_FLOAT_STW, `OPCODE_STORE: begin
+					`OPCODE_FLOAT_STW : begin
+						fregisterdata <= frval2;
+						memaddress <= rval1 + imm;
+					end
+					`OPCODE_STORE: begin
 						registerdata <= rval2;
 						memaddress <= rval1 + imm;
 					end

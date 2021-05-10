@@ -46,20 +46,20 @@
     <Option Name="IPStaticSourceDir" Val="$PIPUSERFILESDIR/ipstatic"/>
     <Option Name="EnableBDX" Val="FALSE"/>
     <Option Name="DSABoardId" Val="arty-a7-100"/>
-    <Option Name="WTXSimLaunchSim" Val="61"/>
+    <Option Name="WTXSimLaunchSim" Val="68"/>
     <Option Name="WTModelSimLaunchSim" Val="0"/>
     <Option Name="WTQuestaLaunchSim" Val="0"/>
     <Option Name="WTIesLaunchSim" Val="0"/>
     <Option Name="WTVcsLaunchSim" Val="0"/>
     <Option Name="WTRivieraLaunchSim" Val="0"/>
     <Option Name="WTActivehdlLaunchSim" Val="0"/>
-    <Option Name="WTXSimExportSim" Val="204"/>
-    <Option Name="WTModelSimExportSim" Val="204"/>
-    <Option Name="WTQuestaExportSim" Val="204"/>
-    <Option Name="WTIesExportSim" Val="204"/>
-    <Option Name="WTVcsExportSim" Val="204"/>
-    <Option Name="WTRivieraExportSim" Val="204"/>
-    <Option Name="WTActivehdlExportSim" Val="204"/>
+    <Option Name="WTXSimExportSim" Val="205"/>
+    <Option Name="WTModelSimExportSim" Val="205"/>
+    <Option Name="WTQuestaExportSim" Val="205"/>
+    <Option Name="WTIesExportSim" Val="205"/>
+    <Option Name="WTVcsExportSim" Val="205"/>
+    <Option Name="WTRivieraExportSim" Val="205"/>
+    <Option Name="WTActivehdlExportSim" Val="205"/>
     <Option Name="GenerateIPUpgradeLog" Val="TRUE"/>
     <Option Name="XSimRadix" Val="hex"/>
     <Option Name="XSimTimeUnit" Val="ns"/>
@@ -623,11 +623,11 @@
       <Strategy Version="1" Minor="2">
         <StratHandle Name="Flow_PerfOptimized_high" Flow="Vivado Synthesis 2020"/>
         <Step Id="synth_design">
-          <Option Id="ResourceSharing">2</Option>
+          <Option Id="Directive">7</Option>
           <Option Id="ShregMinSize">5</Option>
+          <Option Id="ResourceSharing">2</Option>
           <Option Id="FsmExtraction">1</Option>
           <Option Id="NoCombineLuts">1</Option>
-          <Option Id="Directive">7</Option>
           <Option Id="KeepEquivalentRegisters">1</Option>
         </Step>
       </Strategy>

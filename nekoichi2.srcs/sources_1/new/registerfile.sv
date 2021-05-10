@@ -16,16 +16,15 @@ logic [31:0] registers[0:31];
 
 always @(posedge clock) begin
 	if (reset) begin
-		// noop
-		//registers[0] <= 32'h00000000; // Zero register
-		//registers[2] <= 32'd0001FC00; // Default hard SP
+		registers[0] <= 32'h00000000; // Zero register
+		registers[2] <= 32'h0001FFF0; // Default hard SP
 	end else begin
 		if (wren && rd != 5'd0)
 			registers[rd] <= datain;
 	end
 end
 
-assign rval1 = rs1==0 ? 32'd0 : registers[rs1];
-assign rval2 = rs2==0 ? 32'd0 : registers[rs2];
+assign rval1 = registers[rs1];
+assign rval2 = registers[rs2];
 
 endmodule
