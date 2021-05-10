@@ -30,6 +30,10 @@ Currently the DMA lives inside the GPU and is controlled by writing a command to
 - Unmasked writes: writes series of DWORDs from SYSRAM to VRAM using SYSRAM's second port to read, meaning CPU can still read/write to SYSRAM
 - Zero-masked writes: same as unmasked, excepy for every zero byte encountered, the DWORD write is byte masked to skip the zeros)
 
+## Rasterizer
+The rasterizer generates solid-filled triangles, using 16 bit signed values placed in GPU registers as X-Y pairs. Currently this requires 3 registers, and the draw command takes an 8bit color alongside register indices to kick the rasterization.
+Currently the reasterizer won't use bidirectional sweep algorithm for optimal fill speed, or do any parallel work, until the GPU receives its parallel workers.
+
 ## Where are the sample codes & tools?
 
 The built-in ROM image listens to the UART port by default, with 115200baud/1s/np
@@ -37,6 +41,12 @@ The built-in ROM image listens to the UART port by default, with 115200baud/1s/n
 This, in combination with the https://github.com/ecilasun/riscvtool should let you experiment and upload your own binaries to the SoC.
 
 Please use ./build.sh to generate a new ROM_nekoichi.coe alongside samples; which you can then paste over the contents of the BIOS.coe file. I haven't spent time to clean up the uploader and samples yet, updates will move the tools possibly into one git repo in near future.
+
+To upload any sample code to the SoC, use a command as in the following example after running build.sh:
+./build/release/riscvtool gpupipetest.elf -sendelf 0x10000
+
+For regular ELF binaries, the address 0x10000 is the default unless you use a custom linker script in which case you'll need to make sure the address range 0x00000000-0x00002000 is untouched (the loader lives in this region)
+After an executable loads and main() starts executing, it's OK to use the aforementioned loader address range to store data.
 
 ## External IPs:
 
