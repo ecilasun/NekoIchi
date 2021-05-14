@@ -2,23 +2,686 @@
 # Vivado v2020.2.2 (64-bit)
 # SW Build 3118627 on Tue Feb  9 05:13:49 MST 2021
 # IP Build 3115676 on Tue Feb  9 10:48:11 MST 2021
-# Start of session at: Tue Apr 27 21:55:00 2021
-# Process ID: 2973506
+# Start of session at: Tue May 11 18:24:17 2021
+# Process ID: 1780146
 # Current directory: /home/engin
 # Command line: vivado
 # Log file: /home/engin/vivado.log
 # Journal file: /home/engin/vivado.jou
 #-----------------------------------------------------------
 start_gui
-open_project /media/engin/StorageA/FPGA/nekoichi/nekoichi.xpr
+open_project /media/engin/StorageA/FPGA/ecrv32B/ecrv32B.xpr
 Scanning sources...
 Finished scanning sources
 INFO: [IP_Flow 19-234] Refreshing IP repositories
 INFO: [IP_Flow 19-1704] No user IP repositories specified
 INFO: [IP_Flow 19-2313] Loaded Vivado IP repository '/media/engin/StorageA/Xilinx/Vivado/2020.2/data/ip'.
 INFO: [IP_Flow 19-3899] Cannot get the environment domain name variable for the component vendor name. Setting the vendor name to 'user.org'.
+open_project: Time (s): cpu = 00:00:12 ; elapsed = 00:00:05 . Memory (MB): peak = 7463.984 ; gain = 55.059 ; free physical = 11601 ; free virtual = 70630
 update_compile_order -fileset sources_1
-WARNING: [IP_Flow 19-4067] Ignoring invalid widget type specified checkbox.Providing a default widget
-WARNING: [IP_Flow 19-4067] Ignoring invalid widget type specified checkbox.Providing a default widget
+launch_simulation
+Command: launch_simulation 
+INFO: [Vivado 12-5698] Checking validity of IPs in the design for the 'XSim' simulator...
+INFO: [Vivado 12-5682] Launching behavioral simulation in '/media/engin/StorageA/FPGA/ecrv32B/ecrv32B.sim/sim_1/behav/xsim'
+INFO: [Vivado 12-4795] Using compiled simulation libraries for IPs
+INFO: [SIM-utils-51] Simulation object is 'sim_1'
+INFO: [USF-XSim-7] Finding pre-compiled libraries...
+INFO: [USF-XSim-11] File '/media/engin/StorageA/Xilinx/Vivado/2020.2/data/xsim/xsim.ini' copied to run dir:'/media/engin/StorageA/FPGA/ecrv32B/ecrv32B.sim/sim_1/behav/xsim'
+INFO: [SIM-utils-54] Inspecting design source files for 'ecrv32Btop' in fileset 'sim_1'...
+INFO: [USF-XSim-97] Finding global include files...
+INFO: [USF-XSim-98] Fetching design files from 'sim_1'...
+INFO: [USF-XSim-2] XSim::Compile design
+INFO: [USF-XSim-61] Executing 'COMPILE and ANALYZE' step in '/media/engin/StorageA/FPGA/ecrv32B/ecrv32B.sim/sim_1/behav/xsim'
+xvlog --incr --relax -prj ecrv32Btop_vlog.prj
+INFO: [VRFC 10-2263] Analyzing Verilog file "/media/engin/StorageA/FPGA/ecrv32B/ecrv32B.gen/sources_1/ip/mig_7series_0/mig_7series_0/user_design/rtl/ecc/mig_7series_v4_2_ecc_buf.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module mig_7series_v4_2_ecc_buf
+INFO: [VRFC 10-2263] Analyzing Verilog file "/media/engin/StorageA/FPGA/ecrv32B/ecrv32B.gen/sources_1/ip/mig_7series_0/mig_7series_0/user_design/rtl/ecc/mig_7series_v4_2_ecc_gen.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module mig_7series_v4_2_ecc_gen
+INFO: [VRFC 10-2263] Analyzing Verilog file "/media/engin/StorageA/FPGA/ecrv32B/ecrv32B.gen/sources_1/ip/mig_7series_0/mig_7series_0/user_design/rtl/ecc/mig_7series_v4_2_ecc_dec_fix.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module mig_7series_v4_2_ecc_dec_fix
+INFO: [VRFC 10-2263] Analyzing Verilog file "/media/engin/StorageA/FPGA/ecrv32B/ecrv32B.gen/sources_1/ip/mig_7series_0/mig_7series_0/user_design/rtl/ecc/mig_7series_v4_2_ecc_merge_enc.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module mig_7series_v4_2_ecc_merge_enc
+INFO: [VRFC 10-2263] Analyzing Verilog file "/media/engin/StorageA/FPGA/ecrv32B/ecrv32B.gen/sources_1/ip/mig_7series_0/mig_7series_0/user_design/rtl/ecc/mig_7series_v4_2_fi_xor.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module mig_7series_v4_2_fi_xor
+INFO: [VRFC 10-2263] Analyzing Verilog file "/media/engin/StorageA/FPGA/ecrv32B/ecrv32B.gen/sources_1/ip/mig_7series_0/mig_7series_0/user_design/rtl/clocking/mig_7series_v4_2_tempmon.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module mig_7series_v4_2_tempmon
+INFO: [VRFC 10-2263] Analyzing Verilog file "/media/engin/StorageA/FPGA/ecrv32B/ecrv32B.gen/sources_1/ip/mig_7series_0/mig_7series_0/user_design/rtl/clocking/mig_7series_v4_2_clk_ibuf.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module mig_7series_v4_2_clk_ibuf
+INFO: [VRFC 10-2263] Analyzing Verilog file "/media/engin/StorageA/FPGA/ecrv32B/ecrv32B.gen/sources_1/ip/mig_7series_0/mig_7series_0/user_design/rtl/clocking/mig_7series_v4_2_infrastructure.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module mig_7series_v4_2_infrastructure
+INFO: [VRFC 10-2263] Analyzing Verilog file "/media/engin/StorageA/FPGA/ecrv32B/ecrv32B.gen/sources_1/ip/mig_7series_0/mig_7series_0/user_design/rtl/clocking/mig_7series_v4_2_iodelay_ctrl.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module mig_7series_v4_2_iodelay_ctrl
+INFO: [VRFC 10-2263] Analyzing Verilog file "/media/engin/StorageA/FPGA/ecrv32B/ecrv32B.gen/sources_1/ip/mig_7series_0/mig_7series_0/user_design/rtl/ip_top/mig_7series_v4_2_memc_ui_top_std.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module mig_7series_v4_2_memc_ui_top_std
+INFO: [VRFC 10-2263] Analyzing Verilog file "/media/engin/StorageA/FPGA/ecrv32B/ecrv32B.gen/sources_1/ip/mig_7series_0/mig_7series_0/user_design/rtl/ip_top/mig_7series_v4_2_mem_intfc.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module mig_7series_v4_2_mem_intfc
+INFO: [VRFC 10-2263] Analyzing Verilog file "/media/engin/StorageA/FPGA/ecrv32B/ecrv32B.gen/sources_1/ip/mig_7series_0/mig_7series_0/user_design/rtl/phy/mig_7series_v4_2_ddr_phy_wrlvl.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module mig_7series_v4_2_ddr_phy_wrlvl
+INFO: [VRFC 10-2263] Analyzing Verilog file "/media/engin/StorageA/FPGA/ecrv32B/ecrv32B.gen/sources_1/ip/mig_7series_0/mig_7series_0/user_design/rtl/phy/mig_7series_v4_2_ddr_mc_phy.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module mig_7series_v4_2_ddr_mc_phy
+INFO: [VRFC 10-2263] Analyzing Verilog file "/media/engin/StorageA/FPGA/ecrv32B/ecrv32B.gen/sources_1/ip/mig_7series_0/mig_7series_0/user_design/rtl/phy/mig_7series_v4_2_ddr_phy_ocd_mux.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module mig_7series_v4_2_ddr_phy_ocd_mux
+INFO: [VRFC 10-2263] Analyzing Verilog file "/media/engin/StorageA/FPGA/ecrv32B/ecrv32B.gen/sources_1/ip/mig_7series_0/mig_7series_0/user_design/rtl/phy/mig_7series_v4_2_ddr_phy_tempmon.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module mig_7series_v4_2_ddr_phy_tempmon
+INFO: [VRFC 10-2263] Analyzing Verilog file "/media/engin/StorageA/FPGA/ecrv32B/ecrv32B.gen/sources_1/ip/mig_7series_0/mig_7series_0/user_design/rtl/phy/mig_7series_v4_2_ddr_mc_phy_wrapper.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module mig_7series_v4_2_ddr_mc_phy_wrapper
+INFO: [VRFC 10-2263] Analyzing Verilog file "/media/engin/StorageA/FPGA/ecrv32B/ecrv32B.gen/sources_1/ip/mig_7series_0/mig_7series_0/user_design/rtl/phy/mig_7series_v4_2_poc_top.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module mig_7series_v4_2_poc_top
+INFO: [VRFC 10-2263] Analyzing Verilog file "/media/engin/StorageA/FPGA/ecrv32B/ecrv32B.gen/sources_1/ip/mig_7series_0/mig_7series_0/user_design/rtl/phy/mig_7series_v4_2_ddr_skip_calib_tap.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module mig_7series_v4_2_ddr_skip_calib_tap
+INFO: [VRFC 10-2263] Analyzing Verilog file "/media/engin/StorageA/FPGA/ecrv32B/ecrv32B.gen/sources_1/ip/mig_7series_0/mig_7series_0/user_design/rtl/phy/mig_7series_v4_2_ddr_phy_ocd_cntlr.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module mig_7series_v4_2_ddr_phy_ocd_cntlr
+INFO: [VRFC 10-2263] Analyzing Verilog file "/media/engin/StorageA/FPGA/ecrv32B/ecrv32B.gen/sources_1/ip/mig_7series_0/mig_7series_0/user_design/rtl/phy/mig_7series_v4_2_ddr_byte_group_io.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module mig_7series_v4_2_ddr_byte_group_io
+INFO: [VRFC 10-2263] Analyzing Verilog file "/media/engin/StorageA/FPGA/ecrv32B/ecrv32B.gen/sources_1/ip/mig_7series_0/mig_7series_0/user_design/rtl/phy/mig_7series_v4_2_ddr_phy_ocd_edge.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module mig_7series_v4_2_ddr_phy_ocd_edge
+INFO: [VRFC 10-2263] Analyzing Verilog file "/media/engin/StorageA/FPGA/ecrv32B/ecrv32B.gen/sources_1/ip/mig_7series_0/mig_7series_0/user_design/rtl/phy/mig_7series_v4_2_poc_pd.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module mig_7series_v4_2_poc_pd
+INFO: [VRFC 10-2263] Analyzing Verilog file "/media/engin/StorageA/FPGA/ecrv32B/ecrv32B.gen/sources_1/ip/mig_7series_0/mig_7series_0/user_design/rtl/phy/mig_7series_v4_2_ddr_phy_top.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module mig_7series_v4_2_ddr_phy_top
+INFO: [VRFC 10-2263] Analyzing Verilog file "/media/engin/StorageA/FPGA/ecrv32B/ecrv32B.gen/sources_1/ip/mig_7series_0/mig_7series_0/user_design/rtl/phy/mig_7series_v4_2_ddr_phy_prbs_rdlvl.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module mig_7series_v4_2_ddr_phy_prbs_rdlvl
+INFO: [VRFC 10-2263] Analyzing Verilog file "/media/engin/StorageA/FPGA/ecrv32B/ecrv32B.gen/sources_1/ip/mig_7series_0/mig_7series_0/user_design/rtl/phy/mig_7series_v4_2_poc_edge_store.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module mig_7series_v4_2_poc_edge_store
+INFO: [VRFC 10-2263] Analyzing Verilog file "/media/engin/StorageA/FPGA/ecrv32B/ecrv32B.gen/sources_1/ip/mig_7series_0/mig_7series_0/user_design/rtl/phy/mig_7series_v4_2_ddr_phy_rdlvl.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module mig_7series_v4_2_ddr_phy_rdlvl
+INFO: [VRFC 10-2263] Analyzing Verilog file "/media/engin/StorageA/FPGA/ecrv32B/ecrv32B.gen/sources_1/ip/mig_7series_0/mig_7series_0/user_design/rtl/phy/mig_7series_v4_2_ddr_of_pre_fifo.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module mig_7series_v4_2_ddr_of_pre_fifo
+INFO: [VRFC 10-2263] Analyzing Verilog file "/media/engin/StorageA/FPGA/ecrv32B/ecrv32B.gen/sources_1/ip/mig_7series_0/mig_7series_0/user_design/rtl/phy/mig_7series_v4_2_ddr_phy_ocd_samp.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module mig_7series_v4_2_ddr_phy_ocd_samp
+INFO: [VRFC 10-2263] Analyzing Verilog file "/media/engin/StorageA/FPGA/ecrv32B/ecrv32B.gen/sources_1/ip/mig_7series_0/mig_7series_0/user_design/rtl/phy/mig_7series_v4_2_poc_tap_base.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module mig_7series_v4_2_poc_tap_base
+INFO: [VRFC 10-2263] Analyzing Verilog file "/media/engin/StorageA/FPGA/ecrv32B/ecrv32B.gen/sources_1/ip/mig_7series_0/mig_7series_0/user_design/rtl/phy/mig_7series_v4_2_ddr_phy_ocd_lim.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module mig_7series_v4_2_ddr_phy_ocd_lim
+INFO: [VRFC 10-2263] Analyzing Verilog file "/media/engin/StorageA/FPGA/ecrv32B/ecrv32B.gen/sources_1/ip/mig_7series_0/mig_7series_0/user_design/rtl/phy/mig_7series_v4_2_ddr_phy_dqs_found_cal.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module mig_7series_v4_2_ddr_phy_dqs_found_cal
+INFO: [VRFC 10-2263] Analyzing Verilog file "/media/engin/StorageA/FPGA/ecrv32B/ecrv32B.gen/sources_1/ip/mig_7series_0/mig_7series_0/user_design/rtl/phy/mig_7series_v4_2_ddr_phy_init.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module mig_7series_v4_2_ddr_phy_init
+INFO: [VRFC 10-2263] Analyzing Verilog file "/media/engin/StorageA/FPGA/ecrv32B/ecrv32B.gen/sources_1/ip/mig_7series_0/mig_7series_0/user_design/rtl/phy/mig_7series_v4_2_ddr_phy_wrlvl_off_delay.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module mig_7series_v4_2_ddr_phy_wrlvl_off_delay
+INFO: [VRFC 10-2263] Analyzing Verilog file "/media/engin/StorageA/FPGA/ecrv32B/ecrv32B.gen/sources_1/ip/mig_7series_0/mig_7series_0/user_design/rtl/phy/mig_7series_v4_2_ddr_phy_ocd_data.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module mig_7series_v4_2_ddr_phy_ocd_data
+INFO: [VRFC 10-2263] Analyzing Verilog file "/media/engin/StorageA/FPGA/ecrv32B/ecrv32B.gen/sources_1/ip/mig_7series_0/mig_7series_0/user_design/rtl/phy/mig_7series_v4_2_poc_meta.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module mig_7series_v4_2_poc_meta
+INFO: [VRFC 10-2263] Analyzing Verilog file "/media/engin/StorageA/FPGA/ecrv32B/ecrv32B.gen/sources_1/ip/mig_7series_0/mig_7series_0/user_design/rtl/phy/mig_7series_v4_2_ddr_prbs_gen.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module mig_7series_v4_2_ddr_prbs_gen
+INFO: [VRFC 10-2263] Analyzing Verilog file "/media/engin/StorageA/FPGA/ecrv32B/ecrv32B.gen/sources_1/ip/mig_7series_0/mig_7series_0/user_design/rtl/phy/mig_7series_v4_2_ddr_phy_4lanes.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module mig_7series_v4_2_ddr_phy_4lanes
+INFO: [VRFC 10-2263] Analyzing Verilog file "/media/engin/StorageA/FPGA/ecrv32B/ecrv32B.gen/sources_1/ip/mig_7series_0/mig_7series_0/user_design/rtl/phy/mig_7series_v4_2_ddr_byte_lane.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module mig_7series_v4_2_ddr_byte_lane
+INFO: [VRFC 10-2263] Analyzing Verilog file "/media/engin/StorageA/FPGA/ecrv32B/ecrv32B.gen/sources_1/ip/mig_7series_0/mig_7series_0/user_design/rtl/phy/mig_7series_v4_2_ddr_if_post_fifo.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module mig_7series_v4_2_ddr_if_post_fifo
+INFO: [VRFC 10-2263] Analyzing Verilog file "/media/engin/StorageA/FPGA/ecrv32B/ecrv32B.gen/sources_1/ip/mig_7series_0/mig_7series_0/user_design/rtl/phy/mig_7series_v4_2_ddr_phy_oclkdelay_cal.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module mig_7series_v4_2_ddr_phy_oclkdelay_cal
+INFO: [VRFC 10-2263] Analyzing Verilog file "/media/engin/StorageA/FPGA/ecrv32B/ecrv32B.gen/sources_1/ip/mig_7series_0/mig_7series_0/user_design/rtl/phy/mig_7series_v4_2_ddr_phy_ck_addr_cmd_delay.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module mig_7series_v4_2_ddr_phy_ck_addr_cmd_delay
+INFO: [VRFC 10-2263] Analyzing Verilog file "/media/engin/StorageA/FPGA/ecrv32B/ecrv32B.gen/sources_1/ip/mig_7series_0/mig_7series_0/user_design/rtl/phy/mig_7series_v4_2_ddr_phy_wrcal.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module mig_7series_v4_2_ddr_phy_wrcal
+INFO: [VRFC 10-2263] Analyzing Verilog file "/media/engin/StorageA/FPGA/ecrv32B/ecrv32B.gen/sources_1/ip/mig_7series_0/mig_7series_0/user_design/rtl/phy/mig_7series_v4_2_ddr_phy_dqs_found_cal_hr.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module mig_7series_v4_2_ddr_phy_dqs_found_cal_hr
+INFO: [VRFC 10-2263] Analyzing Verilog file "/media/engin/StorageA/FPGA/ecrv32B/ecrv32B.gen/sources_1/ip/mig_7series_0/mig_7series_0/user_design/rtl/phy/mig_7series_v4_2_ddr_phy_ocd_po_cntlr.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module mig_7series_v4_2_ddr_phy_ocd_po_cntlr
+INFO: [VRFC 10-2263] Analyzing Verilog file "/media/engin/StorageA/FPGA/ecrv32B/ecrv32B.gen/sources_1/ip/mig_7series_0/mig_7series_0/user_design/rtl/phy/mig_7series_v4_2_ddr_calib_top.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module mig_7series_v4_2_ddr_calib_top
+INFO: [VRFC 10-2263] Analyzing Verilog file "/media/engin/StorageA/FPGA/ecrv32B/ecrv32B.gen/sources_1/ip/mig_7series_0/mig_7series_0/user_design/rtl/phy/mig_7series_v4_2_poc_cc.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module mig_7series_v4_2_poc_cc
+INFO: [VRFC 10-2263] Analyzing Verilog file "/media/engin/StorageA/FPGA/ecrv32B/ecrv32B.gen/sources_1/ip/mig_7series_0/mig_7series_0/user_design/rtl/controller/mig_7series_v4_2_bank_mach.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module mig_7series_v4_2_bank_mach
+INFO: [VRFC 10-2263] Analyzing Verilog file "/media/engin/StorageA/FPGA/ecrv32B/ecrv32B.gen/sources_1/ip/mig_7series_0/mig_7series_0/user_design/rtl/controller/mig_7series_v4_2_arb_select.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module mig_7series_v4_2_arb_select
+INFO: [VRFC 10-2263] Analyzing Verilog file "/media/engin/StorageA/FPGA/ecrv32B/ecrv32B.gen/sources_1/ip/mig_7series_0/mig_7series_0/user_design/rtl/controller/mig_7series_v4_2_round_robin_arb.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module mig_7series_v4_2_round_robin_arb
+INFO: [VRFC 10-2263] Analyzing Verilog file "/media/engin/StorageA/FPGA/ecrv32B/ecrv32B.gen/sources_1/ip/mig_7series_0/mig_7series_0/user_design/rtl/controller/mig_7series_v4_2_bank_common.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module mig_7series_v4_2_bank_common
+INFO: [VRFC 10-2263] Analyzing Verilog file "/media/engin/StorageA/FPGA/ecrv32B/ecrv32B.gen/sources_1/ip/mig_7series_0/mig_7series_0/user_design/rtl/controller/mig_7series_v4_2_arb_mux.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module mig_7series_v4_2_arb_mux
+INFO: [VRFC 10-2263] Analyzing Verilog file "/media/engin/StorageA/FPGA/ecrv32B/ecrv32B.gen/sources_1/ip/mig_7series_0/mig_7series_0/user_design/rtl/controller/mig_7series_v4_2_rank_cntrl.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module mig_7series_v4_2_rank_cntrl
+INFO: [VRFC 10-2263] Analyzing Verilog file "/media/engin/StorageA/FPGA/ecrv32B/ecrv32B.gen/sources_1/ip/mig_7series_0/mig_7series_0/user_design/rtl/controller/mig_7series_v4_2_mc.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module mig_7series_v4_2_mc
+INFO: [VRFC 10-2263] Analyzing Verilog file "/media/engin/StorageA/FPGA/ecrv32B/ecrv32B.gen/sources_1/ip/mig_7series_0/mig_7series_0/user_design/rtl/controller/mig_7series_v4_2_bank_compare.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module mig_7series_v4_2_bank_compare
+INFO: [VRFC 10-2263] Analyzing Verilog file "/media/engin/StorageA/FPGA/ecrv32B/ecrv32B.gen/sources_1/ip/mig_7series_0/mig_7series_0/user_design/rtl/controller/mig_7series_v4_2_bank_state.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module mig_7series_v4_2_bank_state
+INFO: [VRFC 10-2263] Analyzing Verilog file "/media/engin/StorageA/FPGA/ecrv32B/ecrv32B.gen/sources_1/ip/mig_7series_0/mig_7series_0/user_design/rtl/controller/mig_7series_v4_2_bank_cntrl.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module mig_7series_v4_2_bank_cntrl
+INFO: [VRFC 10-2263] Analyzing Verilog file "/media/engin/StorageA/FPGA/ecrv32B/ecrv32B.gen/sources_1/ip/mig_7series_0/mig_7series_0/user_design/rtl/controller/mig_7series_v4_2_arb_row_col.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module mig_7series_v4_2_arb_row_col
+WARNING: [VRFC 10-8332] begin/end is required for generate-for in this mode of Verilog [/media/engin/StorageA/FPGA/ecrv32B/ecrv32B.gen/sources_1/ip/mig_7series_0/mig_7series_0/user_design/rtl/controller/mig_7series_v4_2_arb_row_col.v:252]
+INFO: [VRFC 10-2263] Analyzing Verilog file "/media/engin/StorageA/FPGA/ecrv32B/ecrv32B.gen/sources_1/ip/mig_7series_0/mig_7series_0/user_design/rtl/controller/mig_7series_v4_2_bank_queue.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module mig_7series_v4_2_bank_queue
+INFO: [VRFC 10-2263] Analyzing Verilog file "/media/engin/StorageA/FPGA/ecrv32B/ecrv32B.gen/sources_1/ip/mig_7series_0/mig_7series_0/user_design/rtl/controller/mig_7series_v4_2_rank_mach.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module mig_7series_v4_2_rank_mach
+INFO: [VRFC 10-2263] Analyzing Verilog file "/media/engin/StorageA/FPGA/ecrv32B/ecrv32B.gen/sources_1/ip/mig_7series_0/mig_7series_0/user_design/rtl/controller/mig_7series_v4_2_rank_common.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module mig_7series_v4_2_rank_common
+INFO: [VRFC 10-2263] Analyzing Verilog file "/media/engin/StorageA/FPGA/ecrv32B/ecrv32B.gen/sources_1/ip/mig_7series_0/mig_7series_0/user_design/rtl/controller/mig_7series_v4_2_col_mach.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module mig_7series_v4_2_col_mach
+INFO: [VRFC 10-2263] Analyzing Verilog file "/media/engin/StorageA/FPGA/ecrv32B/ecrv32B.gen/sources_1/ip/mig_7series_0/mig_7series_0/user_design/rtl/ui/mig_7series_v4_2_ui_rd_data.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module mig_7series_v4_2_ui_rd_data
+INFO: [VRFC 10-2263] Analyzing Verilog file "/media/engin/StorageA/FPGA/ecrv32B/ecrv32B.gen/sources_1/ip/mig_7series_0/mig_7series_0/user_design/rtl/ui/mig_7series_v4_2_ui_top.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module mig_7series_v4_2_ui_top
+INFO: [VRFC 10-2263] Analyzing Verilog file "/media/engin/StorageA/FPGA/ecrv32B/ecrv32B.gen/sources_1/ip/mig_7series_0/mig_7series_0/user_design/rtl/ui/mig_7series_v4_2_ui_cmd.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module mig_7series_v4_2_ui_cmd
+INFO: [VRFC 10-2263] Analyzing Verilog file "/media/engin/StorageA/FPGA/ecrv32B/ecrv32B.gen/sources_1/ip/mig_7series_0/mig_7series_0/user_design/rtl/ui/mig_7series_v4_2_ui_wr_data.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module mig_7series_v4_2_ui_wr_data
+INFO: [VRFC 10-2263] Analyzing Verilog file "/media/engin/StorageA/FPGA/ecrv32B/ecrv32B.gen/sources_1/ip/mig_7series_0/mig_7series_0/user_design/rtl/mig_7series_0_mig_sim.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module mig_7series_0_mig
+INFO: [VRFC 10-2458] undeclared symbol dbg_sel_po_incdec, assumed default net type wire [/media/engin/StorageA/FPGA/ecrv32B/ecrv32B.gen/sources_1/ip/mig_7series_0/mig_7series_0/user_design/rtl/mig_7series_0_mig_sim.v:1096]
+INFO: [VRFC 10-2458] undeclared symbol dbg_po_f_inc, assumed default net type wire [/media/engin/StorageA/FPGA/ecrv32B/ecrv32B.gen/sources_1/ip/mig_7series_0/mig_7series_0/user_design/rtl/mig_7series_0_mig_sim.v:1100]
+INFO: [VRFC 10-2458] undeclared symbol dbg_po_f_stg23_sel, assumed default net type wire [/media/engin/StorageA/FPGA/ecrv32B/ecrv32B.gen/sources_1/ip/mig_7series_0/mig_7series_0/user_design/rtl/mig_7series_0_mig_sim.v:1101]
+INFO: [VRFC 10-2458] undeclared symbol dbg_po_f_dec, assumed default net type wire [/media/engin/StorageA/FPGA/ecrv32B/ecrv32B.gen/sources_1/ip/mig_7series_0/mig_7series_0/user_design/rtl/mig_7series_0_mig_sim.v:1102]
+INFO: [VRFC 10-2263] Analyzing Verilog file "/media/engin/StorageA/FPGA/ecrv32B/ecrv32B.gen/sources_1/ip/mig_7series_0/mig_7series_0/user_design/rtl/mig_7series_0.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module mig_7series_0
+INFO: [VRFC 10-2263] Analyzing Verilog file "/media/engin/StorageA/FPGA/ecrv32B/ecrv32B.gen/sources_1/ip/clk_wiz_0/clk_wiz_0_clk_wiz.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module clk_wiz_0_clk_wiz
+INFO: [VRFC 10-2263] Analyzing Verilog file "/media/engin/StorageA/FPGA/ecrv32B/ecrv32B.gen/sources_1/ip/clk_wiz_0/clk_wiz_0.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module clk_wiz_0
+INFO: [VRFC 10-2263] Analyzing Verilog file "/media/engin/StorageA/FPGA/ecrv32B/ecrv32B.srcs/sources_1/new/ecrv32Btop.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module ecrv32Btop
+INFO: [VRFC 10-2263] Analyzing Verilog file "/media/engin/StorageA/FPGA/ecrv32B/ecrv32B.sim/sim_1/behav/xsim/glbl.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module glbl
+Waiting for jobs to finish...
+No pending jobs, compilation finished.
+INFO: [USF-XSim-69] 'compile' step finished in '2' seconds
+INFO: [USF-XSim-3] XSim::Elaborate design
+INFO: [USF-XSim-61] Executing 'ELABORATE' step in '/media/engin/StorageA/FPGA/ecrv32B/ecrv32B.sim/sim_1/behav/xsim'
+xelab -wto f7a43d8dedd84732b74722d74e6002c5 --incr --debug typical --relax --mt 8 -L xil_defaultlib -L unisims_ver -L unimacro_ver -L secureip -L xpm --snapshot ecrv32Btop_behav xil_defaultlib.ecrv32Btop xil_defaultlib.glbl -log elaborate.log
+Vivado Simulator v2020.2.2
+Copyright 1986-1999, 2001-2021 Xilinx, Inc. All Rights Reserved.
+Running: /media/engin/StorageA/Xilinx/Vivado/2020.2/bin/unwrapped/lnx64.o/xelab -wto f7a43d8dedd84732b74722d74e6002c5 --incr --debug typical --relax --mt 8 -L xil_defaultlib -L unisims_ver -L unimacro_ver -L secureip -L xpm --snapshot ecrv32Btop_behav xil_defaultlib.ecrv32Btop xil_defaultlib.glbl -log elaborate.log 
+Using 8 slave threads.
+Starting static elaboration
+Pass Through NonSizing Optimizer
+WARNING: [VRFC 10-3091] actual bit length 12 differs from formal bit length 4 for port 'pi_dqs_found_lanes' [/media/engin/StorageA/FPGA/ecrv32B/ecrv32B.gen/sources_1/ip/mig_7series_0/mig_7series_0/user_design/rtl/phy/mig_7series_v4_2_ddr_mc_phy_wrapper.v:1671]
+WARNING: [VRFC 10-3091] actual bit length 12 differs from formal bit length 4 for port 'pi_phase_locked_lanes' [/media/engin/StorageA/FPGA/ecrv32B/ecrv32B.gen/sources_1/ip/mig_7series_0/mig_7series_0/user_design/rtl/phy/mig_7series_v4_2_ddr_mc_phy_wrapper.v:1679]
+WARNING: [VRFC 10-3091] actual bit length 12 differs from formal bit length 4 for port 'pi_dqs_found_lanes' [/media/engin/StorageA/FPGA/ecrv32B/ecrv32B.gen/sources_1/ip/mig_7series_0/mig_7series_0/user_design/rtl/phy/mig_7series_v4_2_ddr_phy_top.v:1340]
+WARNING: [VRFC 10-5021] port 'complex_oclk_prech_req' is not connected on this instance [/media/engin/StorageA/FPGA/ecrv32B/ecrv32B.gen/sources_1/ip/mig_7series_0/mig_7series_0/user_design/rtl/phy/mig_7series_v4_2_ddr_calib_top.v:1318]
+Completed static elaboration
+Starting simulation data flow analysis
+Completed simulation data flow analysis
+Time Resolution for simulation is 1fs
+Compiling module unisims_ver.IBUF
+Compiling module unisims_ver.MMCME2_ADV(CLKFBOUT_MULT_F=62.5,...
+Compiling module unisims_ver.BUFG
+Compiling module xil_defaultlib.clk_wiz_0_clk_wiz
+Compiling module xil_defaultlib.clk_wiz_0
+Compiling module unisims_ver.IDELAYCTRL_default
+Compiling module xil_defaultlib.mig_7series_v4_2_iodelay_ctrl(IO...
+Compiling module unisims_ver.IBUF(IBUF_LOW_PWR="FALSE")
+Compiling module unisims_ver.IBUFG(IBUF_LOW_PWR="FALSE")
+Compiling module xil_defaultlib.mig_7series_v4_2_clk_ibuf(SYSCLK...
+Compiling module unisims_ver.XADC(INIT_40=16'b01000000000000,...
+Compiling module xil_defaultlib.mig_7series_v4_2_tempmon_default
+Compiling module unisims_ver.PLLE2_ADV(CLKFBOUT_MULT=13,CLKIN...
+Compiling module unisims_ver.BUFH
+Compiling module unisims_ver.MMCME2_ADV(BANDWIDTH="HIGH",CLKF...
+Compiling module xil_defaultlib.mig_7series_v4_2_infrastructure(...
+Compiling module unisims_ver.SRLC32E_default
+Compiling module xil_defaultlib.mig_7series_v4_2_rank_cntrl(DQRD...
+Compiling module xil_defaultlib.mig_7series_v4_2_round_robin_arb...
+Compiling module xil_defaultlib.mig_7series_v4_2_round_robin_arb...
+Compiling module xil_defaultlib.mig_7series_v4_2_rank_common(MAI...
+Compiling module xil_defaultlib.mig_7series_v4_2_rank_mach(CS_WI...
+Compiling module xil_defaultlib.mig_7series_v4_2_bank_compare(CO...
+Compiling module xil_defaultlib.mig_7series_v4_2_bank_state(BM_C...
+Compiling module xil_defaultlib.mig_7series_v4_2_bank_queue(BM_C...
+Compiling module xil_defaultlib.mig_7series_v4_2_bank_cntrl(BM_C...
+Compiling module xil_defaultlib.mig_7series_v4_2_bank_state(BM_C...
+Compiling module xil_defaultlib.mig_7series_v4_2_bank_queue(BM_C...
+Compiling module xil_defaultlib.mig_7series_v4_2_bank_cntrl(BM_C...
+Compiling module xil_defaultlib.mig_7series_v4_2_bank_common(BM_...
+Compiling module xil_defaultlib.mig_7series_v4_2_round_robin_arb...
+Compiling module xil_defaultlib.mig_7series_v4_2_arb_row_col(nBA...
+Compiling module xil_defaultlib.mig_7series_v4_2_arb_select(BANK...
+Compiling module xil_defaultlib.mig_7series_v4_2_arb_mux(BANK_VE...
+Compiling module xil_defaultlib.mig_7series_v4_2_bank_mach(BM_CN...
+Compiling module unisims_ver.RAM32M
+Compiling module xil_defaultlib.mig_7series_v4_2_col_mach(COL_WI...
+Compiling module xil_defaultlib.mig_7series_v4_2_mc(BM_CNT_WIDTH...
+Compiling module unisims_ver.OBUF
+Compiling module unisims_ver.OBUFT
+Compiling module unisims_ver.IOBUF_INTERMDISABLE(IBUF_LOW_PWR...
+Compiling module unisims_ver.IOBUFDS_INTERMDISABLE(DQS_BIAS="...
+Compiling module xil_defaultlib.mig_7series_v4_2_ddr_of_pre_fifo...
+Compiling module xil_defaultlib.mig_7series_v4_2_ddr_of_pre_fifo...
+Compiling module unisims_ver.BUFIO
+Compiling module xil_defaultlib.mig_7series_v4_2_ddr_of_pre_fifo...
+Compiling module unisims_ver.PHASER_OUT_PHY(CLKOUT_DIV=2,FINE...
+Compiling module unisims_ver.OUT_FIFO(ARRAY_MODE="ARRAY_MODE_...
+Compiling module unisims_ver.OSERDESE2(INIT_TQ=1'b1,SRVAL_TQ=...
+Compiling module xil_defaultlib.mig_7series_v4_2_ddr_byte_group_...
+Compiling module unisims_ver.ODDR(DDR_CLK_EDGE="SAME_EDGE")
+Compiling module unisims_ver.OBUFDS
+Compiling module xil_defaultlib.mig_7series_v4_2_ddr_byte_lane(B...
+Compiling module xil_defaultlib.mig_7series_v4_2_ddr_byte_group_...
+Compiling module xil_defaultlib.mig_7series_v4_2_ddr_byte_lane(A...
+Compiling module xil_defaultlib.mig_7series_v4_2_ddr_if_post_fif...
+Compiling module unisims_ver.PHASER_IN_PHY(BURST_MODE="TRUE",...
+Compiling module unisims_ver.PHASER_OUT_PHY(CLKOUT_DIV=2,DATA...
+Compiling module unisims_ver.IN_FIFO(ARRAY_MODE="ARRAY_MODE_4...
+Compiling module unisims_ver.ISERDESE2(INTERFACE_TYPE="MEMORY...
+Compiling module unisims_ver.IDELAYE2(HIGH_PERFORMANCE_MODE="...
+Compiling module unisims_ver.OSERDESE2(INIT_OQ=1'b1,INIT_TQ=1...
+Compiling module unisims_ver.OSERDESE2(INIT_OQ=1'b1,INIT_TQ=1...
+Compiling module xil_defaultlib.mig_7series_v4_2_ddr_byte_group_...
+Compiling module xil_defaultlib.mig_7series_v4_2_ddr_byte_lane(A...
+Compiling module xil_defaultlib.mig_7series_v4_2_ddr_byte_group_...
+Compiling module xil_defaultlib.mig_7series_v4_2_ddr_byte_lane(A...
+Compiling module unisims_ver.PHY_CONTROL(AO_TOGGLE=1,BURST_MO...
+Compiling module unisims_ver.PHASER_REF
+Compiling module xil_defaultlib.mig_7series_v4_2_ddr_phy_4lanes(...
+Compiling module xil_defaultlib.mig_7series_v4_2_ddr_mc_phy(DATA...
+Compiling module xil_defaultlib.mig_7series_v4_2_ddr_mc_phy_wrap...
+Compiling module xil_defaultlib.mig_7series_v4_2_ddr_prbs_gen(PR...
+Compiling module xil_defaultlib.mig_7series_v4_2_ddr_phy_init(tC...
+Compiling module xil_defaultlib.mig_7series_v4_2_ddr_phy_wrcal(C...
+Compiling module xil_defaultlib.mig_7series_v4_2_ddr_phy_wrlvl(D...
+Compiling module xil_defaultlib.mig_7series_v4_2_ddr_phy_ck_addr...
+Compiling module xil_defaultlib.mig_7series_v4_2_ddr_phy_dqs_fou...
+Compiling module xil_defaultlib.mig_7series_v4_2_ddr_phy_rdlvl(C...
+Compiling module xil_defaultlib.mig_7series_v4_2_ddr_phy_tempmon...
+Compiling module xil_defaultlib.mig_7series_v4_2_ddr_calib_top(t...
+Compiling module xil_defaultlib.mig_7series_v4_2_ddr_phy_top(DDR...
+Compiling module xil_defaultlib.mig_7series_v4_2_mem_intfc(PAYLO...
+Compiling module xil_defaultlib.mig_7series_v4_2_ui_cmd(ADDR_WID...
+Compiling module xil_defaultlib.mig_7series_v4_2_ui_wr_data(APP_...
+Compiling module xil_defaultlib.mig_7series_v4_2_ui_rd_data(APP_...
+Compiling module xil_defaultlib.mig_7series_v4_2_ui_top(APP_DATA...
+Compiling module xil_defaultlib.mig_7series_v4_2_memc_ui_top_std...
+Compiling module xil_defaultlib.mig_7series_0_mig_default
+Compiling module xil_defaultlib.mig_7series_0
+Compiling module xil_defaultlib.ecrv32Btop
+Compiling module xil_defaultlib.glbl
+Built simulation snapshot ecrv32Btop_behav
+
+****** Webtalk v2020.2.2 (64-bit)
+  **** SW Build 3118627 on Tue Feb  9 05:13:49 MST 2021
+  **** IP Build 3115676 on Tue Feb  9 10:48:11 MST 2021
+    ** Copyright 1986-2021 Xilinx, Inc. All Rights Reserved.
+
+source /media/engin/StorageA/FPGA/ecrv32B/ecrv32B.sim/sim_1/behav/xsim/xsim.dir/ecrv32Btop_behav/webtalk/xsim_webtalk.tcl -notrace
+INFO: [Common 17-186] '/media/engin/StorageA/FPGA/ecrv32B/ecrv32B.sim/sim_1/behav/xsim/xsim.dir/ecrv32Btop_behav/webtalk/usage_statistics_ext_xsim.xml' has been successfully sent to Xilinx on Tue May 11 21:11:28 2021. For additional details about this file, please refer to the WebTalk help file at /media/engin/StorageA/Xilinx/Vivado/2020.2/doc/webtalk_introduction.html.
+INFO: [Common 17-206] Exiting Webtalk at Tue May 11 21:11:28 2021...
+run_program: Time (s): cpu = 00:00:58 ; elapsed = 00:00:23 . Memory (MB): peak = 7514.988 ; gain = 0.000 ; free physical = 8861 ; free virtual = 68099
+INFO: [USF-XSim-69] 'elaborate' step finished in '23' seconds
+INFO: [USF-XSim-4] XSim::Simulate design
+INFO: [USF-XSim-61] Executing 'SIMULATE' step in '/media/engin/StorageA/FPGA/ecrv32B/ecrv32B.sim/sim_1/behav/xsim'
+INFO: [USF-XSim-98] *** Running xsim
+   with args "ecrv32Btop_behav -key {Behavioral:sim_1:Functional:ecrv32Btop} -tclbatch {ecrv32Btop.tcl} -view {/media/engin/StorageA/FPGA/ecrv32B/ecrv32Btop_behav.wcfg} -log {simulate.log}"
+INFO: [USF-XSim-8] Loading simulator feature
+Vivado Simulator v2020.2.2
+Time resolution is 1 fs
+open_wave_config /media/engin/StorageA/FPGA/ecrv32B/ecrv32Btop_behav.wcfg
+source ecrv32Btop.tcl
+# set curr_wave [current_wave_config]
+# if { [string length $curr_wave] == 0 } {
+#   if { [llength [get_objects]] > 0} {
+#     add_wave /
+#     set_property needs_save false [current_wave_config]
+#   } else {
+#      send_msg_id Add_Wave-1 WARNING "No top level signals found. Simulator will start without a wave window. If you want to open a wave window go to 'File->New Waveform Configuration' or type 'create_wave_config' in the TCL console."
+#   }
+# }
+# run 1000ns
+WARNING: file design.txt could not be opened
+ *** Warning: The analog data file design.txt for XADC instance ecrv32Btop.DDR3Controller.u_mig_7series_0_mig.\temp_mon_enabled.u_tempmon .\xadc_supplied_temperature.XADC_inst  was not found. Use the SIM_MONITOR_FILE parameter to specify the analog data file name or use the default name: design.txt.
+
+############# Write Clocks PLLE2_ADV Parameters #############
+
+nCK_PER_CLK      =       2
+CLK_PERIOD       =   10000
+CLKIN1_PERIOD    =  10.000
+DIVCLK_DIVIDE    =       1
+CLKFBOUT_MULT    =      13
+VCO_PERIOD       =   769.0
+CLKOUT0_DIVIDE_F =       2
+CLKOUT1_DIVIDE   =       4
+CLKOUT2_DIVIDE   =      64
+CLKOUT3_DIVIDE   =       8
+CLKOUT0_PERIOD   =    1538
+CLKOUT1_PERIOD   =    3076
+CLKOUT2_PERIOD   =   49216
+CLKOUT3_PERIOD   =    6152
+CLKOUT4_PERIOD   =    6152
+############################################################
+
+############# MMCME2_ADV Parameters #############
+
+MMCM_MULT_F           =           4
+MMCM_VCO_FREQ (MHz)   = 649.000
+MMCM_VCO_PERIOD       = 1540.832
+#################################################
+
+ecrv32Btop.DDR3Controller.u_mig_7series_0_mig.u_memc_ui_top_std.mem_intfc0.ddr_phy_top0.u_ddr_mc_phy_wrapper.u_ddr_mc_phy : BYTE_LANES_B0 = f BYTE_LANES_B1 = 0 DATA_CTL_B0 = c DATA_CTL_B1 = 0
+ecrv32Btop.DDR3Controller.u_mig_7series_0_mig.u_memc_ui_top_std.mem_intfc0.ddr_phy_top0.u_ddr_mc_phy_wrapper.u_ddr_mc_phy : HIGHEST_LANE =           4 HIGHEST_LANE_B0 =           4 HIGHEST_LANE_B1 =           0
+ecrv32Btop.DDR3Controller.u_mig_7series_0_mig.u_memc_ui_top_std.mem_intfc0.ddr_phy_top0.u_ddr_mc_phy_wrapper.u_ddr_mc_phy : HIGHEST_BANK =           1
+ecrv32Btop.DDR3Controller.u_mig_7series_0_mig.u_memc_ui_top_std.mem_intfc0.ddr_phy_top0.u_ddr_mc_phy_wrapper.u_ddr_mc_phy : FREQ_REF_PERIOD         = 1538.00 
+ecrv32Btop.DDR3Controller.u_mig_7series_0_mig.u_memc_ui_top_std.mem_intfc0.ddr_phy_top0.u_ddr_mc_phy_wrapper.u_ddr_mc_phy : DDR_TCK                 = 3077 
+ecrv32Btop.DDR3Controller.u_mig_7series_0_mig.u_memc_ui_top_std.mem_intfc0.ddr_phy_top0.u_ddr_mc_phy_wrapper.u_ddr_mc_phy : PO_S2_TAPS_SIZE         = 12.02 
+ecrv32Btop.DDR3Controller.u_mig_7series_0_mig.u_memc_ui_top_std.mem_intfc0.ddr_phy_top0.u_ddr_mc_phy_wrapper.u_ddr_mc_phy : PO_CIRC_BUF_EARLY       = 1 
+ecrv32Btop.DDR3Controller.u_mig_7series_0_mig.u_memc_ui_top_std.mem_intfc0.ddr_phy_top0.u_ddr_mc_phy_wrapper.u_ddr_mc_phy : PO_CIRC_BUF_OFFSET      = 1610.30 
+ecrv32Btop.DDR3Controller.u_mig_7series_0_mig.u_memc_ui_top_std.mem_intfc0.ddr_phy_top0.u_ddr_mc_phy_wrapper.u_ddr_mc_phy : PO_CIRC_BUF_META_ZONE   = 200.00 
+ecrv32Btop.DDR3Controller.u_mig_7series_0_mig.u_memc_ui_top_std.mem_intfc0.ddr_phy_top0.u_ddr_mc_phy_wrapper.u_ddr_mc_phy : PO_STG2_FINE_INTR_DLY   = 890.73 
+ecrv32Btop.DDR3Controller.u_mig_7series_0_mig.u_memc_ui_top_std.mem_intfc0.ddr_phy_top0.u_ddr_mc_phy_wrapper.u_ddr_mc_phy : PO_STG2_COARSE_INTR_DLY = 575.97 
+ecrv32Btop.DDR3Controller.u_mig_7series_0_mig.u_memc_ui_top_std.mem_intfc0.ddr_phy_top0.u_ddr_mc_phy_wrapper.u_ddr_mc_phy : PO_STG2_INTRINSIC_DELAY = 1466.70 
+ecrv32Btop.DDR3Controller.u_mig_7series_0_mig.u_memc_ui_top_std.mem_intfc0.ddr_phy_top0.u_ddr_mc_phy_wrapper.u_ddr_mc_phy : PO_CIRC_BUF_DELAY       = 60 
+ecrv32Btop.DDR3Controller.u_mig_7series_0_mig.u_memc_ui_top_std.mem_intfc0.ddr_phy_top0.u_ddr_mc_phy_wrapper.u_ddr_mc_phy : PO_INTRINSIC_DELAY      = 1466.70 
+ecrv32Btop.DDR3Controller.u_mig_7series_0_mig.u_memc_ui_top_std.mem_intfc0.ddr_phy_top0.u_ddr_mc_phy_wrapper.u_ddr_mc_phy : PO_DELAY                = 2187.64 
+ecrv32Btop.DDR3Controller.u_mig_7series_0_mig.u_memc_ui_top_std.mem_intfc0.ddr_phy_top0.u_ddr_mc_phy_wrapper.u_ddr_mc_phy : PO_OCLK_DELAY           = 0 
+ecrv32Btop.DDR3Controller.u_mig_7series_0_mig.u_memc_ui_top_std.mem_intfc0.ddr_phy_top0.u_ddr_mc_phy_wrapper.u_ddr_mc_phy : L_PHY_0_PO_FINE_DELAY   = 60 
+ecrv32Btop.DDR3Controller.u_mig_7series_0_mig.u_memc_ui_top_std.mem_intfc0.ddr_phy_top0.u_ddr_mc_phy_wrapper.u_ddr_mc_phy : PI_STG1_INTRINSIC_DELAY = 0.00 
+ecrv32Btop.DDR3Controller.u_mig_7series_0_mig.u_memc_ui_top_std.mem_intfc0.ddr_phy_top0.u_ddr_mc_phy_wrapper.u_ddr_mc_phy : PI_STG2_INTRINSIC_DELAY = 865.48 
+ecrv32Btop.DDR3Controller.u_mig_7series_0_mig.u_memc_ui_top_std.mem_intfc0.ddr_phy_top0.u_ddr_mc_phy_wrapper.u_ddr_mc_phy : PI_INTRINSIC_DELAY      = 865.48 
+ecrv32Btop.DDR3Controller.u_mig_7series_0_mig.u_memc_ui_top_std.mem_intfc0.ddr_phy_top0.u_ddr_mc_phy_wrapper.u_ddr_mc_phy : PI_MAX_STG2_DELAY       = 756.98 
+ecrv32Btop.DDR3Controller.u_mig_7series_0_mig.u_memc_ui_top_std.mem_intfc0.ddr_phy_top0.u_ddr_mc_phy_wrapper.u_ddr_mc_phy : PI_OFFSET               = 123.00 
+ecrv32Btop.DDR3Controller.u_mig_7series_0_mig.u_memc_ui_top_std.mem_intfc0.ddr_phy_top0.u_ddr_mc_phy_wrapper.u_ddr_mc_phy : PI_STG2_DELAY           = 123.00 
+ecrv32Btop.DDR3Controller.u_mig_7series_0_mig.u_memc_ui_top_std.mem_intfc0.ddr_phy_top0.u_ddr_mc_phy_wrapper.u_ddr_mc_phy :PI_STG2_DELAY_CAND       = 123.00 
+ecrv32Btop.DDR3Controller.u_mig_7series_0_mig.u_memc_ui_top_std.mem_intfc0.ddr_phy_top0.u_ddr_mc_phy_wrapper.u_ddr_mc_phy : DEFAULT_RCLK_DELAY      = 10 
+ecrv32Btop.DDR3Controller.u_mig_7series_0_mig.u_memc_ui_top_std.mem_intfc0.ddr_phy_top0.u_ddr_mc_phy_wrapper.u_ddr_mc_phy : RCLK_SELECT_EDGE        = 111 
+INFO: [USF-XSim-96] XSim completed. Design snapshot 'ecrv32Btop_behav' loaded.
+INFO: [USF-XSim-97] XSim simulation ran for 1000ns
+launch_simulation: Time (s): cpu = 00:01:08 ; elapsed = 00:00:29 . Memory (MB): peak = 7689.633 ; gain = 174.645 ; free physical = 8782 ; free virtual = 68022
+add_force {/ecrv32Btop/reset} -radix hex {0 0ns}
+add_force {/ecrv32Btop/CLK100MHZ} -radix hex {0 0ns} {1 5000000fs} -repeat_every 10000000fs
+add_force {/ecrv32Btop/CLK12MHZ} -radix hex {0 0ns} {1 41650000fs} -repeat_every 83300000fs
+restart
+INFO: [Simtcl 6-17] Simulation restarted
+run all
+WARNING: file design.txt could not be opened
+ *** Warning: The analog data file design.txt for XADC instance ecrv32Btop.DDR3Controller.u_mig_7series_0_mig.\temp_mon_enabled.u_tempmon .\xadc_supplied_temperature.XADC_inst  was not found. Use the SIM_MONITOR_FILE parameter to specify the analog data file name or use the default name: design.txt.
+
+############# Write Clocks PLLE2_ADV Parameters #############
+
+nCK_PER_CLK      =       2
+CLK_PERIOD       =   10000
+CLKIN1_PERIOD    =  10.000
+DIVCLK_DIVIDE    =       1
+CLKFBOUT_MULT    =      13
+VCO_PERIOD       =   769.0
+CLKOUT0_DIVIDE_F =       2
+CLKOUT1_DIVIDE   =       4
+CLKOUT2_DIVIDE   =      64
+CLKOUT3_DIVIDE   =       8
+CLKOUT0_PERIOD   =    1538
+CLKOUT1_PERIOD   =    3076
+CLKOUT2_PERIOD   =   49216
+CLKOUT3_PERIOD   =    6152
+CLKOUT4_PERIOD   =    6152
+############################################################
+
+############# MMCME2_ADV Parameters #############
+
+MMCM_MULT_F           =           4
+MMCM_VCO_FREQ (MHz)   = 649.000
+MMCM_VCO_PERIOD       = 1540.832
+#################################################
+
+ecrv32Btop.DDR3Controller.u_mig_7series_0_mig.u_memc_ui_top_std.mem_intfc0.ddr_phy_top0.u_ddr_mc_phy_wrapper.u_ddr_mc_phy : BYTE_LANES_B0 = f BYTE_LANES_B1 = 0 DATA_CTL_B0 = c DATA_CTL_B1 = 0
+ecrv32Btop.DDR3Controller.u_mig_7series_0_mig.u_memc_ui_top_std.mem_intfc0.ddr_phy_top0.u_ddr_mc_phy_wrapper.u_ddr_mc_phy : HIGHEST_LANE =           4 HIGHEST_LANE_B0 =           4 HIGHEST_LANE_B1 =           0
+ecrv32Btop.DDR3Controller.u_mig_7series_0_mig.u_memc_ui_top_std.mem_intfc0.ddr_phy_top0.u_ddr_mc_phy_wrapper.u_ddr_mc_phy : HIGHEST_BANK =           1
+ecrv32Btop.DDR3Controller.u_mig_7series_0_mig.u_memc_ui_top_std.mem_intfc0.ddr_phy_top0.u_ddr_mc_phy_wrapper.u_ddr_mc_phy : FREQ_REF_PERIOD         = 1538.00 
+ecrv32Btop.DDR3Controller.u_mig_7series_0_mig.u_memc_ui_top_std.mem_intfc0.ddr_phy_top0.u_ddr_mc_phy_wrapper.u_ddr_mc_phy : DDR_TCK                 = 3077 
+ecrv32Btop.DDR3Controller.u_mig_7series_0_mig.u_memc_ui_top_std.mem_intfc0.ddr_phy_top0.u_ddr_mc_phy_wrapper.u_ddr_mc_phy : PO_S2_TAPS_SIZE         = 12.02 
+ecrv32Btop.DDR3Controller.u_mig_7series_0_mig.u_memc_ui_top_std.mem_intfc0.ddr_phy_top0.u_ddr_mc_phy_wrapper.u_ddr_mc_phy : PO_CIRC_BUF_EARLY       = 1 
+ecrv32Btop.DDR3Controller.u_mig_7series_0_mig.u_memc_ui_top_std.mem_intfc0.ddr_phy_top0.u_ddr_mc_phy_wrapper.u_ddr_mc_phy : PO_CIRC_BUF_OFFSET      = 1610.30 
+ecrv32Btop.DDR3Controller.u_mig_7series_0_mig.u_memc_ui_top_std.mem_intfc0.ddr_phy_top0.u_ddr_mc_phy_wrapper.u_ddr_mc_phy : PO_CIRC_BUF_META_ZONE   = 200.00 
+ecrv32Btop.DDR3Controller.u_mig_7series_0_mig.u_memc_ui_top_std.mem_intfc0.ddr_phy_top0.u_ddr_mc_phy_wrapper.u_ddr_mc_phy : PO_STG2_FINE_INTR_DLY   = 890.73 
+ecrv32Btop.DDR3Controller.u_mig_7series_0_mig.u_memc_ui_top_std.mem_intfc0.ddr_phy_top0.u_ddr_mc_phy_wrapper.u_ddr_mc_phy : PO_STG2_COARSE_INTR_DLY = 575.97 
+ecrv32Btop.DDR3Controller.u_mig_7series_0_mig.u_memc_ui_top_std.mem_intfc0.ddr_phy_top0.u_ddr_mc_phy_wrapper.u_ddr_mc_phy : PO_STG2_INTRINSIC_DELAY = 1466.70 
+ecrv32Btop.DDR3Controller.u_mig_7series_0_mig.u_memc_ui_top_std.mem_intfc0.ddr_phy_top0.u_ddr_mc_phy_wrapper.u_ddr_mc_phy : PO_CIRC_BUF_DELAY       = 60 
+ecrv32Btop.DDR3Controller.u_mig_7series_0_mig.u_memc_ui_top_std.mem_intfc0.ddr_phy_top0.u_ddr_mc_phy_wrapper.u_ddr_mc_phy : PO_INTRINSIC_DELAY      = 1466.70 
+ecrv32Btop.DDR3Controller.u_mig_7series_0_mig.u_memc_ui_top_std.mem_intfc0.ddr_phy_top0.u_ddr_mc_phy_wrapper.u_ddr_mc_phy : PO_DELAY                = 2187.64 
+ecrv32Btop.DDR3Controller.u_mig_7series_0_mig.u_memc_ui_top_std.mem_intfc0.ddr_phy_top0.u_ddr_mc_phy_wrapper.u_ddr_mc_phy : PO_OCLK_DELAY           = 0 
+ecrv32Btop.DDR3Controller.u_mig_7series_0_mig.u_memc_ui_top_std.mem_intfc0.ddr_phy_top0.u_ddr_mc_phy_wrapper.u_ddr_mc_phy : L_PHY_0_PO_FINE_DELAY   = 60 
+ecrv32Btop.DDR3Controller.u_mig_7series_0_mig.u_memc_ui_top_std.mem_intfc0.ddr_phy_top0.u_ddr_mc_phy_wrapper.u_ddr_mc_phy : PI_STG1_INTRINSIC_DELAY = 0.00 
+ecrv32Btop.DDR3Controller.u_mig_7series_0_mig.u_memc_ui_top_std.mem_intfc0.ddr_phy_top0.u_ddr_mc_phy_wrapper.u_ddr_mc_phy : PI_STG2_INTRINSIC_DELAY = 865.48 
+ecrv32Btop.DDR3Controller.u_mig_7series_0_mig.u_memc_ui_top_std.mem_intfc0.ddr_phy_top0.u_ddr_mc_phy_wrapper.u_ddr_mc_phy : PI_INTRINSIC_DELAY      = 865.48 
+ecrv32Btop.DDR3Controller.u_mig_7series_0_mig.u_memc_ui_top_std.mem_intfc0.ddr_phy_top0.u_ddr_mc_phy_wrapper.u_ddr_mc_phy : PI_MAX_STG2_DELAY       = 756.98 
+ecrv32Btop.DDR3Controller.u_mig_7series_0_mig.u_memc_ui_top_std.mem_intfc0.ddr_phy_top0.u_ddr_mc_phy_wrapper.u_ddr_mc_phy : PI_OFFSET               = 123.00 
+ecrv32Btop.DDR3Controller.u_mig_7series_0_mig.u_memc_ui_top_std.mem_intfc0.ddr_phy_top0.u_ddr_mc_phy_wrapper.u_ddr_mc_phy : PI_STG2_DELAY           = 123.00 
+ecrv32Btop.DDR3Controller.u_mig_7series_0_mig.u_memc_ui_top_std.mem_intfc0.ddr_phy_top0.u_ddr_mc_phy_wrapper.u_ddr_mc_phy :PI_STG2_DELAY_CAND       = 123.00 
+ecrv32Btop.DDR3Controller.u_mig_7series_0_mig.u_memc_ui_top_std.mem_intfc0.ddr_phy_top0.u_ddr_mc_phy_wrapper.u_ddr_mc_phy : DEFAULT_RCLK_DELAY      = 10 
+ecrv32Btop.DDR3Controller.u_mig_7series_0_mig.u_memc_ui_top_std.mem_intfc0.ddr_phy_top0.u_ddr_mc_phy_wrapper.u_ddr_mc_phy : RCLK_SELECT_EDGE        = 111 
+PHY_INIT: Memory Initialization completed at          61004329000
+run: Time (s): cpu = 00:00:05 ; elapsed = 00:00:13 . Memory (MB): peak = 7689.633 ; gain = 0.000 ; free physical = 8756 ; free virtual = 67999
+close_sim
+INFO: [Simtcl 6-16] Simulation closed
+launch_simulation
+Command: launch_simulation 
+INFO: [Vivado 12-5698] Checking validity of IPs in the design for the 'XSim' simulator...
+INFO: [Vivado 12-5682] Launching behavioral simulation in '/media/engin/StorageA/FPGA/ecrv32B/ecrv32B.sim/sim_1/behav/xsim'
+INFO: [Vivado 12-4795] Using compiled simulation libraries for IPs
+INFO: [SIM-utils-51] Simulation object is 'sim_1'
+INFO: [USF-XSim-7] Finding pre-compiled libraries...
+INFO: [USF-XSim-11] File '/media/engin/StorageA/Xilinx/Vivado/2020.2/data/xsim/xsim.ini' copied to run dir:'/media/engin/StorageA/FPGA/ecrv32B/ecrv32B.sim/sim_1/behav/xsim'
+INFO: [SIM-utils-54] Inspecting design source files for 'ecrv32Btop' in fileset 'sim_1'...
+INFO: [USF-XSim-97] Finding global include files...
+INFO: [USF-XSim-98] Fetching design files from 'sim_1'...
+INFO: [USF-XSim-2] XSim::Compile design
+INFO: [USF-XSim-61] Executing 'COMPILE and ANALYZE' step in '/media/engin/StorageA/FPGA/ecrv32B/ecrv32B.sim/sim_1/behav/xsim'
+xvlog --incr --relax -prj ecrv32Btop_vlog.prj
+Waiting for jobs to finish...
+No pending jobs, compilation finished.
+INFO: [USF-XSim-69] 'compile' step finished in '1' seconds
+INFO: [USF-XSim-3] XSim::Elaborate design
+INFO: [USF-XSim-61] Executing 'ELABORATE' step in '/media/engin/StorageA/FPGA/ecrv32B/ecrv32B.sim/sim_1/behav/xsim'
+xelab -wto f7a43d8dedd84732b74722d74e6002c5 --incr --debug typical --relax --mt 8 -L xil_defaultlib -L unisims_ver -L unimacro_ver -L secureip -L xpm --snapshot ecrv32Btop_behav xil_defaultlib.ecrv32Btop xil_defaultlib.glbl -log elaborate.log
+Vivado Simulator v2020.2.2
+Copyright 1986-1999, 2001-2021 Xilinx, Inc. All Rights Reserved.
+Running: /media/engin/StorageA/Xilinx/Vivado/2020.2/bin/unwrapped/lnx64.o/xelab -wto f7a43d8dedd84732b74722d74e6002c5 --incr --debug typical --relax --mt 8 -L xil_defaultlib -L unisims_ver -L unimacro_ver -L secureip -L xpm --snapshot ecrv32Btop_behav xil_defaultlib.ecrv32Btop xil_defaultlib.glbl -log elaborate.log 
+Using 8 slave threads.
+Starting static elaboration
+Pass Through NonSizing Optimizer
+WARNING: [VRFC 10-3091] actual bit length 12 differs from formal bit length 4 for port 'pi_dqs_found_lanes' [/media/engin/StorageA/FPGA/ecrv32B/ecrv32B.gen/sources_1/ip/mig_7series_0/mig_7series_0/user_design/rtl/phy/mig_7series_v4_2_ddr_mc_phy_wrapper.v:1671]
+WARNING: [VRFC 10-3091] actual bit length 12 differs from formal bit length 4 for port 'pi_phase_locked_lanes' [/media/engin/StorageA/FPGA/ecrv32B/ecrv32B.gen/sources_1/ip/mig_7series_0/mig_7series_0/user_design/rtl/phy/mig_7series_v4_2_ddr_mc_phy_wrapper.v:1679]
+WARNING: [VRFC 10-3091] actual bit length 12 differs from formal bit length 4 for port 'pi_dqs_found_lanes' [/media/engin/StorageA/FPGA/ecrv32B/ecrv32B.gen/sources_1/ip/mig_7series_0/mig_7series_0/user_design/rtl/phy/mig_7series_v4_2_ddr_phy_top.v:1340]
+WARNING: [VRFC 10-5021] port 'complex_oclk_prech_req' is not connected on this instance [/media/engin/StorageA/FPGA/ecrv32B/ecrv32B.gen/sources_1/ip/mig_7series_0/mig_7series_0/user_design/rtl/phy/mig_7series_v4_2_ddr_calib_top.v:1318]
+Completed static elaboration
+INFO: [XSIM 43-4323] No Change in HDL. Linking previously generated obj files to create kernel
+INFO: [USF-XSim-69] 'elaborate' step finished in '3' seconds
+INFO: [USF-XSim-4] XSim::Simulate design
+INFO: [USF-XSim-61] Executing 'SIMULATE' step in '/media/engin/StorageA/FPGA/ecrv32B/ecrv32B.sim/sim_1/behav/xsim'
+INFO: [USF-XSim-98] *** Running xsim
+   with args "ecrv32Btop_behav -key {Behavioral:sim_1:Functional:ecrv32Btop} -tclbatch {ecrv32Btop.tcl} -view {/media/engin/StorageA/FPGA/ecrv32B/ecrv32Btop_behav.wcfg} -log {simulate.log}"
+INFO: [USF-XSim-8] Loading simulator feature
+Vivado Simulator v2020.2.2
+Time resolution is 1 fs
+open_wave_config /media/engin/StorageA/FPGA/ecrv32B/ecrv32Btop_behav.wcfg
+source ecrv32Btop.tcl
+# set curr_wave [current_wave_config]
+# if { [string length $curr_wave] == 0 } {
+#   if { [llength [get_objects]] > 0} {
+#     add_wave /
+#     set_property needs_save false [current_wave_config]
+#   } else {
+#      send_msg_id Add_Wave-1 WARNING "No top level signals found. Simulator will start without a wave window. If you want to open a wave window go to 'File->New Waveform Configuration' or type 'create_wave_config' in the TCL console."
+#   }
+# }
+# run 1000ns
+WARNING: file design.txt could not be opened
+ *** Warning: The analog data file design.txt for XADC instance ecrv32Btop.DDR3Controller.u_mig_7series_0_mig.\temp_mon_enabled.u_tempmon .\xadc_supplied_temperature.XADC_inst  was not found. Use the SIM_MONITOR_FILE parameter to specify the analog data file name or use the default name: design.txt.
+
+############# Write Clocks PLLE2_ADV Parameters #############
+
+nCK_PER_CLK      =       2
+CLK_PERIOD       =   10000
+CLKIN1_PERIOD    =  10.000
+DIVCLK_DIVIDE    =       1
+CLKFBOUT_MULT    =      13
+VCO_PERIOD       =   769.0
+CLKOUT0_DIVIDE_F =       2
+CLKOUT1_DIVIDE   =       4
+CLKOUT2_DIVIDE   =      64
+CLKOUT3_DIVIDE   =       8
+CLKOUT0_PERIOD   =    1538
+CLKOUT1_PERIOD   =    3076
+CLKOUT2_PERIOD   =   49216
+CLKOUT3_PERIOD   =    6152
+CLKOUT4_PERIOD   =    6152
+############################################################
+
+############# MMCME2_ADV Parameters #############
+
+MMCM_MULT_F           =           4
+MMCM_VCO_FREQ (MHz)   = 649.000
+MMCM_VCO_PERIOD       = 1540.832
+#################################################
+
+ecrv32Btop.DDR3Controller.u_mig_7series_0_mig.u_memc_ui_top_std.mem_intfc0.ddr_phy_top0.u_ddr_mc_phy_wrapper.u_ddr_mc_phy : BYTE_LANES_B0 = f BYTE_LANES_B1 = 0 DATA_CTL_B0 = c DATA_CTL_B1 = 0
+ecrv32Btop.DDR3Controller.u_mig_7series_0_mig.u_memc_ui_top_std.mem_intfc0.ddr_phy_top0.u_ddr_mc_phy_wrapper.u_ddr_mc_phy : HIGHEST_LANE =           4 HIGHEST_LANE_B0 =           4 HIGHEST_LANE_B1 =           0
+ecrv32Btop.DDR3Controller.u_mig_7series_0_mig.u_memc_ui_top_std.mem_intfc0.ddr_phy_top0.u_ddr_mc_phy_wrapper.u_ddr_mc_phy : HIGHEST_BANK =           1
+ecrv32Btop.DDR3Controller.u_mig_7series_0_mig.u_memc_ui_top_std.mem_intfc0.ddr_phy_top0.u_ddr_mc_phy_wrapper.u_ddr_mc_phy : FREQ_REF_PERIOD         = 1538.00 
+ecrv32Btop.DDR3Controller.u_mig_7series_0_mig.u_memc_ui_top_std.mem_intfc0.ddr_phy_top0.u_ddr_mc_phy_wrapper.u_ddr_mc_phy : DDR_TCK                 = 3077 
+ecrv32Btop.DDR3Controller.u_mig_7series_0_mig.u_memc_ui_top_std.mem_intfc0.ddr_phy_top0.u_ddr_mc_phy_wrapper.u_ddr_mc_phy : PO_S2_TAPS_SIZE         = 12.02 
+ecrv32Btop.DDR3Controller.u_mig_7series_0_mig.u_memc_ui_top_std.mem_intfc0.ddr_phy_top0.u_ddr_mc_phy_wrapper.u_ddr_mc_phy : PO_CIRC_BUF_EARLY       = 1 
+ecrv32Btop.DDR3Controller.u_mig_7series_0_mig.u_memc_ui_top_std.mem_intfc0.ddr_phy_top0.u_ddr_mc_phy_wrapper.u_ddr_mc_phy : PO_CIRC_BUF_OFFSET      = 1610.30 
+ecrv32Btop.DDR3Controller.u_mig_7series_0_mig.u_memc_ui_top_std.mem_intfc0.ddr_phy_top0.u_ddr_mc_phy_wrapper.u_ddr_mc_phy : PO_CIRC_BUF_META_ZONE   = 200.00 
+ecrv32Btop.DDR3Controller.u_mig_7series_0_mig.u_memc_ui_top_std.mem_intfc0.ddr_phy_top0.u_ddr_mc_phy_wrapper.u_ddr_mc_phy : PO_STG2_FINE_INTR_DLY   = 890.73 
+ecrv32Btop.DDR3Controller.u_mig_7series_0_mig.u_memc_ui_top_std.mem_intfc0.ddr_phy_top0.u_ddr_mc_phy_wrapper.u_ddr_mc_phy : PO_STG2_COARSE_INTR_DLY = 575.97 
+ecrv32Btop.DDR3Controller.u_mig_7series_0_mig.u_memc_ui_top_std.mem_intfc0.ddr_phy_top0.u_ddr_mc_phy_wrapper.u_ddr_mc_phy : PO_STG2_INTRINSIC_DELAY = 1466.70 
+ecrv32Btop.DDR3Controller.u_mig_7series_0_mig.u_memc_ui_top_std.mem_intfc0.ddr_phy_top0.u_ddr_mc_phy_wrapper.u_ddr_mc_phy : PO_CIRC_BUF_DELAY       = 60 
+ecrv32Btop.DDR3Controller.u_mig_7series_0_mig.u_memc_ui_top_std.mem_intfc0.ddr_phy_top0.u_ddr_mc_phy_wrapper.u_ddr_mc_phy : PO_INTRINSIC_DELAY      = 1466.70 
+ecrv32Btop.DDR3Controller.u_mig_7series_0_mig.u_memc_ui_top_std.mem_intfc0.ddr_phy_top0.u_ddr_mc_phy_wrapper.u_ddr_mc_phy : PO_DELAY                = 2187.64 
+ecrv32Btop.DDR3Controller.u_mig_7series_0_mig.u_memc_ui_top_std.mem_intfc0.ddr_phy_top0.u_ddr_mc_phy_wrapper.u_ddr_mc_phy : PO_OCLK_DELAY           = 0 
+ecrv32Btop.DDR3Controller.u_mig_7series_0_mig.u_memc_ui_top_std.mem_intfc0.ddr_phy_top0.u_ddr_mc_phy_wrapper.u_ddr_mc_phy : L_PHY_0_PO_FINE_DELAY   = 60 
+ecrv32Btop.DDR3Controller.u_mig_7series_0_mig.u_memc_ui_top_std.mem_intfc0.ddr_phy_top0.u_ddr_mc_phy_wrapper.u_ddr_mc_phy : PI_STG1_INTRINSIC_DELAY = 0.00 
+ecrv32Btop.DDR3Controller.u_mig_7series_0_mig.u_memc_ui_top_std.mem_intfc0.ddr_phy_top0.u_ddr_mc_phy_wrapper.u_ddr_mc_phy : PI_STG2_INTRINSIC_DELAY = 865.48 
+ecrv32Btop.DDR3Controller.u_mig_7series_0_mig.u_memc_ui_top_std.mem_intfc0.ddr_phy_top0.u_ddr_mc_phy_wrapper.u_ddr_mc_phy : PI_INTRINSIC_DELAY      = 865.48 
+ecrv32Btop.DDR3Controller.u_mig_7series_0_mig.u_memc_ui_top_std.mem_intfc0.ddr_phy_top0.u_ddr_mc_phy_wrapper.u_ddr_mc_phy : PI_MAX_STG2_DELAY       = 756.98 
+ecrv32Btop.DDR3Controller.u_mig_7series_0_mig.u_memc_ui_top_std.mem_intfc0.ddr_phy_top0.u_ddr_mc_phy_wrapper.u_ddr_mc_phy : PI_OFFSET               = 123.00 
+ecrv32Btop.DDR3Controller.u_mig_7series_0_mig.u_memc_ui_top_std.mem_intfc0.ddr_phy_top0.u_ddr_mc_phy_wrapper.u_ddr_mc_phy : PI_STG2_DELAY           = 123.00 
+ecrv32Btop.DDR3Controller.u_mig_7series_0_mig.u_memc_ui_top_std.mem_intfc0.ddr_phy_top0.u_ddr_mc_phy_wrapper.u_ddr_mc_phy :PI_STG2_DELAY_CAND       = 123.00 
+ecrv32Btop.DDR3Controller.u_mig_7series_0_mig.u_memc_ui_top_std.mem_intfc0.ddr_phy_top0.u_ddr_mc_phy_wrapper.u_ddr_mc_phy : DEFAULT_RCLK_DELAY      = 10 
+ecrv32Btop.DDR3Controller.u_mig_7series_0_mig.u_memc_ui_top_std.mem_intfc0.ddr_phy_top0.u_ddr_mc_phy_wrapper.u_ddr_mc_phy : RCLK_SELECT_EDGE        = 111 
+INFO: [USF-XSim-96] XSim completed. Design snapshot 'ecrv32Btop_behav' loaded.
+INFO: [USF-XSim-97] XSim simulation ran for 1000ns
+launch_simulation: Time (s): cpu = 00:00:08 ; elapsed = 00:00:06 . Memory (MB): peak = 7692.496 ; gain = 2.863 ; free physical = 8929 ; free virtual = 69339
+add_force {/ecrv32Btop/CLK12MHZ} -radix hex {0 0ns} {1 41650000fs} -repeat_every 83300000fs
+add_force {/ecrv32Btop/CLK100MHZ} -radix hex {0 0ns} {1 5000000fs} -repeat_every 10000000fs
+add_force {/ecrv32Btop/reset} -radix hex {0 0ns}
+restart
+INFO: [Simtcl 6-17] Simulation restarted
+run all
+WARNING: file design.txt could not be opened
+ *** Warning: The analog data file design.txt for XADC instance ecrv32Btop.DDR3Controller.u_mig_7series_0_mig.\temp_mon_enabled.u_tempmon .\xadc_supplied_temperature.XADC_inst  was not found. Use the SIM_MONITOR_FILE parameter to specify the analog data file name or use the default name: design.txt.
+
+############# Write Clocks PLLE2_ADV Parameters #############
+
+nCK_PER_CLK      =       2
+CLK_PERIOD       =   10000
+CLKIN1_PERIOD    =  10.000
+DIVCLK_DIVIDE    =       1
+CLKFBOUT_MULT    =      13
+VCO_PERIOD       =   769.0
+CLKOUT0_DIVIDE_F =       2
+CLKOUT1_DIVIDE   =       4
+CLKOUT2_DIVIDE   =      64
+CLKOUT3_DIVIDE   =       8
+CLKOUT0_PERIOD   =    1538
+CLKOUT1_PERIOD   =    3076
+CLKOUT2_PERIOD   =   49216
+CLKOUT3_PERIOD   =    6152
+CLKOUT4_PERIOD   =    6152
+############################################################
+
+############# MMCME2_ADV Parameters #############
+
+MMCM_MULT_F           =           4
+MMCM_VCO_FREQ (MHz)   = 649.000
+MMCM_VCO_PERIOD       = 1540.832
+#################################################
+
+ecrv32Btop.DDR3Controller.u_mig_7series_0_mig.u_memc_ui_top_std.mem_intfc0.ddr_phy_top0.u_ddr_mc_phy_wrapper.u_ddr_mc_phy : BYTE_LANES_B0 = f BYTE_LANES_B1 = 0 DATA_CTL_B0 = c DATA_CTL_B1 = 0
+ecrv32Btop.DDR3Controller.u_mig_7series_0_mig.u_memc_ui_top_std.mem_intfc0.ddr_phy_top0.u_ddr_mc_phy_wrapper.u_ddr_mc_phy : HIGHEST_LANE =           4 HIGHEST_LANE_B0 =           4 HIGHEST_LANE_B1 =           0
+ecrv32Btop.DDR3Controller.u_mig_7series_0_mig.u_memc_ui_top_std.mem_intfc0.ddr_phy_top0.u_ddr_mc_phy_wrapper.u_ddr_mc_phy : HIGHEST_BANK =           1
+ecrv32Btop.DDR3Controller.u_mig_7series_0_mig.u_memc_ui_top_std.mem_intfc0.ddr_phy_top0.u_ddr_mc_phy_wrapper.u_ddr_mc_phy : FREQ_REF_PERIOD         = 1538.00 
+ecrv32Btop.DDR3Controller.u_mig_7series_0_mig.u_memc_ui_top_std.mem_intfc0.ddr_phy_top0.u_ddr_mc_phy_wrapper.u_ddr_mc_phy : DDR_TCK                 = 3077 
+ecrv32Btop.DDR3Controller.u_mig_7series_0_mig.u_memc_ui_top_std.mem_intfc0.ddr_phy_top0.u_ddr_mc_phy_wrapper.u_ddr_mc_phy : PO_S2_TAPS_SIZE         = 12.02 
+ecrv32Btop.DDR3Controller.u_mig_7series_0_mig.u_memc_ui_top_std.mem_intfc0.ddr_phy_top0.u_ddr_mc_phy_wrapper.u_ddr_mc_phy : PO_CIRC_BUF_EARLY       = 1 
+ecrv32Btop.DDR3Controller.u_mig_7series_0_mig.u_memc_ui_top_std.mem_intfc0.ddr_phy_top0.u_ddr_mc_phy_wrapper.u_ddr_mc_phy : PO_CIRC_BUF_OFFSET      = 1610.30 
+ecrv32Btop.DDR3Controller.u_mig_7series_0_mig.u_memc_ui_top_std.mem_intfc0.ddr_phy_top0.u_ddr_mc_phy_wrapper.u_ddr_mc_phy : PO_CIRC_BUF_META_ZONE   = 200.00 
+ecrv32Btop.DDR3Controller.u_mig_7series_0_mig.u_memc_ui_top_std.mem_intfc0.ddr_phy_top0.u_ddr_mc_phy_wrapper.u_ddr_mc_phy : PO_STG2_FINE_INTR_DLY   = 890.73 
+ecrv32Btop.DDR3Controller.u_mig_7series_0_mig.u_memc_ui_top_std.mem_intfc0.ddr_phy_top0.u_ddr_mc_phy_wrapper.u_ddr_mc_phy : PO_STG2_COARSE_INTR_DLY = 575.97 
+ecrv32Btop.DDR3Controller.u_mig_7series_0_mig.u_memc_ui_top_std.mem_intfc0.ddr_phy_top0.u_ddr_mc_phy_wrapper.u_ddr_mc_phy : PO_STG2_INTRINSIC_DELAY = 1466.70 
+ecrv32Btop.DDR3Controller.u_mig_7series_0_mig.u_memc_ui_top_std.mem_intfc0.ddr_phy_top0.u_ddr_mc_phy_wrapper.u_ddr_mc_phy : PO_CIRC_BUF_DELAY       = 60 
+ecrv32Btop.DDR3Controller.u_mig_7series_0_mig.u_memc_ui_top_std.mem_intfc0.ddr_phy_top0.u_ddr_mc_phy_wrapper.u_ddr_mc_phy : PO_INTRINSIC_DELAY      = 1466.70 
+ecrv32Btop.DDR3Controller.u_mig_7series_0_mig.u_memc_ui_top_std.mem_intfc0.ddr_phy_top0.u_ddr_mc_phy_wrapper.u_ddr_mc_phy : PO_DELAY                = 2187.64 
+ecrv32Btop.DDR3Controller.u_mig_7series_0_mig.u_memc_ui_top_std.mem_intfc0.ddr_phy_top0.u_ddr_mc_phy_wrapper.u_ddr_mc_phy : PO_OCLK_DELAY           = 0 
+ecrv32Btop.DDR3Controller.u_mig_7series_0_mig.u_memc_ui_top_std.mem_intfc0.ddr_phy_top0.u_ddr_mc_phy_wrapper.u_ddr_mc_phy : L_PHY_0_PO_FINE_DELAY   = 60 
+ecrv32Btop.DDR3Controller.u_mig_7series_0_mig.u_memc_ui_top_std.mem_intfc0.ddr_phy_top0.u_ddr_mc_phy_wrapper.u_ddr_mc_phy : PI_STG1_INTRINSIC_DELAY = 0.00 
+ecrv32Btop.DDR3Controller.u_mig_7series_0_mig.u_memc_ui_top_std.mem_intfc0.ddr_phy_top0.u_ddr_mc_phy_wrapper.u_ddr_mc_phy : PI_STG2_INTRINSIC_DELAY = 865.48 
+ecrv32Btop.DDR3Controller.u_mig_7series_0_mig.u_memc_ui_top_std.mem_intfc0.ddr_phy_top0.u_ddr_mc_phy_wrapper.u_ddr_mc_phy : PI_INTRINSIC_DELAY      = 865.48 
+ecrv32Btop.DDR3Controller.u_mig_7series_0_mig.u_memc_ui_top_std.mem_intfc0.ddr_phy_top0.u_ddr_mc_phy_wrapper.u_ddr_mc_phy : PI_MAX_STG2_DELAY       = 756.98 
+ecrv32Btop.DDR3Controller.u_mig_7series_0_mig.u_memc_ui_top_std.mem_intfc0.ddr_phy_top0.u_ddr_mc_phy_wrapper.u_ddr_mc_phy : PI_OFFSET               = 123.00 
+ecrv32Btop.DDR3Controller.u_mig_7series_0_mig.u_memc_ui_top_std.mem_intfc0.ddr_phy_top0.u_ddr_mc_phy_wrapper.u_ddr_mc_phy : PI_STG2_DELAY           = 123.00 
+ecrv32Btop.DDR3Controller.u_mig_7series_0_mig.u_memc_ui_top_std.mem_intfc0.ddr_phy_top0.u_ddr_mc_phy_wrapper.u_ddr_mc_phy :PI_STG2_DELAY_CAND       = 123.00 
+ecrv32Btop.DDR3Controller.u_mig_7series_0_mig.u_memc_ui_top_std.mem_intfc0.ddr_phy_top0.u_ddr_mc_phy_wrapper.u_ddr_mc_phy : DEFAULT_RCLK_DELAY      = 10 
+ecrv32Btop.DDR3Controller.u_mig_7series_0_mig.u_memc_ui_top_std.mem_intfc0.ddr_phy_top0.u_ddr_mc_phy_wrapper.u_ddr_mc_phy : RCLK_SELECT_EDGE        = 111 
+PHY_INIT: Memory Initialization completed at          61004329000
+run: Time (s): cpu = 00:00:07 ; elapsed = 00:00:31 . Memory (MB): peak = 7692.496 ; gain = 0.000 ; free physical = 8927 ; free virtual = 69343
+run all
+run: Time (s): cpu = 00:00:03 ; elapsed = 00:00:08 . Memory (MB): peak = 7692.496 ; gain = 0.000 ; free physical = 8896 ; free virtual = 69313
+restart
+INFO: [Simtcl 6-17] Simulation restarted
+run all
+WARNING: file design.txt could not be opened
+ *** Warning: The analog data file design.txt for XADC instance ecrv32Btop.DDR3Controller.u_mig_7series_0_mig.\temp_mon_enabled.u_tempmon .\xadc_supplied_temperature.XADC_inst  was not found. Use the SIM_MONITOR_FILE parameter to specify the analog data file name or use the default name: design.txt.
+
+############# Write Clocks PLLE2_ADV Parameters #############
+
+nCK_PER_CLK      =       2
+CLK_PERIOD       =   10000
+CLKIN1_PERIOD    =  10.000
+DIVCLK_DIVIDE    =       1
+CLKFBOUT_MULT    =      13
+VCO_PERIOD       =   769.0
+CLKOUT0_DIVIDE_F =       2
+CLKOUT1_DIVIDE   =       4
+CLKOUT2_DIVIDE   =      64
+CLKOUT3_DIVIDE   =       8
+CLKOUT0_PERIOD   =    1538
+CLKOUT1_PERIOD   =    3076
+CLKOUT2_PERIOD   =   49216
+CLKOUT3_PERIOD   =    6152
+CLKOUT4_PERIOD   =    6152
+############################################################
+
+############# MMCME2_ADV Parameters #############
+
+MMCM_MULT_F           =           4
+MMCM_VCO_FREQ (MHz)   = 649.000
+MMCM_VCO_PERIOD       = 1540.832
+#################################################
+
+ecrv32Btop.DDR3Controller.u_mig_7series_0_mig.u_memc_ui_top_std.mem_intfc0.ddr_phy_top0.u_ddr_mc_phy_wrapper.u_ddr_mc_phy : BYTE_LANES_B0 = f BYTE_LANES_B1 = 0 DATA_CTL_B0 = c DATA_CTL_B1 = 0
+ecrv32Btop.DDR3Controller.u_mig_7series_0_mig.u_memc_ui_top_std.mem_intfc0.ddr_phy_top0.u_ddr_mc_phy_wrapper.u_ddr_mc_phy : HIGHEST_LANE =           4 HIGHEST_LANE_B0 =           4 HIGHEST_LANE_B1 =           0
+ecrv32Btop.DDR3Controller.u_mig_7series_0_mig.u_memc_ui_top_std.mem_intfc0.ddr_phy_top0.u_ddr_mc_phy_wrapper.u_ddr_mc_phy : HIGHEST_BANK =           1
+ecrv32Btop.DDR3Controller.u_mig_7series_0_mig.u_memc_ui_top_std.mem_intfc0.ddr_phy_top0.u_ddr_mc_phy_wrapper.u_ddr_mc_phy : FREQ_REF_PERIOD         = 1538.00 
+ecrv32Btop.DDR3Controller.u_mig_7series_0_mig.u_memc_ui_top_std.mem_intfc0.ddr_phy_top0.u_ddr_mc_phy_wrapper.u_ddr_mc_phy : DDR_TCK                 = 3077 
+ecrv32Btop.DDR3Controller.u_mig_7series_0_mig.u_memc_ui_top_std.mem_intfc0.ddr_phy_top0.u_ddr_mc_phy_wrapper.u_ddr_mc_phy : PO_S2_TAPS_SIZE         = 12.02 
+ecrv32Btop.DDR3Controller.u_mig_7series_0_mig.u_memc_ui_top_std.mem_intfc0.ddr_phy_top0.u_ddr_mc_phy_wrapper.u_ddr_mc_phy : PO_CIRC_BUF_EARLY       = 1 
+ecrv32Btop.DDR3Controller.u_mig_7series_0_mig.u_memc_ui_top_std.mem_intfc0.ddr_phy_top0.u_ddr_mc_phy_wrapper.u_ddr_mc_phy : PO_CIRC_BUF_OFFSET      = 1610.30 
+ecrv32Btop.DDR3Controller.u_mig_7series_0_mig.u_memc_ui_top_std.mem_intfc0.ddr_phy_top0.u_ddr_mc_phy_wrapper.u_ddr_mc_phy : PO_CIRC_BUF_META_ZONE   = 200.00 
+ecrv32Btop.DDR3Controller.u_mig_7series_0_mig.u_memc_ui_top_std.mem_intfc0.ddr_phy_top0.u_ddr_mc_phy_wrapper.u_ddr_mc_phy : PO_STG2_FINE_INTR_DLY   = 890.73 
+ecrv32Btop.DDR3Controller.u_mig_7series_0_mig.u_memc_ui_top_std.mem_intfc0.ddr_phy_top0.u_ddr_mc_phy_wrapper.u_ddr_mc_phy : PO_STG2_COARSE_INTR_DLY = 575.97 
+ecrv32Btop.DDR3Controller.u_mig_7series_0_mig.u_memc_ui_top_std.mem_intfc0.ddr_phy_top0.u_ddr_mc_phy_wrapper.u_ddr_mc_phy : PO_STG2_INTRINSIC_DELAY = 1466.70 
+ecrv32Btop.DDR3Controller.u_mig_7series_0_mig.u_memc_ui_top_std.mem_intfc0.ddr_phy_top0.u_ddr_mc_phy_wrapper.u_ddr_mc_phy : PO_CIRC_BUF_DELAY       = 60 
+ecrv32Btop.DDR3Controller.u_mig_7series_0_mig.u_memc_ui_top_std.mem_intfc0.ddr_phy_top0.u_ddr_mc_phy_wrapper.u_ddr_mc_phy : PO_INTRINSIC_DELAY      = 1466.70 
+ecrv32Btop.DDR3Controller.u_mig_7series_0_mig.u_memc_ui_top_std.mem_intfc0.ddr_phy_top0.u_ddr_mc_phy_wrapper.u_ddr_mc_phy : PO_DELAY                = 2187.64 
+ecrv32Btop.DDR3Controller.u_mig_7series_0_mig.u_memc_ui_top_std.mem_intfc0.ddr_phy_top0.u_ddr_mc_phy_wrapper.u_ddr_mc_phy : PO_OCLK_DELAY           = 0 
+ecrv32Btop.DDR3Controller.u_mig_7series_0_mig.u_memc_ui_top_std.mem_intfc0.ddr_phy_top0.u_ddr_mc_phy_wrapper.u_ddr_mc_phy : L_PHY_0_PO_FINE_DELAY   = 60 
+ecrv32Btop.DDR3Controller.u_mig_7series_0_mig.u_memc_ui_top_std.mem_intfc0.ddr_phy_top0.u_ddr_mc_phy_wrapper.u_ddr_mc_phy : PI_STG1_INTRINSIC_DELAY = 0.00 
+ecrv32Btop.DDR3Controller.u_mig_7series_0_mig.u_memc_ui_top_std.mem_intfc0.ddr_phy_top0.u_ddr_mc_phy_wrapper.u_ddr_mc_phy : PI_STG2_INTRINSIC_DELAY = 865.48 
+ecrv32Btop.DDR3Controller.u_mig_7series_0_mig.u_memc_ui_top_std.mem_intfc0.ddr_phy_top0.u_ddr_mc_phy_wrapper.u_ddr_mc_phy : PI_INTRINSIC_DELAY      = 865.48 
+ecrv32Btop.DDR3Controller.u_mig_7series_0_mig.u_memc_ui_top_std.mem_intfc0.ddr_phy_top0.u_ddr_mc_phy_wrapper.u_ddr_mc_phy : PI_MAX_STG2_DELAY       = 756.98 
+ecrv32Btop.DDR3Controller.u_mig_7series_0_mig.u_memc_ui_top_std.mem_intfc0.ddr_phy_top0.u_ddr_mc_phy_wrapper.u_ddr_mc_phy : PI_OFFSET               = 123.00 
+ecrv32Btop.DDR3Controller.u_mig_7series_0_mig.u_memc_ui_top_std.mem_intfc0.ddr_phy_top0.u_ddr_mc_phy_wrapper.u_ddr_mc_phy : PI_STG2_DELAY           = 123.00 
+ecrv32Btop.DDR3Controller.u_mig_7series_0_mig.u_memc_ui_top_std.mem_intfc0.ddr_phy_top0.u_ddr_mc_phy_wrapper.u_ddr_mc_phy :PI_STG2_DELAY_CAND       = 123.00 
+ecrv32Btop.DDR3Controller.u_mig_7series_0_mig.u_memc_ui_top_std.mem_intfc0.ddr_phy_top0.u_ddr_mc_phy_wrapper.u_ddr_mc_phy : DEFAULT_RCLK_DELAY      = 10 
+ecrv32Btop.DDR3Controller.u_mig_7series_0_mig.u_memc_ui_top_std.mem_intfc0.ddr_phy_top0.u_ddr_mc_phy_wrapper.u_ddr_mc_phy : RCLK_SELECT_EDGE        = 111 
+PHY_INIT: Memory Initialization completed at          61004329000
+run: Time (s): cpu = 00:00:08 ; elapsed = 00:00:36 . Memory (MB): peak = 7692.496 ; gain = 0.000 ; free physical = 8893 ; free virtual = 69311
+close_sim
+INFO: [Simtcl 6-16] Simulation closed
 exit
-INFO: [Common 17-206] Exiting Vivado at Tue Apr 27 21:57:40 2021...
+INFO: [Common 17-206] Exiting Vivado at Tue May 11 22:25:23 2021...

@@ -44,7 +44,7 @@ set_property -dict { PACKAGE_PIN D9    IOSTANDARD LVCMOS33 } [get_ports { RST_I 
 #set_property -dict { PACKAGE_PIN B9    IOSTANDARD LVCMOS33 } [get_ports { btn[2] }]; #IO_L11N_T1_SRCC_16 Sch=btn[2]
 #set_property -dict { PACKAGE_PIN B8    IOSTANDARD LVCMOS33 } [get_ports { btn[3] }]; #IO_L12P_T1_MRCC_16 Sch=btn[3]
 
-##Pmod Header JA
+##Pmod Header JA & JB - VGA PMOD
 
 set_property -dict { PACKAGE_PIN G13   IOSTANDARD LVCMOS33 } [get_ports { VGA_R[0] }]; #IO_0_15 Sch=ja[1]
 set_property -dict { PACKAGE_PIN B11   IOSTANDARD LVCMOS33 } [get_ports { VGA_R[1] }]; #IO_L4P_T0_15 Sch=ja[2]
@@ -55,8 +55,6 @@ set_property -dict { PACKAGE_PIN B18   IOSTANDARD LVCMOS33 } [get_ports { VGA_B[
 set_property -dict { PACKAGE_PIN A18   IOSTANDARD LVCMOS33 } [get_ports { VGA_B[2] }]; #IO_L10N_T1_AD11N_15 Sch=ja[9]
 set_property -dict { PACKAGE_PIN K16   IOSTANDARD LVCMOS33 } [get_ports { VGA_B[3] }]; #IO_25_15 Sch=ja[10]
 
-##Pmod Header JB
-
 set_property -dict { PACKAGE_PIN E15   IOSTANDARD LVCMOS33 } [get_ports { VGA_G[0] }]; #IO_L11P_T1_SRCC_15 Sch=jb_p[1]
 set_property -dict { PACKAGE_PIN E16   IOSTANDARD LVCMOS33 } [get_ports { VGA_G[1] }]; #IO_L11N_T1_SRCC_15 Sch=jb_n[1]
 set_property -dict { PACKAGE_PIN D15   IOSTANDARD LVCMOS33 } [get_ports { VGA_G[2] }]; #IO_L12P_T1_MRCC_15 Sch=jb_p[2]
@@ -66,15 +64,35 @@ set_property -dict { PACKAGE_PIN J18   IOSTANDARD LVCMOS33 } [get_ports { VGA_VS
 #set_property -dict { PACKAGE_PIN K15   IOSTANDARD LVCMOS33 } [get_ports { jb[6] }]; #IO_L24P_T3_RS1_15 Sch=jb_p[4]
 #set_property -dict { PACKAGE_PIN J15   IOSTANDARD LVCMOS33 } [get_ports { jb[7] }]; #IO_L24N_T3_RS0_15 Sch=jb_n[4]
 
-##Pmod Header JC
+##Pmod Header JA & JB - DVI PMOD
 
-#set_property -dict { PACKAGE_PIN U12   IOSTANDARD LVCMOS33 } [get_ports { jc[0] }]; #IO_L20P_T3_A08_D24_14 Sch=jc_p[1]
-#set_property -dict { PACKAGE_PIN V12   IOSTANDARD LVCMOS33 } [get_ports { jc[1] }]; #IO_L20N_T3_A07_D23_14 Sch=jc_n[1]
-#set_property -dict { PACKAGE_PIN V10   IOSTANDARD LVCMOS33 } [get_ports { jc[2] }]; #IO_L21P_T3_DQS_14 Sch=jc_p[2]
-#set_property -dict { PACKAGE_PIN V11   IOSTANDARD LVCMOS33 } [get_ports { jc[3] }]; #IO_L21N_T3_DQS_A06_D22_14 Sch=jc_n[2]
-#set_property -dict { PACKAGE_PIN U14   IOSTANDARD LVCMOS33 } [get_ports { jc[4] }]; #IO_L22P_T3_A05_D21_14 Sch=jc_p[3]
-#set_property -dict { PACKAGE_PIN V14   IOSTANDARD LVCMOS33 } [get_ports { jc[5] }]; #IO_L22N_T3_A04_D20_14 Sch=jc_n[3]
-#set_property -dict { PACKAGE_PIN T13   IOSTANDARD LVCMOS33 } [get_ports { jc[6] }]; #IO_L23P_T3_A03_D19_14 Sch=jc_p[4]
+#set_property -dict { PACKAGE_PIN G13   IOSTANDARD LVCMOS33 } [get_ports { DVI_R[3] }]; #IO_0_15 Sch=ja[1]
+#set_property -dict { PACKAGE_PIN B11   IOSTANDARD LVCMOS33 } [get_ports { DVI_R[1] }]; #IO_L4P_T0_15 Sch=ja[2]
+#set_property -dict { PACKAGE_PIN A11   IOSTANDARD LVCMOS33 } [get_ports { DVI_G[3] }]; #IO_L4N_T0_15 Sch=ja[3]
+#set_property -dict { PACKAGE_PIN D12   IOSTANDARD LVCMOS33 } [get_ports { DVI_G[1] }]; #IO_L6P_T0_15 Sch=ja[4]
+#set_property -dict { PACKAGE_PIN D13   IOSTANDARD LVCMOS33 } [get_ports { DVI_R[2] }]; #IO_L6N_T0_VREF_15 Sch=ja[7]
+#set_property -dict { PACKAGE_PIN B18   IOSTANDARD LVCMOS33 } [get_ports { DVI_R[0] }]; #IO_L10P_T1_AD11P_15 Sch=ja[8]
+#set_property -dict { PACKAGE_PIN A18   IOSTANDARD LVCMOS33 } [get_ports { DVI_G[2] }]; #IO_L10N_T1_AD11N_15 Sch=ja[9]
+#set_property -dict { PACKAGE_PIN K16   IOSTANDARD LVCMOS33 } [get_ports { DVI_G[0] }]; #IO_25_15 Sch=ja[10]
+
+#set_property -dict { PACKAGE_PIN E15   IOSTANDARD LVCMOS33 } [get_ports { DVI_B[3] }]; #IO_L11P_T1_SRCC_15 Sch=jb_p[1]
+#set_property -dict { PACKAGE_PIN E16   IOSTANDARD LVCMOS33 } [get_ports { DVI_CLK }]; #IO_L11N_T1_SRCC_15 Sch=jb_n[1]
+#set_property -dict { PACKAGE_PIN D15   IOSTANDARD LVCMOS33 } [get_ports { DVI_B[0] }]; #IO_L12P_T1_MRCC_15 Sch=jb_p[2]
+#set_property -dict { PACKAGE_PIN C15   IOSTANDARD LVCMOS33 } [get_ports { DVI_HS }]; #IO_L12N_T1_MRCC_15 Sch=jb_n[2]
+#set_property -dict { PACKAGE_PIN J17   IOSTANDARD LVCMOS33 } [get_ports { DVI_B[2] }]; #IO_L23P_T3_FOE_B_15 Sch=jb_p[3]
+#set_property -dict { PACKAGE_PIN J18   IOSTANDARD LVCMOS33 } [get_ports { DVI_B[1] }]; #IO_L23N_T3_FWE_B_15 Sch=jb_n[3]
+#set_property -dict { PACKAGE_PIN K15   IOSTANDARD LVCMOS33 } [get_ports { DVI_DE }]; #IO_L24P_T3_RS1_15 Sch=jb_p[4]
+#set_property -dict { PACKAGE_PIN J15   IOSTANDARD LVCMOS33 } [get_ports { DVI_VS }]; #IO_L24N_T3_RS0_15 Sch=jb_n[4]
+
+##Pmod Header JC - SDCard interface
+
+#set_property -dict { PACKAGE_PIN U12   IOSTANDARD LVCMOS33 } [get_ports { spi_cs_n }]; #IO_L20P_T3_A08_D24_14 Sch=jc_p[1]
+#set_property -dict { PACKAGE_PIN V12   IOSTANDARD LVCMOS33 } [get_ports { spi_mosi }]; #IO_L20N_T3_A07_D23_14 Sch=jc_n[1]
+#set_property -dict { PACKAGE_PIN V10   IOSTANDARD LVCMOS33 } [get_ports { spi_miso }]; #IO_L21P_T3_DQS_14 Sch=jc_p[2]
+#set_property -dict { PACKAGE_PIN V11   IOSTANDARD LVCMOS33 } [get_ports { spi_sck }]; #IO_L21N_T3_DQS_A06_D22_14 Sch=jc_n[2]
+#set_property -dict { PACKAGE_PIN U14   IOSTANDARD LVCMOS33 } [get_ports { spi_dat[0] }]; #IO_L22P_T3_A05_D21_14 Sch=jc_p[3]
+#set_property -dict { PACKAGE_PIN V14   IOSTANDARD LVCMOS33 } [get_ports { spi_dat[1] }]; #IO_L22N_T3_A04_D20_14 Sch=jc_n[3]
+#set_property -dict { PACKAGE_PIN T13   IOSTANDARD LVCMOS33 } [get_ports { spi_cd }]; #IO_L23P_T3_A03_D19_14 Sch=jc_p[4]
 #set_property -dict { PACKAGE_PIN U13   IOSTANDARD LVCMOS33 } [get_ports { jc[7] }]; #IO_L23N_T3_A02_D18_14 Sch=jc_n[4]
 
 ##Pmod Header JD
@@ -225,6 +243,57 @@ set_property -dict { PACKAGE_PIN A9    IOSTANDARD LVCMOS33 } [get_ports { uart_t
 #set_property -dict { PACKAGE_PIN F13   IOSTANDARD LVCMOS33     } [get_ports { isns5v0_p }]; #IO_L5P_T0_AD9P_15 Sch=ad_p[9]
 #set_property -dict { PACKAGE_PIN A16   IOSTANDARD LVCMOS33     } [get_ports { isns0v95_n }]; #IO_L8N_T1_AD10N_15 Sch=ad_n[10]
 #set_property -dict { PACKAGE_PIN A15   IOSTANDARD LVCMOS33     } [get_ports { isns0v95_p }]; #IO_L8P_T1_AD10P_15 Sch=ad_p[10]
+
+# DDR3
+
+#set_property -dict { PACKAGE_PIN K5  IOSTANDARD SSTL135      } [get_ports { ddr3_dq[0]    }];
+#set_property -dict { PACKAGE_PIN L3  IOSTANDARD SSTL135      } [get_ports { ddr3_dq[1]    }];
+#set_property -dict { PACKAGE_PIN K3  IOSTANDARD SSTL135      } [get_ports { ddr3_dq[2]    }];
+#set_property -dict { PACKAGE_PIN L6  IOSTANDARD SSTL135      } [get_ports { ddr3_dq[3]    }];
+#set_property -dict { PACKAGE_PIN M3  IOSTANDARD SSTL135      } [get_ports { ddr3_dq[4]    }];
+#set_property -dict { PACKAGE_PIN M1  IOSTANDARD SSTL135      } [get_ports { ddr3_dq[5]    }];
+#set_property -dict { PACKAGE_PIN L4  IOSTANDARD SSTL135      } [get_ports { ddr3_dq[6]    }];
+#set_property -dict { PACKAGE_PIN M2  IOSTANDARD SSTL135      } [get_ports { ddr3_dq[7]    }];
+#set_property -dict { PACKAGE_PIN V4  IOSTANDARD SSTL135      } [get_ports { ddr3_dq[8]    }];
+#set_property -dict { PACKAGE_PIN T5  IOSTANDARD SSTL135      } [get_ports { ddr3_dq[9]    }];
+#set_property -dict { PACKAGE_PIN U4  IOSTANDARD SSTL135      } [get_ports { ddr3_dq[10]   }];
+#set_property -dict { PACKAGE_PIN V5  IOSTANDARD SSTL135      } [get_ports { ddr3_dq[11]   }];
+#set_property -dict { PACKAGE_PIN V1  IOSTANDARD SSTL135      } [get_ports { ddr3_dq[12]   }];
+#set_property -dict { PACKAGE_PIN T3  IOSTANDARD SSTL135      } [get_ports { ddr3_dq[13]   }];
+#set_property -dict { PACKAGE_PIN U3  IOSTANDARD SSTL135      } [get_ports { ddr3_dq[14]   }];
+#set_property -dict { PACKAGE_PIN R3  IOSTANDARD SSTL135      } [get_ports { ddr3_dq[15]   }];
+#set_property -dict { PACKAGE_PIN L1  IOSTANDARD SSTL135      } [get_ports { ddr3_dm[0]    }];
+#set_property -dict { PACKAGE_PIN U1  IOSTANDARD SSTL135      } [get_ports { ddr3_dm[1]    }];
+#set_property -dict { PACKAGE_PIN N2  IOSTANDARD DIFF_SSTL135 } [get_ports { ddr3_dqs_p[0] }];
+#set_property -dict { PACKAGE_PIN N1  IOSTANDARD DIFF_SSTL135 } [get_ports { ddr3_dqs_n[0] }];
+#set_property -dict { PACKAGE_PIN U2  IOSTANDARD DIFF_SSTL135 } [get_ports { ddr3_dqs_p[1] }];
+#set_property -dict { PACKAGE_PIN V2  IOSTANDARD DIFF_SSTL135 } [get_ports { ddr3_dqs_n[1] }];
+#set_property -dict { PACKAGE_PIN T8  IOSTANDARD SSTL135      } [get_ports { ddr3_addr[13] }];
+#set_property -dict { PACKAGE_PIN T6  IOSTANDARD SSTL135      } [get_ports { ddr3_addr[12] }];
+#set_property -dict { PACKAGE_PIN U6  IOSTANDARD SSTL135      } [get_ports { ddr3_addr[11] }];
+#set_property -dict { PACKAGE_PIN R6  IOSTANDARD SSTL135      } [get_ports { ddr3_addr[10] }];
+#set_property -dict { PACKAGE_PIN V7  IOSTANDARD SSTL135      } [get_ports { ddr3_addr[9]  }];
+#set_property -dict { PACKAGE_PIN R8  IOSTANDARD SSTL135      } [get_ports { ddr3_addr[8]  }];
+#set_property -dict { PACKAGE_PIN U7  IOSTANDARD SSTL135      } [get_ports { ddr3_addr[7]  }];
+#set_property -dict { PACKAGE_PIN V6  IOSTANDARD SSTL135      } [get_ports { ddr3_addr[6]  }];
+#set_property -dict { PACKAGE_PIN R7  IOSTANDARD SSTL135      } [get_ports { ddr3_addr[5]  }];
+#set_property -dict { PACKAGE_PIN N6  IOSTANDARD SSTL135      } [get_ports { ddr3_addr[4]  }];
+#set_property -dict { PACKAGE_PIN T1  IOSTANDARD SSTL135      } [get_ports { ddr3_addr[3]  }];
+#set_property -dict { PACKAGE_PIN N4  IOSTANDARD SSTL135      } [get_ports { ddr3_addr[2]  }];
+#set_property -dict { PACKAGE_PIN M6  IOSTANDARD SSTL135      } [get_ports { ddr3_addr[1]  }];
+#set_property -dict { PACKAGE_PIN R2  IOSTANDARD SSTL135      } [get_ports { ddr3_addr[0]  }];
+#set_property -dict { PACKAGE_PIN P2  IOSTANDARD SSTL135      } [get_ports { ddr3_ba[2]    }];
+#set_property -dict { PACKAGE_PIN P4  IOSTANDARD SSTL135      } [get_ports { ddr3_ba[1]    }];
+#set_property -dict { PACKAGE_PIN R1  IOSTANDARD SSTL135      } [get_ports { ddr3_ba[0]    }];
+#set_property -dict { PACKAGE_PIN U9  IOSTANDARD DIFF_SSTL135 } [get_ports { ddr3_ck_p[0]  }];
+#set_property -dict { PACKAGE_PIN V9  IOSTANDARD DIFF_SSTL135 } [get_ports { ddr3_ck_n[0]  }];
+#set_property -dict { PACKAGE_PIN P3  IOSTANDARD SSTL135      } [get_ports { ddr3_ras_n    }];
+#set_property -dict { PACKAGE_PIN M4  IOSTANDARD SSTL135      } [get_ports { ddr3_cas_n    }];
+#set_property -dict { PACKAGE_PIN P5  IOSTANDARD SSTL135      } [get_ports { ddr3_we_n     }];
+#set_property -dict { PACKAGE_PIN K6  IOSTANDARD SSTL135      } [get_ports { ddr3_reset_n  }];
+#set_property -dict { PACKAGE_PIN N5  IOSTANDARD SSTL135      } [get_ports { ddr3_cke[0]   }];
+#set_property -dict { PACKAGE_PIN R5  IOSTANDARD SSTL135      } [get_ports { ddr3_odt[0]   }];
+#set_property -dict { PACKAGE_PIN U8  IOSTANDARD SSTL135      } [get_ports { ddr3_cs_n[0]  }];
 
 ## Configuration options, can be used for all designs
 set_property BITSTREAM.CONFIG.CONFIGRATE 50 [current_design]

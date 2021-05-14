@@ -3,13 +3,51 @@
 module nekoichitop(
 	input wire CLK_I,
 	input wire RST_I,
+
+	// VGA PMOD on ports A+B
 	output wire [3:0] VGA_R,
 	output wire [3:0] VGA_G,
 	output wire [3:0] VGA_B,
 	output wire VGA_HS_O,
 	output wire VGA_VS_O,
+	
+	// DVI PMOD on ports A+B
+	/*output wire [3:0] DVI_R,
+	output wire [3:0] DVI_G,
+	output wire [3:0] DVI_B,
+	output wire DVI_HS,
+	output wire DVI_VS,
+	output wire DVI_DE,
+	output wire DVI_CLK,*/
+
+	// UART
 	output wire uart_rxd_out,
-	input wire uart_txd_in );
+	input wire uart_txd_in
+
+	// SD Card PMOD on port C
+/*	,output wire spi_cs_n,
+	output wire spi_mosi,
+	input wire spi_miso,
+	output wire spi_sck,
+	//inout wire [1:0] dat,
+	input wire spi_cd
+
+	// DDR3
+	,inout wire [15:0] ddr3_dq,
+	output wire[1:0] ddr3_dm,
+	inout wire [1:0] ddr3_dqs_p,
+	inout wire [1:0] ddr3_dqs_n,
+	output wire [13:0] ddr3_addr,
+	output wire [2:0] ddr3_ba,
+	output wire [0:0] ddr3_ck_p,
+	output wire [0:0] ddr3_ck_n,
+	output wire ddr3_ras_n,
+	output wire ddr3_cas_n,
+	output wire ddr3_we_n,
+	output wire ddr3_reset_n,
+	output wire [0:0] ddr3_cke,
+	output wire [0:0] ddr3_odt,
+	output wire [0:0] ddr3_cs_n*/ );
 
 // =====================================================================================================
 // Misc Wires
@@ -29,15 +67,10 @@ wire fifore;
 wire [31:0] fifodataout;
 
 // UART clock: 10Mhz, VGA clock: 25Mhz
-// GPU and CPU clocks vary, default at CPU@60Mhz & GPU@80Mhz
+// GPU and CPU clocks vary, default at CPU@60Mhz & GPU@75Mhz
 // Wall clock is for time CSR and runs at 10Mhz
-wire sysclock, wallclock, gpuclock, uartclk, vgaclock;
+wire sysclock60, wallclock, gpuclock, uartclk, vgaclock, spiclock100;
 wire clockALocked, clockBLocked, clockCLocked;
-
-wire [31:0] memaddress, dmaaddress;
-wire [31:0] writeword, dmawriteword;
-wire [31:0] mem_dataout, dma_data;
-wire [3:0] mem_writeena, dma_writeena;
 
 wire [11:0] video_x;
 wire [11:0] video_y;
@@ -50,14 +83,13 @@ wire vsyncfifofull;
 wire vsyncfifovalid;
 
 // =====================================================================================================
-// CPU Clock
+// Clocks
 // =====================================================================================================
 
 SystemClockGen SysClockUnit(
 	.clk_in1(CLK_I),
 	.resetn(~RST_I),
-	.sysclock(sysclock),
-	.vgaclock(vgaclock),
+	.sysclock60(sysclock60),
 	.wallclock(wallclock),
 	.locked(clockALocked) );
 
@@ -65,18 +97,65 @@ GPUClockGen GpuClockUnit(
 	.clk_in1(CLK_I),
 	.resetn(~RST_I),
 	.gpuclock(gpuclock),
+	.vgaclock(vgaclock),
 	.locked(clockBLocked) );
 	
 PeripheralClockGen PeripheralClockUnit(
 	.clk_in1(CLK_I),
 	.resetn(~RST_I),
 	.uartclk(uartclk),
+	.spiclock100(spiclock100),
 	.locked(clockCLocked) );
 
 wire allClocksLocked = clockALocked & clockBLocked & clockCLocked;
 
 wire reset_p = RST_I | (~allClocksLocked);
 wire reset_n = (~RST_I) & allClocksLocked;
+
+
+// =====================================================================================================
+// Device router
+// =====================================================================================================
+
+/*logic [31:0] memaddress=0;
+logic [31:0] writeword=0;
+logic [31:0] mem_dataout;
+logic[3:0] mem_writeena;
+
+wire [31:0] busaddress;
+wire [31:0] buswriteword;
+wire [31:0] busdataout;
+wire [3:0] buswriteena;
+
+wire deviceUARTTxWrite			= busaddress[31:28] == 4'b0100 ? 1'b1 : 1'b0;	// 0x40000000
+wire deviceUARTRxRead			= busaddress[31:28] == 4'b0101 ? 1'b1 : 1'b0;	// 0x50000000
+wire deviceUARTByteCountRead	= busaddress[31:28] == 4'b0110 ? 1'b1 : 1'b0;	// 0x60000000
+wire deviceGPUFIFOWrite			= busaddress[31:28] == 4'b1000 ? 1'b1 : 1'b0;	// 0x80000000
+wire [3:0] deviceRTPort			= {deviceUARTTxWrite, deviceUARTRxRead, deviceUARTByteCountRead, deviceGPUFIFOWrite};
+
+assign busdataout = deviceUARTRxRead ? {24'd0, infifoout} : ( deviceUARTByteCountRead ? infifodatacount : mem_dataout);
+
+// =====================================================================================================
+// Read arbitrator
+// =====================================================================================================
+
+always_comb begin
+	unique case (deviceRTPort)
+		4'b0000: begin // SYSRAM
+			memaddress <= busaddress;
+			mem_writeena <= buswriteena;
+			mem_dataout <= busdataout;
+		end
+		4'b0001: begin // GPUFIFO
+		end
+		4'b0010: begin // UARTBYTECOUNT
+		end
+		4'b0100: begin // UARTRX
+		end
+		4'b1000: begin // UARTTX
+		end 
+	endcase
+end*/
 
 // =====================================================================================================
 // UART (Tx/Rx) @115200
@@ -118,7 +197,7 @@ UARTFifoGen UART_out_fifo(
     .empty(outfifoempty),
     .dout(outfifoout), // to transmitter
     .rd_en(outfifore), // transmitter can send
-    .wr_clk(sysclock), // CPU write clock
+    .wr_clk(sysclock60), // CPU write clock
     .rd_clk(uartclk), // transmitter runs slower
     .valid(outfifovalid),
     .rd_data_count(outfifodatacount) );
@@ -172,7 +251,7 @@ UARTFifoGen UART_in_fifo(
     .dout(infifoout),
     .rd_en(infifore),
     .wr_clk(uartclk),
-    .rd_clk(sysclock),
+    .rd_clk(sysclock60),
     .valid(infifovalid),
     .rd_data_count(infifodatacount) );
 
@@ -190,23 +269,33 @@ end
 // CPU + GPU + System RAM (true dual port) / GPU FIFO (1024 DWORDs)
 // =====================================================================================================
 
+wire [31:0] dma_address;
+wire [31:0] dma_writeword;
+wire [31:0] dma_dataout;
+wire [3:0] dma_writeena;
+
+wire [31:0] mem_address;
+wire [31:0] mem_writeword;
+wire [31:0] mem_dataout;
+wire [3:0] mem_writeena;
+
 FastSystemMemory SYSRAM(
 	// ----------------------------
 	// CPU bus for CPU read-write
 	// ----------------------------
-	.addra(memaddress[16:2]), // 128Kb RAM, 32768 DWORDs, 15 bit address space
-	.clka(sysclock),
-	.dina(writeword),
+	.addra(mem_address[16:2]), // 128Kb RAM, 32768 DWORDs, 15 bit address space
+	.clka(sysclock60),
+	.dina(mem_writeword),
 	.douta(mem_dataout),
-	.wea(memaddress[31]==1'b0 ? mem_writeena : 4'b0000),
+	.wea(mem_address[31]==1'b0 ? mem_writeena : 4'b0000),
 	.ena(reset_n),
 	// ----------------------------
 	// DMA bus for GPU read/write
 	// ----------------------------
-	.addrb(dmaaddress[16:2]),
+	.addrb(dma_address[16:2]),
 	.clkb(gpuclock),
-	.dinb(dmawriteword),
-	.doutb(dma_data),
+	.dinb(dma_writeword),
+	.doutb(dma_dataout),
 	.web(dma_writeena),
 	.enb(reset_n) );
 
@@ -220,7 +309,7 @@ GPUCommandFIFO GPUCommands(
 	.dout(fifodataout),
 	.rd_en(fifore),
 	// ctl
-	.wr_clk(sysclock),
+	.wr_clk(sysclock60),
 	.rd_clk(gpuclock),
 	.rst(reset_p),
 	.valid(fifodatavalid) );
@@ -268,43 +357,44 @@ GPU rv32gpu(
 	.vramwe(gpuwriteena),
 	.vramwriteword(gpuwriteword),
 	.lanemask(gpulanewritemask),
-	.dmaaddress(dmaaddress),
-	.dmawriteword(dmawriteword),
-	.dma_data(dma_data),
+	.dmaaddress(dma_address),
+	.dmawriteword(dma_writeword),
+	.dma_data(dma_dataout),
 	.dmawe(dma_writeena) );
 
 rv32cpu rv32cpu(
-	.clock(sysclock),
+	.clock(sysclock60),
 	.wallclock(wallclock),
 	.reset(reset_p),
-	// GPU
+	// GPU: // 0x80000000 (read/write,32bits)
 	.gpufifofull(fifowrfull),
 	.gpufifocommand(gpufifocommand),
 	.gpufifowe(gpufifowe),
-	// UART Tx
+	// UART Tx: // OutData: 0x40000000 (write,8bits)
 	.uartfifowe(outuartfifowe),
 	.uartoutdata(outfifoin),
-	// UART Rx
+	// UART Rx: // DataCount: 0x60000000 (read,32bits) InData: 0x50000000 (read,8bits)
 	.uartfifovalid(infifovalid),
 	.uartfifore(infifore),
 	.uartindata(infifoout),
 	.uartinputbytecount(infifodatacount),
-	// Mem
-	.memaddress(memaddress),
-	.writeword(writeword),
-	.mem_data(mem_dataout),
-	.mem_writeena(mem_writeena) );
+	// SYSMEM: // 0x00000000 - 0x0001FFFF (read/write,32bit,16bits,8bitss)
+	.memaddress(mem_address),//busaddress
+	.writeword(mem_writeword),//buswriteword
+	.mem_data(mem_dataout),//busdataout
+	.mem_writeena(mem_writeena) //buswriteena
+  );
 
 // =====================================================================================================
 // Video Unit
 // =====================================================================================================
 
-wire [3:0] VGA_R_ONE;
-wire [3:0] VGA_G_ONE;
-wire [3:0] VGA_B_ONE;
-wire [3:0] VGA_R_TWO;
-wire [3:0] VGA_G_TWO;
-wire [3:0] VGA_B_TWO;
+wire [3:0] VIDEO_R_ONE;
+wire [3:0] VIDEO_G_ONE;
+wire [3:0] VIDEO_B_ONE;
+wire [3:0] VIDEO_R_TWO;
+wire [3:0] VIDEO_G_TWO;
+wire [3:0] VIDEO_B_TWO;
 
 VideoControllerGen VideoUnitA(
 	.gpuclock(gpuclock),
@@ -319,9 +409,9 @@ VideoControllerGen VideoUnitA(
 	.writeword(gpuwriteword),
 	.lanemask(gpulanewritemask),
 	// Video output
-	.red(VGA_R_ONE),
-	.green(VGA_G_ONE),
-	.blue(VGA_B_ONE) );
+	.red(VIDEO_R_ONE),
+	.green(VIDEO_G_ONE),
+	.blue(VIDEO_B_ONE) );
 
 VideoControllerGen VideoUnitB(
 	.gpuclock(gpuclock),
@@ -336,22 +426,74 @@ VideoControllerGen VideoUnitB(
 	.writeword(gpuwriteword),
 	.lanemask(gpulanewritemask),
 	// Video output
-	.red(VGA_R_TWO),
-	.green(VGA_G_TWO),
-	.blue(VGA_B_TWO) );
+	.red(VIDEO_R_TWO),
+	.green(VIDEO_G_TWO),
+	.blue(VIDEO_B_TWO) );
 
-assign VGA_R = videopage == 1'b0 ? VGA_R_ONE : VGA_R_TWO;
-assign VGA_G = videopage == 1'b0 ? VGA_G_ONE : VGA_G_TWO;
-assign VGA_B = videopage == 1'b0 ? VGA_B_ONE : VGA_B_TWO;
+// DVI
+/*assign DVI_R = videopage == 1'b0 ? VIDEO_R_ONE : VIDEO_R_TWO;
+assign DVI_G = videopage == 1'b0 ? VIDEO_G_ONE : VIDEO_G_TWO;
+assign DVI_B = videopage == 1'b0 ? VIDEO_B_ONE : VIDEO_B_TWO;
+assign DVI_CLK = vgaclock;
 
-vgatimer VGAScanout(
-		.rst_i(),
+vgatimer VideoScanout(
+		.rst_i(reset_p),
+		.clk_i(vgaclock),
+        .hsync_o(DVI_HS),
+        .vsync_o(DVI_VS),
+        .counter_x(video_x),
+        .counter_y(video_y),
+        .vsynctrigger_o(vsync_we),
+        .vsynccounter(vsynccounter),
+        .in_display_window(DVI_DE) );*/
+
+// VGA
+assign VGA_R = videopage == 1'b0 ? VIDEO_R_ONE : VIDEO_R_TWO;
+assign VGA_G = videopage == 1'b0 ? VIDEO_G_ONE : VIDEO_G_TWO;
+assign VGA_B = videopage == 1'b0 ? VIDEO_B_ONE : VIDEO_B_TWO;
+
+vgatimer VideoScanout(
+		.rst_i(reset_p),
 		.clk_i(vgaclock),
         .hsync_o(VGA_HS_O),
         .vsync_o(VGA_VS_O),
         .counter_x(video_x),
         .counter_y(video_y),
         .vsynctrigger_o(vsync_we),
-        .vsynccounter(vsynccounter) );
+        .vsynccounter(vsynccounter),
+        .in_display_window() );
+
+// =====================================================================================================
+// SD Card controller
+// =====================================================================================================
+
+/*wire sddatavalid;
+wire sdtxready;
+wire sdtxdatavalid;
+wire [7:0] sdtxdata;
+wire [7:0] sdrcvdata;
+
+SPI_Master_With_Single_CS SDCardController (
+	// Control/Data Signals
+	.i_Rst_L(reset_n),					// FPGA Reset
+	.i_Clk(spiclock100),				// 100Mhz clock
+   
+	// TX (MOSI) Signals
+	.i_TX_Count(2'b10),					// Bytes per CS low
+	.i_TX_Byte(sdtxdata),				// Byte to transmit on MOSI
+	.i_TX_DV(sdtxdatavalid),			// Data Valid Pulse with i_TX_Byte
+	.o_TX_Ready(sdtxready),				// Transmit Ready for next byte
+
+	// RX (MISO) Signals
+	.o_RX_DV(sddatavalid),				// Data Valid pulse (1 clock cycle)
+	.o_RX_Byte(sdrcvdata),				// Byte received on MISO
+	.o_RX_Count(),						// Receive count - unused
+
+	// SPI Interface
+	.o_SPI_Clk(spi_sck),
+	.i_SPI_MISO(spi_miso),
+	.o_SPI_MOSI(spi_mosi),
+	.o_SPI_CS_n(spi_cs_n) );
+*/
 
 endmodule

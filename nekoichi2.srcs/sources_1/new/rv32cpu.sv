@@ -689,8 +689,8 @@ always_ff @(posedge clock) begin
 						3'b101: begin
 							// short alignment based on {address[1],1'b0} with zero extension
 							unique case (memaddress[1])
-								1'b1: begin registerdata <= {16'd0,mem_data[31:16]}; end
-								1'b0: begin registerdata <= {16'd0,mem_data[15:0]}; end
+								1'b1: begin registerdata <= {16'd0, mem_data[31:16]}; end
+								1'b0: begin registerdata <= {16'd0, mem_data[15:0]}; end
 							endcase
 						end
 					endcase
@@ -740,16 +740,17 @@ always_ff @(posedge clock) begin
 								2'b00: begin mem_writeena <= 4'b0001; writeword <= {24'd0, registerdata[7:0]}; end
 							endcase
 						end
-						// Short
+						// Word
 						3'b001: begin
 							unique case (memaddress[1])
 								1'b1: begin mem_writeena <= 4'b1100; writeword <= {registerdata[15:0], 16'd0}; end
 								1'b0: begin mem_writeena <= 4'b0011; writeword <= {16'd0, registerdata[15:0]}; end
 							endcase
 						end
-						// Word
+						// Dword
 						default: begin
-							mem_writeena <= 4'b1111; writeword <= registerdata;
+							mem_writeena <= 4'b1111;
+							writeword <= registerdata;
 						end
 					endcase
 					cpustate[`CPURETIREINSTRUCTION] <= 1'b1;
