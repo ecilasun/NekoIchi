@@ -460,8 +460,7 @@ vgatimer VideoScanout(
         .counter_x(video_x),
         .counter_y(video_y),
         .vsynctrigger_o(vsync_we),
-        .vsynccounter(vsynccounter),
-        .in_display_window() );
+        .vsynccounter(vsynccounter) );
 
 // =====================================================================================================
 // SD Card controller
