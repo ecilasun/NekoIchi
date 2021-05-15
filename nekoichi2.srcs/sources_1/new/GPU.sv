@@ -250,7 +250,7 @@ end
 // ==============================================================
 
 // See: https://fgiesen.wordpress.com/2013/02/10/optimizing-the-basic-rasterizer/
-wire signed [15:0] A01 = (y0 - y1)*4;
+/*wire signed [15:0] A01 = (y0 - y1)*4;
 wire signed [15:0] B01 = x1 - x0;
 wire signed [15:0] A12 = (y1 - y2)*4;
 wire signed [15:0] B12 = x2 - x1;
@@ -280,7 +280,7 @@ always_comb begin
 	end
 end
 logic signed [31:0] w0_row, w1_row, w2_row;
-logic signed [31:0] w0, w1, w2;
+logic signed [31:0] w0, w1, w2;*/
 
 // ==============================================================
 // Main state machine
@@ -467,12 +467,12 @@ always_ff @(posedge clock) begin
 				tileY0 <= minYval; // tile height=1 (but using 4 aligned at start)
 				tileXCount <= (maxXval-minXval)>>2; // W/4
 				tileYCount <= (maxYval-minYval); // H/1
-				w0_row <= w0_init;
+				/*w0_row <= w0_init;
 				w1_row <= w1_init;
 				w2_row <= w2_init;
 				w0 <= w0_init;
 				w1 <= w1_init;
-				w2 <= w2_init;
+				w2 <= w2_init;*/
 				if (triFacing == 1'b1) begin
 					// Start by figuring out if we have something to rasterize
 					// on this scanline.
@@ -504,19 +504,19 @@ always_ff @(posedge clock) begin
 						// Actually this is too large but since we stop at empty tiles anyways, doesn't seem to hurt
 						tileXCount <= (maxXval-minXval)>>2; // W/4
 						tileYCount <= tileYCount - 16'sd1;
-						w0_row <= w0_row + B12;
+						/*w0_row <= w0_row + B12;
 						w1_row <= w1_row + B20;
 						w2_row <= w2_row + B01;
 						w0 <= w0_row + B12;
 						w1 <= w1_row + B20;
-						w2 <= w2_row + B01;
+						w2 <= w2_row + B01;*/
 					end else begin
 						// Step to next tile on scanline
 						tileXCount <= tileXCount - 16'sd1;
 						tileX0 <= tileX0 + 16'sd4;
-						w0 <= w0 + A12;
+						/*w0 <= w0 + A12;
 						w1 <= w1 + A20;
-						w2 <= w2 + A01;
+						w2 <= w2 + A01;*/
 					end
 					gpustate[`GPUSTATERASTER] <= 1'b1;
 				end

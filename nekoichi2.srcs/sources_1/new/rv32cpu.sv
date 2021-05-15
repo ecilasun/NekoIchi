@@ -6,19 +6,12 @@ module rv32cpu(
 	input wire reset,
 	input wire clock,
 	input wire wallclock,
-	input wire gpufifofull,
-	output logic[31:0] gpufifocommand,
-	output logic gpufifowe,
-	output logic uartfifowe,
-	output logic [7:0] uartoutdata,
-	input wire uartfifovalid,
-	output logic uartfifore,
-	input wire [7:0] uartindata,
-	input wire [9:0] uartinputbytecount,
+	input wire busstall,
 	output logic[31:0] memaddress = 32'h80000000,
 	output logic [31:0] writeword = 32'h00000000,
 	input wire [31:0] mem_data,
-	output logic [3:0] mem_writeena = 4'b0000 );
+	output logic [3:0] mem_writeena = 4'b0000,
+	output logic mem_readena = 1'b0);
 
 // =====================================================================================================
 // CPU Internal State & Instruction Decomposition
@@ -29,8 +22,8 @@ logic [31:0] nextPC;
 logic [`CPUSTAGECOUNT-1:0] cpustate;
 wire [`CPUSTAGECOUNT-1:0] nextstage;
 
-// Floating point control register
-logic [31:0] fcsr;
+// Floating point control register - unused for now
+//logic [31:0] fcsr;
 
 logic [31:0] fullinstruction;
 wire [4:0] aluop;
@@ -417,14 +410,10 @@ always_ff @(posedge clock) begin
 		cpustate <= `CPURETIREINSTRUCTION_MASK;
 		mem_writeena <= 4'b0000;
 		registerWriteEnable <= 1'b0;
-		registerdata <= 32'd0;
+		//registerdata <= 32'd0;
 		fregisterWriteEnable <= 1'b0;
-		fregisterdata <= 32'd0;
-		fcsr <= 32'd0; // [7:5] == 000 -> RNE (round to nearest even), [4:0] -> NotValid|DivbyZero|OverFlow|UnderFlow|iNeXact (exceptions), ignored for now
-		gpufifocommand <= 32'd0;
-		gpufifowe <= 1'b0;
-		uartfifowe <= 1'b0;
-		uartfifore <= 1'b0;
+		//fregisterdata <= 32'd0;
+		//fcsr <= 32'd0; // [7:5] == 000 -> RNE (round to nearest even), [4:0] -> NotValid|DivbyZero|OverFlow|UnderFlow|iNeXact (exceptions), ignored for now
 
 	end else begin
 
@@ -434,11 +423,15 @@ always_ff @(posedge clock) begin
 		unique case (1'b1)
 
 			cpustate[`CPUFETCH]: begin
+				mem_readena <= 1'b0;
 				// Instruction read takes place here, to be latched at the start of next state
 				cpustate[`CPUDECODE] <= 1'b1;
 			end
 
 			cpustate[`CPUDECODE]: begin
+				// NOTE: For external/different memory, reads might stall
+				// if (busstall) begin cpustate[`CPUDECODE] <= 1'b1; else begin decode(); end
+
 				// Instruction is now latched on to fullinstruction
 				// Any decode checks since decoder should be done by now
 				// Should have register values available from rs1 and rs2 now
@@ -496,6 +489,7 @@ always_ff @(posedge clock) begin
 					end
 					`OPCODE_FLOAT_LDW, `OPCODE_LOAD: begin
 						memaddress <= rval1 + imm;
+						mem_readena <= 1'b1;
 					end
 					`OPCODE_FLOAT_STW : begin
 						fregisterdata <= frval2;
@@ -641,6 +635,7 @@ always_ff @(posedge clock) begin
 			end
 
 			cpustate[`CPULOADWAIT]: begin
+				mem_readena <= 1'b0;
 				if (opcode == `OPCODE_FLOAT_LDW) begin
 					cpustate[`CPULOADFCOMPLETE] <= 1'b1;
 				end else begin
@@ -649,12 +644,8 @@ always_ff @(posedge clock) begin
 			end
 
 			cpustate[`CPULOADCOMPLETE]: begin
-				if (memaddress[31:28] == 4'b0101) begin // 0x50000000 UART Rx read
-					uartfifore <= 1'b1;
-					cpustate[`CPULOADUARTCOMPLETE] <= 1'b1;
-				end else if (memaddress[31:28] == 4'b0110) begin // 0x60000000 UART pending received byte count
-					registerdata <= {22'd0, uartinputbytecount};
-					cpustate[`CPURETIREINSTRUCTION] <= 1'b1;
+				if (busstall) begin
+					cpustate[`CPULOADCOMPLETE] <= 1'b1;
 				end else begin
 					unique case (func3) // lb:000 lh:001 lw:010 lbu:100 lhu:101
 						3'b000: begin
@@ -697,60 +688,45 @@ always_ff @(posedge clock) begin
 					cpustate[`CPURETIREINSTRUCTION] <= 1'b1;
 				end
 			end
-			
-			cpustate[`CPULOADUARTCOMPLETE]: begin
-				if (uartfifovalid) begin
-					uartfifore <= 1'b0;
-					registerdata <= {24'd0, uartindata};
-					cpustate[`CPURETIREINSTRUCTION] <= 1'b1;
+
+			cpustate[`CPULOADFCOMPLETE]: begin
+				if (busstall) begin
+					cpustate[`CPULOADFCOMPLETE] <= 1'b1;
 				end else begin
-					cpustate[`CPULOADUARTCOMPLETE] <= 1'b1;
+					// Already aligned on read, regular DWORD read
+					fregisterdata <= mem_data[31:0];
+					cpustate[`CPURETIREINSTRUCTION] <= 1'b1;
 				end
 			end
 
-			cpustate[`CPULOADFCOMPLETE]: begin
-				// Already aligned on read, regular DWORD read
-				fregisterdata <= mem_data[31:0];
-				cpustate[`CPURETIREINSTRUCTION] <= 1'b1;
-			end
-
 			cpustate[`CPUSTORE]: begin
-				if (memaddress[31:28] == 4'b1000) begin // 0x80000000 GPU command queue, VRAM write command (4'b0001)
-					if (gpufifofull) begin
-						// Stall writes until GPU processes more data
-						cpustate[`CPUSTORE] <= 1'b1;
-					end else begin
-						// GPU commands are always 32 bits, no byte writes possible to this address range
-						gpufifocommand <= registerdata;
-						gpufifowe <= 1'b1;
-						cpustate[`CPURETIREINSTRUCTION] <= 1'b1;
-					end
-				end else if (memaddress[31:28] == 4'b0100) begin // 0x40000000 UART Tx write
-					uartoutdata <= registerdata[7:0];
-					uartfifowe <= 1'b1;
-					cpustate[`CPURETIREINSTRUCTION] <= 1'b1;
+				if (busstall) begin
+					// Do not write to the bus while it's busy
+					cpustate[`CPUSTORE] <= 1'b1;
 				end else begin
 					unique case (func3)
 						// Byte
 						3'b000: begin
+							writeword <= {registerdata[7:0], registerdata[7:0], registerdata[7:0], registerdata[7:0]};
 							unique case (memaddress[1:0])
-								2'b11: begin mem_writeena <= 4'b1000; writeword <= {registerdata[7:0], 24'd0}; end
-								2'b10: begin mem_writeena <= 4'b0100; writeword <= {8'd0, registerdata[7:0], 16'd0}; end
-								2'b01: begin mem_writeena <= 4'b0010; writeword <= {16'd0, registerdata[7:0], 8'd0}; end
-								2'b00: begin mem_writeena <= 4'b0001; writeword <= {24'd0, registerdata[7:0]}; end
+								2'b11: begin mem_writeena <= 4'b1000; end
+								2'b10: begin mem_writeena <= 4'b0100; end
+								2'b01: begin mem_writeena <= 4'b0010; end
+								2'b00: begin mem_writeena <= 4'b0001; end
 							endcase
 						end
 						// Word
 						3'b001: begin
+							writeword <= {registerdata[15:0], registerdata[15:0]};
 							unique case (memaddress[1])
-								1'b1: begin mem_writeena <= 4'b1100; writeword <= {registerdata[15:0], 16'd0}; end
-								1'b0: begin mem_writeena <= 4'b0011; writeword <= {16'd0, registerdata[15:0]}; end
+								1'b1: begin mem_writeena <= 4'b1100; end
+								1'b0: begin mem_writeena <= 4'b0011; end
 							endcase
 						end
 						// Dword
 						default: begin
-							mem_writeena <= 4'b1111;
 							writeword <= registerdata;
+							mem_writeena <= 4'b1111;
 						end
 					endcase
 					cpustate[`CPURETIREINSTRUCTION] <= 1'b1;
@@ -758,16 +734,18 @@ always_ff @(posedge clock) begin
 			end
 
 			cpustate[`CPUSTOREF]: begin
-				// Word
-				mem_writeena <= 4'b1111;
-				writeword <= fregisterdata;
-				cpustate[`CPURETIREINSTRUCTION] <= 1'b1;
+				if (busstall) begin
+					// Do not write to the bus while it's busy
+					cpustate[`CPUSTOREF] <= 1'b1;
+				end else begin
+					// Word
+					mem_writeena <= 4'b1111;
+					writeword <= fregisterdata;
+					cpustate[`CPURETIREINSTRUCTION] <= 1'b1;
+				end
 			end
 
 			cpustate[`CPURETIREINSTRUCTION]: begin
-				// Stop GPU/UART fifo writes
-				gpufifowe <= 1'b0;
-				uartfifowe <= 1'b0;
 				// Stop register writes
 				registerWriteEnable <= 1'b0;
 				fregisterWriteEnable <= 1'b0;
@@ -777,6 +755,7 @@ always_ff @(posedge clock) begin
 				PC <= {nextPC[31:1],1'b0}; // Truncate to 16bit aligned addresses to align to instructions
 				// Also reflect to the memaddress so we end up reading next instruction
 				memaddress <= {nextPC[31:1], 1'b0};
+				mem_readena <= 1'b1;
 				// Update retired instruction CRS
 				CSRReti <= CSRReti + 64'd1;
 				// Loop back to fetch (actually fetch wait) state

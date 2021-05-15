@@ -11,6 +11,9 @@ module nekoichitop(
 	output wire VGA_HS_O,
 	output wire VGA_VS_O,
 	
+	// LEDs
+	output wire [3:0] led,
+	
 	// DVI PMOD on ports A+B
 	/*output wire [3:0] DVI_R,
 	output wire [3:0] DVI_G,
@@ -58,14 +61,6 @@ wire [3:0] gpuwriteena;
 wire [31:0] gpuwriteword;
 wire [11:0] gpulanewritemask;
 
-wire fifowrfull;
-wire fifordempty;
-wire fifodatavalid;
-wire [31:0] gpufifocommand;  // < from CPU
-wire gpufifowe; // < from CPU
-wire fifore;
-wire [31:0] fifodataout;
-
 // UART clock: 10Mhz, VGA clock: 25Mhz
 // GPU and CPU clocks vary, default at CPU@60Mhz & GPU@75Mhz
 // Wall clock is for time CSR and runs at 10Mhz
@@ -112,51 +107,6 @@ wire allClocksLocked = clockALocked & clockBLocked & clockCLocked;
 wire reset_p = RST_I | (~allClocksLocked);
 wire reset_n = (~RST_I) & allClocksLocked;
 
-
-// =====================================================================================================
-// Device router
-// =====================================================================================================
-
-/*logic [31:0] memaddress=0;
-logic [31:0] writeword=0;
-logic [31:0] mem_dataout;
-logic[3:0] mem_writeena;
-
-wire [31:0] busaddress;
-wire [31:0] buswriteword;
-wire [31:0] busdataout;
-wire [3:0] buswriteena;
-
-wire deviceUARTTxWrite			= busaddress[31:28] == 4'b0100 ? 1'b1 : 1'b0;	// 0x40000000
-wire deviceUARTRxRead			= busaddress[31:28] == 4'b0101 ? 1'b1 : 1'b0;	// 0x50000000
-wire deviceUARTByteCountRead	= busaddress[31:28] == 4'b0110 ? 1'b1 : 1'b0;	// 0x60000000
-wire deviceGPUFIFOWrite			= busaddress[31:28] == 4'b1000 ? 1'b1 : 1'b0;	// 0x80000000
-wire [3:0] deviceRTPort			= {deviceUARTTxWrite, deviceUARTRxRead, deviceUARTByteCountRead, deviceGPUFIFOWrite};
-
-assign busdataout = deviceUARTRxRead ? {24'd0, infifoout} : ( deviceUARTByteCountRead ? infifodatacount : mem_dataout);
-
-// =====================================================================================================
-// Read arbitrator
-// =====================================================================================================
-
-always_comb begin
-	unique case (deviceRTPort)
-		4'b0000: begin // SYSRAM
-			memaddress <= busaddress;
-			mem_writeena <= buswriteena;
-			mem_dataout <= busdataout;
-		end
-		4'b0001: begin // GPUFIFO
-		end
-		4'b0010: begin // UARTBYTECOUNT
-		end
-		4'b0100: begin // UARTRX
-		end
-		4'b1000: begin // UARTTX
-		end 
-	endcase
-end*/
-
 // =====================================================================================================
 // UART (Tx/Rx) @115200
 // =====================================================================================================
@@ -164,14 +114,14 @@ end*/
 logic transmitbyte = 1'b0;
 logic [7:0] datatotransmit = 8'h00;
 wire uarttxbusy, outfifofull, outfifoempty, infifofull, infifoempty;
-wire outuartfifowe;
+logic outuartfifowe = 1'b0;
 logic outfifore = 1'b0;
 wire outfifovalid;
 logic infifowe = 1'b0;
-wire infifore;
+logic infifore;
 wire infifovalid;
 wire uartbyteavailable;
-wire [7:0] outfifoin;
+logic [7:0] outfifoin;
 logic [7:0] inuartbyte;
 wire [7:0] uartbytein;
 wire [7:0] outfifoout,infifoout;
@@ -266,6 +216,68 @@ always @(posedge(uartclk)) begin
 end
 
 // =====================================================================================================
+// CPU Bus
+// =====================================================================================================
+
+wire gpu_fifowrfull;
+wire gpu_fifordempty;
+wire gpu_fifodatavalid;
+logic [31:0] gpu_fifocommand;
+logic gpu_fifowe;
+wire gpu_fifore;
+wire [31:0] gpu_fifodataout;
+
+wire [31:0] mem_address;
+wire [31:0] mem_writeword;
+wire [31:0] sysmem_dataout;
+wire [3:0] mem_writeena;
+wire mem_readena;
+
+logic [31:0] bus_address;
+logic [31:0] bus_writeword;
+logic [3:0] bus_writeena;
+logic bus_readena;
+
+// Device selector based on address
+wire deviceUARTTxWrite			= mem_address[31:28] == 4'b0100 ? 1'b1 : 1'b0;	// 0x40000000
+wire deviceUARTRxRead			= mem_address[31:28] == 4'b0101 ? 1'b1 : 1'b0;	// 0x50000000
+wire deviceUARTByteCountRead	= mem_address[31:28] == 4'b0110 ? 1'b1 : 1'b0;	// 0x60000000
+wire deviceGPUFIFOWrite			= mem_address[31:28] == 4'b1000 ? 1'b1 : 1'b0;	// 0x80000000
+wire [3:0] deviceRTPort			= {deviceUARTTxWrite, deviceUARTRxRead, deviceUARTByteCountRead, deviceGPUFIFOWrite};
+
+// Reads are routed from the correct device to one wire
+wire [31:0] bus_dataout = deviceUARTRxRead ? {24'd0, infifoout} : ( deviceUARTByteCountRead ? {22'd0, infifodatacount} : sysmem_dataout);
+
+// This is high if any of the device FIFOs are full, or receiving FIFOs are empty, so that the CPU can stall
+wire bus_stall = deviceGPUFIFOWrite ? gpu_fifowrfull : (deviceUARTTxWrite ? outfifofull : (deviceUARTRxRead ? ((~infifovalid)|infifoempty) : 1'b0));
+
+// SYSMEM and memory mapped device r/w router
+always_comb begin
+	// SYSMEM r/w
+	bus_address = mem_address;
+	bus_writeword = mem_writeword;
+	bus_writeena = deviceRTPort == 4'b0000 ? mem_writeena : 4'b0000;
+	bus_readena = deviceRTPort == 4'b0000 ? mem_readena : 0;
+
+	// GPU FIFO
+	gpu_fifocommand = mem_writeword; // Dword writes, no masking
+	gpu_fifowe = deviceGPUFIFOWrite ? ((~gpu_fifowrfull) & (|mem_writeena)) : 1'b0;
+
+	// UART (receive)
+	infifore = deviceUARTRxRead ? mem_readena : 0;
+
+	// UART (transmit)
+	case (mem_writeena)
+		4'b1000: begin outfifoin = mem_writeword[31:24]; end
+		4'b0100: begin outfifoin = mem_writeword[23:16]; end
+		4'b0010: begin outfifoin = mem_writeword[15:8]; end
+		4'b0001: begin outfifoin = mem_writeword[7:0]; end
+	endcase
+	outuartfifowe = deviceUARTTxWrite ? ((~outfifofull) & (|mem_writeena)) : 1'b0;
+
+end
+
+// =====================================================================================================
 // CPU + GPU + System RAM (true dual port) / GPU FIFO (1024 DWORDs)
 // =====================================================================================================
 
@@ -274,21 +286,16 @@ wire [31:0] dma_writeword;
 wire [31:0] dma_dataout;
 wire [3:0] dma_writeena;
 
-wire [31:0] mem_address;
-wire [31:0] mem_writeword;
-wire [31:0] mem_dataout;
-wire [3:0] mem_writeena;
-
 FastSystemMemory SYSRAM(
 	// ----------------------------
 	// CPU bus for CPU read-write
 	// ----------------------------
-	.addra(mem_address[16:2]), // 128Kb RAM, 32768 DWORDs, 15 bit address space
+	.addra(bus_address[16:2]), // 128Kb RAM, 32768 DWORDs, 15 bit address space
 	.clka(sysclock60),
-	.dina(mem_writeword),
-	.douta(mem_dataout),
-	.wea(mem_address[31]==1'b0 ? mem_writeena : 4'b0000),
-	.ena(reset_n),
+	.dina(bus_writeword),
+	.douta(sysmem_dataout),
+	.wea(bus_address[31]==1'b0 ? bus_writeena : 4'b0000),
+	.ena(reset_n & (bus_readena | (|bus_writeena))),
 	// ----------------------------
 	// DMA bus for GPU read/write
 	// ----------------------------
@@ -301,18 +308,18 @@ FastSystemMemory SYSRAM(
 
 GPUCommandFIFO GPUCommands(
 	// write
-	.full(fifowrfull),
-	.din(gpufifocommand),
-	.wr_en(gpufifowe),
+	.full(gpu_fifowrfull),
+	.din(gpu_fifocommand),
+	.wr_en(gpu_fifowe),
 	// read
-	.empty(fifordempty),
-	.dout(fifodataout),
-	.rd_en(fifore),
+	.empty(gpu_fifordempty),
+	.dout(gpu_fifodataout),
+	.rd_en(gpu_fifore),
 	// ctl
 	.wr_clk(sysclock60),
 	.rd_clk(gpuclock),
 	.rst(reset_p),
-	.valid(fifodatavalid) );
+	.valid(gpu_fifodatavalid) );
 
 // Cross clock domain for vsync, from DVI to sys
 logic [31:0] vsync_signal = 32'd0;
@@ -348,10 +355,10 @@ GPU rv32gpu(
 	.vsync(vsync_signal),
 	.videopage(videopage),
 	// FIFO control
-	.fifoempty(fifordempty),
-	.fifodout(fifodataout),
-	.fifdoutvalid(fifodatavalid),
-	.fiford_en(fifore),
+	.fifoempty(gpu_fifordempty),
+	.fifodout(gpu_fifodataout),
+	.fifdoutvalid(gpu_fifodatavalid),
+	.fiford_en(gpu_fifore),
 	// VRAM output
 	.vramaddress(gpuwriteaddress),
 	.vramwe(gpuwriteena),
@@ -366,23 +373,12 @@ rv32cpu rv32cpu(
 	.clock(sysclock60),
 	.wallclock(wallclock),
 	.reset(reset_p),
-	// GPU: // 0x80000000 (read/write,32bits)
-	.gpufifofull(fifowrfull),
-	.gpufifocommand(gpufifocommand),
-	.gpufifowe(gpufifowe),
-	// UART Tx: // OutData: 0x40000000 (write,8bits)
-	.uartfifowe(outuartfifowe),
-	.uartoutdata(outfifoin),
-	// UART Rx: // DataCount: 0x60000000 (read,32bits) InData: 0x50000000 (read,8bits)
-	.uartfifovalid(infifovalid),
-	.uartfifore(infifore),
-	.uartindata(infifoout),
-	.uartinputbytecount(infifodatacount),
-	// SYSMEM: // 0x00000000 - 0x0001FFFF (read/write,32bit,16bits,8bitss)
-	.memaddress(mem_address),//busaddress
-	.writeword(mem_writeword),//buswriteword
-	.mem_data(mem_dataout),//busdataout
-	.mem_writeena(mem_writeena) //buswriteena
+	// Memory and memory mapped device access
+	.memaddress(mem_address),
+	.writeword(mem_writeword),
+	.mem_data(bus_dataout),
+	.mem_writeena(mem_writeena),
+	.mem_readena(mem_readena)
   );
 
 // =====================================================================================================
@@ -494,5 +490,11 @@ SPI_Master_With_Single_CS SDCardController (
 	.o_SPI_MOSI(spi_mosi),
 	.o_SPI_CS_n(spi_cs_n) );
 */
+
+// =====================================================================================================
+// Diagnosis LEDs
+// =====================================================================================================
+
+assign led = deviceRTPort;
 
 endmodule
