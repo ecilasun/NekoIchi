@@ -117,7 +117,7 @@ module GPU (
 	output logic [31:0] dmawriteword,
 	output logic [3:0] dmawe,
 	input wire [31:0] dma_data );
-	
+
 logic [`GPUSTATEBITS-1:0] gpustate = `GPUSTATEIDLE_MASK;
 
 logic [31:0] rdatain;
@@ -150,7 +150,6 @@ gpuregisterfile gpuregs(
 // Coarse rasterizer
 // ==============================================================
 
-logic signed [15:0] tileXCount, tileYCount;
 logic signed [15:0] tileX0, tileY0;
 logic signed [15:0] x0, y0, x1, y1, x2, y2;
 
@@ -290,18 +289,12 @@ logic [31:0] vsyncrequestpoint = 32'd0;
 
 always_ff @(posedge clock) begin
 	if (reset) begin
+
 		gpustate <= `GPUSTATEIDLE_MASK;
-		//vramaddress <= 14'd0;
-		//vramwriteword <= 32'd0;
 		vramwe <= 4'b0000;
 		lanemask <= 12'h000;
-		//rdatain <= 32'd0;
-		//dmaaddress <= 32'd0;
-		//dmawriteword <= 32'd0;
 		dmawe <= 4'b0000;
-		//dmacount <= 14'd0;
 		fiford_en <= 1'b0;
-		//frfifowe <= 1'b0;
 
 	end else begin
 	
@@ -317,7 +310,7 @@ always_ff @(posedge clock) begin
 				lanemask <= 12'h000;
 				// And DMA writes
 				dmawe <= 4'b0000;
-				
+
 				// See if there's something on the fifo
 				if (~fifoempty) begin
 					fiford_en <= 1'b1;
@@ -392,12 +385,9 @@ always_ff @(posedge clock) begin
 
 					`GPUCMD_RASTER: begin
 						// Grab primitive vertex data from rs&rd
-						x0 <= rval1[15:0];
-						y0 <= rval1[31:16];
-						x1 <= rval2[15:0];
-						y1 <= rval2[31:16];
-						x2 <= rval3[15:0];
-						y2 <= rval3[31:16];
+						{y0, x0} <= rval1;
+						{y1, x1} <= rval2;
+						{y2, x2} <= rval3;
 
 						// DEBU: Solid color output during development
 						// Full DWORD color from immshort, mask selects which pixels to write
@@ -465,8 +455,6 @@ always_ff @(posedge clock) begin
 				// Set up scan extents (4x1 tiles for a 4bit mask)
 				tileX0 <= minXval; // tile width=4
 				tileY0 <= minYval; // tile height=1 (but using 4 aligned at start)
-				tileXCount <= (maxXval-minXval)>>2; // W/4
-				tileYCount <= (maxYval-minYval); // H/1
 				/*w0_row <= w0_init;
 				w1_row <= w1_init;
 				w2_row <= w2_init;
@@ -485,11 +473,11 @@ always_ff @(posedge clock) begin
 			end
 
 			gpustate[`GPUSTATERASTER]: begin
-				if (tileYCount == 0) begin
+				if (tileY0 >= maxYval) begin
 					// We have exhausted all rows to rasterize
 					gpustate[`GPUSTATEIDLE] <= 1'b1;
 				end else begin
-				
+
 					// Output tile mask for this tile
 					vramaddress <= {tileY0[7:0], tileX0[7:2]};
 					// This effectively turns off writes for unoccupied tiles since tilecoverage == 0
@@ -497,13 +485,10 @@ always_ff @(posedge clock) begin
 					//vramwriteword <= {w0[15:8], w0[15:8]+A12, w0[15:8]+A12+A12, w0[15:8]+A12+A12+A12};
 
 					// Did we run out of tiles in this direction, or hit a zero tile mask?
-					if (/*(~widetilemask) |*/ tileXCount == 0) begin
+					if (/*(~widetilemask) |*/ tileX0 >= maxXval) begin
 						tileX0 <= minXval;
 						// Step one tile down
 						tileY0 <= tileY0 + 16'sd1; // tile height=1
-						// Actually this is too large but since we stop at empty tiles anyways, doesn't seem to hurt
-						tileXCount <= (maxXval-minXval)>>2; // W/4
-						tileYCount <= tileYCount - 16'sd1;
 						/*w0_row <= w0_row + B12;
 						w1_row <= w1_row + B20;
 						w2_row <= w2_row + B01;
@@ -512,7 +497,6 @@ always_ff @(posedge clock) begin
 						w2 <= w2_row + B01;*/
 					end else begin
 						// Step to next tile on scanline
-						tileXCount <= tileXCount - 16'sd1;
 						tileX0 <= tileX0 + 16'sd4;
 						/*w0 <= w0 + A12;
 						w1 <= w1 + A20;

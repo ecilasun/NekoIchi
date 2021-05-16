@@ -140,16 +140,19 @@ async_transmitter UART_transmit(
 
 // Output FIFO
 UARTFifoGen UART_out_fifo(
-    .rst(reset_p),
+    // In
     .full(outfifofull),
     .din(outfifoin), // data from CPU
     .wr_en(outuartfifowe), // CPU controls write, high for one clock
+    // Out
     .empty(outfifoempty),
     .dout(outfifoout), // to transmitter
     .rd_en(outfifore), // transmitter can send
     .wr_clk(sysclock60), // CPU write clock
     .rd_clk(uartclk), // transmitter runs slower
     .valid(outfifovalid),
+    // Ctl
+    .rst(reset_p),
     .rd_data_count(outfifodatacount) );
 
 // Fifo output serializer
@@ -193,16 +196,19 @@ async_receiver UART_receive(
 
 // Input FIFO
 UARTFifoGen UART_in_fifo(
-    .rst(reset_p),
+    // In
     .full(infifofull),
     .din(inuartbyte),
     .wr_en(infifowe),
+    // Out
     .empty(infifoempty),
     .dout(infifoout),
     .rd_en(infifore),
     .wr_clk(uartclk),
     .rd_clk(sysclock60),
     .valid(infifovalid),
+    // Ctl
+    .rst(reset_p),
     .rd_data_count(infifodatacount) );
 
 // Fifo input control
@@ -243,13 +249,19 @@ wire deviceUARTTxWrite			= mem_address[31:28] == 4'b0100 ? 1'b1 : 1'b0;	// 0x400
 wire deviceUARTRxRead			= mem_address[31:28] == 4'b0101 ? 1'b1 : 1'b0;	// 0x50000000
 wire deviceUARTByteCountRead	= mem_address[31:28] == 4'b0110 ? 1'b1 : 1'b0;	// 0x60000000
 wire deviceGPUFIFOWrite			= mem_address[31:28] == 4'b1000 ? 1'b1 : 1'b0;	// 0x80000000
-wire [3:0] deviceRTPort			= {deviceUARTTxWrite, deviceUARTRxRead, deviceUARTByteCountRead, deviceGPUFIFOWrite};
+wire [3:0] deviceRTPort			= {deviceUARTRxRead, deviceUARTByteCountRead, deviceUARTTxWrite, deviceGPUFIFOWrite};
 
 // Reads are routed from the correct device to one wire
-wire [31:0] bus_dataout = deviceUARTRxRead ? {24'd0, infifoout} : ( deviceUARTByteCountRead ? {22'd0, infifodatacount} : sysmem_dataout);
+wire [31:0] uartdataout = {24'd0, infifoout};
+wire [31:0] uartbytecountout = {22'd0, infifodatacount};
+wire [31:0] bus_dataout = deviceUARTRxRead ? uartdataout : (deviceUARTByteCountRead ? uartbytecountout : sysmem_dataout);
 
-// This is high if any of the device FIFOs are full, or receiving FIFOs are empty, so that the CPU can stall
-wire bus_stall = deviceGPUFIFOWrite ? gpu_fifowrfull : (deviceUARTTxWrite ? outfifofull : (deviceUARTRxRead ? ((~infifovalid)|infifoempty) : 1'b0));
+// This is high if any of the device FIFOs are full or empty depending on read/write
+// It allows the CPU side to stall and wait for data access
+wire gpustall = deviceGPUFIFOWrite ? gpu_fifowrfull : 1'b0;
+wire uartwritestall = deviceUARTTxWrite ? outfifofull : 1'b0;
+wire uartreadstall = deviceUARTRxRead ? infifoempty : 1'b0;
+wire bus_stall = gpustall | uartwritestall | uartreadstall;
 
 // SYSMEM and memory mapped device r/w router
 always_comb begin
@@ -372,6 +384,7 @@ GPU rv32gpu(
 rv32cpu rv32cpu(
 	.clock(sysclock60),
 	.wallclock(wallclock),
+	.busstall(bus_stall),
 	.reset(reset_p),
 	// Memory and memory mapped device access
 	.memaddress(mem_address),

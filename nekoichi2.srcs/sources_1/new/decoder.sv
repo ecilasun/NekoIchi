@@ -166,7 +166,7 @@ always_comb begin
 			end
 
 			`OPCODE_SYSTEM: begin
-				wren = (func3 == 3'b010) ? 1'b1 : 1'b0;
+				wren = (func3 == 3'b010) ? 1'b1 : 1'b0; // CSRRS
 				fwren = 1'b0;
 				// func3:
 				//001 CSRRW: atomic r/w CSR -> read CSR, zero extend, write to ireg rd, swap rs1 into CSR, if rd=0 then don't read CSR
@@ -181,17 +181,6 @@ always_comb begin
 				// CSR== RDCYCLE[H} / RDTIME[H] / RDINSTRET[H]
 
 				//csrindex = {func7,rs2};
-
-				// 0x001: fflags (Floating point exceptions)
-				// 0x002: frm (Floating point dynamic rounding mode)
-				// 0x003: fcsr (Floating point control & status register: frm+fflags)
-				
-				// 0xC00: cycle (Cycle counter low)
-				// 0xC01: time (Time low)
-				// 0xC02: instret (Retired instructions low)
-				// 0xC80: cycleh (Cycle counter high)
-				// 0xC81: timeh (Time high)
-				// 0xC82: instreth (Retired instructions high)
 
 				nextstage = `CPURETIREINSTRUCTION_MASK;
 				aluop = `ALU_NONE;

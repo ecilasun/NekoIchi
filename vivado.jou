@@ -2,34 +2,148 @@
 # Vivado v2020.2.2 (64-bit)
 # SW Build 3118627 on Tue Feb  9 05:13:49 MST 2021
 # IP Build 3115676 on Tue Feb  9 10:48:11 MST 2021
-# Start of session at: Tue May 11 18:24:17 2021
-# Process ID: 1780146
+# Start of session at: Sat May 15 15:07:47 2021
+# Process ID: 2652841
 # Current directory: /home/engin
 # Command line: vivado
 # Log file: /home/engin/vivado.log
 # Journal file: /home/engin/vivado.jou
 #-----------------------------------------------------------
 start_gui
-open_project /media/engin/StorageA/FPGA/ecrv32B/ecrv32B.xpr
+open_project /media/engin/StorageA/FPGA/nekoichi2/nekoichi2.xpr
 update_compile_order -fileset sources_1
-launch_simulation
-open_wave_config /media/engin/StorageA/FPGA/ecrv32B/ecrv32Btop_behav.wcfg
-source ecrv32Btop.tcl
-add_force {/ecrv32Btop/reset} -radix hex {0 0ns}
-add_force {/ecrv32Btop/CLK100MHZ} -radix hex {0 0ns} {1 5000000fs} -repeat_every 10000000fs
-add_force {/ecrv32Btop/CLK12MHZ} -radix hex {0 0ns} {1 41650000fs} -repeat_every 83300000fs
-restart
-run all
-close_sim
-launch_simulation
-open_wave_config /media/engin/StorageA/FPGA/ecrv32B/ecrv32Btop_behav.wcfg
-source ecrv32Btop.tcl
-add_force {/ecrv32Btop/CLK12MHZ} -radix hex {0 0ns} {1 41650000fs} -repeat_every 83300000fs
-add_force {/ecrv32Btop/CLK100MHZ} -radix hex {0 0ns} {1 5000000fs} -repeat_every 10000000fs
-add_force {/ecrv32Btop/reset} -radix hex {0 0ns}
-restart
-run all
-run all
-restart
-run all
-close_sim
+update_compile_order -fileset sources_1
+update_compile_order -fileset sources_1
+reset_run synth_1
+set_property -dict [list CONFIG.CLKOUT1_REQUESTED_OUT_FREQ {85.000} CONFIG.MMCM_CLKFBOUT_MULT_F {8.500} CONFIG.MMCM_CLKOUT0_DIVIDE_F {10.000} CONFIG.MMCM_CLKOUT1_DIVIDE {34} CONFIG.CLKOUT1_JITTER {144.010} CONFIG.CLKOUT1_PHASE_ERROR {109.126} CONFIG.CLKOUT2_JITTER {184.840} CONFIG.CLKOUT2_PHASE_ERROR {109.126}] [get_ips GPUClockGen]
+generate_target all [get_files  /media/engin/StorageA/FPGA/nekoichi2/nekoichi2.srcs/sources_1/ip/GPUClockGen/GPUClockGen.xci]
+catch { config_ip_cache -export [get_ips -all GPUClockGen] }
+export_ip_user_files -of_objects [get_files /media/engin/StorageA/FPGA/nekoichi2/nekoichi2.srcs/sources_1/ip/GPUClockGen/GPUClockGen.xci] -no_script -sync -force -quiet
+reset_run GPUClockGen_synth_1
+launch_runs GPUClockGen_synth_1 -jobs 16
+wait_on_run GPUClockGen_synth_1
+export_simulation -of_objects [get_files /media/engin/StorageA/FPGA/nekoichi2/nekoichi2.srcs/sources_1/ip/GPUClockGen/GPUClockGen.xci] -directory /media/engin/StorageA/FPGA/nekoichi2/nekoichi2.ip_user_files/sim_scripts -ip_user_files_dir /media/engin/StorageA/FPGA/nekoichi2/nekoichi2.ip_user_files -ipstatic_source_dir /media/engin/StorageA/FPGA/nekoichi2/nekoichi2.ip_user_files/ipstatic -lib_map_path [list {modelsim=/media/engin/StorageA/FPGA/nekoichi2/nekoichi2.cache/compile_simlib/modelsim} {questa=/media/engin/StorageA/FPGA/nekoichi2/nekoichi2.cache/compile_simlib/questa} {ies=/media/engin/StorageA/FPGA/nekoichi2/nekoichi2.cache/compile_simlib/ies} {xcelium=/media/engin/StorageA/FPGA/nekoichi2/nekoichi2.cache/compile_simlib/xcelium} {vcs=/media/engin/StorageA/FPGA/nekoichi2/nekoichi2.cache/compile_simlib/vcs} {riviera=/media/engin/StorageA/FPGA/nekoichi2/nekoichi2.cache/compile_simlib/riviera}] -use_ip_compiled_libs -force -quiet
+launch_runs impl_1 -to_step write_bitstream -jobs 16
+wait_on_run impl_1
+open_hw_manager
+connect_hw_server -allow_non_jtag
+open_hw_target
+set_property PROGRAM.FILE {/media/engin/StorageA/FPGA/nekoichi2/nekoichi2.runs/impl_1/nekoichitop.bit} [get_hw_devices xc7a100t_0]
+current_hw_device [get_hw_devices xc7a100t_0]
+refresh_hw_device -update_hw_probes false [lindex [get_hw_devices xc7a100t_0] 0]
+create_hw_cfgmem -hw_device [get_hw_devices xc7a100t_0] -mem_dev [lindex [get_cfgmem_parts {s25fl128sxxxxxx0-spi-x1_x2_x4}] 0]
+set_property PROBES.FILE {} [get_hw_devices xc7a100t_0]
+set_property FULL_PROBES.FILE {} [get_hw_devices xc7a100t_0]
+set_property PROGRAM.FILE {/media/engin/StorageA/FPGA/nekoichi2/nekoichi2.runs/impl_1/nekoichitop.bit} [get_hw_devices xc7a100t_0]
+program_hw_devices [get_hw_devices xc7a100t_0]
+refresh_hw_device [lindex [get_hw_devices xc7a100t_0] 0]
+close_hw_manager
+archive_project /media/engin/StorageA/FPGA/nekoichi2.xpr.zip -force -include_local_ip_cache -include_config_settings
+set_property -dict [list CONFIG.CLKOUT1_REQUESTED_OUT_FREQ {90.000} CONFIG.MMCM_CLKFBOUT_MULT_F {11.250} CONFIG.MMCM_CLKOUT0_DIVIDE_F {12.500} CONFIG.MMCM_CLKOUT1_DIVIDE {45} CONFIG.CLKOUT1_JITTER {124.009} CONFIG.CLKOUT1_PHASE_ERROR {91.100} CONFIG.CLKOUT2_JITTER {163.632} CONFIG.CLKOUT2_PHASE_ERROR {91.100}] [get_ips GPUClockGen]
+generate_target all [get_files  /media/engin/StorageA/FPGA/nekoichi2/nekoichi2.srcs/sources_1/ip/GPUClockGen/GPUClockGen.xci]
+catch { config_ip_cache -export [get_ips -all GPUClockGen] }
+catch { [ delete_ip_run [get_ips -all GPUClockGen] ] }
+export_ip_user_files -of_objects [get_files /media/engin/StorageA/FPGA/nekoichi2/nekoichi2.srcs/sources_1/ip/GPUClockGen/GPUClockGen.xci] -no_script -sync -force -quiet
+create_ip_run [get_files -of_objects [get_fileset sources_1] /media/engin/StorageA/FPGA/nekoichi2/nekoichi2.srcs/sources_1/ip/GPUClockGen/GPUClockGen.xci]
+export_simulation -of_objects [get_files /media/engin/StorageA/FPGA/nekoichi2/nekoichi2.srcs/sources_1/ip/GPUClockGen/GPUClockGen.xci] -directory /media/engin/StorageA/FPGA/nekoichi2/nekoichi2.ip_user_files/sim_scripts -ip_user_files_dir /media/engin/StorageA/FPGA/nekoichi2/nekoichi2.ip_user_files -ipstatic_source_dir /media/engin/StorageA/FPGA/nekoichi2/nekoichi2.ip_user_files/ipstatic -lib_map_path [list {modelsim=/media/engin/StorageA/FPGA/nekoichi2/nekoichi2.cache/compile_simlib/modelsim} {questa=/media/engin/StorageA/FPGA/nekoichi2/nekoichi2.cache/compile_simlib/questa} {ies=/media/engin/StorageA/FPGA/nekoichi2/nekoichi2.cache/compile_simlib/ies} {xcelium=/media/engin/StorageA/FPGA/nekoichi2/nekoichi2.cache/compile_simlib/xcelium} {vcs=/media/engin/StorageA/FPGA/nekoichi2/nekoichi2.cache/compile_simlib/vcs} {riviera=/media/engin/StorageA/FPGA/nekoichi2/nekoichi2.cache/compile_simlib/riviera}] -use_ip_compiled_libs -force -quiet
+update_compile_order -fileset sources_1
+reset_run synth_1
+launch_runs impl_1 -to_step write_bitstream -jobs 16
+wait_on_run impl_1
+open_hw_manager
+connect_hw_server -allow_non_jtag
+open_hw_target
+set_property PROGRAM.FILE {/media/engin/StorageA/FPGA/nekoichi2/nekoichi2.runs/impl_1/nekoichitop.bit} [get_hw_devices xc7a100t_0]
+current_hw_device [get_hw_devices xc7a100t_0]
+refresh_hw_device -update_hw_probes false [lindex [get_hw_devices xc7a100t_0] 0]
+create_hw_cfgmem -hw_device [get_hw_devices xc7a100t_0] -mem_dev [lindex [get_cfgmem_parts {s25fl128sxxxxxx0-spi-x1_x2_x4}] 0]
+set_property PROBES.FILE {} [get_hw_devices xc7a100t_0]
+set_property FULL_PROBES.FILE {} [get_hw_devices xc7a100t_0]
+set_property PROGRAM.FILE {/media/engin/StorageA/FPGA/nekoichi2/nekoichi2.runs/impl_1/nekoichitop.bit} [get_hw_devices xc7a100t_0]
+program_hw_devices [get_hw_devices xc7a100t_0]
+refresh_hw_device [lindex [get_hw_devices xc7a100t_0] 0]
+close_hw_manager
+set_property -dict [list CONFIG.CLKOUT1_REQUESTED_OUT_FREQ {86.000} CONFIG.MMCM_CLKFBOUT_MULT_F {10.750} CONFIG.MMCM_CLKOUT1_DIVIDE {43} CONFIG.CLKOUT1_JITTER {127.747} CONFIG.CLKOUT1_PHASE_ERROR {93.331} CONFIG.CLKOUT2_JITTER {166.886} CONFIG.CLKOUT2_PHASE_ERROR {93.331}] [get_ips GPUClockGen]
+set_property -dict [list CONFIG.CLKOUT1_REQUESTED_OUT_FREQ {85.000} CONFIG.MMCM_CLKFBOUT_MULT_F {8.500} CONFIG.MMCM_CLKOUT0_DIVIDE_F {10.000} CONFIG.MMCM_CLKOUT1_DIVIDE {34} CONFIG.CLKOUT1_JITTER {144.010} CONFIG.CLKOUT1_PHASE_ERROR {109.126} CONFIG.CLKOUT2_JITTER {184.840} CONFIG.CLKOUT2_PHASE_ERROR {109.126}] [get_ips GPUClockGen]
+generate_target all [get_files  /media/engin/StorageA/FPGA/nekoichi2/nekoichi2.srcs/sources_1/ip/GPUClockGen/GPUClockGen.xci]
+catch { config_ip_cache -export [get_ips -all GPUClockGen] }
+export_ip_user_files -of_objects [get_files /media/engin/StorageA/FPGA/nekoichi2/nekoichi2.srcs/sources_1/ip/GPUClockGen/GPUClockGen.xci] -no_script -sync -force -quiet
+create_ip_run [get_files -of_objects [get_fileset sources_1] /media/engin/StorageA/FPGA/nekoichi2/nekoichi2.srcs/sources_1/ip/GPUClockGen/GPUClockGen.xci]
+export_simulation -of_objects [get_files /media/engin/StorageA/FPGA/nekoichi2/nekoichi2.srcs/sources_1/ip/GPUClockGen/GPUClockGen.xci] -directory /media/engin/StorageA/FPGA/nekoichi2/nekoichi2.ip_user_files/sim_scripts -ip_user_files_dir /media/engin/StorageA/FPGA/nekoichi2/nekoichi2.ip_user_files -ipstatic_source_dir /media/engin/StorageA/FPGA/nekoichi2/nekoichi2.ip_user_files/ipstatic -lib_map_path [list {modelsim=/media/engin/StorageA/FPGA/nekoichi2/nekoichi2.cache/compile_simlib/modelsim} {questa=/media/engin/StorageA/FPGA/nekoichi2/nekoichi2.cache/compile_simlib/questa} {ies=/media/engin/StorageA/FPGA/nekoichi2/nekoichi2.cache/compile_simlib/ies} {xcelium=/media/engin/StorageA/FPGA/nekoichi2/nekoichi2.cache/compile_simlib/xcelium} {vcs=/media/engin/StorageA/FPGA/nekoichi2/nekoichi2.cache/compile_simlib/vcs} {riviera=/media/engin/StorageA/FPGA/nekoichi2/nekoichi2.cache/compile_simlib/riviera}] -use_ip_compiled_libs -force -quiet
+open_run impl_1
+close_design
+reset_run synth_1
+set_property -dict [list CONFIG.CLKOUT1_REQUESTED_OUT_FREQ {90.000} CONFIG.MMCM_CLKFBOUT_MULT_F {11.250} CONFIG.MMCM_CLKOUT0_DIVIDE_F {12.500} CONFIG.MMCM_CLKOUT1_DIVIDE {45} CONFIG.CLKOUT1_JITTER {124.009} CONFIG.CLKOUT1_PHASE_ERROR {91.100} CONFIG.CLKOUT2_JITTER {163.632} CONFIG.CLKOUT2_PHASE_ERROR {91.100}] [get_ips GPUClockGen]
+generate_target all [get_files  /media/engin/StorageA/FPGA/nekoichi2/nekoichi2.srcs/sources_1/ip/GPUClockGen/GPUClockGen.xci]
+catch { config_ip_cache -export [get_ips -all GPUClockGen] }
+export_ip_user_files -of_objects [get_files /media/engin/StorageA/FPGA/nekoichi2/nekoichi2.srcs/sources_1/ip/GPUClockGen/GPUClockGen.xci] -no_script -sync -force -quiet
+create_ip_run [get_files -of_objects [get_fileset sources_1] /media/engin/StorageA/FPGA/nekoichi2/nekoichi2.srcs/sources_1/ip/GPUClockGen/GPUClockGen.xci]
+export_simulation -of_objects [get_files /media/engin/StorageA/FPGA/nekoichi2/nekoichi2.srcs/sources_1/ip/GPUClockGen/GPUClockGen.xci] -directory /media/engin/StorageA/FPGA/nekoichi2/nekoichi2.ip_user_files/sim_scripts -ip_user_files_dir /media/engin/StorageA/FPGA/nekoichi2/nekoichi2.ip_user_files -ipstatic_source_dir /media/engin/StorageA/FPGA/nekoichi2/nekoichi2.ip_user_files/ipstatic -lib_map_path [list {modelsim=/media/engin/StorageA/FPGA/nekoichi2/nekoichi2.cache/compile_simlib/modelsim} {questa=/media/engin/StorageA/FPGA/nekoichi2/nekoichi2.cache/compile_simlib/questa} {ies=/media/engin/StorageA/FPGA/nekoichi2/nekoichi2.cache/compile_simlib/ies} {xcelium=/media/engin/StorageA/FPGA/nekoichi2/nekoichi2.cache/compile_simlib/xcelium} {vcs=/media/engin/StorageA/FPGA/nekoichi2/nekoichi2.cache/compile_simlib/vcs} {riviera=/media/engin/StorageA/FPGA/nekoichi2/nekoichi2.cache/compile_simlib/riviera}] -use_ip_compiled_libs -force -quiet
+launch_runs impl_1 -to_step write_bitstream -jobs 16
+wait_on_run impl_1
+open_hw_manager
+connect_hw_server -allow_non_jtag
+open_hw_target
+set_property PROGRAM.FILE {/media/engin/StorageA/FPGA/nekoichi2/nekoichi2.runs/impl_1/nekoichitop.bit} [get_hw_devices xc7a100t_0]
+current_hw_device [get_hw_devices xc7a100t_0]
+refresh_hw_device -update_hw_probes false [lindex [get_hw_devices xc7a100t_0] 0]
+create_hw_cfgmem -hw_device [get_hw_devices xc7a100t_0] -mem_dev [lindex [get_cfgmem_parts {s25fl128sxxxxxx0-spi-x1_x2_x4}] 0]
+set_property PROBES.FILE {} [get_hw_devices xc7a100t_0]
+set_property FULL_PROBES.FILE {} [get_hw_devices xc7a100t_0]
+set_property PROGRAM.FILE {/media/engin/StorageA/FPGA/nekoichi2/nekoichi2.runs/impl_1/nekoichitop.bit} [get_hw_devices xc7a100t_0]
+program_hw_devices [get_hw_devices xc7a100t_0]
+refresh_hw_device [lindex [get_hw_devices xc7a100t_0] 0]
+close_hw_manager
+archive_project /media/engin/StorageA/FPGA/nekoichi2.xpr.zip -force -include_local_ip_cache -include_config_settings
+open_hw_manager
+connect_hw_server -allow_non_jtag
+open_hw_target
+set_property PROGRAM.FILE {/media/engin/StorageA/FPGA/nekoichi2/nekoichi2.runs/impl_1/nekoichitop.bit} [get_hw_devices xc7a100t_0]
+current_hw_device [get_hw_devices xc7a100t_0]
+refresh_hw_device -update_hw_probes false [lindex [get_hw_devices xc7a100t_0] 0]
+create_hw_cfgmem -hw_device [get_hw_devices xc7a100t_0] -mem_dev [lindex [get_cfgmem_parts {s25fl128sxxxxxx0-spi-x1_x2_x4}] 0]
+set_property PROGRAM.ADDRESS_RANGE  {use_file} [ get_property PROGRAM.HW_CFGMEM [lindex [get_hw_devices xc7a100t_0] 0]]
+set_property PROGRAM.FILES [list "/media/engin/StorageA/FPGA/nekoichi2/nekoichi2.runs/impl_1/nekoichitop.bin" ] [ get_property PROGRAM.HW_CFGMEM [lindex [get_hw_devices xc7a100t_0] 0]]
+set_property PROGRAM.PRM_FILE {} [ get_property PROGRAM.HW_CFGMEM [lindex [get_hw_devices xc7a100t_0] 0]]
+set_property PROGRAM.UNUSED_PIN_TERMINATION {pull-none} [ get_property PROGRAM.HW_CFGMEM [lindex [get_hw_devices xc7a100t_0] 0]]
+set_property PROGRAM.BLANK_CHECK  0 [ get_property PROGRAM.HW_CFGMEM [lindex [get_hw_devices xc7a100t_0] 0]]
+set_property PROGRAM.ERASE  1 [ get_property PROGRAM.HW_CFGMEM [lindex [get_hw_devices xc7a100t_0] 0]]
+set_property PROGRAM.CFG_PROGRAM  1 [ get_property PROGRAM.HW_CFGMEM [lindex [get_hw_devices xc7a100t_0] 0]]
+set_property PROGRAM.VERIFY  1 [ get_property PROGRAM.HW_CFGMEM [lindex [get_hw_devices xc7a100t_0] 0]]
+set_property PROGRAM.CHECKSUM  0 [ get_property PROGRAM.HW_CFGMEM [lindex [get_hw_devices xc7a100t_0] 0]]
+startgroup 
+create_hw_bitstream -hw_device [lindex [get_hw_devices xc7a100t_0] 0] [get_property PROGRAM.HW_CFGMEM_BITFILE [ lindex [get_hw_devices xc7a100t_0] 0]]; program_hw_devices [lindex [get_hw_devices xc7a100t_0] 0]; refresh_hw_device [lindex [get_hw_devices xc7a100t_0] 0];
+program_hw_cfgmem -hw_cfgmem [ get_property PROGRAM.HW_CFGMEM [lindex [get_hw_devices xc7a100t_0] 0]]
+endgroup
+close_hw_manager
+archive_project /media/engin/StorageA/FPGA/nekoichi2.xpr.zip -force -include_local_ip_cache -include_config_settings
+reset_run synth_1
+launch_runs impl_1 -to_step write_bitstream -jobs 16
+wait_on_run impl_1
+open_hw_manager
+connect_hw_server -allow_non_jtag
+open_hw_target
+set_property PROGRAM.FILE {/media/engin/StorageA/FPGA/nekoichi2/nekoichi2.runs/impl_1/nekoichitop.bit} [get_hw_devices xc7a100t_0]
+current_hw_device [get_hw_devices xc7a100t_0]
+refresh_hw_device -update_hw_probes false [lindex [get_hw_devices xc7a100t_0] 0]
+create_hw_cfgmem -hw_device [get_hw_devices xc7a100t_0] -mem_dev [lindex [get_cfgmem_parts {s25fl128sxxxxxx0-spi-x1_x2_x4}] 0]
+set_property PROBES.FILE {} [get_hw_devices xc7a100t_0]
+set_property FULL_PROBES.FILE {} [get_hw_devices xc7a100t_0]
+set_property PROGRAM.FILE {/media/engin/StorageA/FPGA/nekoichi2/nekoichi2.runs/impl_1/nekoichitop.bit} [get_hw_devices xc7a100t_0]
+program_hw_devices [get_hw_devices xc7a100t_0]
+refresh_hw_device [lindex [get_hw_devices xc7a100t_0] 0]
+set_property PROGRAM.ADDRESS_RANGE  {use_file} [ get_property PROGRAM.HW_CFGMEM [lindex [get_hw_devices xc7a100t_0] 0]]
+set_property PROGRAM.FILES [list "/media/engin/StorageA/FPGA/nekoichi2/nekoichi2.runs/impl_1/nekoichitop.bin" ] [ get_property PROGRAM.HW_CFGMEM [lindex [get_hw_devices xc7a100t_0] 0]]
+set_property PROGRAM.PRM_FILE {} [ get_property PROGRAM.HW_CFGMEM [lindex [get_hw_devices xc7a100t_0] 0]]
+set_property PROGRAM.UNUSED_PIN_TERMINATION {pull-none} [ get_property PROGRAM.HW_CFGMEM [lindex [get_hw_devices xc7a100t_0] 0]]
+set_property PROGRAM.BLANK_CHECK  0 [ get_property PROGRAM.HW_CFGMEM [lindex [get_hw_devices xc7a100t_0] 0]]
+set_property PROGRAM.ERASE  1 [ get_property PROGRAM.HW_CFGMEM [lindex [get_hw_devices xc7a100t_0] 0]]
+set_property PROGRAM.CFG_PROGRAM  1 [ get_property PROGRAM.HW_CFGMEM [lindex [get_hw_devices xc7a100t_0] 0]]
+set_property PROGRAM.VERIFY  1 [ get_property PROGRAM.HW_CFGMEM [lindex [get_hw_devices xc7a100t_0] 0]]
+set_property PROGRAM.CHECKSUM  0 [ get_property PROGRAM.HW_CFGMEM [lindex [get_hw_devices xc7a100t_0] 0]]
+startgroup 
+create_hw_bitstream -hw_device [lindex [get_hw_devices xc7a100t_0] 0] [get_property PROGRAM.HW_CFGMEM_BITFILE [ lindex [get_hw_devices xc7a100t_0] 0]]; program_hw_devices [lindex [get_hw_devices xc7a100t_0] 0]; refresh_hw_device [lindex [get_hw_devices xc7a100t_0] 0];
+program_hw_cfgmem -hw_cfgmem [ get_property PROGRAM.HW_CFGMEM [lindex [get_hw_devices xc7a100t_0] 0]]
+endgroup
+close_hw_manager
+archive_project /media/engin/StorageA/FPGA/nekoichi2.xpr.zip -force -include_local_ip_cache -include_config_settings

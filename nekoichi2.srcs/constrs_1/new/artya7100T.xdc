@@ -90,8 +90,8 @@ set_property -dict { PACKAGE_PIN J18   IOSTANDARD LVCMOS33 } [get_ports { VGA_VS
 #set_property -dict { PACKAGE_PIN V12   IOSTANDARD LVCMOS33 } [get_ports { spi_mosi }]; #IO_L20N_T3_A07_D23_14 Sch=jc_n[1]
 #set_property -dict { PACKAGE_PIN V10   IOSTANDARD LVCMOS33 } [get_ports { spi_miso }]; #IO_L21P_T3_DQS_14 Sch=jc_p[2]
 #set_property -dict { PACKAGE_PIN V11   IOSTANDARD LVCMOS33 } [get_ports { spi_sck }]; #IO_L21N_T3_DQS_A06_D22_14 Sch=jc_n[2]
-#set_property -dict { PACKAGE_PIN U14   IOSTANDARD LVCMOS33 } [get_ports { spi_dat[0] }]; #IO_L22P_T3_A05_D21_14 Sch=jc_p[3]
-#set_property -dict { PACKAGE_PIN V14   IOSTANDARD LVCMOS33 } [get_ports { spi_dat[1] }]; #IO_L22N_T3_A04_D20_14 Sch=jc_n[3]
+##set_property -dict { PACKAGE_PIN U14   IOSTANDARD LVCMOS33 } [get_ports { spi_dat[0] }]; #IO_L22P_T3_A05_D21_14 Sch=jc_p[3]
+##set_property -dict { PACKAGE_PIN V14   IOSTANDARD LVCMOS33 } [get_ports { spi_dat[1] }]; #IO_L22N_T3_A04_D20_14 Sch=jc_n[3]
 #set_property -dict { PACKAGE_PIN T13   IOSTANDARD LVCMOS33 } [get_ports { spi_cd }]; #IO_L23P_T3_A03_D19_14 Sch=jc_p[4]
 #set_property -dict { PACKAGE_PIN U13   IOSTANDARD LVCMOS33 } [get_ports { jc[7] }]; #IO_L23N_T3_A02_D18_14 Sch=jc_n[4]
 

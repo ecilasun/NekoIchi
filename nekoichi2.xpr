@@ -6,7 +6,7 @@
 <Project Version="7" Minor="54" Path="/media/engin/StorageA/FPGA/nekoichi2/nekoichi2.xpr">
   <DefaultLaunch Dir="$PRUNDIR"/>
   <Configuration>
-    <Option Name="Id" Val="b3ee6bea83ec4e93998e68e4d1a2207d"/>
+    <Option Name="Id" Val="adb65aef0c8b47a0a4ac2e98aa6af3c8"/>
     <Option Name="Part" Val="xc7a100tcsg324-1"/>
     <Option Name="CompiledLibDir" Val="$PCACHEDIR/compile_simlib"/>
     <Option Name="CompiledLibDirXSim" Val=""/>
@@ -46,20 +46,20 @@
     <Option Name="IPStaticSourceDir" Val="$PIPUSERFILESDIR/ipstatic"/>
     <Option Name="EnableBDX" Val="FALSE"/>
     <Option Name="DSABoardId" Val="arty-a7-100"/>
-    <Option Name="WTXSimLaunchSim" Val="111"/>
+    <Option Name="WTXSimLaunchSim" Val="130"/>
     <Option Name="WTModelSimLaunchSim" Val="0"/>
     <Option Name="WTQuestaLaunchSim" Val="0"/>
     <Option Name="WTIesLaunchSim" Val="0"/>
     <Option Name="WTVcsLaunchSim" Val="0"/>
     <Option Name="WTRivieraLaunchSim" Val="0"/>
     <Option Name="WTActivehdlLaunchSim" Val="0"/>
-    <Option Name="WTXSimExportSim" Val="239"/>
-    <Option Name="WTModelSimExportSim" Val="239"/>
-    <Option Name="WTQuestaExportSim" Val="239"/>
-    <Option Name="WTIesExportSim" Val="239"/>
-    <Option Name="WTVcsExportSim" Val="239"/>
-    <Option Name="WTRivieraExportSim" Val="239"/>
-    <Option Name="WTActivehdlExportSim" Val="239"/>
+    <Option Name="WTXSimExportSim" Val="260"/>
+    <Option Name="WTModelSimExportSim" Val="260"/>
+    <Option Name="WTQuestaExportSim" Val="260"/>
+    <Option Name="WTIesExportSim" Val="260"/>
+    <Option Name="WTVcsExportSim" Val="260"/>
+    <Option Name="WTRivieraExportSim" Val="260"/>
+    <Option Name="WTActivehdlExportSim" Val="260"/>
     <Option Name="GenerateIPUpgradeLog" Val="TRUE"/>
     <Option Name="XSimRadix" Val="hex"/>
     <Option Name="XSimTimeUnit" Val="ns"/>
@@ -93,10 +93,10 @@
           <Attr Name="UsedIn" Val="simulation"/>
         </FileInfo>
       </File>
-      <File Path="$PSRCDIR/sources_1/ip/PeripheralClockGen/PeripheralClockGen.xci">
+      <File Path="$PSRCDIR/sources_1/ip/GPUClockGen/GPUClockGen.xci">
         <FileInfo>
-          <Attr Name="ImportPath" Val="$PSRCDIR/sources_1/ip/PeripheralClockGen/PeripheralClockGen.xci"/>
-          <Attr Name="ImportTime" Val="1620295321"/>
+          <Attr Name="ImportPath" Val="$PSRCDIR/sources_1/ip/GPUClockGen/GPUClockGen.xci"/>
+          <Attr Name="ImportTime" Val="1620464817"/>
           <Attr Name="UsedIn" Val="synthesis"/>
           <Attr Name="UsedIn" Val="implementation"/>
           <Attr Name="UsedIn" Val="simulation"/>
@@ -234,9 +234,19 @@
           <Attr Name="UsedIn" Val="simulation"/>
         </FileInfo>
       </File>
+      <File Path="$PSRCDIR/sources_1/ip/SPIFIFO/SPIFIFO.xci">
+        <FileInfo>
+          <Attr Name="AutoDisabled" Val="1"/>
+          <Attr Name="UsedIn" Val="synthesis"/>
+          <Attr Name="UsedIn" Val="implementation"/>
+          <Attr Name="UsedIn" Val="simulation"/>
+        </FileInfo>
+      </File>
       <File Path="$PSRCDIR/sources_1/new/SPImaster.sv">
         <FileInfo>
           <Attr Name="AutoDisabled" Val="1"/>
+          <Attr Name="ImportPath" Val="$PSRCDIR/sources_1/new/SPImaster.sv"/>
+          <Attr Name="ImportTime" Val="1620978124"/>
           <Attr Name="UsedIn" Val="synthesis"/>
           <Attr Name="UsedIn" Val="implementation"/>
           <Attr Name="UsedIn" Val="simulation"/>
@@ -253,7 +263,7 @@
       <File Path="$PSRCDIR/sources_1/imports/nekoichi2/archive_project_summary.txt">
         <FileInfo>
           <Attr Name="ImportPath" Val="$PPRDIR/archive_project_summary.txt"/>
-          <Attr Name="ImportTime" Val="1619587270"/>
+          <Attr Name="ImportTime" Val="1620807954"/>
         </FileInfo>
       </File>
       <File Path="$PPRDIR/archive_project_summary.txt"/>
@@ -593,18 +603,18 @@
         <Option Name="UseBlackboxStub" Val="1"/>
       </Config>
     </FileSet>
-    <FileSet Name="GPUClockGen" Type="BlockSrcs" RelSrcDir="$PSRCDIR/GPUClockGen" RelGenDir="$PGENDIR/GPUClockGen">
-      <File Path="$PSRCDIR/sources_1/ip/GPUClockGen/GPUClockGen.xci">
+    <FileSet Name="PeripheralClockGen" Type="BlockSrcs" RelSrcDir="$PSRCDIR/PeripheralClockGen" RelGenDir="$PGENDIR/PeripheralClockGen">
+      <File Path="$PSRCDIR/sources_1/ip/PeripheralClockGen/PeripheralClockGen.xci">
         <FileInfo>
-          <Attr Name="ImportPath" Val="$PSRCDIR/sources_1/ip/GPUClockGen/GPUClockGen.xci"/>
-          <Attr Name="ImportTime" Val="1620464817"/>
+          <Attr Name="ImportPath" Val="$PSRCDIR/sources_1/ip/PeripheralClockGen/PeripheralClockGen.xci"/>
+          <Attr Name="ImportTime" Val="1620295321"/>
           <Attr Name="UsedIn" Val="synthesis"/>
           <Attr Name="UsedIn" Val="implementation"/>
           <Attr Name="UsedIn" Val="simulation"/>
         </FileInfo>
       </File>
       <Config>
-        <Option Name="TopModule" Val="GPUClockGen"/>
+        <Option Name="TopModule" Val="PeripheralClockGen"/>
         <Option Name="UseBlackboxStub" Val="1"/>
       </Config>
     </FileSet>
@@ -651,14 +661,16 @@
   <Runs Version="1" Minor="15">
     <Run Id="synth_1" Type="Ft3:Synth" SrcSet="sources_1" Part="xc7a100tcsg324-1" ConstrsSet="constrs_1" Description="Higher performance designs, resource sharing is turned off, the global fanout guide is set to a lower number, FSM extraction forced to one-hot, LUT combining is disabled, equivalent registers are preserved, SRL are inferred  with a larger threshold" AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" State="current" Dir="$PRUNDIR/synth_1" IncludeInArchive="true" AutoIncrementalDir="$PSRCDIR/utils_1/imports/synth_1">
       <Strategy Version="1" Minor="2">
-        <StratHandle Name="Flow_PerfOptimized_high" Flow="Vivado Synthesis 2020"/>
+        <StratHandle Name="Flow_PerfOptimized_high" Flow="Vivado Synthesis 2020">
+          <Desc>Higher performance designs, resource sharing is turned off, the global fanout guide is set to a lower number, FSM extraction forced to one-hot, LUT combining is disabled, equivalent registers are preserved, SRL are inferred  with a larger threshold</Desc>
+        </StratHandle>
         <Step Id="synth_design">
-          <Option Id="ShregMinSize">5</Option>
           <Option Id="FsmExtraction">1</Option>
+          <Option Id="ShregMinSize">5</Option>
           <Option Id="Directive">7</Option>
           <Option Id="ResourceSharing">2</Option>
-          <Option Id="KeepEquivalentRegisters">1</Option>
           <Option Id="NoCombineLuts">1</Option>
+          <Option Id="KeepEquivalentRegisters">1</Option>
         </Step>
       </Strategy>
       <GeneratedRun Dir="$PRUNDIR" File="gen_run.xml"/>
@@ -856,7 +868,7 @@
       <Report Name="ROUTE_DESIGN.REPORT_METHODOLOGY" Enabled="1"/>
       <RQSFiles/>
     </Run>
-    <Run Id="GPUClockGen_synth_1" Type="Ft3:Synth" SrcSet="GPUClockGen" Part="xc7a100tcsg324-1" ConstrsSet="GPUClockGen" Description="Vivado Synthesis Defaults" AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" Dir="$PRUNDIR/GPUClockGen_synth_1" IncludeInArchive="true" AutoIncrementalDir="$PSRCDIR/utils_1/imports/GPUClockGen_synth_1">
+    <Run Id="PeripheralClockGen_synth_1" Type="Ft3:Synth" SrcSet="PeripheralClockGen" Part="xc7a100tcsg324-1" ConstrsSet="PeripheralClockGen" Description="Vivado Synthesis Defaults" AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" Dir="$PRUNDIR/PeripheralClockGen_synth_1" IncludeInArchive="true" AutoIncrementalDir="$PSRCDIR/utils_1/imports/PeripheralClockGen_synth_1">
       <Strategy Version="1" Minor="2">
         <StratHandle Name="Vivado Synthesis Defaults" Flow="Vivado Synthesis 2020">
           <Desc>Vivado Synthesis Defaults</Desc>
@@ -880,22 +892,20 @@
       <Report Name="ROUTE_DESIGN.REPORT_METHODOLOGY" Enabled="1"/>
       <RQSFiles/>
     </Run>
-    <Run Id="impl_1" Type="Ft2:EntireDesign" Part="xc7a100tcsg324-1" ConstrsSet="constrs_1" Description="Combines retiming in phys_opt_design with extra placement optimization and higher router delay cost." AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" State="current" Dir="$PRUNDIR/impl_1" SynthRun="synth_1" IncludeInArchive="true" GenFullBitstream="true" AutoIncrementalDir="$PSRCDIR/utils_1/imports/impl_1">
+    <Run Id="impl_1" Type="Ft2:EntireDesign" Part="xc7a100tcsg324-1" ConstrsSet="constrs_1" Description="Similar to the Implementation Run Defaults, but enables the physical optimization step (phys_opt_design)." AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" State="current" Dir="$PRUNDIR/impl_1" SynthRun="synth_1" IncludeInArchive="true" GenFullBitstream="true" AutoIncrementalDir="$PSRCDIR/utils_1/imports/impl_1">
       <Strategy Version="1" Minor="2">
-        <StratHandle Name="Performance_Retiming" Flow="Vivado Implementation 2020"/>
+        <StratHandle Name="Flow_RunPhysOpt" Flow="Vivado Implementation 2020">
+          <Desc>Similar to the Implementation Run Defaults, but enables the physical optimization step (phys_opt_design).</Desc>
+        </StratHandle>
         <Step Id="init_design"/>
         <Step Id="opt_design"/>
         <Step Id="power_opt_design"/>
-        <Step Id="place_design">
-          <Option Id="Directive">7</Option>
-        </Step>
+        <Step Id="place_design"/>
         <Step Id="post_place_power_opt_design"/>
         <Step Id="phys_opt_design">
-          <Option Id="Directive">6</Option>
-        </Step>
-        <Step Id="route_design">
           <Option Id="Directive">0</Option>
         </Step>
+        <Step Id="route_design"/>
         <Step Id="post_route_phys_opt_design"/>
         <Step Id="write_bitstream">
           <Option Id="BinFile">1</Option>
@@ -1229,7 +1239,7 @@
       <Report Name="ROUTE_DESIGN.REPORT_METHODOLOGY" Enabled="1"/>
       <RQSFiles/>
     </Run>
-    <Run Id="GPUClockGen_impl_1" Type="Ft2:EntireDesign" Part="xc7a100tcsg324-1" ConstrsSet="GPUClockGen" Description="Default settings for Implementation." AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" SynthRun="GPUClockGen_synth_1" IncludeInArchive="false" GenFullBitstream="true" AutoIncrementalDir="$PSRCDIR/utils_1/imports/GPUClockGen_impl_1">
+    <Run Id="PeripheralClockGen_impl_1" Type="Ft2:EntireDesign" Part="xc7a100tcsg324-1" ConstrsSet="PeripheralClockGen" Description="Default settings for Implementation." AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" SynthRun="PeripheralClockGen_synth_1" IncludeInArchive="false" GenFullBitstream="true" AutoIncrementalDir="$PSRCDIR/utils_1/imports/PeripheralClockGen_impl_1">
       <Strategy Version="1" Minor="2">
         <StratHandle Name="Vivado Implementation Defaults" Flow="Vivado Implementation 2020">
           <Desc>Default settings for Implementation.</Desc>
