@@ -12,14 +12,14 @@
    </db_ref_list>
    <zoom_setting>
       <ZoomStartTime time="0fs"></ZoomStartTime>
-      <ZoomEndTime time="1311000001fs"></ZoomEndTime>
-      <Cursor1Time time="16868333fs"></Cursor1Time>
+      <ZoomEndTime time="526000001fs"></ZoomEndTime>
+      <Cursor1Time time="100359999fs"></Cursor1Time>
    </zoom_setting>
    <column_width_setting>
-      <NameColumnWidth column_width="152"></NameColumnWidth>
-      <ValueColumnWidth column_width="73"></ValueColumnWidth>
+      <NameColumnWidth column_width="151"></NameColumnWidth>
+      <ValueColumnWidth column_width="66"></ValueColumnWidth>
    </column_width_setting>
-   <WVObjectSize size="180" />
+   <WVObjectSize size="237" />
    <wvobject fp_name="divider45" type="divider">
       <obj_property name="label">SYS</obj_property>
       <obj_property name="DisplayName">label</obj_property>
@@ -769,6 +769,234 @@
       <obj_property name="ObjectShortName">empty</obj_property>
    </wvobject>
    <wvobject type="logic" fp_name="/nekoichitop/GPUVGAVSyncQueue/valid">
+      <obj_property name="ElementShortName">valid</obj_property>
+      <obj_property name="ObjectShortName">valid</obj_property>
+   </wvobject>
+   <wvobject fp_name="divider1899" type="divider">
+      <obj_property name="label">SPIMASTER</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/nekoichitop/SDCardController/CLK">
+      <obj_property name="ElementShortName">CLK</obj_property>
+      <obj_property name="ObjectShortName">CLK</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/nekoichitop/SDCardController/RST">
+      <obj_property name="ElementShortName">RST</obj_property>
+      <obj_property name="ObjectShortName">RST</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/nekoichitop/SDCardController/SCLK">
+      <obj_property name="ElementShortName">SCLK</obj_property>
+      <obj_property name="ObjectShortName">SCLK</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/nekoichitop/SDCardController/CS_N">
+      <obj_property name="ElementShortName">CS_N[0:0]</obj_property>
+      <obj_property name="ObjectShortName">CS_N[0:0]</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/nekoichitop/SDCardController/MOSI">
+      <obj_property name="ElementShortName">MOSI</obj_property>
+      <obj_property name="ObjectShortName">MOSI</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/nekoichitop/SDCardController/MISO">
+      <obj_property name="ElementShortName">MISO</obj_property>
+      <obj_property name="ObjectShortName">MISO</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/nekoichitop/SDCardController/DIN">
+      <obj_property name="ElementShortName">DIN[7:0]</obj_property>
+      <obj_property name="ObjectShortName">DIN[7:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/nekoichitop/SDCardController/DIN_ADDR">
+      <obj_property name="ElementShortName">DIN_ADDR[-1:0]</obj_property>
+      <obj_property name="ObjectShortName">DIN_ADDR[-1:0]</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/nekoichitop/SDCardController/DIN_LAST">
+      <obj_property name="ElementShortName">DIN_LAST</obj_property>
+      <obj_property name="ObjectShortName">DIN_LAST</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/nekoichitop/SDCardController/DIN_VLD">
+      <obj_property name="ElementShortName">DIN_VLD</obj_property>
+      <obj_property name="ObjectShortName">DIN_VLD</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/nekoichitop/SDCardController/DIN_RDY">
+      <obj_property name="ElementShortName">DIN_RDY</obj_property>
+      <obj_property name="ObjectShortName">DIN_RDY</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/nekoichitop/SDCardController/DOUT">
+      <obj_property name="ElementShortName">DOUT[7:0]</obj_property>
+      <obj_property name="ObjectShortName">DOUT[7:0]</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/nekoichitop/SDCardController/DOUT_VLD">
+      <obj_property name="ElementShortName">DOUT_VLD</obj_property>
+      <obj_property name="ObjectShortName">DOUT_VLD</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/nekoichitop/SDCardController/addr_reg">
+      <obj_property name="ElementShortName">addr_reg[-1:0]</obj_property>
+      <obj_property name="ObjectShortName">addr_reg[-1:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/nekoichitop/SDCardController/sys_clk_cnt">
+      <obj_property name="ElementShortName">sys_clk_cnt[2:0]</obj_property>
+      <obj_property name="ObjectShortName">sys_clk_cnt[2:0]</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/nekoichitop/SDCardController/sys_clk_cnt_max">
+      <obj_property name="ElementShortName">sys_clk_cnt_max</obj_property>
+      <obj_property name="ObjectShortName">sys_clk_cnt_max</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/nekoichitop/SDCardController/spi_clk">
+      <obj_property name="ElementShortName">spi_clk</obj_property>
+      <obj_property name="ObjectShortName">spi_clk</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/nekoichitop/SDCardController/spi_clk_rst">
+      <obj_property name="ElementShortName">spi_clk_rst</obj_property>
+      <obj_property name="ObjectShortName">spi_clk_rst</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/nekoichitop/SDCardController/din_last_reg_n">
+      <obj_property name="ElementShortName">din_last_reg_n</obj_property>
+      <obj_property name="ObjectShortName">din_last_reg_n</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/nekoichitop/SDCardController/first_edge_en">
+      <obj_property name="ElementShortName">first_edge_en</obj_property>
+      <obj_property name="ObjectShortName">first_edge_en</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/nekoichitop/SDCardController/second_edge_en">
+      <obj_property name="ElementShortName">second_edge_en</obj_property>
+      <obj_property name="ObjectShortName">second_edge_en</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/nekoichitop/SDCardController/chip_select_n">
+      <obj_property name="ElementShortName">chip_select_n</obj_property>
+      <obj_property name="ObjectShortName">chip_select_n</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/nekoichitop/SDCardController/load_data">
+      <obj_property name="ElementShortName">load_data</obj_property>
+      <obj_property name="ObjectShortName">load_data</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/nekoichitop/SDCardController/miso_reg">
+      <obj_property name="ElementShortName">miso_reg</obj_property>
+      <obj_property name="ObjectShortName">miso_reg</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/nekoichitop/SDCardController/shreg">
+      <obj_property name="ElementShortName">shreg[7:0]</obj_property>
+      <obj_property name="ObjectShortName">shreg[7:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/nekoichitop/SDCardController/bit_cnt">
+      <obj_property name="ElementShortName">bit_cnt[2:0]</obj_property>
+      <obj_property name="ObjectShortName">bit_cnt[2:0]</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/nekoichitop/SDCardController/bit_cnt_max">
+      <obj_property name="ElementShortName">bit_cnt_max</obj_property>
+      <obj_property name="ObjectShortName">bit_cnt_max</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/nekoichitop/SDCardController/rx_data_vld">
+      <obj_property name="ElementShortName">rx_data_vld</obj_property>
+      <obj_property name="ObjectShortName">rx_data_vld</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/nekoichitop/SDCardController/master_ready">
+      <obj_property name="ElementShortName">master_ready</obj_property>
+      <obj_property name="ObjectShortName">master_ready</obj_property>
+   </wvobject>
+   <wvobject type="other" fp_name="/nekoichitop/SDCardController/present_state">
+      <obj_property name="ElementShortName">present_state</obj_property>
+      <obj_property name="ObjectShortName">present_state</obj_property>
+   </wvobject>
+   <wvobject type="other" fp_name="/nekoichitop/SDCardController/next_state">
+      <obj_property name="ElementShortName">next_state</obj_property>
+      <obj_property name="ObjectShortName">next_state</obj_property>
+   </wvobject>
+   <wvobject fp_name="divider2379" type="divider">
+      <obj_property name="label">SDW</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/nekoichitop/SDCardWriteFifo/rst">
+      <obj_property name="ElementShortName">rst</obj_property>
+      <obj_property name="ObjectShortName">rst</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/nekoichitop/SDCardWriteFifo/wr_clk">
+      <obj_property name="ElementShortName">wr_clk</obj_property>
+      <obj_property name="ObjectShortName">wr_clk</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/nekoichitop/SDCardWriteFifo/rd_clk">
+      <obj_property name="ElementShortName">rd_clk</obj_property>
+      <obj_property name="ObjectShortName">rd_clk</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/nekoichitop/SDCardWriteFifo/din">
+      <obj_property name="ElementShortName">din[7:0]</obj_property>
+      <obj_property name="ObjectShortName">din[7:0]</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/nekoichitop/SDCardWriteFifo/wr_en">
+      <obj_property name="ElementShortName">wr_en</obj_property>
+      <obj_property name="ObjectShortName">wr_en</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/nekoichitop/SDCardWriteFifo/rd_en">
+      <obj_property name="ElementShortName">rd_en</obj_property>
+      <obj_property name="ObjectShortName">rd_en</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/nekoichitop/SDCardWriteFifo/dout">
+      <obj_property name="ElementShortName">dout[7:0]</obj_property>
+      <obj_property name="ObjectShortName">dout[7:0]</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/nekoichitop/SDCardWriteFifo/full">
+      <obj_property name="ElementShortName">full</obj_property>
+      <obj_property name="ObjectShortName">full</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/nekoichitop/SDCardWriteFifo/empty">
+      <obj_property name="ElementShortName">empty</obj_property>
+      <obj_property name="ObjectShortName">empty</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/nekoichitop/SDCardWriteFifo/valid">
+      <obj_property name="ElementShortName">valid</obj_property>
+      <obj_property name="ObjectShortName">valid</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/nekoichitop/sddataout">
+      <obj_property name="ElementShortName">sddataout[7:0]</obj_property>
+      <obj_property name="ObjectShortName">sddataout[7:0]</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/nekoichitop/sdwq_re">
+      <obj_property name="ElementShortName">sdwq_re</obj_property>
+      <obj_property name="ObjectShortName">sdwq_re</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/nekoichitop/sdqwritestate">
+      <obj_property name="ElementShortName">sdqwritestate</obj_property>
+      <obj_property name="ObjectShortName">sdqwritestate</obj_property>
+   </wvobject>
+   <wvobject fp_name="divider2380" type="divider">
+      <obj_property name="label">SDR</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/nekoichitop/SDCardReadFifo/rst">
+      <obj_property name="ElementShortName">rst</obj_property>
+      <obj_property name="ObjectShortName">rst</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/nekoichitop/SDCardReadFifo/wr_clk">
+      <obj_property name="ElementShortName">wr_clk</obj_property>
+      <obj_property name="ObjectShortName">wr_clk</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/nekoichitop/SDCardReadFifo/rd_clk">
+      <obj_property name="ElementShortName">rd_clk</obj_property>
+      <obj_property name="ObjectShortName">rd_clk</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/nekoichitop/SDCardReadFifo/din">
+      <obj_property name="ElementShortName">din[7:0]</obj_property>
+      <obj_property name="ObjectShortName">din[7:0]</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/nekoichitop/SDCardReadFifo/wr_en">
+      <obj_property name="ElementShortName">wr_en</obj_property>
+      <obj_property name="ObjectShortName">wr_en</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/nekoichitop/SDCardReadFifo/rd_en">
+      <obj_property name="ElementShortName">rd_en</obj_property>
+      <obj_property name="ObjectShortName">rd_en</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/nekoichitop/SDCardReadFifo/dout">
+      <obj_property name="ElementShortName">dout[7:0]</obj_property>
+      <obj_property name="ObjectShortName">dout[7:0]</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/nekoichitop/SDCardReadFifo/full">
+      <obj_property name="ElementShortName">full</obj_property>
+      <obj_property name="ObjectShortName">full</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/nekoichitop/SDCardReadFifo/empty">
+      <obj_property name="ElementShortName">empty</obj_property>
+      <obj_property name="ObjectShortName">empty</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/nekoichitop/SDCardReadFifo/valid">
       <obj_property name="ElementShortName">valid</obj_property>
       <obj_property name="ObjectShortName">valid</obj_property>
    </wvobject>

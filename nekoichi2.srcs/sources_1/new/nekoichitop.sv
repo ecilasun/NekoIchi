@@ -25,10 +25,10 @@ module nekoichitop(
 
 	// UART
 	output wire uart_rxd_out,
-	input wire uart_txd_in
+	input wire uart_txd_in,
 
 	// SD Card PMOD on port C
-/*	,output wire spi_cs_n,
+	output wire spi_cs_n,
 	output wire spi_mosi,
 	input wire spi_miso,
 	output wire spi_sck,
@@ -36,7 +36,7 @@ module nekoichitop(
 	input wire spi_cd
 
 	// DDR3
-	,inout wire [15:0] ddr3_dq,
+/*	,inout wire [15:0] ddr3_dq,
 	output wire[1:0] ddr3_dm,
 	inout wire [1:0] ddr3_dqs_p,
 	inout wire [1:0] ddr3_dqs_n,
@@ -244,39 +244,57 @@ logic [31:0] bus_writeword;
 logic [3:0] bus_writeena;
 logic bus_readena;
 
+wire sdwq_full;
+logic [7:0] sdwq_datain;
+logic sdwq_we=1'b0;
+
+wire sdrq_empty, sqrq_valid;
+wire [7:0] sdrq_dataout;
+logic sdrq_re=1'b0;
+
+wire sddatainready, sddataoutready;
+
 // Device selector based on address
+wire deviceSPIWrite				= mem_address[31:28] == 4'b0010 ? 1'b1 : 1'b0;	// 0x20000000
+wire deviceSPIRead				= mem_address[31:28] == 4'b0011 ? 1'b1 : 1'b0;	// 0x30000000
 wire deviceUARTTxWrite			= mem_address[31:28] == 4'b0100 ? 1'b1 : 1'b0;	// 0x40000000
 wire deviceUARTRxRead			= mem_address[31:28] == 4'b0101 ? 1'b1 : 1'b0;	// 0x50000000
 wire deviceUARTByteCountRead	= mem_address[31:28] == 4'b0110 ? 1'b1 : 1'b0;	// 0x60000000
 wire deviceGPUFIFOWrite			= mem_address[31:28] == 4'b1000 ? 1'b1 : 1'b0;	// 0x80000000
-wire [3:0] deviceRTPort			= {deviceUARTRxRead, deviceUARTByteCountRead, deviceUARTTxWrite, deviceGPUFIFOWrite};
+
+wire [5:0] deviceRTPort			= {deviceSPIWrite, deviceSPIRead, deviceUARTRxRead, deviceUARTByteCountRead, deviceUARTTxWrite, deviceGPUFIFOWrite};
 
 // Reads are routed from the correct device to one wire
 wire [31:0] uartdataout = {24'd0, infifoout};
 wire [31:0] uartbytecountout = {22'd0, infifodatacount};
-wire [31:0] bus_dataout = deviceUARTRxRead ? uartdataout : (deviceUARTByteCountRead ? uartbytecountout : sysmem_dataout);
+wire [31:0] bus_dataout = deviceUARTRxRead ? uartdataout : (deviceUARTByteCountRead ? uartbytecountout : (deviceSPIRead ? sdrq_dataout : sysmem_dataout));
 
 // This is high if any of the device FIFOs are full or empty depending on read/write
 // It allows the CPU side to stall and wait for data access
 wire gpustall = deviceGPUFIFOWrite ? gpu_fifowrfull : 1'b0;
 wire uartwritestall = deviceUARTTxWrite ? outfifofull : 1'b0;
 wire uartreadstall = deviceUARTRxRead ? infifoempty : 1'b0;
-wire bus_stall = gpustall | uartwritestall | uartreadstall;
+wire spiwritestall = deviceSPIWrite ? sdwq_full : 1'b0;
+wire spireadstall = deviceSPIRead ? sdrq_empty : 1'b0;
+wire bus_stall = gpustall | uartwritestall | uartreadstall | spiwritestall | spireadstall;
 
 // SYSMEM and memory mapped device r/w router
 always_comb begin
 	// SYSMEM r/w
 	bus_address = mem_address;
 	bus_writeword = mem_writeword;
-	bus_writeena = deviceRTPort == 4'b0000 ? mem_writeena : 4'b0000;
-	bus_readena = deviceRTPort == 4'b0000 ? mem_readena : 0;
+	bus_writeena = deviceRTPort == 6'b000000 ? mem_writeena : 4'b0000;
+	bus_readena = deviceRTPort == 6'b000000 ? mem_readena : 0;
 
 	// GPU FIFO
 	gpu_fifocommand = mem_writeword; // Dword writes, no masking
 	gpu_fifowe = deviceGPUFIFOWrite ? ((~gpu_fifowrfull) & (|mem_writeena)) : 1'b0;
 
 	// UART (receive)
-	infifore = deviceUARTRxRead ? mem_readena : 0;
+	infifore = deviceUARTRxRead ? mem_readena : 1'b0;
+	
+	// SPI (receive)
+	sdrq_re = (deviceSPIRead & (~sdrq_empty)) ? mem_readena : 1'b0;
 
 	// UART (transmit)
 	case (mem_writeena)
@@ -286,7 +304,15 @@ always_comb begin
 		4'b0001: begin outfifoin = mem_writeword[7:0]; end
 	endcase
 	outuartfifowe = deviceUARTTxWrite ? ((~outfifofull) & (|mem_writeena)) : 1'b0;
-
+	
+	// SPI (transmit)
+	case (mem_writeena)
+		4'b1000: begin sdwq_datain = mem_writeword[31:24]; end
+		4'b0100: begin sdwq_datain = mem_writeword[23:16]; end
+		4'b0010: begin sdwq_datain = mem_writeword[15:8]; end
+		4'b0001: begin sdwq_datain = mem_writeword[7:0]; end
+	endcase
+	sdwq_we = deviceSPIWrite ? ((~sdwq_full) & |mem_writeena) : 1'b0;
 end
 
 // =====================================================================================================
@@ -475,39 +501,111 @@ vgatimer VideoScanout(
 // SD Card controller
 // =====================================================================================================
 
-/*wire sddatavalid;
-wire sdtxready;
-wire sdtxdatavalid;
-wire [7:0] sdtxdata;
-wire [7:0] sdrcvdata;
+// -----------------
+// SD Card Write
+// -----------------
+wire sdwq_empty, sqwq_valid;
+wire [7:0] sdwq_dataout;
+logic sdwq_re=1'b0;
+SPIFIFO SDCardWriteFifo(
+	// In
+	.full(sdwq_full),
+	.din(sdwq_datain),
+	.wr_en(sdwq_we),
+	.wr_clk(sysclock60),
+	// Out
+	.empty(sdwq_empty),
+	.dout(sdwq_dataout),
+	.rd_en(sdwq_re),
+	.rd_clk(sysclock60),
+	.valid(sqwq_valid),
+	// Clt
+	.rst(reset_p) );
 
-SPI_Master_With_Single_CS SDCardController (
-	// Control/Data Signals
-	.i_Rst_L(reset_n),					// FPGA Reset
-	.i_Clk(spiclock100),				// 100Mhz clock
-   
-	// TX (MOSI) Signals
-	.i_TX_Count(2'b10),					// Bytes per CS low
-	.i_TX_Byte(sdtxdata),				// Byte to transmit on MOSI
-	.i_TX_DV(sdtxdatavalid),			// Data Valid Pulse with i_TX_Byte
-	.o_TX_Ready(sdtxready),				// Transmit Ready for next byte
+// Pull from write queue and send through SD controller
+logic sddatawe = 1'b0;
+logic [7:0] sddataout;
+logic [1:0] sdqwritestate = 2'b00;
+always @(posedge sysclock60) begin
 
-	// RX (MISO) Signals
-	.o_RX_DV(sddatavalid),				// Data Valid pulse (1 clock cycle)
-	.o_RX_Byte(sdrcvdata),				// Byte received on MISO
-	.o_RX_Count(),						// Receive count - unused
+	sdwq_re <= 1'b0;
+	sddatawe <= 1'b0;
 
-	// SPI Interface
-	.o_SPI_Clk(spi_sck),
-	.i_SPI_MISO(spi_miso),
-	.o_SPI_MOSI(spi_mosi),
-	.o_SPI_CS_n(spi_cs_n) );
-*/
+	if (sdqwritestate == 2'b00) begin
+		if ((~sdwq_empty) & sddataoutready) begin
+			sdwq_re <= 1'b1;
+			sdqwritestate <= 2'b10;
+		end
+	end else begin
+		if (sqwq_valid & sdqwritestate== 2'b10) begin
+			sddatawe <= 1'b1;
+			sddataout <= sdwq_dataout;
+			sdqwritestate <= 2'b01;
+		end
+		// One clock delay to catch with sddataoutready properly
+		if (sdqwritestate <= 2'b01) begin
+			sdqwritestate <= 2'b00;
+		end
+	end
+
+end
+
+// -----------------
+// SD Card Read
+// -----------------
+wire sdrq_full;
+logic [7:0] sdrq_datain;
+logic sdrq_we = 1'b0;
+SPIFIFO SDCardReadFifo(
+	// In
+	.full(sdrq_full),
+	.din(sdrq_datain),
+	.wr_en(sdrq_we),
+	.wr_clk(sysclock60),
+	// Out
+	.empty(sdrq_empty),
+	.dout(sdrq_dataout),
+	.rd_en(sdrq_re),
+	.rd_clk(sysclock60),
+	.valid(sqrq_valid),
+	// Clt
+	.rst(reset_p) );
+
+// Push incoming data from SD controller to read queue
+wire [7:0] sddatain;
+always @(posedge sysclock60) begin
+	sdrq_we <= 1'b0;
+	if (sddatainready) begin
+		sdrq_we <= 1'b1;
+		sdrq_datain <= sddatain;
+	end
+end
+
+// -----------------
+// SD Card Controller
+// -----------------
+SPI_MASTER SDCardController(
+        .CLK(sysclock60),
+        .RST(reset_p), // spi_cd?
+        // SPI MASTER INTERFACE
+        .SCLK(spi_sck),
+        .CS_N(spi_cs_n),
+        .MOSI(spi_mosi),
+        .MISO(spi_miso),
+        // INPUT USER INTERFACE
+        .DIN(sddataout),
+        //.DIN_ADDR(1'b0), // this range is [-1:0] since we have only one client to pick, therefure unused
+        .DIN_LAST(1'b0),
+        .DIN_VLD(sddatawe),
+        .DIN_RDY(sddataoutready),
+        // OUTPUT USER INTERFACE
+        .DOUT(sddatain),
+        .DOUT_VLD(sddatainready) );
 
 // =====================================================================================================
 // Diagnosis LEDs
 // =====================================================================================================
 
-assign led = deviceRTPort;
+assign led = {spireadstall, spiwritestall, deviceSPIRead, deviceSPIWrite};
 
 endmodule

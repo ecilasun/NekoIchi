@@ -418,14 +418,19 @@ always_ff @(posedge clock) begin
 	end else begin
 
 		cpustate <= `CPUNONE_MASK;
-		
+
 		// cpu state uses one-hot encoding
 		unique case (1'b1)
 
 			cpustate[`CPUFETCH]: begin
-				mem_readena <= 1'b0;
-				// Instruction read takes place here, to be latched at the start of next state
-				cpustate[`CPUDECODE] <= 1'b1;
+				/*if (busstall) begin
+					// Keep mem_readena high during stall
+					cpustate[`CPUFETCH] <= 1'b1;
+				end else begin*/
+					mem_readena <= 1'b0;
+					// Instruction read takes place here, to be latched at the start of next state
+					cpustate[`CPUDECODE] <= 1'b1;
+				/*end*/
 			end
 
 			cpustate[`CPUDECODE]: begin
