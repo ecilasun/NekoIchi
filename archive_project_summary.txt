@@ -80,6 +80,7 @@ The run results were included for the following runs in the archived project:-
 <fp_lt_synth_1>
 <fp_le_synth_1>
 <UARTFifoGen_synth_1>
+<PeripheralClockGen_synth_1>
 <SystemClockGen_synth_1>
 <impl_1>
 
@@ -113,6 +114,9 @@ List of referenced 'remote' design files that were 'imported' into the archived 
 None
 
 <GPUCommandFIFO>
+None
+
+<PeripheralClockGen>
 None
 
 <SystemClockGen>
@@ -195,30 +199,14 @@ List of all the source files present in the archived project:-
 ./nekoichi2.gen/sources_1/ip/VideoMemSlice/synth/VideoMemSlice.vhd
 ./nekoichi2.gen/sources_1/ip/VideoMemSlice/VideoMemSlice.xml
 ./nekoichi2.srcs/sources_1/ip/FastSystemMemory/FastSystemMemory.xci
-./nekoichi2.gen/sources_1/ip/FastSystemMemory/FastSystemMemory_ooc.xdc
 ./nekoichi2.gen/sources_1/ip/FastSystemMemory/FastSystemMemory.mif
+./nekoichi2.gen/sources_1/ip/FastSystemMemory/simulation/blk_mem_gen_v8_4.v
+./nekoichi2.gen/sources_1/ip/FastSystemMemory/sim/FastSystemMemory.v
+./nekoichi2.gen/sources_1/ip/FastSystemMemory/FastSystemMemory_ooc.xdc
 ./nekoichi2.gen/sources_1/ip/FastSystemMemory/hdl/blk_mem_gen_v8_4_vhsyn_rfs.vhd
 ./nekoichi2.gen/sources_1/ip/FastSystemMemory/synth/FastSystemMemory.vhd
 ./nekoichi2.gen/sources_1/ip/FastSystemMemory/FastSystemMemory.xml
 ./nekoichi2.srcs/sources_1/new/BIOS.coe
-./nekoichi2.srcs/sources_1/ip/PeripheralClockGen/PeripheralClockGen.xci
-./nekoichi2.gen/sources_1/ip/PeripheralClockGen/PeripheralClockGen_board.xdc
-./nekoichi2.gen/sources_1/ip/PeripheralClockGen/mmcm_pll_drp_func_7s_mmcm.vh
-./nekoichi2.gen/sources_1/ip/PeripheralClockGen/mmcm_pll_drp_func_7s_pll.vh
-./nekoichi2.gen/sources_1/ip/PeripheralClockGen/mmcm_pll_drp_func_us_mmcm.vh
-./nekoichi2.gen/sources_1/ip/PeripheralClockGen/mmcm_pll_drp_func_us_pll.vh
-./nekoichi2.gen/sources_1/ip/PeripheralClockGen/mmcm_pll_drp_func_us_plus_pll.vh
-./nekoichi2.gen/sources_1/ip/PeripheralClockGen/mmcm_pll_drp_func_us_plus_mmcm.vh
-./nekoichi2.gen/sources_1/ip/PeripheralClockGen/PeripheralClockGen_clk_wiz.v
-./nekoichi2.gen/sources_1/ip/PeripheralClockGen/PeripheralClockGen.v
-./nekoichi2.gen/sources_1/ip/PeripheralClockGen/PeripheralClockGen_stub.v
-./nekoichi2.gen/sources_1/ip/PeripheralClockGen/PeripheralClockGen_sim_netlist.v
-./nekoichi2.gen/sources_1/ip/PeripheralClockGen/PeripheralClockGen_sim_netlist.vhdl
-./nekoichi2.gen/sources_1/ip/PeripheralClockGen/PeripheralClockGen_stub.vhdl
-./nekoichi2.gen/sources_1/ip/PeripheralClockGen/PeripheralClockGen.dcp
-./nekoichi2.gen/sources_1/ip/PeripheralClockGen/PeripheralClockGen.xdc
-./nekoichi2.gen/sources_1/ip/PeripheralClockGen/PeripheralClockGen_ooc.xdc
-./nekoichi2.gen/sources_1/ip/PeripheralClockGen/PeripheralClockGen.xml
 ./nekoichi2.srcs/sources_1/ip/GPUClockGen/GPUClockGen.xci
 ./nekoichi2.gen/sources_1/ip/GPUClockGen/doc/clk_wiz_v6_0_changelog.txt
 ./nekoichi2.gen/sources_1/ip/GPUClockGen/GPUClockGen_board.xdc
@@ -753,6 +741,28 @@ None
 ./nekoichi2.gen/sources_1/ip/UARTFifoGen/UARTFifoGen_ooc.xdc
 ./nekoichi2.gen/sources_1/ip/UARTFifoGen/UARTFifoGen.xml
 
+<PeripheralClockGen>
+./nekoichi2.srcs/sources_1/ip/PeripheralClockGen/PeripheralClockGen.xci
+./nekoichi2.gen/sources_1/ip/PeripheralClockGen/doc/clk_wiz_v6_0_changelog.txt
+./nekoichi2.gen/sources_1/ip/PeripheralClockGen/PeripheralClockGen_board.xdc
+./nekoichi2.gen/sources_1/ip/PeripheralClockGen/PeripheralClockGen.veo
+./nekoichi2.gen/sources_1/ip/PeripheralClockGen/mmcm_pll_drp_func_7s_mmcm.vh
+./nekoichi2.gen/sources_1/ip/PeripheralClockGen/mmcm_pll_drp_func_7s_pll.vh
+./nekoichi2.gen/sources_1/ip/PeripheralClockGen/mmcm_pll_drp_func_us_mmcm.vh
+./nekoichi2.gen/sources_1/ip/PeripheralClockGen/mmcm_pll_drp_func_us_pll.vh
+./nekoichi2.gen/sources_1/ip/PeripheralClockGen/mmcm_pll_drp_func_us_plus_pll.vh
+./nekoichi2.gen/sources_1/ip/PeripheralClockGen/mmcm_pll_drp_func_us_plus_mmcm.vh
+./nekoichi2.gen/sources_1/ip/PeripheralClockGen/PeripheralClockGen_clk_wiz.v
+./nekoichi2.gen/sources_1/ip/PeripheralClockGen/PeripheralClockGen.v
+./nekoichi2.gen/sources_1/ip/PeripheralClockGen/PeripheralClockGen.dcp
+./nekoichi2.gen/sources_1/ip/PeripheralClockGen/PeripheralClockGen_stub.v
+./nekoichi2.gen/sources_1/ip/PeripheralClockGen/PeripheralClockGen_stub.vhdl
+./nekoichi2.gen/sources_1/ip/PeripheralClockGen/PeripheralClockGen_sim_netlist.v
+./nekoichi2.gen/sources_1/ip/PeripheralClockGen/PeripheralClockGen_sim_netlist.vhdl
+./nekoichi2.gen/sources_1/ip/PeripheralClockGen/PeripheralClockGen.xdc
+./nekoichi2.gen/sources_1/ip/PeripheralClockGen/PeripheralClockGen_ooc.xdc
+./nekoichi2.gen/sources_1/ip/PeripheralClockGen/PeripheralClockGen.xml
+
 <SystemClockGen>
 ./nekoichi2.srcs/sources_1/ip/SystemClockGen/SystemClockGen.xci
 ./nekoichi2.gen/sources_1/ip/SystemClockGen/doc/clk_wiz_v6_0_changelog.txt
@@ -837,6 +847,9 @@ None
 None
 
 <UARTFifoGen>
+None
+
+<PeripheralClockGen>
 None
 
 <SystemClockGen>

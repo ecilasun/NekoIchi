@@ -6,7 +6,7 @@
 <Project Version="7" Minor="54" Path="/media/engin/StorageA/FPGA/nekoichi2/nekoichi2.xpr">
   <DefaultLaunch Dir="$PRUNDIR"/>
   <Configuration>
-    <Option Name="Id" Val="adb65aef0c8b47a0a4ac2e98aa6af3c8"/>
+    <Option Name="Id" Val="f4778a38ebcd450380d2794787396da5"/>
     <Option Name="Part" Val="xc7a100tcsg324-1"/>
     <Option Name="CompiledLibDir" Val="$PCACHEDIR/compile_simlib"/>
     <Option Name="CompiledLibDirXSim" Val=""/>
@@ -46,20 +46,20 @@
     <Option Name="IPStaticSourceDir" Val="$PIPUSERFILESDIR/ipstatic"/>
     <Option Name="EnableBDX" Val="FALSE"/>
     <Option Name="DSABoardId" Val="arty-a7-100"/>
-    <Option Name="WTXSimLaunchSim" Val="158"/>
+    <Option Name="WTXSimLaunchSim" Val="146"/>
     <Option Name="WTModelSimLaunchSim" Val="0"/>
     <Option Name="WTQuestaLaunchSim" Val="0"/>
     <Option Name="WTIesLaunchSim" Val="0"/>
     <Option Name="WTVcsLaunchSim" Val="0"/>
     <Option Name="WTRivieraLaunchSim" Val="0"/>
     <Option Name="WTActivehdlLaunchSim" Val="0"/>
-    <Option Name="WTXSimExportSim" Val="261"/>
-    <Option Name="WTModelSimExportSim" Val="261"/>
-    <Option Name="WTQuestaExportSim" Val="261"/>
-    <Option Name="WTIesExportSim" Val="261"/>
-    <Option Name="WTVcsExportSim" Val="261"/>
-    <Option Name="WTRivieraExportSim" Val="261"/>
-    <Option Name="WTActivehdlExportSim" Val="261"/>
+    <Option Name="WTXSimExportSim" Val="264"/>
+    <Option Name="WTModelSimExportSim" Val="264"/>
+    <Option Name="WTQuestaExportSim" Val="264"/>
+    <Option Name="WTIesExportSim" Val="264"/>
+    <Option Name="WTVcsExportSim" Val="264"/>
+    <Option Name="WTRivieraExportSim" Val="264"/>
+    <Option Name="WTActivehdlExportSim" Val="264"/>
     <Option Name="GenerateIPUpgradeLog" Val="TRUE"/>
     <Option Name="XSimRadix" Val="hex"/>
     <Option Name="XSimTimeUnit" Val="ns"/>
@@ -77,6 +77,8 @@
       <Filter Type="Srcs"/>
       <File Path="$PSRCDIR/sources_1/ip/SPIFIFO/SPIFIFO.xci">
         <FileInfo>
+          <Attr Name="ImportPath" Val="$PSRCDIR/sources_1/ip/SPIFIFO/SPIFIFO.xci"/>
+          <Attr Name="ImportTime" Val="1621159194"/>
           <Attr Name="UsedIn" Val="synthesis"/>
           <Attr Name="UsedIn" Val="implementation"/>
           <Attr Name="UsedIn" Val="simulation"/>
@@ -247,6 +249,14 @@
           <Attr Name="UsedIn" Val="simulation"/>
         </FileInfo>
       </File>
+      <File Path="$PSRCDIR/sources_1/ip/BRAMReadWriteQueue/BRAMReadWriteQueue.xci">
+        <FileInfo>
+          <Attr Name="AutoDisabled" Val="1"/>
+          <Attr Name="UsedIn" Val="synthesis"/>
+          <Attr Name="UsedIn" Val="implementation"/>
+          <Attr Name="UsedIn" Val="simulation"/>
+        </FileInfo>
+      </File>
       <File Path="$PSRCDIR/sources_1/new/BIOS.coe">
         <FileInfo>
           <Attr Name="ImportPath" Val="$PSRCDIR/sources_1/new/BIOS.coe"/>
@@ -258,7 +268,7 @@
       <File Path="$PSRCDIR/sources_1/imports/nekoichi2/archive_project_summary.txt">
         <FileInfo>
           <Attr Name="ImportPath" Val="$PPRDIR/archive_project_summary.txt"/>
-          <Attr Name="ImportTime" Val="1620807954"/>
+          <Attr Name="ImportTime" Val="1621146486"/>
         </FileInfo>
       </File>
       <File Path="$PPRDIR/archive_project_summary.txt"/>
@@ -279,7 +289,6 @@
         </FileInfo>
       </File>
       <Config>
-        <Option Name="TargetConstrsFile" Val="$PSRCDIR/constrs_1/new/artya7100T.xdc"/>
         <Option Name="ConstrsType" Val="XDC"/>
       </Config>
     </FileSet>
@@ -659,12 +668,12 @@
       <Strategy Version="1" Minor="2">
         <StratHandle Name="Flow_PerfOptimized_high" Flow="Vivado Synthesis 2020"/>
         <Step Id="synth_design">
-          <Option Id="ShregMinSize">5</Option>
           <Option Id="FsmExtraction">1</Option>
+          <Option Id="ShregMinSize">5</Option>
           <Option Id="Directive">7</Option>
           <Option Id="ResourceSharing">2</Option>
-          <Option Id="KeepEquivalentRegisters">1</Option>
           <Option Id="NoCombineLuts">1</Option>
+          <Option Id="KeepEquivalentRegisters">1</Option>
         </Step>
       </Strategy>
       <GeneratedRun Dir="$PRUNDIR" File="gen_run.xml"/>

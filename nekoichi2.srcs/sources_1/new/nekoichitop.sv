@@ -12,7 +12,7 @@ module nekoichitop(
 	output wire VGA_VS_O,
 	
 	// LEDs
-	output wire [3:0] led,
+	//output wire [3:0] led,
 	
 	// DVI PMOD on ports A+B
 	/*output wire [3:0] DVI_R,
@@ -32,25 +32,8 @@ module nekoichitop(
 	output wire spi_mosi,
 	input wire spi_miso,
 	output wire spi_sck,
-	//inout wire [1:0] dat,
-	input wire spi_cd
-
-	// DDR3
-/*	,inout wire [15:0] ddr3_dq,
-	output wire[1:0] ddr3_dm,
-	inout wire [1:0] ddr3_dqs_p,
-	inout wire [1:0] ddr3_dqs_n,
-	output wire [13:0] ddr3_addr,
-	output wire [2:0] ddr3_ba,
-	output wire [0:0] ddr3_ck_p,
-	output wire [0:0] ddr3_ck_n,
-	output wire ddr3_ras_n,
-	output wire ddr3_cas_n,
-	output wire ddr3_we_n,
-	output wire ddr3_reset_n,
-	output wire [0:0] ddr3_cke,
-	output wire [0:0] ddr3_odt,
-	output wire [0:0] ddr3_cs_n*/ );
+	//inout wire [1:0] dat, // UNUSED
+	input wire spi_cd );
 
 // =====================================================================================================
 // Misc Wires
@@ -233,41 +216,42 @@ logic gpu_fifowe;
 wire gpu_fifore;
 wire [31:0] gpu_fifodataout;
 
-wire [31:0] mem_address;
-wire [31:0] mem_writeword;
-wire [31:0] sysmem_dataout;
-wire [3:0] mem_writeena;
-wire mem_readena;
+// Wires from/to CPU
+wire [31:0] cpu_address;
+wire [31:0] cpu_writeword;
+wire [3:0] cpu_writeena;
+wire cpu_readena;
 
-logic [31:0] bus_address;
-logic [31:0] bus_writeword;
-logic [3:0] bus_writeena;
-logic bus_readena;
+// Wires to BRAM
+logic [31:0] bram_address;
+logic [31:0] bram_writeword;
+logic [3:0] bram_writeena;
+logic bram_readena;
+wire [31:0] bram_dataout;
+logic pendingmemop = 1'b0;
 
+// Wires to SDCard FIFO
 wire sdwq_full;
 logic [7:0] sdwq_datain;
 logic sdwq_we=1'b0;
-
 wire sdrq_empty, sqrq_valid;
 wire [7:0] sdrq_dataout;
 logic sdrq_re=1'b0;
-
 wire sddatainready, sddataoutready;
 
 // Device selector based on address
-wire deviceSPIWrite				= mem_address[31:28] == 4'b0010 ? 1'b1 : 1'b0;	// 0x20000000
-wire deviceSPIRead				= mem_address[31:28] == 4'b0011 ? 1'b1 : 1'b0;	// 0x30000000
-wire deviceUARTTxWrite			= mem_address[31:28] == 4'b0100 ? 1'b1 : 1'b0;	// 0x40000000
-wire deviceUARTRxRead			= mem_address[31:28] == 4'b0101 ? 1'b1 : 1'b0;	// 0x50000000
-wire deviceUARTByteCountRead	= mem_address[31:28] == 4'b0110 ? 1'b1 : 1'b0;	// 0x60000000
-wire deviceGPUFIFOWrite			= mem_address[31:28] == 4'b1000 ? 1'b1 : 1'b0;	// 0x80000000
-
+wire deviceSPIWrite				= cpu_address[31:28] == 4'b0010 ? 1'b1 : 1'b0;	// 0x20000000
+wire deviceSPIRead				= cpu_address[31:28] == 4'b0011 ? 1'b1 : 1'b0;	// 0x30000000
+wire deviceUARTTxWrite			= cpu_address[31:28] == 4'b0100 ? 1'b1 : 1'b0;	// 0x40000000
+wire deviceUARTRxRead			= cpu_address[31:28] == 4'b0101 ? 1'b1 : 1'b0;	// 0x50000000
+wire deviceUARTByteCountRead	= cpu_address[31:28] == 4'b0110 ? 1'b1 : 1'b0;	// 0x60000000
+wire deviceGPUFIFOWrite			= cpu_address[31:28] == 4'b1000 ? 1'b1 : 1'b0;	// 0x80000000
 wire [5:0] deviceRTPort			= {deviceSPIWrite, deviceSPIRead, deviceUARTRxRead, deviceUARTByteCountRead, deviceUARTTxWrite, deviceGPUFIFOWrite};
 
 // Reads are routed from the correct device to one wire
 wire [31:0] uartdataout = {24'd0, infifoout};
 wire [31:0] uartbytecountout = {22'd0, infifodatacount};
-wire [31:0] bus_dataout = deviceUARTRxRead ? uartdataout : (deviceUARTByteCountRead ? uartbytecountout : (deviceSPIRead ? sdrq_dataout : sysmem_dataout));
+wire [31:0] bus_dataout = deviceUARTRxRead ? uartdataout : (deviceUARTByteCountRead ? uartbytecountout : (deviceSPIRead ? sdrq_dataout : bram_dataout));
 
 // This is high if any of the device FIFOs are full or empty depending on read/write
 // It allows the CPU side to stall and wait for data access
@@ -276,43 +260,44 @@ wire uartwritestall = deviceUARTTxWrite ? outfifofull : 1'b0;
 wire uartreadstall = deviceUARTRxRead ? infifoempty : 1'b0;
 wire spiwritestall = deviceSPIWrite ? sdwq_full : 1'b0;
 wire spireadstall = deviceSPIRead ? sdrq_empty : 1'b0;
+
 wire bus_stall = gpustall | uartwritestall | uartreadstall | spiwritestall | spireadstall;
 
 // SYSMEM and memory mapped device r/w router
 always_comb begin
 	// SYSMEM r/w
-	bus_address = mem_address;
-	bus_writeword = mem_writeword;
-	bus_writeena = deviceRTPort == 6'b000000 ? mem_writeena : 4'b0000;
-	bus_readena = deviceRTPort == 6'b000000 ? mem_readena : 0;
+	bram_address = cpu_address;
+	bram_writeword = cpu_writeword;
+	bram_writeena = deviceRTPort == 6'd0 ? cpu_writeena : 4'b0000;
+	bram_readena = deviceRTPort == 6'd0 ? cpu_readena : 0;
 
 	// GPU FIFO
-	gpu_fifocommand = mem_writeword; // Dword writes, no masking
-	gpu_fifowe = deviceGPUFIFOWrite ? ((~gpu_fifowrfull) & (|mem_writeena)) : 1'b0;
+	gpu_fifocommand = cpu_writeword; // Dword writes, no masking
+	gpu_fifowe = deviceGPUFIFOWrite ? ((~gpu_fifowrfull) & (|cpu_writeena)) : 1'b0;
 
 	// UART (receive)
-	infifore = deviceUARTRxRead ? mem_readena : 1'b0;
-	
+	infifore = deviceUARTRxRead ? cpu_readena : 0;
+
 	// SPI (receive)
-	sdrq_re = (deviceSPIRead & (~sdrq_empty)) ? mem_readena : 1'b0;
+	sdrq_re = (deviceSPIRead & (~sdrq_empty)) ? cpu_readena : 1'b0;
 
 	// UART (transmit)
-	case (mem_writeena)
-		4'b1000: begin outfifoin = mem_writeword[31:24]; end
-		4'b0100: begin outfifoin = mem_writeword[23:16]; end
-		4'b0010: begin outfifoin = mem_writeword[15:8]; end
-		4'b0001: begin outfifoin = mem_writeword[7:0]; end
+	case (cpu_writeena)
+		4'b1000: begin outfifoin = cpu_writeword[31:24]; end
+		4'b0100: begin outfifoin = cpu_writeword[23:16]; end
+		4'b0010: begin outfifoin = cpu_writeword[15:8]; end
+		4'b0001: begin outfifoin = cpu_writeword[7:0]; end
 	endcase
-	outuartfifowe = deviceUARTTxWrite ? ((~outfifofull) & (|mem_writeena)) : 1'b0;
-	
+	outuartfifowe = deviceUARTTxWrite ? ((~outfifofull) & (|cpu_writeena)) : 1'b0;
+
 	// SPI (transmit)
-	case (mem_writeena)
-		4'b1000: begin sdwq_datain = mem_writeword[31:24]; end
-		4'b0100: begin sdwq_datain = mem_writeword[23:16]; end
-		4'b0010: begin sdwq_datain = mem_writeword[15:8]; end
-		4'b0001: begin sdwq_datain = mem_writeword[7:0]; end
+	case (cpu_writeena)
+		4'b1000: begin sdwq_datain = cpu_writeword[31:24]; end
+		4'b0100: begin sdwq_datain = cpu_writeword[23:16]; end
+		4'b0010: begin sdwq_datain = cpu_writeword[15:8]; end
+		4'b0001: begin sdwq_datain = cpu_writeword[7:0]; end
 	endcase
-	sdwq_we = deviceSPIWrite ? ((~sdwq_full) & |mem_writeena) : 1'b0;
+	sdwq_we = deviceSPIWrite ? ((~sdwq_full) & (|cpu_writeena)) : 1'b0;
 end
 
 // =====================================================================================================
@@ -328,16 +313,16 @@ FastSystemMemory SYSRAM(
 	// ----------------------------
 	// CPU bus for CPU read-write
 	// ----------------------------
-	.addra(bus_address[16:2]), // 128Kb RAM, 32768 DWORDs, 15 bit address space
+	.addra(bram_address[17:2]), // 256Kb RAM, 65536 DWORDs, 16 bit address space
 	.clka(sysclock60),
-	.dina(bus_writeword),
-	.douta(sysmem_dataout),
-	.wea(bus_address[31]==1'b0 ? bus_writeena : 4'b0000),
-	.ena(reset_n & (bus_readena | (|bus_writeena))),
+	.dina(bram_writeword),
+	.douta(bram_dataout),
+	.wea(bram_address[31]==1'b0 ? bram_writeena : 4'b0000),
+	.ena(reset_n & (bram_readena | (|bram_writeena))),
 	// ----------------------------
 	// DMA bus for GPU read/write
 	// ----------------------------
-	.addrb(dma_address[16:2]),
+	.addrb(dma_address[17:2]),
 	.clkb(gpuclock),
 	.dinb(dma_writeword),
 	.doutb(dma_dataout),
@@ -413,11 +398,11 @@ rv32cpu rv32cpu(
 	.busstall(bus_stall),
 	.reset(reset_p),
 	// Memory and memory mapped device access
-	.memaddress(mem_address),
-	.writeword(mem_writeword),
-	.mem_data(bus_dataout),
-	.mem_writeena(mem_writeena),
-	.mem_readena(mem_readena)
+	.memaddress(cpu_address),
+	.writeword(cpu_writeword),
+	.mem_data(bus_dataout), // output from bus depending on device
+	.mem_writeena(cpu_writeena),
+	.mem_readena(cpu_readena)
   );
 
 // =====================================================================================================
@@ -606,6 +591,6 @@ SPI_MASTER SDCardController(
 // Diagnosis LEDs
 // =====================================================================================================
 
-assign led = {spireadstall, spiwritestall, deviceSPIRead, deviceSPIWrite};
+//assign led = 4'b0000;
 
 endmodule
