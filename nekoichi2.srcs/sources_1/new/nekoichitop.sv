@@ -251,7 +251,8 @@ wire [5:0] deviceRTPort			= {deviceSPIWrite, deviceSPIRead, deviceUARTRxRead, de
 // Reads are routed from the correct device to one wire
 wire [31:0] uartdataout = {24'd0, infifoout};
 wire [31:0] uartbytecountout = {22'd0, infifodatacount};
-wire [31:0] bus_dataout = deviceUARTRxRead ? uartdataout : (deviceUARTByteCountRead ? uartbytecountout : (deviceSPIRead ? sdrq_dataout : bram_dataout));
+wire [31:0] sddatawide = {24'd0, sdrq_dataout};
+wire [31:0] bus_dataout = deviceUARTRxRead ? uartdataout : (deviceUARTByteCountRead ? uartbytecountout : (deviceSPIRead ? sddatawide : bram_dataout));
 
 // This is high if any of the device FIFOs are full or empty depending on read/write
 // It allows the CPU side to stall and wait for data access
