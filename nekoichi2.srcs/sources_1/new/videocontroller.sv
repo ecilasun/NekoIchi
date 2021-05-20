@@ -13,13 +13,14 @@ module VideoControllerGen(
 		input wire [11:0] lanemask,
 		output wire [3:0] red,
 		output wire [3:0] green,
-		output wire [3:0] blue);
+		output wire [3:0] blue,
+		output wire inDisplayWindow );
 
 logic [31:0] scanlinecache [0:63];
 wire [11:0] pixelX = (video_x-12'd64);
 wire [11:0] pixelY = (video_y-12'd48);
 
-wire inDisplayWindow = (video_x >= 64) && (video_y >= 48) && (video_x < 576) && (video_y < 432);	// 512x384 window centered inside 640x480 image
+assign inDisplayWindow = (video_x >= 64) && (video_y >= 48) && (video_x < 576) && (video_y < 432);	// 512x384 window centered inside 640x480 image
 wire [31:0] scanoutaddress = {pixelY[8:1], video_x[5:0]}; // video_x%64   //{pixelY[8:1], pixelX[8:1]} : 16'h0000;
 wire [5:0] cachewriteaddress = video_x[5:0]-6'd1; // Since memory data delays 1 clock, run 1 address behind to sync properly
 wire [5:0] cachereadaddress = pixelX[8:3];
@@ -59,16 +60,16 @@ always @(posedge(vgaclock)) begin
 	end else begin
 		case (videobyteselect)
 			2'b00: begin
-				videooutbyte <= inDisplayWindow ? scanlinecache[cachereadaddress][7:0] : 8'd0;
+				videooutbyte <= scanlinecache[cachereadaddress][7:0];
 			end
 			2'b01: begin
-				videooutbyte <= inDisplayWindow ? scanlinecache[cachereadaddress][15:8] : 8'd0;
+				videooutbyte <= scanlinecache[cachereadaddress][15:8];
 			end
 			2'b10: begin
-				videooutbyte <= inDisplayWindow ? scanlinecache[cachereadaddress][23:16] : 8'd0;
+				videooutbyte <= scanlinecache[cachereadaddress][23:16];
 			end
 			2'b11: begin
-				videooutbyte <= inDisplayWindow ? scanlinecache[cachereadaddress][31:24] : 8'd0;
+				videooutbyte <= scanlinecache[cachereadaddress][31:24];
 			end
 		endcase
 	end

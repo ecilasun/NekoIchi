@@ -5,23 +5,23 @@ module nekoichitop(
 	input wire RST_I,
 
 	// VGA PMOD on ports A+B
-	output wire [3:0] VGA_R,
+	/*output wire [3:0] VGA_R,
 	output wire [3:0] VGA_G,
 	output wire [3:0] VGA_B,
 	output wire VGA_HS_O,
-	output wire VGA_VS_O,
+	output wire VGA_VS_O,*/
 	
 	// LEDs
-	//output wire [3:0] led,
+	output wire [3:0] led,
 	
 	// DVI PMOD on ports A+B
-	/*output wire [3:0] DVI_R,
+	output wire [3:0] DVI_R,
 	output wire [3:0] DVI_G,
 	output wire [3:0] DVI_B,
 	output wire DVI_HS,
 	output wire DVI_VS,
 	output wire DVI_DE,
-	output wire DVI_CLK,*/
+	output wire DVI_CLK,
 
 	// UART
 	output wire uart_rxd_out,
@@ -240,12 +240,15 @@ logic sdrq_re=1'b0;
 wire sddatainready, sddataoutready;
 
 // Device selector based on address
-wire deviceSPIWrite				= cpu_address[31:28] == 4'b0010 ? 1'b1 : 1'b0;	// 0x20000000
-wire deviceSPIRead				= cpu_address[31:28] == 4'b0011 ? 1'b1 : 1'b0;	// 0x30000000
-wire deviceUARTTxWrite			= cpu_address[31:28] == 4'b0100 ? 1'b1 : 1'b0;	// 0x40000000
-wire deviceUARTRxRead			= cpu_address[31:28] == 4'b0101 ? 1'b1 : 1'b0;	// 0x50000000
-wire deviceUARTByteCountRead	= cpu_address[31:28] == 4'b0110 ? 1'b1 : 1'b0;	// 0x60000000
-wire deviceGPUFIFOWrite			= cpu_address[31:28] == 4'b1000 ? 1'b1 : 1'b0;	// 0x80000000
+//wire device???Write				= {cpu_address[31], cpu_address[4:2]} == 4'b1111 ? 1'b1 : 1'b0;	// 0x8000001C
+//wire device???Read				= {cpu_address[31], cpu_address[4:2]} == 4'b1110 ? 1'b1 : 1'b0;	// 0x80000018
+wire deviceSPIWrite				= {cpu_address[31], cpu_address[4:2]} == 4'b1101 ? 1'b1 : 1'b0;	// 0x80000014
+wire deviceSPIRead				= {cpu_address[31], cpu_address[4:2]} == 4'b1100 ? 1'b1 : 1'b0;	// 0x80000010
+wire deviceUARTTxWrite			= {cpu_address[31], cpu_address[4:2]} == 4'b1011 ? 1'b1 : 1'b0;	// 0x8000000C
+wire deviceUARTRxRead			= {cpu_address[31], cpu_address[4:2]} == 4'b1010 ? 1'b1 : 1'b0;	// 0x80000008
+wire deviceUARTByteCountRead	= {cpu_address[31], cpu_address[4:2]} == 4'b1001 ? 1'b1 : 1'b0;	// 0x80000004
+wire deviceGPUFIFOWrite			= {cpu_address[31], cpu_address[4:2]} == 4'b1000 ? 1'b1 : 1'b0;	// 0x80000000
+
 wire [5:0] deviceRTPort			= {deviceSPIWrite, deviceSPIRead, deviceUARTRxRead, deviceUARTByteCountRead, deviceUARTTxWrite, deviceGPUFIFOWrite};
 
 // Reads are routed from the correct device to one wire
@@ -266,11 +269,11 @@ wire bus_stall = gpustall | uartwritestall | uartreadstall | spiwritestall | spi
 
 // SYSMEM and memory mapped device r/w router
 always_comb begin
-	// SYSMEM r/w
+	// SYSMEM r/w (0x00000000 - 0x80000000)
 	bram_address = cpu_address;
 	bram_writeword = cpu_writeword;
-	bram_writeena = deviceRTPort == 6'd0 ? cpu_writeena : 4'b0000;
-	bram_readena = deviceRTPort == 6'd0 ? cpu_readena : 0;
+	bram_writeena = cpu_address[31]== 1'b0 ? cpu_writeena : 4'b0000;
+	bram_readena = cpu_address[31]== 1'b0 ? cpu_readena : 0;
 
 	// GPU FIFO
 	gpu_fifocommand = cpu_writeword; // Dword writes, no masking
@@ -416,6 +419,7 @@ wire [3:0] VIDEO_B_ONE;
 wire [3:0] VIDEO_R_TWO;
 wire [3:0] VIDEO_G_TWO;
 wire [3:0] VIDEO_B_TWO;
+wire inDisplayWindowA, inDisplayWindowB;
 
 VideoControllerGen VideoUnitA(
 	.gpuclock(gpuclock),
@@ -432,7 +436,8 @@ VideoControllerGen VideoUnitA(
 	// Video output
 	.red(VIDEO_R_ONE),
 	.green(VIDEO_G_ONE),
-	.blue(VIDEO_B_ONE) );
+	.blue(VIDEO_B_ONE),
+	.inDisplayWindow(inDisplayWindowA) );
 
 VideoControllerGen VideoUnitB(
 	.gpuclock(gpuclock),
@@ -449,12 +454,16 @@ VideoControllerGen VideoUnitB(
 	// Video output
 	.red(VIDEO_R_TWO),
 	.green(VIDEO_G_TWO),
-	.blue(VIDEO_B_TWO) );
+	.blue(VIDEO_B_TWO),
+	.inDisplayWindow(inDisplayWindowB) );
 
 // DVI
-/*assign DVI_R = videopage == 1'b0 ? VIDEO_R_ONE : VIDEO_R_TWO;
-assign DVI_G = videopage == 1'b0 ? VIDEO_G_ONE : VIDEO_G_TWO;
-assign DVI_B = videopage == 1'b0 ? VIDEO_B_ONE : VIDEO_B_TWO;
+
+wire inDisplayWindow = videopage == 1'b0 ? inDisplayWindowA : inDisplayWindowB;
+assign DVI_DE = inDisplayWindow;
+assign DVI_R = inDisplayWindow ? (videopage == 1'b0 ? VIDEO_R_ONE : VIDEO_R_TWO) : 1'b0;
+assign DVI_G = inDisplayWindow ? (videopage == 1'b0 ? VIDEO_G_ONE : VIDEO_G_TWO) : 1'b0;
+assign DVI_B = inDisplayWindow ? (videopage == 1'b0 ? VIDEO_B_ONE : VIDEO_B_TWO) : 1'b0;
 assign DVI_CLK = vgaclock;
 
 vgatimer VideoScanout(
@@ -465,13 +474,13 @@ vgatimer VideoScanout(
         .counter_x(video_x),
         .counter_y(video_y),
         .vsynctrigger_o(vsync_we),
-        .vsynccounter(vsynccounter),
-        .in_display_window(DVI_DE) );*/
+        .vsynccounter(vsynccounter) );
 
 // VGA
-assign VGA_R = videopage == 1'b0 ? VIDEO_R_ONE : VIDEO_R_TWO;
-assign VGA_G = videopage == 1'b0 ? VIDEO_G_ONE : VIDEO_G_TWO;
-assign VGA_B = videopage == 1'b0 ? VIDEO_B_ONE : VIDEO_B_TWO;
+/*wire inDisplayWindow = videopage == 1'b0 ? inDisplayWindowA : inDisplayWindowB;
+assign VGA_R = inDisplayWindow ? (videopage == 1'b0 ? VIDEO_R_ONE : VIDEO_R_TWO) : 1'b0;
+assign VGA_G = inDisplayWindow ? (videopage == 1'b0 ? VIDEO_G_ONE : VIDEO_G_TWO) : 1'b0;
+assign VGA_B = inDisplayWindow ? (videopage == 1'b0 ? VIDEO_B_ONE : VIDEO_B_TWO) : 1'b0;
 
 vgatimer VideoScanout(
 		.rst_i(reset_p),
@@ -481,7 +490,7 @@ vgatimer VideoScanout(
         .counter_x(video_x),
         .counter_y(video_y),
         .vsynctrigger_o(vsync_we),
-        .vsynccounter(vsynccounter) );
+        .vsynccounter(vsynccounter) );*/
 
 // =====================================================================================================
 // SD Card controller
@@ -592,6 +601,6 @@ SPI_MASTER SDCardController(
 // Diagnosis LEDs
 // =====================================================================================================
 
-//assign led = 4'b0000;
+assign led = {deviceSPIWrite, deviceSPIRead, 2'b00};
 
 endmodule
