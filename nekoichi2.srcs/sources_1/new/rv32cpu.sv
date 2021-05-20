@@ -63,6 +63,13 @@ wire divbusy, divbusyu;
 // Cycle/Timer/Reti CSRs
 // =====================================================================================================
 
+logic [31:0] CSRmepc = 32'd0;
+logic [31:0] CSRmcause = 32'd0;
+logic [31:0] CSRmip = 32'd0;
+logic [31:0] CSRmtvec = 32'd0;
+logic [31:0] CSRmie = 32'd0;
+logic [31:0] CSRmstatus = 32'd0;
+
 logic [63:0] CSRCycle = 64'd0;
 logic [63:0] CSRTime = 64'd0;
 logic [63:0] CSRReti = 64'd0;
@@ -311,6 +318,7 @@ fp_le floatle(
 	.m_axis_result_tdata(fleresult),
 	.m_axis_result_tvalid(fleresultvalid) );
 
+wire [11:0] csrindex;
 decoder idecode(
 	.clock(clock),
 	.reset(reset),
@@ -324,6 +332,7 @@ decoder idecode(
 	.func3(func3),
 	.func7(func7),
 	.imm(imm),
+	.csrindex(csrindex),
 	.nextstage(nextstage),
 	.wren(decoderwren),
 	.fwren(decoderfwren),
@@ -508,17 +517,191 @@ always_ff @(posedge clock) begin
 						// TODO:
 					end
 					`OPCODE_SYSTEM: begin
+						// machine trap setup
+						// 0x300: mstatus machine status: [3:3]=MIE (machine interrupt enable)
+						// 0x302: medeleg machine exception delegation
+						// 0x303: mideleg machine interrupt delegation
+						// 0x304: mie machine interrupt enable [...:MEIE:HEIE:SEIE:UEIE:MTIE:HTIE:STIE:UTIE:MSIE:HSIE:SSIE:USIE] MEIE=>machine external interrupts
+						// 0x305: mtvec machine trap handler base address [31:1]=trap vector base, [0:0]=0
+
+						// machine trap handling
+						// 0x340: mscratch scratch register for machine trap handlers
+						// 0x341: mepc machine exception program counter (trap return address)
+						// 0x342: mcause machine trap cause
+						// 0x343: mbadaddr machine bad address
+						// 0x344: mip machine interrupt pending [...:MEIP:HEIP:SEIP:UEIP:MTIP:HTIP:STIP:UTIP:MSIP:HSIP:SSIP:USIP]
+						
+						// mcause:
+						// 1 0 User software interrupt
+						// 1 1 Supervisor software interrupt
+						// 1 2 Hypervisor software interrupt
+						// 1 3 Machine software interrupt
+						// 1 4 User timer interrupt
+						// 1 5 Supervisor timer interrupt
+						// 1 6 Hypervisor timer interrupt
+						// 1 7 Machine timer interrupt
+						// 1 8 User external interrupt
+						// 1 9 Supervisor external interrupt
+						// 1 10 Hypervisor external interrupt
+						// 1 11 Machine external interrupt
+						// 1 >=12 Reserved
+						// 0 0 Instruction address misaligned
+						// 0 1 Instruction access fault
+						// 0 2 Illegal instruction
+						// 0 3 Breakpoint
+						// 0 4 Load address misaligned
+						// 0 5 Load access fault
+						// 0 6 Store/AMO address misaligned
+						// 0 7 Store/AMO access fault
+						// 0 8 Environment call from U-mode
+						// 0 9 Environment call from S-mode
+						// 0 10 Environment call from H-mode
+						// 0 11 Environment call from M-mode
+						// 0 >=12 Reserved
+
 						// Only implements timer CSR reads for now
-						if (func3 == 3'b010) begin // CSRRS
-							case ({func7,rs2}) // csr index
-								12'hC00: begin registerdata <= CSRCycle[31:0]; end
-								12'hC01: begin registerdata <= CSRTime[31:0]; end
-								12'hC02: begin registerdata <= CSRReti[31:0]; end
-								12'hC80: begin registerdata <= CSRCycle[63:32]; end
-								12'hC81: begin registerdata <= CSRTime[63:32]; end
-								12'hC82: begin registerdata <= CSRReti[63:32]; end
-							endcase
-						end
+						case (func3)
+							3'b000: begin // ECALL/EBREAK
+								case (fullinstruction[31:20])
+									12'b000000000000: begin // ECALL
+										// TBD 
+									end
+									12'b000000000001: begin // EBREAK
+										// MIE (Machine interrupt enable) & MSIE (Machine software interrupt enable)
+										if (CSRmstatus[3] & CSRmie[3]) begin
+											CSRmstatus[7] <= CSRmstatus[3]; // MPIE = MIE
+											CSRmstatus[3] <= 1'b0; // Clear MIE (disable interrupts)
+											CSRmepc <= PC+32'd4; // Store next instruction address
+											nextPC <= CSRmtvec; // jump to mtvec, handler MUST return with mret instruction
+											// For vectored interrupts:
+											// nextPC <= CSRmtvec + 4*exception code
+
+											//CSRmip[11] <= 1'b1; // Machine external interrupt pending
+											//CSRmip[7] <= 1'b1; // Machine timer interrupt pending
+											//CSRmip[3] <= 1'b1; // Machine interrupt pending
+											//CSRmcause <= 32'd3; // breakpoint ?
+											// interrupts are taken if both mip and mie bits are set and interrupts are globally enabled (M always globally enabled)
+											// order:
+											// external, software, timer, synchronous
+										end
+									end
+									// privileged instructions
+									12'b001100000010: begin // MRET
+										CSRmstatus[3] <= CSRmstatus[7]; // MIE=MPIE - re-enable machine interrupts
+										nextPC <= CSRmepc;
+									end
+									// 001000000010: // HRET -> PC <= CSRhepc;
+									// 000100000010: // SRET -> PC <= CSRsepc;
+									// 000000000010: // URET -> PC <= CSRuepc;
+									// 000100000101: // WFI wait for interrupt
+									// 000100000100: // SFENCE.VM
+									// Upon reset, a hart's privilege mode is set to M. The mstatus fields MIE and MPRV are reset to 0, and the VM field is reset to Mbare
+									// The mcause values after reset have implementation-specific interpretation, but the value 0 should be returned on implementations that do not distinguish different reset conditions
+								endcase
+							end
+							3'b001: begin // CSRRW
+								// Swap rs1 and csr register values
+								case (csrindex)
+									12'hC00: begin registerdata <= CSRCycle[31:0]; /*CSRCycle[31:0]<=rval1;*/ end
+									12'hC01: begin registerdata <= CSRTime[31:0]; /*CSRTime[31:0]<=rval1;*/ end
+									12'hC02: begin registerdata <= CSRReti[31:0]; /*CSRReti[31:0]<=rval1;*/ end
+									12'hC80: begin registerdata <= CSRCycle[63:32]; /*CSRCycle[63:32]<=rval1;*/ end
+									12'hC81: begin registerdata <= CSRTime[63:32]; /*CSRTime[63:32]<=rval1;*/ end
+									12'hC82: begin registerdata <= CSRReti[63:32]; /*CSRReti[63:32]<=rval1;*/ end
+									12'h300: begin registerdata <= CSRmstatus; CSRmstatus<=rval1; end
+									12'h304: begin registerdata <= CSRmie; CSRmie<=rval1; end
+									12'h305: begin registerdata <= CSRmtvec; CSRmtvec<=rval1; end
+									12'h341: begin registerdata <= CSRmepc; CSRmepc<=rval1; end
+									12'h342: begin registerdata <= CSRmcause; CSRmcause<=rval1; end
+									12'h344: begin registerdata <= CSRmip; CSRmip<=rval1; end
+
+								endcase
+							end
+							3'b010: begin // CSRRS
+								case (csrindex)
+									// Need to trap special counter registers and use built-in hardware counters
+									12'hC00: begin registerdata <= CSRCycle[31:0]; /*CSRCycle[31:0]<=CSRCycle[31:0]&rval1;*/ end
+									12'hC01: begin registerdata <= CSRTime[31:0]; /*CSRTime[31:0]<=CSRTime[31:0]&rval1;*/ end
+									12'hC02: begin registerdata <= CSRReti[31:0]; /*CSRReti[31:0]<=CSRReti[31:0]&rval1;*/ end
+									12'hC80: begin registerdata <= CSRCycle[63:32]; /*CSRCycle[63:32]<=CSRCycle[63:32]&rval1;*/ end
+									12'hC81: begin registerdata <= CSRTime[63:32]; /*CSRTime[63:32]<=CSRTime[63:32]&rval1;*/ end
+									12'hC82: begin registerdata <= CSRReti[63:32]; /*CSRReti[63:32]<=CSRReti[63:32]&rval1;*/ end
+									12'h300: begin registerdata <= CSRmstatus; CSRmstatus<=CSRmstatus&rval1; end
+									12'h304: begin registerdata <= CSRmie; CSRmie<=CSRmie&rval1; end
+									12'h305: begin registerdata <= CSRmtvec; CSRmtvec<=CSRmtvec&rval1; end
+									12'h341: begin registerdata <= CSRmepc; CSRmepc<=CSRmepc&rval1; end
+									12'h342: begin registerdata <= CSRmcause; CSRmcause<=CSRmcause&rval1; end
+									12'h344: begin registerdata <= CSRmip; CSRmip<=CSRmip&rval1; end
+								endcase
+							end
+							3'b011: begin // CSSRRC
+								case (csrindex)
+									// Need to trap special counter registers and use built-in hardware counters
+									12'hC00: begin registerdata <= CSRCycle[31:0]; /*CSRCycle[31:0]<=CSRCycle[31:0]&(~rval1);*/ end
+									12'hC01: begin registerdata <= CSRTime[31:0]; /*CSRTime[31:0]<=CSRTime[31:0]&(~rval1);*/ end
+									12'hC02: begin registerdata <= CSRReti[31:0]; /*CSRReti[31:0]<=CSRReti[31:0]&(~rval1);*/ end
+									12'hC80: begin registerdata <= CSRCycle[63:32]; /*CSRCycle[63:32]<=CSRCycle[63:32]&(~rval1);*/ end
+									12'hC81: begin registerdata <= CSRTime[63:32]; /*CSRTime[63:32]<=CSRTime[63:32]&(~rval1);*/ end
+									12'hC82: begin registerdata <= CSRReti[63:32]; /*CSRReti[63:32]<=CSRReti[63:32]&(~rval1);*/ end
+									12'h300: begin registerdata <= CSRmstatus; CSRmstatus<=CSRmstatus&(~rval1); end
+									12'h304: begin registerdata <= CSRmie; CSRmie<=CSRmie&(~rval1); end
+									12'h305: begin registerdata <= CSRmtvec; CSRmtvec<=CSRmtvec&(~rval1); end
+									12'h341: begin registerdata <= CSRmepc; CSRmepc<=CSRmepc&(~rval1); end
+									12'h342: begin registerdata <= CSRmcause; CSRmcause<=CSRmcause&(~rval1); end
+									12'h344: begin registerdata <= CSRmip; CSRmip<=CSRmip&(~rval1); end
+								endcase
+							end
+							3'b101: begin // CSRRWI
+								case (csrindex)
+									12'hC00: begin registerdata <= CSRCycle[31:0]; /*CSRCycle[31:0]<=imm;*/ end
+									12'hC01: begin registerdata <= CSRTime[31:0]; /*CSRTime[31:0]<=imm;*/ end
+									12'hC02: begin registerdata <= CSRReti[31:0]; /*CSRReti[31:0]<=imm;*/ end
+									12'hC80: begin registerdata <= CSRCycle[63:32]; /*CSRCycle[63:32]<=imm;*/ end
+									12'hC81: begin registerdata <= CSRTime[63:32]; /*CSRTime[63:32]<=imm;*/ end
+									12'hC82: begin registerdata <= CSRReti[63:32]; /*CSRReti[63:32]<=imm;*/ end
+									12'h300: begin registerdata <= CSRmstatus; CSRmstatus<=imm; end
+									12'h304: begin registerdata <= CSRmie; CSRmie<=imm; end
+									12'h305: begin registerdata <= CSRmtvec; CSRmtvec<=imm; end
+									12'h341: begin registerdata <= CSRmepc; CSRmepc<=imm; end
+									12'h342: begin registerdata <= CSRmcause; CSRmcause<=imm; end
+									12'h344: begin registerdata <= CSRmip; CSRmip<=imm; end
+								endcase
+							end
+							3'b110: begin // CSRRSI
+								case (csrindex)
+									// Need to trap special counter registers and use built-in hardware counters
+									12'hC00: begin registerdata <= CSRCycle[31:0]; /*CSRCycle[31:0]<=CSRCycle[31:0]&imm;*/ end
+									12'hC01: begin registerdata <= CSRTime[31:0]; /*CSRTime[31:0]<=CSRTime[31:0]&imm;*/ end
+									12'hC02: begin registerdata <= CSRReti[31:0]; /*CSRReti[31:0]<=CSRReti[31:0]&imm;*/ end
+									12'hC80: begin registerdata <= CSRCycle[63:32]; /*CSRCycle[63:32]<=CSRCycle[63:32]&imm;*/ end
+									12'hC81: begin registerdata <= CSRTime[63:32]; /*CSRTime[63:32]<=CSRTime[63:32]&imm;*/ end
+									12'hC82: begin registerdata <= CSRReti[63:32]; /*CSRReti[63:32]<=CSRReti[63:32]&imm;*/ end
+									12'h300: begin registerdata <= CSRmstatus; CSRmstatus<=CSRmstatus&imm; end
+									12'h304: begin registerdata <= CSRmie; CSRmie<=CSRmie&imm; end
+									12'h305: begin registerdata <= CSRmtvec; CSRmtvec<=CSRmtvec&imm; end
+									12'h341: begin registerdata <= CSRmepc; CSRmepc<=CSRmepc&imm; end
+									12'h342: begin registerdata <= CSRmcause; CSRmcause<=CSRmcause&imm; end
+									12'h344: begin registerdata <= CSRmip; CSRmip<=CSRmip&imm; end
+								endcase
+							end
+							3'b111: begin // CSRRCI
+								case (csrindex)
+									// Need to trap special counter registers and use built-in hardware counters
+									12'hC00: begin registerdata <= CSRCycle[31:0]; /*CSRCycle[31:0]<=CSRCycle[31:0]&(~imm);*/ end
+									12'hC01: begin registerdata <= CSRTime[31:0]; /*CSRTime[31:0]<=CSRTime[31:0]&(~imm);*/ end
+									12'hC02: begin registerdata <= CSRReti[31:0]; /*CSRReti[31:0]<=CSRReti[31:0]&(~imm);*/ end
+									12'hC80: begin registerdata <= CSRCycle[63:32]; /*CSRCycle[63:32]<=CSRCycle[63:32]&(~imm);*/ end
+									12'hC81: begin registerdata <= CSRTime[63:32]; /*CSRTime[63:32]<=CSRTime[63:32]&(~imm);*/ end
+									12'hC82: begin registerdata <= CSRReti[63:32]; /*CSRReti[63:32]<=CSRReti[63:32]&(~imm);*/ end
+									12'h300: begin registerdata <= CSRmstatus; CSRmstatus<=CSRmstatus&(~imm); end
+									12'h304: begin registerdata <= CSRmie; CSRmie<=CSRmie&(~imm); end
+									12'h305: begin registerdata <= CSRmtvec; CSRmtvec<=CSRmtvec&(~imm); end
+									12'h341: begin registerdata <= CSRmepc; CSRmepc<=CSRmepc&(~imm); end
+									12'h342: begin registerdata <= CSRmcause; CSRmcause<=CSRmcause&(~imm); end
+									12'h344: begin registerdata <= CSRmip; CSRmip<=CSRmip&(~imm); end
+								endcase
+							end
+						endcase
 					end
 					`OPCODE_FLOAT_OP: begin
 						// Sign injection is handled here, then retired.

@@ -6,7 +6,7 @@
 <Project Version="7" Minor="54" Path="/media/engin/StorageA/FPGA/nekoichi2/nekoichi2.xpr">
   <DefaultLaunch Dir="$PRUNDIR"/>
   <Configuration>
-    <Option Name="Id" Val="f4778a38ebcd450380d2794787396da5"/>
+    <Option Name="Id" Val="fe414bb5e3df41c58e183490fc6ee3f0"/>
     <Option Name="Part" Val="xc7a100tcsg324-1"/>
     <Option Name="CompiledLibDir" Val="$PCACHEDIR/compile_simlib"/>
     <Option Name="CompiledLibDirXSim" Val=""/>
@@ -46,20 +46,20 @@
     <Option Name="IPStaticSourceDir" Val="$PIPUSERFILESDIR/ipstatic"/>
     <Option Name="EnableBDX" Val="FALSE"/>
     <Option Name="DSABoardId" Val="arty-a7-100"/>
-    <Option Name="WTXSimLaunchSim" Val="147"/>
+    <Option Name="WTXSimLaunchSim" Val="164"/>
     <Option Name="WTModelSimLaunchSim" Val="0"/>
     <Option Name="WTQuestaLaunchSim" Val="0"/>
     <Option Name="WTIesLaunchSim" Val="0"/>
     <Option Name="WTVcsLaunchSim" Val="0"/>
     <Option Name="WTRivieraLaunchSim" Val="0"/>
     <Option Name="WTActivehdlLaunchSim" Val="0"/>
-    <Option Name="WTXSimExportSim" Val="265"/>
-    <Option Name="WTModelSimExportSim" Val="265"/>
-    <Option Name="WTQuestaExportSim" Val="265"/>
-    <Option Name="WTIesExportSim" Val="265"/>
-    <Option Name="WTVcsExportSim" Val="265"/>
-    <Option Name="WTRivieraExportSim" Val="265"/>
-    <Option Name="WTActivehdlExportSim" Val="265"/>
+    <Option Name="WTXSimExportSim" Val="270"/>
+    <Option Name="WTModelSimExportSim" Val="270"/>
+    <Option Name="WTQuestaExportSim" Val="270"/>
+    <Option Name="WTIesExportSim" Val="270"/>
+    <Option Name="WTVcsExportSim" Val="270"/>
+    <Option Name="WTRivieraExportSim" Val="270"/>
+    <Option Name="WTActivehdlExportSim" Val="270"/>
     <Option Name="GenerateIPUpgradeLog" Val="TRUE"/>
     <Option Name="XSimRadix" Val="hex"/>
     <Option Name="XSimTimeUnit" Val="ns"/>
@@ -228,6 +228,8 @@
       </File>
       <File Path="$PSRCDIR/sources_1/new/SD.vhd">
         <FileInfo>
+          <Attr Name="ImportPath" Val="$PSRCDIR/sources_1/new/SD.vhd"/>
+          <Attr Name="ImportTime" Val="1621235204"/>
           <Attr Name="UsedIn" Val="synthesis"/>
           <Attr Name="UsedIn" Val="simulation"/>
         </FileInfo>
@@ -249,14 +251,6 @@
           <Attr Name="UsedIn" Val="simulation"/>
         </FileInfo>
       </File>
-      <File Path="$PSRCDIR/sources_1/ip/BRAMReadWriteQueue/BRAMReadWriteQueue.xci">
-        <FileInfo>
-          <Attr Name="AutoDisabled" Val="1"/>
-          <Attr Name="UsedIn" Val="synthesis"/>
-          <Attr Name="UsedIn" Val="implementation"/>
-          <Attr Name="UsedIn" Val="simulation"/>
-        </FileInfo>
-      </File>
       <File Path="$PSRCDIR/sources_1/new/BIOS.coe">
         <FileInfo>
           <Attr Name="ImportPath" Val="$PSRCDIR/sources_1/new/BIOS.coe"/>
@@ -268,7 +262,7 @@
       <File Path="$PSRCDIR/sources_1/imports/nekoichi2/archive_project_summary.txt">
         <FileInfo>
           <Attr Name="ImportPath" Val="$PPRDIR/archive_project_summary.txt"/>
-          <Attr Name="ImportTime" Val="1621146486"/>
+          <Attr Name="ImportTime" Val="1621176538"/>
         </FileInfo>
       </File>
       <File Path="$PPRDIR/archive_project_summary.txt"/>
@@ -671,8 +665,8 @@
         <Step Id="synth_design">
           <Option Id="FsmExtraction">1</Option>
           <Option Id="ShregMinSize">5</Option>
-          <Option Id="Directive">7</Option>
           <Option Id="ResourceSharing">2</Option>
+          <Option Id="Directive">7</Option>
           <Option Id="NoCombineLuts">1</Option>
           <Option Id="KeepEquivalentRegisters">1</Option>
         </Step>

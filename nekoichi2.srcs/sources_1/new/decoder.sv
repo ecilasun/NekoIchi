@@ -15,6 +15,7 @@ module decoder(
 	output logic [2:0] func3,
 	output logic [6:0] func7,
 	output logic [31:0] imm,
+	output logic [11:0] csrindex,
 	output logic [`CPUSTAGECOUNT-1:0] nextstage,
 	output logic wren,
 	output logic fwren,
@@ -36,6 +37,7 @@ always_comb begin
 		//imm = 32'd0;
 		selectimmedasrval2 = 1'b0;
 		aluop = `ALU_NONE;
+		csrindex = 0;
 		nextstage = `CPURETIREINSTRUCTION_MASK;
 
 	end else begin
@@ -53,6 +55,7 @@ always_comb begin
 			`OPCODE_OP: begin
 				wren = 1'b1;
 				fwren = 1'b0;
+				csrindex = 12'h000;
 				nextstage = `CPURETIREINSTRUCTION_MASK;
 				if (instruction[25]==1'b0) begin // Not M extension
 					unique case (func3)
@@ -79,6 +82,7 @@ always_comb begin
 			`OPCODE_OP_IMM: begin
 				wren = 1'b1;
 				fwren = 1'b0;
+				csrindex = 12'h000;
 				nextstage = `CPURETIREINSTRUCTION_MASK;
 				unique case (func3)
 					3'b000: aluop = `ALU_ADD; // NOTE: No immediate mode sub exists
@@ -96,6 +100,7 @@ always_comb begin
 			`OPCODE_LUI: begin
 				wren = 1'b1;
 				fwren = 1'b0;
+				csrindex = 12'h000;
 				nextstage = `CPURETIREINSTRUCTION_MASK;
 				aluop = `ALU_NONE;
 				imm = {instruction[31:12],12'd0};
@@ -104,6 +109,7 @@ always_comb begin
 			`OPCODE_STORE: begin
 				wren = 1'b0;
 				fwren = 1'b0;
+				csrindex = 12'h000;
 				nextstage = `CPUSTORE_MASK;
 				aluop = `ALU_NONE;
 				imm = {{20{instruction[31]}},instruction[31:25],instruction[11:7]};
@@ -112,6 +118,7 @@ always_comb begin
 			`OPCODE_LOAD: begin
 				wren = 1'b1;
 				fwren = 1'b0;
+				csrindex = 12'h000;
 				nextstage = `CPULOADWAIT_MASK;
 				aluop = `ALU_NONE;
 				imm = {{20{instruction[31]}},instruction[31:20]};
@@ -120,6 +127,7 @@ always_comb begin
 			`OPCODE_JAL: begin
 				wren = 1'b1;
 				fwren = 1'b0;
+				csrindex = 12'h000;
 				nextstage = `CPURETIREINSTRUCTION_MASK;
 				aluop = `ALU_NONE;
 				imm = {{11{instruction[31]}}, instruction[31], instruction[19:12], instruction[20], instruction[30:21], 1'b0};
@@ -128,6 +136,7 @@ always_comb begin
 			`OPCODE_JALR: begin
 				wren = 1'b1;
 				fwren = 1'b0;
+				csrindex = 12'h000;
 				nextstage = `CPURETIREINSTRUCTION_MASK;
 				aluop = `ALU_NONE;
 				imm = {{20{instruction[31]}},instruction[31:20]};
@@ -136,6 +145,7 @@ always_comb begin
 			`OPCODE_BRANCH: begin
 				wren = 1'b0;
 				fwren = 1'b0;
+				csrindex = 12'h000;
 				nextstage = `CPURETIREINSTRUCTION_MASK;
 				unique case (func3)
 					3'b000: aluop = `ALU_EQ;
@@ -152,6 +162,7 @@ always_comb begin
 			`OPCODE_AUPC: begin
 				wren = 1'b1;
 				fwren = 1'b0;
+				csrindex = 12'h000;
 				nextstage = `CPURETIREINSTRUCTION_MASK;
 				aluop = `ALU_NONE;
 				imm = {instruction[31:12],12'd0};
@@ -160,34 +171,29 @@ always_comb begin
 			`OPCODE_FENCE: begin
 				wren = 1'b0;
 				fwren = 1'b0;
+				csrindex = 12'h000;
 				nextstage = `CPURETIREINSTRUCTION_MASK;
 				aluop = `ALU_NONE;
 				imm = 32'd0;
 			end
 
 			`OPCODE_SYSTEM: begin
-				wren = (func3 == 3'b010) ? 1'b1 : 1'b0; // CSRRS
+				// CSRRW Atomic Read/Write CSR
+				// CSRRS Atomic Read and Set Bits in CSR
+				// CSRRC Atomic Read and Clear Bits in CSR
+				// CSRRWI/CSRRSI/CSRRCI -> 5 bit zero extended integer immediate
+				
+				csrindex = {func7,rs2};
+				wren = (func3 == 3'b000) ? 1'b0 : 1'b1;
 				fwren = 1'b0;
-				// func3:
-				//001 CSRRW: atomic r/w CSR -> read CSR, zero extend, write to ireg rd, swap rs1 into CSR, if rd=0 then don't read CSR
-				//010 CSRRS: atomic r/s CSR bit -> read CSR, zero extend, write to ireg rd, use 1 bits in rs1 to set CSR bits, don't touch zero bits
-				//011 CSRRC: atomic r/c CSR bit -> read CSR, zero extend, write to ireg rd, use 1 bits in rs1 to clear CSR bits, don't touch zero bits
-				// (For CSRRS & CSRRC: if rs1=0, no write to CSR at all)
-				//101 CSRRWI: instead of CSR uses zero extended immed[4:0] in rs1 field instead of register, same as above otherwise
-				//110 CSRRSI: 
-				//111 CSRRCI: 
-				// Timers & Counters: (CSRRS)
-				// rs1 == 0
-				// CSR== RDCYCLE[H} / RDTIME[H] / RDINSTRET[H]
-
-				//csrindex = {func7,rs2};
 
 				nextstage = `CPURETIREINSTRUCTION_MASK;
 				aluop = `ALU_NONE;
-				imm = 32'd0;
+				imm = {27'd0, rs1}; // Immediate is encoded over rs1 for the I series instructions
 			end
-			
+
 			`OPCODE_FLOAT_OP: begin
+				csrindex = 12'h000;
 				unique case (func7)
 					`FADD,`FSUB,`FMUL,`FDIV,`FSGNJ,`FCVTWS,`FCVTSW,`FSQRT,`FEQ,`FMIN: begin // FCVTWUS and FCVTSWU implied by FCVTWS and FCVTSW, FSGNJ includes FSGNJN and FSGNJX, FEQ includes FLT and FLE, FMIN includes FMAX
 						// For fcvtws (float to int) and FEQ/FLT/FLE, result is written back to integer register
@@ -226,33 +232,36 @@ always_comb begin
 			`OPCODE_FLOAT_MSUB, `OPCODE_FLOAT_MADD, `OPCODE_FLOAT_NMSUB, `OPCODE_FLOAT_NMADD: begin
 				wren = 1'b0;
 				fwren = 1'b1;
+				csrindex = 12'h000;
 				nextstage = `CPUSTALLFF_MASK;
 				aluop = `ALU_NONE; 
 				imm = 32'd0;
 			end
 
-			
 			`OPCODE_FLOAT_LDW: begin
 				wren = 1'b0;
 				fwren = 1'b1;
+				csrindex = 12'h000;
 				nextstage = `CPULOADWAIT_MASK;
 				aluop = `ALU_NONE;
 				imm = {{20{instruction[31]}},instruction[31:20]};
 			end
-			
+
 			`OPCODE_FLOAT_STW: begin
 				wren = 1'b0;
 				fwren = 1'b0;
+				csrindex = 12'h000;
 				nextstage = `CPUSTOREF_MASK;
 				aluop = `ALU_NONE;
 				imm = {{20{instruction[31]}},instruction[31:25],instruction[11:7]};
 			end
-			
+
 			default: begin
 				// NOTE: Removing this creates less LUTs but WNS gets lower
 				// TODO: These are illegal / unhandled instructions, signal EXCEPTION_ILLEGAL_INSTRUCTION
 				wren = 1'b0;
 				fwren = 1'b0;
+				csrindex = 12'h000;
 				nextstage = `CPUFETCH_MASK; // OR `CPUEXCEPTION_MASK
 				aluop = `ALU_NONE;
 				imm = 32'd0;

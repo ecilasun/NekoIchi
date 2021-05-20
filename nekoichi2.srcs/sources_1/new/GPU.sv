@@ -47,6 +47,7 @@ wire signed [15:0] A = (pY-y0);
 wire signed [15:0] B = (pX-x0);
 wire signed [15:0] dy = (y1-y0);
 wire signed [15:0] dx = (x0-x1);
+
 always_comb begin
 	if (reset) begin
 		// lineedge = 0;
