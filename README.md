@@ -10,6 +10,13 @@ NekoIchi is a system-on-chip which contains:
 - A custom GPU
 - UART @115200 bauds
 
+## The CPU
+NekoIchi implements MSI/MTI/MEI interrupt support (machine interrupts for software/timer/external).
+
+For the timer interrupts, a custom 64 bit CSR register on addresses 0x800-0x801 is implemented, to be used as the 'timecmp' register. Original RISC-V documentation uses a memory mapped register scheme but that doesn't reflect well with NekoIchi internals, therefore a custom CSR was used.
+
+Current built-in ROM image uses external interrupt enable and an interrupt handler to implement an UART driven console, which doesn't have to poll data arrival in software, and a demo 1 second timer that fires right after the ROM starts. The source can be found under test/ROM_Nekoichi.cpp file in the project https://github.com/ecilasun/riscvtool
+
 ## The GPU
 The custom GPU has the following features:
 - Pixel write: Can draw single bytes at any VRAM position (to be deprecated)
@@ -54,12 +61,11 @@ RS232 serial communication/baud generator code used from https://www.fpga4fun.co
 
 ## TODO:
 
-- Support gradient/barycentric generation for triangle primitives
-- Support fixed point (8.4? 8.8?) for primitive rasterizer
+- Implement GDB debugger stub (hardware support exists and should be adequate for a UART debug interface)
+- Support gradient/barycentric generation for triangle primitives on the GPU
+- Support fixed point (8.4? 8.8?) for primitive rasterizer on the GPU
 - Allow for coordinates outside the view so that the GPU can clip (currently, CPU must clip before sending otherwise triangles will get deformed)
-- Possibly port back to Spartan 7 instead of using a Zynq-7000 board (only chosen because of larger logic count and larger internal BRAM)
-- Tackle more features for the GPU such as texturing / alpha blending (stretch goal)
 - Add audio support
 - Add button input support
-- Connect more board IOs to memory mapped addresses (buttons/LEDs/GPIO/Ethernet)
-- Start using the HyperRAM module for more storage (because DDR3 uses way too many LUTs/FFs)
+- Tackle more features for the GPU such as texturing / alpha blending (stretch goal)
+- Add back support for the DDR3 SDRAM or the HyperRAM module, whichever doesn't break the design. Otherwise expand the BRAM, or move to a board with an SRAM + simple SDRAM on board
