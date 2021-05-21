@@ -11,7 +11,8 @@ module rv32cpu(
 	output logic [31:0] writeword = 32'h00000000,
 	input wire [31:0] mem_data,
 	output logic [3:0] mem_writeena = 4'b0000,
-	output logic mem_readena = 1'b0);
+	output logic mem_readena = 1'b0,
+	input wire externalirq_uart );
 
 // =====================================================================================================
 // CPU Internal State & Instruction Decomposition
@@ -72,11 +73,13 @@ logic [31:0] CSRmstatus = 32'd0;
 
 logic [63:0] CSRTime = 64'd0;
 
-// Custom CSR r/w between 0x800-0x8FF
-logic [63:0] CSRTimeCmp = 64'd0; // Custom CSR 0x800, not using memory mapped timecmp
+// Custom CSR pair at 0x800/0x801, not using memory mapped timecmp
+logic [63:0] CSRTimeCmp = 64'hFFFFFFFFFFFFFFFF;
 
 logic [63:0] CSRCycle = 64'd0;
 logic [63:0] CSRReti = 64'd0;
+
+// TODO: Other custom CSRs r/w between 0x802-0x8FF
 
 // Advancing cycles is simple since clocks = cycles
 always @(posedge clock) begin
@@ -608,7 +611,8 @@ always_ff @(posedge clock) begin
 									12'b001100000010: begin // MRET
 										if (CSRmcause == 32'd3) CSRmip[3] <= 1'b0; // Disable machine interrupt pending
 										if (CSRmcause == 32'd7) CSRmip[7] <= 1'b0; // Disable machine timer interrupt pending
-										CSRmstatus[3] <= CSRmstatus[7]; // MIE=MPIE - re-set previous interrupt state
+										if (CSRmcause == 32'd11) CSRmip[11] <= 1'b0; // Disable machine external interrupt pending
+										CSRmstatus[3] <= CSRmstatus[7]; // MIE=MPIE - set to previous machine interrupt enable state
 										CSRmstatus[7] <= 1'b0; // Clear MPIE
 										nextPC <= CSRmepc;
 									end
@@ -974,6 +978,17 @@ always_ff @(posedge clock) begin
 					// Timer interrupt
 					CSRmip[7] <= 1'b1; // Set pending
 					CSRmcause <= 32'd7;
+					CSRmstatus[7] <= CSRmstatus[3]; // MPIE = MIE
+					CSRmstatus[3] <= 1'b0; // Clear MIE (disable interrupts)
+					// Remember where to return
+					CSRmepc <= nextPC;
+					// Go to trap handler
+					PC <= {CSRmtvec[31:1],1'b0};
+					memaddress <= {CSRmtvec[31:1], 1'b0};
+				end else if (CSRmstatus[3] & CSRmie[11] & externalirq_uart) begin
+					// External interrupt
+					CSRmip[11] <= 1'b1; // Set pending
+					CSRmcause <= 32'd11; // Machine External Interrupt
 					CSRmstatus[7] <= CSRmstatus[3]; // MPIE = MIE
 					CSRmstatus[3] <= 1'b0; // Clear MIE (disable interrupts)
 					// Remember where to return

@@ -60,6 +60,8 @@ wire vsyncfifoempty;
 wire vsyncfifofull;
 wire vsyncfifovalid;
 
+logic externalirq_uart = 1'b0;
+
 // =====================================================================================================
 // Clocks
 // =====================================================================================================
@@ -305,6 +307,21 @@ always_comb begin
 end
 
 // =====================================================================================================
+// Machine external interrupt generator
+// =====================================================================================================
+
+always @(posedge sysclock60) begin
+	externalirq_uart <= 1'b0;
+	
+	// The only source of interrupts is UART for now
+	// Might add buttons and switches, or SDCard spi_cd pin in the future
+	if (~infifoempty) begin
+		// Keep forcing an interrupt until the FIFO is empty
+		externalirq_uart <= 1'b1;
+	end
+end
+
+// =====================================================================================================
 // CPU + GPU + System RAM (true dual port) / GPU FIFO (1024 DWORDs)
 // =====================================================================================================
 
@@ -406,8 +423,8 @@ rv32cpu rv32cpu(
 	.writeword(cpu_writeword),
 	.mem_data(bus_dataout), // output from bus depending on device
 	.mem_writeena(cpu_writeena),
-	.mem_readena(cpu_readena)
-  );
+	.mem_readena(cpu_readena),
+	.externalirq_uart(externalirq_uart) );
 
 // =====================================================================================================
 // Video Unit
