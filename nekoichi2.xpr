@@ -46,20 +46,20 @@
     <Option Name="IPStaticSourceDir" Val="$PIPUSERFILESDIR/ipstatic"/>
     <Option Name="EnableBDX" Val="FALSE"/>
     <Option Name="DSABoardId" Val="arty-a7-100"/>
-    <Option Name="WTXSimLaunchSim" Val="164"/>
+    <Option Name="WTXSimLaunchSim" Val="186"/>
     <Option Name="WTModelSimLaunchSim" Val="0"/>
     <Option Name="WTQuestaLaunchSim" Val="0"/>
     <Option Name="WTIesLaunchSim" Val="0"/>
     <Option Name="WTVcsLaunchSim" Val="0"/>
     <Option Name="WTRivieraLaunchSim" Val="0"/>
     <Option Name="WTActivehdlLaunchSim" Val="0"/>
-    <Option Name="WTXSimExportSim" Val="270"/>
-    <Option Name="WTModelSimExportSim" Val="270"/>
-    <Option Name="WTQuestaExportSim" Val="270"/>
-    <Option Name="WTIesExportSim" Val="270"/>
-    <Option Name="WTVcsExportSim" Val="270"/>
-    <Option Name="WTRivieraExportSim" Val="270"/>
-    <Option Name="WTActivehdlExportSim" Val="270"/>
+    <Option Name="WTXSimExportSim" Val="273"/>
+    <Option Name="WTModelSimExportSim" Val="273"/>
+    <Option Name="WTQuestaExportSim" Val="273"/>
+    <Option Name="WTIesExportSim" Val="273"/>
+    <Option Name="WTVcsExportSim" Val="273"/>
+    <Option Name="WTRivieraExportSim" Val="273"/>
+    <Option Name="WTActivehdlExportSim" Val="273"/>
     <Option Name="GenerateIPUpgradeLog" Val="TRUE"/>
     <Option Name="XSimRadix" Val="hex"/>
     <Option Name="XSimTimeUnit" Val="ns"/>
@@ -663,12 +663,12 @@
       <Strategy Version="1" Minor="2">
         <StratHandle Name="Flow_PerfOptimized_high" Flow="Vivado Synthesis 2020"/>
         <Step Id="synth_design">
-          <Option Id="FsmExtraction">1</Option>
+          <Option Id="KeepEquivalentRegisters">1</Option>
           <Option Id="ShregMinSize">5</Option>
           <Option Id="ResourceSharing">2</Option>
+          <Option Id="FsmExtraction">1</Option>
           <Option Id="Directive">7</Option>
           <Option Id="NoCombineLuts">1</Option>
-          <Option Id="KeepEquivalentRegisters">1</Option>
         </Step>
       </Strategy>
       <GeneratedRun Dir="$PRUNDIR" File="gen_run.xml"/>

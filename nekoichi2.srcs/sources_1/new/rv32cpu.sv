@@ -70,8 +70,12 @@ logic [31:0] CSRmtvec = 32'd0;
 logic [31:0] CSRmie = 32'd0;
 logic [31:0] CSRmstatus = 32'd0;
 
-logic [63:0] CSRCycle = 64'd0;
 logic [63:0] CSRTime = 64'd0;
+
+// Custom CSR r/w between 0x800-0x8FF
+logic [63:0] CSRTimeCmp = 64'd0; // Custom CSR 0x800, not using memory mapped timecmp
+
+logic [63:0] CSRCycle = 64'd0;
 logic [63:0] CSRReti = 64'd0;
 
 // Advancing cycles is simple since clocks = cycles
@@ -564,22 +568,37 @@ always_ff @(posedge clock) begin
 							3'b000: begin // ECALL/EBREAK
 								case (fullinstruction[31:20])
 									12'b000000000000: begin // ECALL
-										// TBD 
-									end
+										// TBD
+										// example: 
+										// li a7, SBI_SHUTDOWN // also a0/a1/a2, retval in a0
+  										// ecall
+  									end
 									12'b000000000001: begin // EBREAK
+
+										// Raise 'breakpoint' 
 										// MIE (Machine interrupt enable) & MSIE (Machine software interrupt enable)
-										if (CSRmstatus[3] & CSRmie[3]) begin
+										if (CSRmstatus[3] & CSRmie[3]) begin 
+											//CSRmip[3] <= 1'b1; // Set machine interrupt pending for interrupt case
 											CSRmstatus[7] <= CSRmstatus[3]; // MPIE = MIE
 											CSRmstatus[3] <= 1'b0; // Clear MIE (disable interrupts)
-											CSRmepc <= PC+32'd4; // Store next instruction address
+											// Cause = 3=breakpoint(machine software int)
+											// 7=machine timer int
+											// 11=machine external int
+											// 2=illegal instruction
+											CSRmcause <= 32'd3;
+											// WARNING: Store CURRENT instruction address (PC), NOT nextPC!
+											// Debugger, before return, removes the EBREAK instruction, single steps, restores EBREAK, then resumes execution
+											CSRmepc <= PC;
 											nextPC <= CSRmtvec; // jump to mtvec, handler MUST return with mret instruction
 											// For vectored interrupts:
 											// nextPC <= CSRmtvec + 4*exception code
+											// If lower 2 bits of mtvec are 0, it's a 'direct' address
+											// If the lower 2 bits read 1, it's vectored
+											// anything above 1 is reserved
 
 											//CSRmip[11] <= 1'b1; // Machine external interrupt pending
 											//CSRmip[7] <= 1'b1; // Machine timer interrupt pending
 											//CSRmip[3] <= 1'b1; // Machine interrupt pending
-											//CSRmcause <= 32'd3; // breakpoint ?
 											// interrupts are taken if both mip and mie bits are set and interrupts are globally enabled (M always globally enabled)
 											// order:
 											// external, software, timer, synchronous
@@ -587,7 +606,10 @@ always_ff @(posedge clock) begin
 									end
 									// privileged instructions
 									12'b001100000010: begin // MRET
-										CSRmstatus[3] <= CSRmstatus[7]; // MIE=MPIE - re-enable machine interrupts
+										if (CSRmcause == 32'd3) CSRmip[3] <= 1'b0; // Disable machine interrupt pending
+										if (CSRmcause == 32'd7) CSRmip[7] <= 1'b0; // Disable machine timer interrupt pending
+										CSRmstatus[3] <= CSRmstatus[7]; // MIE=MPIE - re-set previous interrupt state
+										CSRmstatus[7] <= 1'b0; // Clear MPIE
 										nextPC <= CSRmepc;
 									end
 									// 001000000010: // HRET -> PC <= CSRhepc;
@@ -614,6 +636,8 @@ always_ff @(posedge clock) begin
 									12'h341: begin registerdata <= CSRmepc; CSRmepc<=rval1; end
 									12'h342: begin registerdata <= CSRmcause; CSRmcause<=rval1; end
 									12'h344: begin registerdata <= CSRmip; CSRmip<=rval1; end
+									12'h800: begin registerdata <= CSRTimeCmp[31:0]; CSRTimeCmp[31:0]<=rval1; end
+									12'h801: begin registerdata <= CSRTimeCmp[63:32]; CSRTimeCmp[63:32]<=rval1; end
 
 								endcase
 							end
@@ -632,6 +656,8 @@ always_ff @(posedge clock) begin
 									12'h341: begin registerdata <= CSRmepc; CSRmepc<=CSRmepc&rval1; end
 									12'h342: begin registerdata <= CSRmcause; CSRmcause<=CSRmcause&rval1; end
 									12'h344: begin registerdata <= CSRmip; CSRmip<=CSRmip&rval1; end
+									12'h800: begin registerdata <= CSRTimeCmp[31:0]; CSRTimeCmp[31:0]<=CSRTimeCmp[31:0]&rval1; end
+									12'h801: begin registerdata <= CSRTimeCmp[63:32]; CSRTimeCmp[63:32]<=CSRTimeCmp[63:32]&rval1; end
 								endcase
 							end
 							3'b011: begin // CSSRRC
@@ -649,6 +675,8 @@ always_ff @(posedge clock) begin
 									12'h341: begin registerdata <= CSRmepc; CSRmepc<=CSRmepc&(~rval1); end
 									12'h342: begin registerdata <= CSRmcause; CSRmcause<=CSRmcause&(~rval1); end
 									12'h344: begin registerdata <= CSRmip; CSRmip<=CSRmip&(~rval1); end
+									12'h800: begin registerdata <= CSRTimeCmp[31:0]; CSRTimeCmp[31:0]<=CSRTimeCmp[31:0]&(~rval1); end
+									12'h801: begin registerdata <= CSRTimeCmp[63:32]; CSRTimeCmp[63:32]<=CSRTimeCmp[63:32]&(~rval1); end
 								endcase
 							end
 							3'b101: begin // CSRRWI
@@ -665,6 +693,8 @@ always_ff @(posedge clock) begin
 									12'h341: begin registerdata <= CSRmepc; CSRmepc<=imm; end
 									12'h342: begin registerdata <= CSRmcause; CSRmcause<=imm; end
 									12'h344: begin registerdata <= CSRmip; CSRmip<=imm; end
+									12'h800: begin registerdata <= CSRTimeCmp[31:0]; CSRTimeCmp[31:0]<=imm; end
+									12'h801: begin registerdata <= CSRTimeCmp[63:32]; CSRTimeCmp[63:32]<=imm; end
 								endcase
 							end
 							3'b110: begin // CSRRSI
@@ -682,6 +712,8 @@ always_ff @(posedge clock) begin
 									12'h341: begin registerdata <= CSRmepc; CSRmepc<=CSRmepc&imm; end
 									12'h342: begin registerdata <= CSRmcause; CSRmcause<=CSRmcause&imm; end
 									12'h344: begin registerdata <= CSRmip; CSRmip<=CSRmip&imm; end
+									12'h800: begin registerdata <= CSRTimeCmp[31:0]; CSRTimeCmp[31:0]<=CSRTimeCmp[31:0]&imm; end
+									12'h801: begin registerdata <= CSRTimeCmp[63:32]; CSRTimeCmp[63:32]<=CSRTimeCmp[63:32]&imm; end
 								endcase
 							end
 							3'b111: begin // CSRRCI
@@ -699,6 +731,8 @@ always_ff @(posedge clock) begin
 									12'h341: begin registerdata <= CSRmepc; CSRmepc<=CSRmepc&(~imm); end
 									12'h342: begin registerdata <= CSRmcause; CSRmcause<=CSRmcause&(~imm); end
 									12'h344: begin registerdata <= CSRmip; CSRmip<=CSRmip&(~imm); end
+									12'h800: begin registerdata <= CSRTimeCmp[31:0]; CSRTimeCmp[31:0]<=CSRTimeCmp[31:0]&(~imm); end
+									12'h801: begin registerdata <= CSRTimeCmp[63:32]; CSRTimeCmp[63:32]<=CSRTimeCmp[63:32]&(~imm); end
 								endcase
 							end
 						endcase
@@ -931,12 +965,30 @@ always_ff @(posedge clock) begin
 				fregisterWriteEnable <= 1'b0;
 				// Stop memory writes
 				mem_writeena <= 4'b0000;
-				// Set next PC
-				PC <= {nextPC[31:1],1'b0}; // Truncate to 16bit aligned addresses to align to instructions
-				// Also reflect to the memaddress so we end up reading next instruction
-				memaddress <= {nextPC[31:1], 1'b0};
 				mem_readena <= 1'b1;
-				// Update retired instruction CRS
+
+				// If timer interrupts and global machine interrupts enabled
+				// Time interrupt stays pending
+				// Stays posted until timecmp > time (usually after writing to timecmp)
+				if (CSRmstatus[3] & CSRmie[7] & (CSRTime >= CSRTimeCmp)) begin
+					// Timer interrupt
+					CSRmip[7] <= 1'b1; // Set pending
+					CSRmcause <= 32'd7;
+					CSRmstatus[7] <= CSRmstatus[3]; // MPIE = MIE
+					CSRmstatus[3] <= 1'b0; // Clear MIE (disable interrupts)
+					// Remember where to return
+					CSRmepc <= nextPC;
+					// Go to trap handler
+					PC <= {CSRmtvec[31:1],1'b0};
+					memaddress <= {CSRmtvec[31:1], 1'b0};
+				end else begin
+					// Set next PC
+					PC <= {nextPC[31:1],1'b0}; // Truncate to 16bit aligned addresses to align to instructions
+					// Also reflect to the memaddress so we end up reading next instruction
+					memaddress <= {nextPC[31:1], 1'b0};
+				end
+
+				// Update retired instruction CSR
 				CSRReti <= CSRReti + 64'd1;
 				// Loop back to fetch (actually fetch wait) state
 				cpustate[`CPUFETCH] <= 1'b1;
