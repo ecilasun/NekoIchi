@@ -654,14 +654,14 @@ always_ff @(posedge clock) begin
 									12'hC80: begin registerdata <= CSRCycle[63:32]; /*CSRCycle[63:32]<=CSRCycle[63:32]&rval1;*/ end
 									12'hC81: begin registerdata <= CSRTime[63:32]; /*CSRTime[63:32]<=CSRTime[63:32]&rval1;*/ end
 									12'hC82: begin registerdata <= CSRReti[63:32]; /*CSRReti[63:32]<=CSRReti[63:32]&rval1;*/ end
-									12'h300: begin registerdata <= CSRmstatus; CSRmstatus<=CSRmstatus&rval1; end
-									12'h304: begin registerdata <= CSRmie; CSRmie<=CSRmie&rval1; end
-									12'h305: begin registerdata <= CSRmtvec; CSRmtvec<=CSRmtvec&rval1; end
-									12'h341: begin registerdata <= CSRmepc; CSRmepc<=CSRmepc&rval1; end
-									12'h342: begin registerdata <= CSRmcause; CSRmcause<=CSRmcause&rval1; end
-									12'h344: begin registerdata <= CSRmip; CSRmip<=CSRmip&rval1; end
-									12'h800: begin registerdata <= CSRTimeCmp[31:0]; CSRTimeCmp[31:0]<=CSRTimeCmp[31:0]&rval1; end
-									12'h801: begin registerdata <= CSRTimeCmp[63:32]; CSRTimeCmp[63:32]<=CSRTimeCmp[63:32]&rval1; end
+									12'h300: begin registerdata <= CSRmstatus; CSRmstatus<=CSRmstatus | rval1; end
+									12'h304: begin registerdata <= CSRmie; CSRmie<=CSRmie | rval1; end
+									12'h305: begin registerdata <= CSRmtvec; CSRmtvec<=CSRmtvec | rval1; end
+									12'h341: begin registerdata <= CSRmepc; CSRmepc<=CSRmepc | rval1; end
+									12'h342: begin registerdata <= CSRmcause; CSRmcause<=CSRmcause | rval1; end
+									12'h344: begin registerdata <= CSRmip; CSRmip<=CSRmip | rval1; end
+									12'h800: begin registerdata <= CSRTimeCmp[31:0]; CSRTimeCmp[31:0]<=CSRTimeCmp[31:0] | rval1; end
+									12'h801: begin registerdata <= CSRTimeCmp[63:32]; CSRTimeCmp[63:32]<=CSRTimeCmp[63:32] | rval1; end
 								endcase
 							end
 							3'b011: begin // CSSRRC
@@ -710,14 +710,14 @@ always_ff @(posedge clock) begin
 									12'hC80: begin registerdata <= CSRCycle[63:32]; /*CSRCycle[63:32]<=CSRCycle[63:32]&imm;*/ end
 									12'hC81: begin registerdata <= CSRTime[63:32]; /*CSRTime[63:32]<=CSRTime[63:32]&imm;*/ end
 									12'hC82: begin registerdata <= CSRReti[63:32]; /*CSRReti[63:32]<=CSRReti[63:32]&imm;*/ end
-									12'h300: begin registerdata <= CSRmstatus; CSRmstatus<=CSRmstatus&imm; end
-									12'h304: begin registerdata <= CSRmie; CSRmie<=CSRmie&imm; end
-									12'h305: begin registerdata <= CSRmtvec; CSRmtvec<=CSRmtvec&imm; end
-									12'h341: begin registerdata <= CSRmepc; CSRmepc<=CSRmepc&imm; end
-									12'h342: begin registerdata <= CSRmcause; CSRmcause<=CSRmcause&imm; end
-									12'h344: begin registerdata <= CSRmip; CSRmip<=CSRmip&imm; end
-									12'h800: begin registerdata <= CSRTimeCmp[31:0]; CSRTimeCmp[31:0]<=CSRTimeCmp[31:0]&imm; end
-									12'h801: begin registerdata <= CSRTimeCmp[63:32]; CSRTimeCmp[63:32]<=CSRTimeCmp[63:32]&imm; end
+									12'h300: begin registerdata <= CSRmstatus; CSRmstatus<=CSRmstatus | imm; end
+									12'h304: begin registerdata <= CSRmie; CSRmie<=CSRmie | imm; end
+									12'h305: begin registerdata <= CSRmtvec; CSRmtvec<=CSRmtvec | imm; end
+									12'h341: begin registerdata <= CSRmepc; CSRmepc<=CSRmepc | imm; end
+									12'h342: begin registerdata <= CSRmcause; CSRmcause<=CSRmcause | imm; end
+									12'h344: begin registerdata <= CSRmip; CSRmip<=CSRmip | imm; end
+									12'h800: begin registerdata <= CSRTimeCmp[31:0]; CSRTimeCmp[31:0]<=CSRTimeCmp[31:0] | imm; end
+									12'h801: begin registerdata <= CSRTimeCmp[63:32]; CSRTimeCmp[63:32]<=CSRTimeCmp[63:32] | imm; end
 								endcase
 							end
 							3'b111: begin // CSRRCI
@@ -978,7 +978,7 @@ always_ff @(posedge clock) begin
 					// Timer interrupt
 					CSRmip[7] <= 1'b1; // Set pending
 					CSRmcause <= 32'd7;
-					CSRmstatus[7] <= CSRmstatus[3]; // MPIE = MIE
+					CSRmstatus[7] <= CSRmstatus[3]; // MPIE = MIE (save ie flag in previous ie)
 					CSRmstatus[3] <= 1'b0; // Clear MIE (disable interrupts)
 					// Remember where to return
 					CSRmepc <= nextPC;
@@ -989,7 +989,7 @@ always_ff @(posedge clock) begin
 					// External interrupt
 					CSRmip[11] <= 1'b1; // Set pending
 					CSRmcause <= 32'd11; // Machine External Interrupt
-					CSRmstatus[7] <= CSRmstatus[3]; // MPIE = MIE
+					CSRmstatus[7] <= CSRmstatus[3]; // MPIE = MIE (save ie flag in previous ie)
 					CSRmstatus[3] <= 1'b0; // Clear MIE (disable interrupts)
 					// Remember where to return
 					CSRmepc <= nextPC;

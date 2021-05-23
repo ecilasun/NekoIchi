@@ -6,7 +6,7 @@
 <Project Version="7" Minor="54" Path="/media/engin/StorageA/FPGA/nekoichi2/nekoichi2.xpr">
   <DefaultLaunch Dir="$PRUNDIR"/>
   <Configuration>
-    <Option Name="Id" Val="fe414bb5e3df41c58e183490fc6ee3f0"/>
+    <Option Name="Id" Val="f1e16667c262462793434975050e030f"/>
     <Option Name="Part" Val="xc7a100tcsg324-1"/>
     <Option Name="CompiledLibDir" Val="$PCACHEDIR/compile_simlib"/>
     <Option Name="CompiledLibDirXSim" Val=""/>
@@ -46,20 +46,20 @@
     <Option Name="IPStaticSourceDir" Val="$PIPUSERFILESDIR/ipstatic"/>
     <Option Name="EnableBDX" Val="FALSE"/>
     <Option Name="DSABoardId" Val="arty-a7-100"/>
-    <Option Name="WTXSimLaunchSim" Val="199"/>
+    <Option Name="WTXSimLaunchSim" Val="223"/>
     <Option Name="WTModelSimLaunchSim" Val="0"/>
     <Option Name="WTQuestaLaunchSim" Val="0"/>
     <Option Name="WTIesLaunchSim" Val="0"/>
     <Option Name="WTVcsLaunchSim" Val="0"/>
     <Option Name="WTRivieraLaunchSim" Val="0"/>
     <Option Name="WTActivehdlLaunchSim" Val="0"/>
-    <Option Name="WTXSimExportSim" Val="274"/>
-    <Option Name="WTModelSimExportSim" Val="274"/>
-    <Option Name="WTQuestaExportSim" Val="274"/>
-    <Option Name="WTIesExportSim" Val="274"/>
-    <Option Name="WTVcsExportSim" Val="274"/>
-    <Option Name="WTRivieraExportSim" Val="274"/>
-    <Option Name="WTActivehdlExportSim" Val="274"/>
+    <Option Name="WTXSimExportSim" Val="282"/>
+    <Option Name="WTModelSimExportSim" Val="282"/>
+    <Option Name="WTQuestaExportSim" Val="282"/>
+    <Option Name="WTIesExportSim" Val="282"/>
+    <Option Name="WTVcsExportSim" Val="282"/>
+    <Option Name="WTRivieraExportSim" Val="282"/>
+    <Option Name="WTActivehdlExportSim" Val="282"/>
     <Option Name="GenerateIPUpgradeLog" Val="TRUE"/>
     <Option Name="XSimRadix" Val="hex"/>
     <Option Name="XSimTimeUnit" Val="ns"/>
@@ -262,7 +262,7 @@
       <File Path="$PSRCDIR/sources_1/imports/nekoichi2/archive_project_summary.txt">
         <FileInfo>
           <Attr Name="ImportPath" Val="$PPRDIR/archive_project_summary.txt"/>
-          <Attr Name="ImportTime" Val="1621176538"/>
+          <Attr Name="ImportTime" Val="1621493620"/>
         </FileInfo>
       </File>
       <File Path="$PPRDIR/archive_project_summary.txt"/>
@@ -664,8 +664,8 @@
         <StratHandle Name="Flow_PerfOptimized_high" Flow="Vivado Synthesis 2020"/>
         <Step Id="synth_design">
           <Option Id="ShregMinSize">5</Option>
-          <Option Id="KeepEquivalentRegisters">1</Option>
           <Option Id="ResourceSharing">2</Option>
+          <Option Id="KeepEquivalentRegisters">1</Option>
           <Option Id="FsmExtraction">1</Option>
           <Option Id="NoCombineLuts">1</Option>
           <Option Id="Directive">7</Option>
@@ -886,18 +886,22 @@
       <Report Name="ROUTE_DESIGN.REPORT_METHODOLOGY" Enabled="1"/>
       <RQSFiles/>
     </Run>
-    <Run Id="impl_1" Type="Ft2:EntireDesign" Part="xc7a100tcsg324-1" ConstrsSet="constrs_1" Description="Similar to the Implementation Run Defaults, but enables the physical optimization step (phys_opt_design)." AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" State="current" Dir="$PRUNDIR/impl_1" SynthRun="synth_1" IncludeInArchive="true" GenFullBitstream="true" AutoIncrementalDir="$PSRCDIR/utils_1/imports/impl_1">
+    <Run Id="impl_1" Type="Ft2:EntireDesign" Part="xc7a100tcsg324-1" ConstrsSet="constrs_1" Description="Includes alternate algorithms for timing-driven optimization" AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" State="current" Dir="$PRUNDIR/impl_1" SynthRun="synth_1" IncludeInArchive="true" GenFullBitstream="true" AutoIncrementalDir="$PSRCDIR/utils_1/imports/impl_1">
       <Strategy Version="1" Minor="2">
-        <StratHandle Name="Flow_RunPhysOpt" Flow="Vivado Implementation 2020"/>
+        <StratHandle Name="Performance_ExtraTimingOpt" Flow="Vivado Implementation 2020"/>
         <Step Id="init_design"/>
         <Step Id="opt_design"/>
         <Step Id="power_opt_design"/>
-        <Step Id="place_design"/>
+        <Step Id="place_design">
+          <Option Id="Directive">8</Option>
+        </Step>
         <Step Id="post_place_power_opt_design"/>
         <Step Id="phys_opt_design">
           <Option Id="Directive">0</Option>
         </Step>
-        <Step Id="route_design"/>
+        <Step Id="route_design">
+          <Option Id="Directive">1</Option>
+        </Step>
         <Step Id="post_route_phys_opt_design"/>
         <Step Id="write_bitstream">
           <Option Id="BinFile">1</Option>

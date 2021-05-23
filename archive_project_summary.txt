@@ -82,6 +82,7 @@ The run results were included for the following runs in the archived project:-
 <UARTFifoGen_synth_1>
 <PeripheralClockGen_synth_1>
 <SystemClockGen_synth_1>
+<DDR3Ctl_synth_1>
 <impl_1>
 
 Section (3) - ARCHIVED SOURCES
@@ -109,6 +110,9 @@ None
 Section (3.2) - REMOTE SOURCES
 ------------------------------
 List of referenced 'remote' design files that were 'imported' into the archived project:-
+
+<DDR3Ctl>
+None
 
 <DomainCrossSignalFifo>
 None
@@ -180,7 +184,7 @@ None
 None
 
 <sources_1>
-/home/engin/.Xil/Vivado-2264427-encilinux/PrjAr/_X_/nekoichi2.srcs/sources_1/new/BIOS.coe
+/home/engin/.Xil/Vivado-1460646-encilinux/PrjAr/_X_/nekoichi2.srcs/sources_1/new/BIOS.coe
 /media/engin/StorageA/FPGA/nekoichi2/archive_project_summary.txt
 
 <utils_1>
@@ -263,6 +267,7 @@ List of all the source files present in the archived project:-
 ./nekoichi2.srcs/sources_1/new/nekoichitop.sv
 ./nekoichi2.srcs/sources_1/new/BIOS.coe
 ./nekoichi2.srcs/sources_1/imports/nekoichi2/archive_project_summary.txt
+./nekoichi2.srcs/sources_1/ip/DDR3Ctl/mig_a.prj
 
 <constrs_1>
 ./nekoichi2.srcs/constrs_1/new/artya7100T.xdc
@@ -804,6 +809,88 @@ None
 ./nekoichi2.gen/sources_1/ip/SystemClockGen/SystemClockGen_ooc.xdc
 ./nekoichi2.gen/sources_1/ip/SystemClockGen/SystemClockGen.xml
 
+<DDR3Ctl>
+./nekoichi2.srcs/sources_1/ip/DDR3Ctl/DDR3Ctl.xci
+./nekoichi2.gen/sources_1/ip/DDR3Ctl/doc/mig_7series_v4_2_changelog.txt
+./nekoichi2.gen/sources_1/ip/DDR3Ctl/DDR3Ctl/user_design/constraints/DDR3Ctl.xdc
+./nekoichi2.gen/sources_1/ip/DDR3Ctl/DDR3Ctl/user_design/constraints/DDR3Ctl_ooc.xdc
+./nekoichi2.gen/sources_1/ip/DDR3Ctl/DDR3Ctl.veo
+./nekoichi2.gen/sources_1/ip/DDR3Ctl/DDR3Ctl/user_design/rtl/ecc/mig_7series_v4_2_ecc_buf.v
+./nekoichi2.gen/sources_1/ip/DDR3Ctl/DDR3Ctl/user_design/rtl/ecc/mig_7series_v4_2_ecc_gen.v
+./nekoichi2.gen/sources_1/ip/DDR3Ctl/DDR3Ctl/user_design/rtl/ecc/mig_7series_v4_2_ecc_dec_fix.v
+./nekoichi2.gen/sources_1/ip/DDR3Ctl/DDR3Ctl/user_design/rtl/ecc/mig_7series_v4_2_ecc_merge_enc.v
+./nekoichi2.gen/sources_1/ip/DDR3Ctl/DDR3Ctl/user_design/rtl/ecc/mig_7series_v4_2_fi_xor.v
+./nekoichi2.gen/sources_1/ip/DDR3Ctl/DDR3Ctl/user_design/rtl/clocking/mig_7series_v4_2_tempmon.v
+./nekoichi2.gen/sources_1/ip/DDR3Ctl/DDR3Ctl/user_design/rtl/clocking/mig_7series_v4_2_clk_ibuf.v
+./nekoichi2.gen/sources_1/ip/DDR3Ctl/DDR3Ctl/user_design/rtl/clocking/mig_7series_v4_2_infrastructure.v
+./nekoichi2.gen/sources_1/ip/DDR3Ctl/DDR3Ctl/user_design/rtl/clocking/mig_7series_v4_2_iodelay_ctrl.v
+./nekoichi2.gen/sources_1/ip/DDR3Ctl/DDR3Ctl/user_design/rtl/ip_top/mig_7series_v4_2_memc_ui_top_std.v
+./nekoichi2.gen/sources_1/ip/DDR3Ctl/DDR3Ctl/user_design/rtl/ip_top/mig_7series_v4_2_mem_intfc.v
+./nekoichi2.gen/sources_1/ip/DDR3Ctl/DDR3Ctl/user_design/rtl/phy/mig_7series_v4_2_ddr_phy_wrlvl.v
+./nekoichi2.gen/sources_1/ip/DDR3Ctl/DDR3Ctl/user_design/rtl/phy/mig_7series_v4_2_ddr_mc_phy.v
+./nekoichi2.gen/sources_1/ip/DDR3Ctl/DDR3Ctl/user_design/rtl/phy/mig_7series_v4_2_ddr_phy_ocd_mux.v
+./nekoichi2.gen/sources_1/ip/DDR3Ctl/DDR3Ctl/user_design/rtl/phy/mig_7series_v4_2_ddr_phy_tempmon.v
+./nekoichi2.gen/sources_1/ip/DDR3Ctl/DDR3Ctl/user_design/rtl/phy/mig_7series_v4_2_ddr_mc_phy_wrapper.v
+./nekoichi2.gen/sources_1/ip/DDR3Ctl/DDR3Ctl/user_design/rtl/phy/mig_7series_v4_2_poc_top.v
+./nekoichi2.gen/sources_1/ip/DDR3Ctl/DDR3Ctl/user_design/rtl/phy/mig_7series_v4_2_ddr_skip_calib_tap.v
+./nekoichi2.gen/sources_1/ip/DDR3Ctl/DDR3Ctl/user_design/rtl/phy/mig_7series_v4_2_ddr_phy_ocd_cntlr.v
+./nekoichi2.gen/sources_1/ip/DDR3Ctl/DDR3Ctl/user_design/rtl/phy/mig_7series_v4_2_ddr_byte_group_io.v
+./nekoichi2.gen/sources_1/ip/DDR3Ctl/DDR3Ctl/user_design/rtl/phy/mig_7series_v4_2_ddr_phy_ocd_edge.v
+./nekoichi2.gen/sources_1/ip/DDR3Ctl/DDR3Ctl/user_design/rtl/phy/mig_7series_v4_2_poc_pd.v
+./nekoichi2.gen/sources_1/ip/DDR3Ctl/DDR3Ctl/user_design/rtl/phy/mig_7series_v4_2_ddr_phy_top.v
+./nekoichi2.gen/sources_1/ip/DDR3Ctl/DDR3Ctl/user_design/rtl/phy/mig_7series_v4_2_ddr_phy_prbs_rdlvl.v
+./nekoichi2.gen/sources_1/ip/DDR3Ctl/DDR3Ctl/user_design/rtl/phy/mig_7series_v4_2_poc_edge_store.v
+./nekoichi2.gen/sources_1/ip/DDR3Ctl/DDR3Ctl/user_design/rtl/phy/mig_7series_v4_2_ddr_phy_rdlvl.v
+./nekoichi2.gen/sources_1/ip/DDR3Ctl/DDR3Ctl/user_design/rtl/phy/mig_7series_v4_2_ddr_of_pre_fifo.v
+./nekoichi2.gen/sources_1/ip/DDR3Ctl/DDR3Ctl/user_design/rtl/phy/mig_7series_v4_2_ddr_phy_ocd_samp.v
+./nekoichi2.gen/sources_1/ip/DDR3Ctl/DDR3Ctl/user_design/rtl/phy/mig_7series_v4_2_poc_tap_base.v
+./nekoichi2.gen/sources_1/ip/DDR3Ctl/DDR3Ctl/user_design/rtl/phy/mig_7series_v4_2_ddr_phy_ocd_lim.v
+./nekoichi2.gen/sources_1/ip/DDR3Ctl/DDR3Ctl/user_design/rtl/phy/mig_7series_v4_2_ddr_phy_dqs_found_cal.v
+./nekoichi2.gen/sources_1/ip/DDR3Ctl/DDR3Ctl/user_design/rtl/phy/mig_7series_v4_2_ddr_phy_init.v
+./nekoichi2.gen/sources_1/ip/DDR3Ctl/DDR3Ctl/user_design/rtl/phy/mig_7series_v4_2_ddr_phy_wrlvl_off_delay.v
+./nekoichi2.gen/sources_1/ip/DDR3Ctl/DDR3Ctl/user_design/rtl/phy/mig_7series_v4_2_ddr_phy_ocd_data.v
+./nekoichi2.gen/sources_1/ip/DDR3Ctl/DDR3Ctl/user_design/rtl/phy/mig_7series_v4_2_poc_meta.v
+./nekoichi2.gen/sources_1/ip/DDR3Ctl/DDR3Ctl/user_design/rtl/phy/mig_7series_v4_2_ddr_prbs_gen.v
+./nekoichi2.gen/sources_1/ip/DDR3Ctl/DDR3Ctl/user_design/rtl/phy/mig_7series_v4_2_ddr_phy_4lanes.v
+./nekoichi2.gen/sources_1/ip/DDR3Ctl/DDR3Ctl/user_design/rtl/phy/mig_7series_v4_2_ddr_byte_lane.v
+./nekoichi2.gen/sources_1/ip/DDR3Ctl/DDR3Ctl/user_design/rtl/phy/mig_7series_v4_2_ddr_if_post_fifo.v
+./nekoichi2.gen/sources_1/ip/DDR3Ctl/DDR3Ctl/user_design/rtl/phy/mig_7series_v4_2_ddr_phy_oclkdelay_cal.v
+./nekoichi2.gen/sources_1/ip/DDR3Ctl/DDR3Ctl/user_design/rtl/phy/mig_7series_v4_2_ddr_phy_ck_addr_cmd_delay.v
+./nekoichi2.gen/sources_1/ip/DDR3Ctl/DDR3Ctl/user_design/rtl/phy/mig_7series_v4_2_ddr_phy_wrcal.v
+./nekoichi2.gen/sources_1/ip/DDR3Ctl/DDR3Ctl/user_design/rtl/phy/mig_7series_v4_2_ddr_phy_dqs_found_cal_hr.v
+./nekoichi2.gen/sources_1/ip/DDR3Ctl/DDR3Ctl/user_design/rtl/phy/mig_7series_v4_2_ddr_phy_ocd_po_cntlr.v
+./nekoichi2.gen/sources_1/ip/DDR3Ctl/DDR3Ctl/user_design/rtl/phy/mig_7series_v4_2_ddr_calib_top.v
+./nekoichi2.gen/sources_1/ip/DDR3Ctl/DDR3Ctl/user_design/rtl/phy/mig_7series_v4_2_poc_cc.v
+./nekoichi2.gen/sources_1/ip/DDR3Ctl/DDR3Ctl/user_design/rtl/controller/mig_7series_v4_2_bank_mach.v
+./nekoichi2.gen/sources_1/ip/DDR3Ctl/DDR3Ctl/user_design/rtl/controller/mig_7series_v4_2_arb_select.v
+./nekoichi2.gen/sources_1/ip/DDR3Ctl/DDR3Ctl/user_design/rtl/controller/mig_7series_v4_2_round_robin_arb.v
+./nekoichi2.gen/sources_1/ip/DDR3Ctl/DDR3Ctl/user_design/rtl/controller/mig_7series_v4_2_bank_common.v
+./nekoichi2.gen/sources_1/ip/DDR3Ctl/DDR3Ctl/user_design/rtl/controller/mig_7series_v4_2_arb_mux.v
+./nekoichi2.gen/sources_1/ip/DDR3Ctl/DDR3Ctl/user_design/rtl/controller/mig_7series_v4_2_rank_cntrl.v
+./nekoichi2.gen/sources_1/ip/DDR3Ctl/DDR3Ctl/user_design/rtl/controller/mig_7series_v4_2_mc.v
+./nekoichi2.gen/sources_1/ip/DDR3Ctl/DDR3Ctl/user_design/rtl/controller/mig_7series_v4_2_bank_compare.v
+./nekoichi2.gen/sources_1/ip/DDR3Ctl/DDR3Ctl/user_design/rtl/controller/mig_7series_v4_2_bank_state.v
+./nekoichi2.gen/sources_1/ip/DDR3Ctl/DDR3Ctl/user_design/rtl/controller/mig_7series_v4_2_bank_cntrl.v
+./nekoichi2.gen/sources_1/ip/DDR3Ctl/DDR3Ctl/user_design/rtl/controller/mig_7series_v4_2_arb_row_col.v
+./nekoichi2.gen/sources_1/ip/DDR3Ctl/DDR3Ctl/user_design/rtl/controller/mig_7series_v4_2_bank_queue.v
+./nekoichi2.gen/sources_1/ip/DDR3Ctl/DDR3Ctl/user_design/rtl/controller/mig_7series_v4_2_rank_mach.v
+./nekoichi2.gen/sources_1/ip/DDR3Ctl/DDR3Ctl/user_design/rtl/controller/mig_7series_v4_2_rank_common.v
+./nekoichi2.gen/sources_1/ip/DDR3Ctl/DDR3Ctl/user_design/rtl/controller/mig_7series_v4_2_col_mach.v
+./nekoichi2.gen/sources_1/ip/DDR3Ctl/DDR3Ctl/user_design/rtl/ui/mig_7series_v4_2_ui_rd_data.v
+./nekoichi2.gen/sources_1/ip/DDR3Ctl/DDR3Ctl/user_design/rtl/ui/mig_7series_v4_2_ui_top.v
+./nekoichi2.gen/sources_1/ip/DDR3Ctl/DDR3Ctl/user_design/rtl/ui/mig_7series_v4_2_ui_cmd.v
+./nekoichi2.gen/sources_1/ip/DDR3Ctl/DDR3Ctl/user_design/rtl/ui/mig_7series_v4_2_ui_wr_data.v
+./nekoichi2.gen/sources_1/ip/DDR3Ctl/DDR3Ctl/user_design/rtl/DDR3Ctl_mig_sim.v
+./nekoichi2.gen/sources_1/ip/DDR3Ctl/DDR3Ctl/user_design/rtl/DDR3Ctl.v
+./nekoichi2.gen/sources_1/ip/DDR3Ctl/DDR3Ctl.dcp
+./nekoichi2.gen/sources_1/ip/DDR3Ctl/DDR3Ctl_stub.v
+./nekoichi2.gen/sources_1/ip/DDR3Ctl/DDR3Ctl_stub.vhdl
+./nekoichi2.gen/sources_1/ip/DDR3Ctl/DDR3Ctl_sim_netlist.v
+./nekoichi2.gen/sources_1/ip/DDR3Ctl/DDR3Ctl_sim_netlist.vhdl
+./nekoichi2.gen/sources_1/ip/DDR3Ctl/DDR3Ctl/user_design/rtl/DDR3Ctl_mig.v
+./nekoichi2.gen/sources_1/ip/DDR3Ctl/DDR3Ctl.xml
+./nekoichi2.srcs/sources_1/ip/DDR3Ctl/mig_a.prj
+
 Section (3.4) - REMOTE IP DEFINITIONS
 -------------------------------------
 List of all the remote IP's present in the archived project:-
@@ -872,6 +959,9 @@ None
 None
 
 <SystemClockGen>
+None
+
+<DDR3Ctl>
 None
 
 None

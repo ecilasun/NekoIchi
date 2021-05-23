@@ -180,7 +180,7 @@ None
 None
 
 <sources_1>
-/home/engin/.Xil/Vivado-2652841-encilinux/PrjAr/_X_/nekoichi2.srcs/sources_1/new/BIOS.coe
+/home/engin/.Xil/Vivado-2264427-encilinux/PrjAr/_X_/nekoichi2.srcs/sources_1/new/BIOS.coe
 /media/engin/StorageA/FPGA/nekoichi2/archive_project_summary.txt
 
 <utils_1>
@@ -191,6 +191,26 @@ Section (3.3) - SOURCES SUMMARY
 List of all the source files present in the archived project:-
 
 <sources_1>
+./nekoichi2.srcs/sources_1/ip/SPIFIFO/SPIFIFO.xci
+./nekoichi2.gen/sources_1/ip/SPIFIFO/doc/fifo_generator_v13_2_changelog.txt
+./nekoichi2.gen/sources_1/ip/SPIFIFO/SPIFIFO.vho
+./nekoichi2.gen/sources_1/ip/SPIFIFO/SPIFIFO.veo
+./nekoichi2.gen/sources_1/ip/SPIFIFO/simulation/fifo_generator_vlog_beh.v
+./nekoichi2.gen/sources_1/ip/SPIFIFO/hdl/fifo_generator_v13_2_rfs.vhd
+./nekoichi2.gen/sources_1/ip/SPIFIFO/hdl/fifo_generator_v13_2_rfs.v
+./nekoichi2.gen/sources_1/ip/SPIFIFO/sim/SPIFIFO.v
+./nekoichi2.gen/sources_1/ip/SPIFIFO/SPIFIFO_stub.v
+./nekoichi2.gen/sources_1/ip/SPIFIFO/SPIFIFO_stub.vhdl
+./nekoichi2.gen/sources_1/ip/SPIFIFO/SPIFIFO_sim_netlist.v
+./nekoichi2.gen/sources_1/ip/SPIFIFO/SPIFIFO.dcp
+./nekoichi2.gen/sources_1/ip/SPIFIFO/SPIFIFO_sim_netlist.vhdl
+./nekoichi2.gen/sources_1/ip/SPIFIFO/hdl/blk_mem_gen_v8_4_vhsyn_rfs.vhd
+./nekoichi2.gen/sources_1/ip/SPIFIFO/SPIFIFO.xdc
+./nekoichi2.gen/sources_1/ip/SPIFIFO/SPIFIFO_clocks.xdc
+./nekoichi2.gen/sources_1/ip/SPIFIFO/hdl/fifo_generator_v13_2_vhsyn_rfs.vhd
+./nekoichi2.gen/sources_1/ip/SPIFIFO/synth/SPIFIFO.vhd
+./nekoichi2.gen/sources_1/ip/SPIFIFO/SPIFIFO_ooc.xdc
+./nekoichi2.gen/sources_1/ip/SPIFIFO/SPIFIFO.xml
 ./nekoichi2.srcs/sources_1/ip/VideoMemSlice/VideoMemSlice.xci
 ./nekoichi2.gen/sources_1/ip/VideoMemSlice/simulation/blk_mem_gen_v8_4.v
 ./nekoichi2.gen/sources_1/ip/VideoMemSlice/sim/VideoMemSlice.v
@@ -199,10 +219,8 @@ List of all the source files present in the archived project:-
 ./nekoichi2.gen/sources_1/ip/VideoMemSlice/synth/VideoMemSlice.vhd
 ./nekoichi2.gen/sources_1/ip/VideoMemSlice/VideoMemSlice.xml
 ./nekoichi2.srcs/sources_1/ip/FastSystemMemory/FastSystemMemory.xci
-./nekoichi2.gen/sources_1/ip/FastSystemMemory/FastSystemMemory.mif
-./nekoichi2.gen/sources_1/ip/FastSystemMemory/simulation/blk_mem_gen_v8_4.v
-./nekoichi2.gen/sources_1/ip/FastSystemMemory/sim/FastSystemMemory.v
 ./nekoichi2.gen/sources_1/ip/FastSystemMemory/FastSystemMemory_ooc.xdc
+./nekoichi2.gen/sources_1/ip/FastSystemMemory/FastSystemMemory.mif
 ./nekoichi2.gen/sources_1/ip/FastSystemMemory/hdl/blk_mem_gen_v8_4_vhsyn_rfs.vhd
 ./nekoichi2.gen/sources_1/ip/FastSystemMemory/synth/FastSystemMemory.vhd
 ./nekoichi2.gen/sources_1/ip/FastSystemMemory/FastSystemMemory.xml
@@ -240,6 +258,7 @@ List of all the source files present in the archived project:-
 ./nekoichi2.srcs/sources_1/new/registerfile.sv
 ./nekoichi2.srcs/sources_1/new/rv32cpu.sv
 ./nekoichi2.srcs/sources_1/new/videocontroller.sv
+./nekoichi2.srcs/sources_1/new/SD.vhd
 ./nekoichi2.srcs/sources_1/new/vgasignal.vhd
 ./nekoichi2.srcs/sources_1/new/nekoichitop.sv
 ./nekoichi2.srcs/sources_1/new/BIOS.coe

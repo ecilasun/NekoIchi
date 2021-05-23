@@ -47,7 +47,7 @@ wire [11:0] gpulanewritemask;
 // UART clock: 10Mhz, VGA clock: 25Mhz
 // GPU and CPU clocks vary, default at CPU@60Mhz & GPU@75Mhz
 // Wall clock is for time CSR and runs at 10Mhz
-wire sysclock60, wallclock, gpuclock, uartclk, vgaclock, spiclock100;
+wire sysclock60, wallclock, gpuclock, uartclk, vgaclock;
 wire clockALocked, clockBLocked, clockCLocked;
 
 wire [11:0] video_x;
@@ -84,7 +84,6 @@ PeripheralClockGen PeripheralClockUnit(
 	.clk_in1(CLK_I),
 	.resetn(~RST_I),
 	.uartclk(uartclk),
-	.spiclock100(spiclock100),
 	.locked(clockCLocked) );
 
 wire allClocksLocked = clockALocked & clockBLocked & clockCLocked;
@@ -242,14 +241,16 @@ logic sdrq_re=1'b0;
 wire sddatainready, sddataoutready;
 
 // Device selector based on address
+wire deviceBRAM					= (cpu_address[31]==1'b0) & (cpu_address < 32'h00040000) ? 1'b1 : 1'b0;		// 0x00000000 - 0x0003FFFF
+wire deviceDDR3					= (cpu_address[31]==1'b0) & (cpu_address >= 32'h00040000) ? 1'b1 : 1'b0;	// 0x00040000 - 0x7FFFFFFF 
 //wire device???Write				= {cpu_address[31], cpu_address[4:2]} == 4'b1111 ? 1'b1 : 1'b0;	// 0x8000001C
 //wire device???Read				= {cpu_address[31], cpu_address[4:2]} == 4'b1110 ? 1'b1 : 1'b0;	// 0x80000018
-wire deviceSPIWrite				= {cpu_address[31], cpu_address[4:2]} == 4'b1101 ? 1'b1 : 1'b0;	// 0x80000014
-wire deviceSPIRead				= {cpu_address[31], cpu_address[4:2]} == 4'b1100 ? 1'b1 : 1'b0;	// 0x80000010
-wire deviceUARTTxWrite			= {cpu_address[31], cpu_address[4:2]} == 4'b1011 ? 1'b1 : 1'b0;	// 0x8000000C
-wire deviceUARTRxRead			= {cpu_address[31], cpu_address[4:2]} == 4'b1010 ? 1'b1 : 1'b0;	// 0x80000008
-wire deviceUARTByteCountRead	= {cpu_address[31], cpu_address[4:2]} == 4'b1001 ? 1'b1 : 1'b0;	// 0x80000004
-wire deviceGPUFIFOWrite			= {cpu_address[31], cpu_address[4:2]} == 4'b1000 ? 1'b1 : 1'b0;	// 0x80000000
+wire deviceSPIWrite				= {cpu_address[31], cpu_address[4:2]} == 4'b1101 ? 1'b1 : 1'b0;		// 0x80000014
+wire deviceSPIRead				= {cpu_address[31], cpu_address[4:2]} == 4'b1100 ? 1'b1 : 1'b0;		// 0x80000010
+wire deviceUARTTxWrite			= {cpu_address[31], cpu_address[4:2]} == 4'b1011 ? 1'b1 : 1'b0;		// 0x8000000C
+wire deviceUARTRxRead			= {cpu_address[31], cpu_address[4:2]} == 4'b1010 ? 1'b1 : 1'b0;		// 0x80000008
+wire deviceUARTByteCountRead	= {cpu_address[31], cpu_address[4:2]} == 4'b1001 ? 1'b1 : 1'b0;		// 0x80000004
+wire deviceGPUFIFOWrite			= {cpu_address[31], cpu_address[4:2]} == 4'b1000 ? 1'b1 : 1'b0;		// 0x80000000
 
 wire [5:0] deviceRTPort			= {deviceSPIWrite, deviceSPIRead, deviceUARTRxRead, deviceUARTByteCountRead, deviceUARTTxWrite, deviceGPUFIFOWrite};
 
@@ -257,7 +258,7 @@ wire [5:0] deviceRTPort			= {deviceSPIWrite, deviceSPIRead, deviceUARTRxRead, de
 wire [31:0] uartdataout = {24'd0, infifoout};
 wire [31:0] uartbytecountout = {22'd0, infifodatacount};
 wire [31:0] sddatawide = {24'd0, sdrq_dataout};
-wire [31:0] bus_dataout = deviceUARTRxRead ? uartdataout : (deviceUARTByteCountRead ? uartbytecountout : (deviceSPIRead ? sddatawide : bram_dataout));
+wire [31:0] bus_dataout = deviceUARTRxRead ? uartdataout : (deviceUARTByteCountRead ? uartbytecountout : (deviceSPIRead ? sddatawide : (deviceDDR3 ? 32'hFFFFFFFF : bram_dataout)));
 
 // This is high if any of the device FIFOs are full or empty depending on read/write
 // It allows the CPU side to stall and wait for data access
@@ -271,11 +272,17 @@ wire bus_stall = gpustall | uartwritestall | uartreadstall | spiwritestall | spi
 
 // SYSMEM and memory mapped device r/w router
 always_comb begin
-	// SYSMEM r/w (0x00000000 - 0x80000000)
+	// SYSMEM r/w (0x00000000 - 0x0003FFFF)
 	bram_address = cpu_address;
 	bram_writeword = cpu_writeword;
-	bram_writeena = cpu_address[31]== 1'b0 ? cpu_writeena : 4'b0000;
-	bram_readena = cpu_address[31]== 1'b0 ? cpu_readena : 0;
+	bram_writeena = deviceBRAM ? cpu_writeena : 4'b0000;
+	bram_readena = deviceBRAM ? cpu_readena : 0;
+	
+	// DDR3 (0x00040000 - 0x7FFFFFFF)
+	//ddr3_address = cpu_address;
+	//ddr3_writeword = cpu_writeword;
+	//ddr3_writeena = deviceDDR3 ? cpu_writeena : 4'b0000;
+	//ddr3_readena = deviceDDR3 ? cpu_readena : 0;
 
 	// GPU FIFO
 	gpu_fifocommand = cpu_writeword; // Dword writes, no masking
