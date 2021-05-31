@@ -57,22 +57,24 @@ end endgenerate
 always @(posedge(vgaclock)) begin
 	if (isCachingRow) begin
 		scanlinecache[cachewriteaddress] <= vram_data[scanoutaddress[13:10]];
-	end else begin
-		case (videobyteselect)
-			2'b00: begin
-				videooutbyte <= scanlinecache[cachereadaddress][7:0];
-			end
-			2'b01: begin
-				videooutbyte <= scanlinecache[cachereadaddress][15:8];
-			end
-			2'b10: begin
-				videooutbyte <= scanlinecache[cachereadaddress][23:16];
-			end
-			2'b11: begin
-				videooutbyte <= scanlinecache[cachereadaddress][31:24];
-			end
-		endcase
 	end
+end
+
+always_comb begin
+	case (videobyteselect)
+		2'b00: begin
+			videooutbyte <= scanlinecache[cachereadaddress][7:0];
+		end
+		2'b01: begin
+			videooutbyte <= scanlinecache[cachereadaddress][15:8];
+		end
+		2'b10: begin
+			videooutbyte <= scanlinecache[cachereadaddress][23:16];
+		end
+		2'b11: begin
+			videooutbyte <= scanlinecache[cachereadaddress][31:24];
+		end
+	endcase
 end
 
 endmodule
