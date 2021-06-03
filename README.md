@@ -5,9 +5,12 @@ A simple risc-v CPU with a custom GPU running on an Arty A7-100T FPGA board
 
 NekoIchi is a system-on-chip which contains:
 - A risc-v (rv32imf) CPU
-- 128Kbytes of SYSRAM for programs
+- 256Kbytes of SYSRAM for programs
+- DVI interface via PMOD on port A&B
+- SDCard interface via PMOD on port C
 - 256x192x8bpp VRAM for graphics
 - A custom GPU
+- Hardware interrupts (external/timer/breakpoint)
 - UART @115200 bauds
 
 ## The CPU
@@ -58,6 +61,7 @@ After an executable loads and main() starts executing, it's OK to use the aforem
 ## External IPs:
 
 RS232 serial communication/baud generator code used from https://www.fpga4fun.com/SerialInterface.html
+SPI interface used from https://github.com/jakubcabal/spi-fpga
 
 ## TODO:
 
