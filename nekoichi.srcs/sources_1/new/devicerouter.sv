@@ -6,8 +6,8 @@ module devicerouter(
 	input cpuclock,
 	input gpuclock,
 	input vgaclock,
-	input ddrclock,
-	input ddrclockref,
+	//input ddrclock,
+	//input ddrclockref,
 	input reset_p,
 	input reset_n,
 	// Bus requests/stall

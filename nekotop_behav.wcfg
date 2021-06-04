@@ -11,13 +11,13 @@
       </db_ref>
    </db_ref_list>
    <zoom_setting>
-      <ZoomStartTime time="0fs"></ZoomStartTime>
-      <ZoomEndTime time="38300001fs"></ZoomEndTime>
-      <Cursor1Time time="3645000fs"></Cursor1Time>
+      <ZoomStartTime time="4647034fs"></ZoomStartTime>
+      <ZoomEndTime time="4874835fs"></ZoomEndTime>
+      <Cursor1Time time="4725000fs"></Cursor1Time>
    </zoom_setting>
    <column_width_setting>
       <NameColumnWidth column_width="314"></NameColumnWidth>
-      <ValueColumnWidth column_width="121"></ValueColumnWidth>
+      <ValueColumnWidth column_width="117"></ValueColumnWidth>
    </column_width_setting>
    <WVObjectSize size="92" />
    <wvobject fp_name="divider40" type="divider">
@@ -71,14 +71,20 @@
    <wvobject type="array" fp_name="/nekotop/mycpu/cpustate">
       <obj_property name="ElementShortName">cpustate[11:0]</obj_property>
       <obj_property name="ObjectShortName">cpustate[11:0]</obj_property>
+      <obj_property name="CustomSignalColor">#FF00FF</obj_property>
+      <obj_property name="UseCustomSignalColor">true</obj_property>
    </wvobject>
    <wvobject type="array" fp_name="/nekotop/mycpu/PC">
       <obj_property name="ElementShortName">PC[31:0]</obj_property>
       <obj_property name="ObjectShortName">PC[31:0]</obj_property>
+      <obj_property name="CustomSignalColor">#FFFFFF</obj_property>
+      <obj_property name="UseCustomSignalColor">true</obj_property>
    </wvobject>
    <wvobject type="array" fp_name="/nekotop/mycpu/instruction">
       <obj_property name="ElementShortName">instruction[31:0]</obj_property>
       <obj_property name="ObjectShortName">instruction[31:0]</obj_property>
+      <obj_property name="CustomSignalColor">#FFFF00</obj_property>
+      <obj_property name="UseCustomSignalColor">true</obj_property>
    </wvobject>
    <wvobject type="logic" fp_name="/nekotop/mycpu/intregisterwriteenable">
       <obj_property name="ElementShortName">intregisterwriteenable</obj_property>
