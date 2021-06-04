@@ -6,12 +6,14 @@ module devicerouter(
 	input cpuclock,
 	input gpuclock,
 	input vgaclock,
+	input ddrclock,
+	input ddrclockref,
 	input reset_p,
 	input reset_n,
 	// Bus requests/stall
 	input [31:0] busaddress,
 	input [31:0] busdatain,
-	output [31:0] busdataout,
+	output logic [31:0] busdataout,
 	input [3:0] buswe,
 	input busre,
 	output busstall,
@@ -35,6 +37,23 @@ module devicerouter(
 	input spi_miso,
 	output spi_sck,
 	input spi_cd,
+	// DDR3
+    /*output          ddr3_reset_n,
+    output  [0:0]   ddr3_cke,
+    output  [0:0]   ddr3_ck_p, 
+    output  [0:0]   ddr3_ck_n,
+    output  [0:0]   ddr3_cs_n,
+    output          ddr3_ras_n, 
+    output          ddr3_cas_n, 
+    output          ddr3_we_n,
+    output  [2:0]   ddr3_ba,
+    output  [13:0]  ddr3_addr,
+    output  [0:0]   ddr3_odt,
+    output  [1:0]   ddr3_dm,
+    inout   [1:0]   ddr3_dqs_p,
+    inout   [1:0]   ddr3_dqs_n,
+    inout   [15:0]  ddr3_dq,*/
+	// IRQ
 	output logic SWITCH_IRQ = 1'b0,
 	output logic UART_IRQ = 1'b0 );
 
@@ -43,7 +62,7 @@ module devicerouter(
 // -----------------------------------------------------------------------
 
 wire deviceBRAM					= (busaddress[31]==1'b0) & (busaddress < 32'h00040000) ? 1'b1 : 1'b0;	// 0x00000000 - 0x0003FFFF
-//wire deviceDDR3				= (busaddress[31]==1'b0) & (busaddress >= 32'h00040000) ? 1'b1 : 1'b0;	// 0x00040000 - 0x7FFFFFFF 
+wire deviceDDR3					= (busaddress[31]==1'b0) & (busaddress >= 32'h00040000) ? 1'b1 : 1'b0;	// 0x00040000 - 0x7FFFFFFF 
 wire deviceSwitchCountRead		= {busaddress[31], busaddress[4:2]} == 4'b1111 ? 1'b1 : 1'b0;			// 0x8000001C Switch incoming queue byte count
 wire deviceSwitchRead			= {busaddress[31], busaddress[4:2]} == 4'b1110 ? 1'b1 : 1'b0;			// 0x80000018 Device switch states
 wire deviceSPIWrite				= {busaddress[31], busaddress[4:2]} == 4'b1101 ? 1'b1 : 1'b0;			// 0x80000014 SPI interface to SDCart write port
@@ -52,6 +71,12 @@ wire deviceUARTTxWrite			= {busaddress[31], busaddress[4:2]} == 4'b1011 ? 1'b1 :
 wire deviceUARTRxRead			= {busaddress[31], busaddress[4:2]} == 4'b1010 ? 1'b1 : 1'b0;			// 0x80000008 UART read port
 wire deviceUARTByteCountRead	= {busaddress[31], busaddress[4:2]} == 4'b1001 ? 1'b1 : 1'b0;			// 0x80000004 UART incoming queue byte count
 wire deviceGPUFIFOWrite			= {busaddress[31], busaddress[4:2]} == 4'b1000 ? 1'b1 : 1'b0;			// 0x80000000 GPU command queue
+
+// -----------------------------------------------------------------------
+// Device: DDR3
+// -----------------------------------------------------------------------
+
+// TODO:
 
 // -----------------------------------------------------------------------
 // Device: Switches
@@ -87,6 +112,7 @@ switchfifo DeviceSwitshStates(
 	.rst(reset_p) );
 
 logic [7:0] prevswitchstate = 8'h00;
+logic [7:0] interswitchstate = 8'h00;
 logic [7:0] newswitchstate = 8'h00;
 wire [7:0] currentswitchstate = {spi_cd, buttons, switches};
 
@@ -98,8 +124,9 @@ always @(posedge cpuclock) begin
 		switchwe <= 1'b0;
 
 		// Pipelined action
-		newswitchstate <= currentswitchstate;
-
+		interswitchstate <= currentswitchstate;
+		newswitchstate <= interswitchstate;
+		
 		// Check if switch states have changed 
 		if (newswitchstate != prevswitchstate) begin
 			// Save previous state, and push switch state onto stack
@@ -381,7 +408,7 @@ sysmem mymemory(
 	.doutb(dmadataout),											// Data to GPU
 	.web(dmawe),												// GPU write control line
 	.enb(reset_n) );											// Reads are always enabled for GPU when not in reset
-	
+
 // -----------------------------------------------------------------------
 // GPU
 // -----------------------------------------------------------------------
@@ -550,22 +577,34 @@ end
 // Bus traffic control and routing
 // -----------------------------------------------------------------------
 
+wire [31:0] ddr3dataout = 32'hBADBADAD; // TODO: Reading from DDR3 memory range returns this value (bad bad address)
 wire [31:0] uartdataout = {24'd0, infifoout};
 wire [31:0] uartbytecountout = {22'd0, infifodatacount};
 wire [31:0] switchdatacountout = {22'd0, switchdatacount};
 wire [31:0] sddatawide = {24'd0, sdrq_dataout};
-wire [31:0] switchdatawide = {24'd0, switchdataout};
-//wire [31:0] bus_dataout = deviceUARTRxRead ? uartdataout : (deviceUARTByteCountRead ? uartbytecountout : (deviceSPIRead ? sddatawide : (deviceDDR3 ? 32'hFFFFFFFF : memdataout)));
-assign busdataout = deviceUARTRxRead ? uartdataout : (deviceUARTByteCountRead ? uartbytecountout : (deviceSPIRead ? sddatawide : (deviceSwitchRead ? switchdatawide : (deviceSwitchCountRead ? switchdatacountout : memdataout))));
+wire [31:0] switchdatawide = switchempty ? {24'd0, newswitchstate} : {24'd0, switchdataout};
+
+always_comb begin
+	unique case(1'b1)
+		deviceUARTRxRead: busdataout = uartdataout;
+		deviceUARTByteCountRead: busdataout = uartbytecountout;
+		deviceSPIRead: busdataout = sddatawide;
+		deviceSwitchRead: busdataout = switchdatawide;
+		deviceSwitchCountRead: busdataout = switchdatacountout;
+		deviceDDR3: busdataout = ddr3dataout;
+		deviceBRAM: busdataout = memdataout;
+	endcase
+end
 
 wire gpustall = deviceGPUFIFOWrite ? gpu_fifowrfull : 1'b0;
 wire uartwritestall = deviceUARTTxWrite ? outfifofull : 1'b0;
 wire uartreadstall = deviceUARTRxRead ? infifoempty : 1'b0;
 wire spiwritestall = deviceSPIWrite ? sdwq_full : 1'b0;
 wire spireadstall = deviceSPIRead ? sdrq_empty : 1'b0;
-wire switchreadstall = deviceSwitchRead ? switchempty : 1'b0;
+//wire switchreadstall = deviceSwitchRead ? switchempty : 1'b0;
+//assign busdataout = deviceUARTRxRead ? uartdataout : (deviceUARTByteCountRead ? uartbytecountout : (deviceSPIRead ? sddatawide : (deviceSwitchRead ? switchdatawide : (deviceSwitchCountRead ? switchdatacountout : (deviceDDR3 ? ddr3dataout : memdataout)))));
 
-assign busstall = uartwritestall | uartreadstall | gpustall | spiwritestall | spireadstall | switchreadstall;
+assign busstall = uartwritestall | uartreadstall | gpustall | spiwritestall | spireadstall;// | switchreadstall;
 
 always_comb begin
 	// SYSMEM r/w (0x00000000 - 0x0003FFFF)

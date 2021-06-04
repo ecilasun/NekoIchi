@@ -49,11 +49,7 @@ wire signed [15:0] dy = (y1-y0);
 wire signed [15:0] dx = (x0-x1);
 
 always_comb begin
-	if (reset) begin
-		// lineedge = 0;
-	end else begin
-		lineedge = A*dx + B*dy;
-	end
+	lineedge = A*dx + B*dy;
 end
 
 assign outmask = lineedge[31]; // Only care about the sign bit
@@ -79,13 +75,20 @@ module gpuregisterfile(
 
 logic [31:0] registers[0:7]; 
 
+initial begin
+	registers[0] <= 32'h00000000;
+	registers[1] <= 32'h00000000; 
+	registers[2] <= 32'h00000000;
+	registers[3] <= 32'h00000000;
+	registers[4] <= 32'h00000000;
+	registers[5] <= 32'h00000000;
+	registers[6] <= 32'h00000000;
+	registers[7] <= 32'h00000000;
+end
+
 always @(posedge clock) begin
-	if (reset) begin
-		// noop
-	end else begin
-		if (wren & rd != 0)
-			registers[rd] <= datain;
-	end
+	if (wren & rd != 0)
+		registers[rd] <= datain;
 end
 
 assign rval1 = rs1 == 0 ? 32'd0 : registers[rs1];
@@ -456,12 +459,12 @@ always_ff @(posedge clock) begin
 				// Set up scan extents (4x1 tiles for a 4bit mask)
 				tileX0 <= minXval; // tile width=4
 				tileY0 <= minYval; // tile height=1 (but using 4 aligned at start)
-				/*w0_row <= w0_init;
-				w1_row <= w1_init;
-				w2_row <= w2_init;
-				w0 <= w0_init;
-				w1 <= w1_init;
-				w2 <= w2_init;*/
+				//w0_row <= w0_init;
+				//w1_row <= w1_init;
+				//w2_row <= w2_init;
+				//w0 <= w0_init;
+				//w1 <= w1_init;
+				//w2 <= w2_init;
 				if (triFacing == 1'b1) begin
 					// Start by figuring out if we have something to rasterize
 					// on this scanline.
@@ -486,22 +489,22 @@ always_ff @(posedge clock) begin
 					//vramwriteword <= {w0[15:8], w0[15:8]+A12, w0[15:8]+A12+A12, w0[15:8]+A12+A12+A12};
 
 					// Did we run out of tiles in this direction, or hit a zero tile mask?
-					if (/*(~widetilemask) |*/ tileX0 >= maxXval) begin
+					if (tileX0 >= maxXval) begin // | (~widetilemask)
 						tileX0 <= minXval;
 						// Step one tile down
 						tileY0 <= tileY0 + 16'sd1; // tile height=1
-						/*w0_row <= w0_row + B12;
-						w1_row <= w1_row + B20;
-						w2_row <= w2_row + B01;
-						w0 <= w0_row + B12;
-						w1 <= w1_row + B20;
-						w2 <= w2_row + B01;*/
+						//w0_row <= w0_row + B12;
+						//w1_row <= w1_row + B20;
+						//w2_row <= w2_row + B01;
+						//w0 <= w0_row + B12;
+						//w1 <= w1_row + B20;
+						//w2 <= w2_row + B01;
 					end else begin
 						// Step to next tile on scanline
 						tileX0 <= tileX0 + 16'sd4;
-						/*w0 <= w0 + A12;
-						w1 <= w1 + A20;
-						w2 <= w2 + A01;*/
+						//w0 <= w0 + A12;
+						//w1 <= w1 + A20;
+						//w2 <= w2 + A01;
 					end
 					gpustate[`GPUSTATERASTER] <= 1'b1;
 				end

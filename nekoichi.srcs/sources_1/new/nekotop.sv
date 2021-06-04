@@ -31,6 +31,23 @@ module nekotop(
 	output spi_sck,
 	//inout [1:0] dat, // UNUSED
 	input spi_cd
+
+    // DDR3 SDRAM
+    /*, output          ddr3_reset_n,
+    output  [0:0]   ddr3_cke,
+    output  [0:0]   ddr3_ck_p, 
+    output  [0:0]   ddr3_ck_n,
+    output  [0:0]   ddr3_cs_n,
+    output          ddr3_ras_n, 
+    output          ddr3_cas_n, 
+    output          ddr3_we_n,
+    output  [2:0]   ddr3_ba,
+    output  [13:0]  ddr3_addr,
+    output  [0:0]   ddr3_odt,
+    output  [1:0]   ddr3_dm,
+    inout   [1:0]   ddr3_dqs_p,
+    inout   [1:0]   ddr3_dqs_n,
+    inout   [15:0]  ddr3_dq*/
 );
 
 wire cpuclock, wallclock, uartbase, gpuclock, vgaclock;
@@ -46,7 +63,7 @@ clockgen myclock(
 peripheralclock myotherclock(
 	.resetn(~RST_I),			// Incoming external reset (negated)
 	.clk_in1(CLK_I),			// Input external clock
-	.uartbase(uartbase),		// Generated UART base clock 
+	.uartbase(uartbase),		// Generated UART base clock
 	.locked(clockBLocked) );	// High when clock is stable
 	
 videoclocks myvideoclocks(
@@ -90,6 +107,8 @@ devicerouter mydevicetree(
 	.cpuclock(cpuclock),
 	.gpuclock(gpuclock),
 	.vgaclock(vgaclock),
+	.ddrclock(ddrclock),
+	.ddrclockref(ddrclockref),
 	.reset_p(reset_p),
 	.reset_n(reset_n),
 	.busaddress(memaddress),
@@ -114,7 +133,22 @@ devicerouter mydevicetree(
 	.spi_miso(spi_miso),
 	.spi_sck(spi_sck),
 	.spi_cd(spi_cd),
-	.SWITCH_IRQ(SWITCH_IRQ),
+    /*.ddr3_reset_n(ddr3_reset_n),
+    .ddr3_cke(ddr3_cke),
+    .ddr3_ck_p(ddr3_ck_p), 
+    .ddr3_ck_n(ddr3_ck_n),
+    .ddr3_cs_n(ddr3_cs_n),
+    .ddr3_ras_n(ddr3_ras_n), 
+    .ddr3_cas_n(ddr3_cas_n), 
+    .ddr3_we_n(ddr3_we_n),
+    .ddr3_ba(ddr3_ba),
+    .ddr3_addr(ddr3_addr),
+    .ddr3_odt(ddr3_odt),
+    .ddr3_dm(ddr3_dm),
+    .ddr3_dqs_p(ddr3_dqs_p),
+    .ddr3_dqs_n(ddr3_dqs_n),
+    .ddr3_dq(ddr3_dq),*/
+    .SWITCH_IRQ(SWITCH_IRQ),
 	.UART_IRQ(UART_IRQ) );
 	
 wire IRQ = SWITCH_IRQ | UART_IRQ;
