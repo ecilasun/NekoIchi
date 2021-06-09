@@ -6,6 +6,7 @@ A simple risc-v CPU with a custom GPU running on an Arty A7-100T FPGA board
 NekoIchi is a system-on-chip which contains:
 - A risc-v (rv32imf) CPU
 - 256Kbytes of SYSRAM for programs
+- 256MBytes of DDR3 RAM
 - DVI interface via PMOD on port A&B
 - SDCard interface via PMOD on port C
 - 256x192x8bpp VRAM for graphics
@@ -40,6 +41,8 @@ Currently the DMA lives inside the GPU and is controlled by writing a command to
 - Unmasked writes: writes series of DWORDs from SYSRAM to VRAM using SYSRAM's second port to read, meaning CPU can still read/write to SYSRAM
 - Zero-masked writes: same as unmasked, excepy for every zero byte encountered, the DWORD write is byte masked to skip the zeros)
 
+NOTE: The GPU has no DMA access to DDR3 RAM
+
 ## Rasterizer
 The rasterizer generates solid-filled triangles, using 16 bit signed values placed in GPU registers as X-Y pairs. Currently this requires 3 registers, and the draw command takes an 8bit color alongside register indices to kick the rasterization.
 Currently the reasterizer won't use bidirectional sweep algorithm for optimal fill speed, or do any parallel work, until the GPU receives its parallel workers.
@@ -63,13 +66,16 @@ After an executable loads and main() starts executing, it's OK to use the aforem
 RS232 serial communication/baud generator code used from https://www.fpga4fun.com/SerialInterface.html
 SPI interface used from https://github.com/jakubcabal/spi-fpga
 
-## TODO:
-
-- Implement GDB debugger stub (hardware support exists and should be adequate for a UART debug interface)
+## TO DO:
 - Support gradient/barycentric generation for triangle primitives on the GPU
 - Support fixed point (8.4? 8.8?) for primitive rasterizer on the GPU
-- Allow for coordinates outside the view so that the GPU can clip (currently, CPU must clip before sending otherwise triangles will get deformed)
-- Add audio support
-- Add button input support
 - Tackle more features for the GPU such as texturing / alpha blending (stretch goal)
-- Add back support for the DDR3 SDRAM or the HyperRAM module, whichever doesn't break the design. Otherwise expand the BRAM, or move to a board with an SRAM + simple SDRAM on board
+
+## PARTIALLY DONE:
+- Implement GDB debugger stub (hardware support exists and should be adequate for a UART debug interface)
+- Add audio support
+
+## DONE
+- Allow for coordinates outside the view so that the GPU can clip (currently, CPU must clip before sending otherwise triangles will get deformed)
+- Add button input support
+- Add back support for the DDR3 SDRAM or the HyperRAM module, whichever doesn't break the design. Otherwise expand the BRAM, or move to a board with an SRAM + simple SDRAM on board (DDR3 was added)
