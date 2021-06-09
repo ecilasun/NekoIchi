@@ -24,16 +24,8 @@ module nekotop(
 	input [3:0] switches,
 	input [2:0] buttons,
 
-	// SD Card PMOD on port C
-	output spi_cs_n,
-	output spi_mosi,
-	input spi_miso,
-	output spi_sck,
-	//inout [1:0] dat, // UNUSED
-	input spi_cd
-
     // DDR3 SDRAM
-    /*, output          ddr3_reset_n,
+    output          ddr3_reset_n,
     output  [0:0]   ddr3_cke,
     output  [0:0]   ddr3_ck_p, 
     output  [0:0]   ddr3_ck_n,
@@ -47,11 +39,25 @@ module nekotop(
     output  [1:0]   ddr3_dm,
     inout   [1:0]   ddr3_dqs_p,
     inout   [1:0]   ddr3_dqs_n,
-    inout   [15:0]  ddr3_dq*/
+    inout   [15:0]  ddr3_dq,
+
+	// I2S2 Audio output
+    output tx_mclk,
+    output tx_lrck,
+    output tx_sclk,
+    output tx_sdout,
+
+	// SD Card PMOD on port C
+	output spi_cs_n,
+	output spi_mosi,
+	input spi_miso,
+	output spi_sck,
+	//inout [1:0] dat, // UNUSED
+	input spi_cd
 );
 
-wire cpuclock, wallclock, uartbase, gpuclock, vgaclock;
-wire clockALocked, clockBLocked, clockCLocked;
+wire cpuclock, wallclock, uartbase, gpuclock, vgaclock, audiomasterclock, sys_clk_i, clk_ref_i;
+wire clockALocked, clockBLocked, clockCLocked, clockDLocked;
 
 clockgen myclock(
 	.resetn(~RST_I),			// Incoming external reset (negated)
@@ -64,17 +70,25 @@ peripheralclock myotherclock(
 	.resetn(~RST_I),			// Incoming external reset (negated)
 	.clk_in1(CLK_I),			// Input external clock
 	.uartbase(uartbase),		// Generated UART base clock
+	.ddrclock(sys_clk_i),		// DDR base clock @166.66667Mhz
+	.ddrclockref(clk_ref_i),	// DDR ref clock @200.0Mhz
 	.locked(clockBLocked) );	// High when clock is stable
 	
-videoclocks myvideoclocks(
+videoclocks VideoClockGen(
 	.resetn(~RST_I),			// Incoming external reset (negated)
 	.clk_in1(CLK_I),			// Input external clock
 	.gpuclock(gpuclock),		// Generated GPU clock 
 	.vgaclock(vgaclock),		// 25Mhz VGA clock
 	.locked(clockCLocked) );	// High when clock is stable
 
+audioclocks AudioClockGen(
+	.resetn(~RST_I),			// Incoming external reset (negated)
+	.clk_in1(CLK_I),			// Input external clock
+	.audiomasterclock(audiomasterclock), // I2S2 master clock @ 22.59001 (almost 22.591) MHz
+	.locked(clockDLocked) );	// High when clock is stable
+
 // Clock, reset and status wires
-wire allClocksLocked = clockALocked & clockBLocked & clockCLocked;
+wire allClocksLocked = clockALocked & clockBLocked & clockCLocked & clockDLocked;
 wire reset_p = RST_I | (~allClocksLocked);
 wire reset_n = (~RST_I) & allClocksLocked;
 
@@ -107,8 +121,9 @@ devicerouter mydevicetree(
 	.cpuclock(cpuclock),
 	.gpuclock(gpuclock),
 	.vgaclock(vgaclock),
-	//.ddrclock(ddrclock),
-	//.ddrclockref(ddrclockref),
+	.audiomasterclock(audiomasterclock),
+	.sys_clk_i(sys_clk_i),
+	.clk_ref_i(clk_ref_i),
 	.reset_p(reset_p),
 	.reset_n(reset_n),
 	.busaddress(memaddress),
@@ -133,7 +148,7 @@ devicerouter mydevicetree(
 	.spi_miso(spi_miso),
 	.spi_sck(spi_sck),
 	.spi_cd(spi_cd),
-    /*.ddr3_reset_n(ddr3_reset_n),
+    .ddr3_reset_n(ddr3_reset_n),
     .ddr3_cke(ddr3_cke),
     .ddr3_ck_p(ddr3_ck_p), 
     .ddr3_ck_n(ddr3_ck_n),
@@ -147,10 +162,14 @@ devicerouter mydevicetree(
     .ddr3_dm(ddr3_dm),
     .ddr3_dqs_p(ddr3_dqs_p),
     .ddr3_dqs_n(ddr3_dqs_n),
-    .ddr3_dq(ddr3_dq),*/
+    .ddr3_dq(ddr3_dq),
+    .tx_mclk(tx_mclk),
+    .tx_lrck(tx_lrck),
+    .tx_sclk(tx_sclk),
+    .tx_sdout(tx_sdout),
     .SWITCH_IRQ(SWITCH_IRQ),
 	.UART_IRQ(UART_IRQ) );
-	
+
 wire IRQ = SWITCH_IRQ | UART_IRQ;
 wire [1:0] IRQ_TYPE = { SWITCH_IRQ, UART_IRQ };
 

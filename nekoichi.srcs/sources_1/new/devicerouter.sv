@@ -6,8 +6,9 @@ module devicerouter(
 	input cpuclock,
 	input gpuclock,
 	input vgaclock,
-	//input ddrclock,
-	//input ddrclockref,
+	input audiomasterclock,
+	input sys_clk_i,
+	input clk_ref_i,
 	input reset_p,
 	input reset_n,
 	// Bus requests/stall
@@ -38,7 +39,7 @@ module devicerouter(
 	output spi_sck,
 	input spi_cd,
 	// DDR3
-    /*output          ddr3_reset_n,
+    output          ddr3_reset_n,
     output  [0:0]   ddr3_cke,
     output  [0:0]   ddr3_ck_p, 
     output  [0:0]   ddr3_ck_n,
@@ -52,8 +53,13 @@ module devicerouter(
     output  [1:0]   ddr3_dm,
     inout   [1:0]   ddr3_dqs_p,
     inout   [1:0]   ddr3_dqs_n,
-    inout   [15:0]  ddr3_dq,*/
-	// IRQ
+    inout   [15:0]  ddr3_dq,
+	// I2S2 audio
+    output tx_mclk,
+    output tx_lrck,
+    output tx_sclk,
+    output tx_sdout,
+    // IRQ
 	output logic SWITCH_IRQ = 1'b0,
 	output logic UART_IRQ = 1'b0 );
 
@@ -62,21 +68,70 @@ module devicerouter(
 // -----------------------------------------------------------------------
 
 wire deviceBRAM					= (busaddress[31]==1'b0) & (busaddress < 32'h00040000) ? 1'b1 : 1'b0;	// 0x00000000 - 0x0003FFFF
-wire deviceDDR3					= (busaddress[31]==1'b0) & (busaddress >= 32'h00040000) ? 1'b1 : 1'b0;	// 0x00040000 - 0x7FFFFFFF 
-wire deviceSwitchCountRead		= {busaddress[31], busaddress[4:2]} == 4'b1111 ? 1'b1 : 1'b0;			// 0x8000001C Switch incoming queue byte count
-wire deviceSwitchRead			= {busaddress[31], busaddress[4:2]} == 4'b1110 ? 1'b1 : 1'b0;			// 0x80000018 Device switch states
-wire deviceSPIWrite				= {busaddress[31], busaddress[4:2]} == 4'b1101 ? 1'b1 : 1'b0;			// 0x80000014 SPI interface to SDCart write port
-wire deviceSPIRead				= {busaddress[31], busaddress[4:2]} == 4'b1100 ? 1'b1 : 1'b0;			// 0x80000010 SPI interface to SDCard read port
-wire deviceUARTTxWrite			= {busaddress[31], busaddress[4:2]} == 4'b1011 ? 1'b1 : 1'b0;			// 0x8000000C UART write port
-wire deviceUARTRxRead			= {busaddress[31], busaddress[4:2]} == 4'b1010 ? 1'b1 : 1'b0;			// 0x80000008 UART read port
-wire deviceUARTByteCountRead	= {busaddress[31], busaddress[4:2]} == 4'b1001 ? 1'b1 : 1'b0;			// 0x80000004 UART incoming queue byte count
-wire deviceGPUFIFOWrite			= {busaddress[31], busaddress[4:2]} == 4'b1000 ? 1'b1 : 1'b0;			// 0x80000000 GPU command queue
+wire deviceDDR3					= (busaddress[31]==1'b0) & (busaddress >= 32'h00040000) ? 1'b1 : 1'b0;	// 0x00040000 - 0x0FFFFFFF
+wire deviceAudioWrite			= {busaddress[31], busaddress[5:2]} == 5'b11000 ? 1'b1 : 1'b0;			// 0x80000020 Audio output port
+wire deviceSwitchCountRead		= {busaddress[31], busaddress[5:2]} == 5'b10111 ? 1'b1 : 1'b0;			// 0x8000001C Switch incoming queue byte count
+wire deviceSwitchRead			= {busaddress[31], busaddress[5:2]} == 5'b10110 ? 1'b1 : 1'b0;			// 0x80000018 Device switch states
+wire deviceSPIWrite				= {busaddress[31], busaddress[5:2]} == 5'b10101 ? 1'b1 : 1'b0;			// 0x80000014 SPI interface to SDCart write port
+wire deviceSPIRead				= {busaddress[31], busaddress[5:2]} == 5'b10100 ? 1'b1 : 1'b0;			// 0x80000010 SPI interface to SDCard read port
+wire deviceUARTTxWrite			= {busaddress[31], busaddress[5:2]} == 5'b10011 ? 1'b1 : 1'b0;			// 0x8000000C UART write port
+wire deviceUARTRxRead			= {busaddress[31], busaddress[5:2]} == 5'b10010 ? 1'b1 : 1'b0;			// 0x80000008 UART read port
+wire deviceUARTByteCountRead	= {busaddress[31], busaddress[5:2]} == 5'b10001 ? 1'b1 : 1'b0;			// 0x80000004 UART incoming queue byte count
+wire deviceGPUFIFOWrite			= {busaddress[31], busaddress[5:2]} == 5'b10000 ? 1'b1 : 1'b0;			// 0x80000000 GPU command queue
+
+// -----------------------------------------------------------------------
+// I2S2 Audio output
+// -----------------------------------------------------------------------
+
+wire latchAudioData = deviceAudioWrite ? (|buswe) : 1'b0;
+
+/*i2s2audio soundoutput(
+	.resetn(reset_n),
+    .clock(audiomasterclock),
+
+	.latch(latchAudioData),			// Latch data when high
+    .leftrightchannels(busdatain),	// Joint stereo DWORD
+
+    .tx_mclk(tx_mclk),
+    .tx_lrck(tx_lrck),
+    .tx_sclk(tx_sclk),
+    .tx_sdout(tx_sdout) );*/
 
 // -----------------------------------------------------------------------
 // Device: DDR3
 // -----------------------------------------------------------------------
 
-// TODO:
+wire [31:0] ddr3dataout;
+wire ddr3stall;
+
+ddr3controller ddr3memory(
+	.reset(reset_p),
+	.resetn(reset_n),
+	.cpuclock(cpuclock),
+	.sys_clk_i(sys_clk_i),
+	.clk_ref_i(clk_ref_i),
+	.deviceDDR3(deviceDDR3),
+	.busre(busre),
+	.buswe(buswe),
+	.busaddress(busaddress),
+	.busdatain(busdatain),
+	.ddr3stall(ddr3stall),
+	.ddr3dataout(ddr3dataout),
+    .ddr3_reset_n(ddr3_reset_n),
+    .ddr3_cke(ddr3_cke),
+    .ddr3_ck_p(ddr3_ck_p), 
+    .ddr3_ck_n(ddr3_ck_n),
+    .ddr3_cs_n(ddr3_cs_n),
+    .ddr3_ras_n(ddr3_ras_n), 
+    .ddr3_cas_n(ddr3_cas_n), 
+    .ddr3_we_n(ddr3_we_n),
+    .ddr3_ba(ddr3_ba),
+    .ddr3_addr(ddr3_addr),
+    .ddr3_odt(ddr3_odt),
+    .ddr3_dm(ddr3_dm),
+    .ddr3_dqs_p(ddr3_dqs_p),
+    .ddr3_dqs_n(ddr3_dqs_n),
+    .ddr3_dq(ddr3_dq) );
 
 // -----------------------------------------------------------------------
 // Device: Switches
@@ -392,8 +447,8 @@ wire [31:0] dmadatain;
 wire [31:0] dmadataout;
 wire [3:0] dmawe;
 
-// System memory
-sysmem mymemory(
+// System memory - FAST section
+sysmem FastRAM(
 	// CPU direct access port
 	.addra(busaddress[17:2]),									// 16 bit DWORD memory address
 	.clka(cpuclock),											// Synchronized to CPU clock
@@ -577,7 +632,6 @@ end
 // Bus traffic control and routing
 // -----------------------------------------------------------------------
 
-wire [31:0] ddr3dataout = 32'hBADBADAD; // TODO: Reading from DDR3 memory range returns this value (bad bad address)
 wire [31:0] uartdataout = {24'd0, infifoout};
 wire [31:0] uartbytecountout = {22'd0, infifodatacount};
 wire [31:0] switchdatacountout = {22'd0, switchdatacount};
@@ -596,25 +650,26 @@ always_comb begin
 	endcase
 end
 
+//wire ddr3stall = deviceDDR3 ? (ddr3readstall | ddr3writestall) : 1'b0;
 wire gpustall = deviceGPUFIFOWrite ? gpu_fifowrfull : 1'b0;
 wire uartwritestall = deviceUARTTxWrite ? outfifofull : 1'b0;
 wire uartreadstall = deviceUARTRxRead ? infifoempty : 1'b0;
 wire spiwritestall = deviceSPIWrite ? sdwq_full : 1'b0;
 wire spireadstall = deviceSPIRead ? sdrq_empty : 1'b0;
-//wire switchreadstall = deviceSwitchRead ? switchempty : 1'b0;
-//assign busdataout = deviceUARTRxRead ? uartdataout : (deviceUARTByteCountRead ? uartbytecountout : (deviceSPIRead ? sddatawide : (deviceSwitchRead ? switchdatawide : (deviceSwitchCountRead ? switchdatacountout : (deviceDDR3 ? ddr3dataout : memdataout)))));
+// NOTE: Switch reads will never stall, but either return instant state or cached state from FIFO
 
-assign busstall = uartwritestall | uartreadstall | gpustall | spiwritestall | spireadstall;// | switchreadstall;
+assign busstall = uartwritestall | uartreadstall | gpustall | spiwritestall | spireadstall | ddr3stall;
 
 always_comb begin
 	// SYSMEM r/w (0x00000000 - 0x0003FFFF)
 	// This one self-selects in the System memory section
 	
-	// DDR3 (0x00040000 - 0x7FFFFFFF) - Reserved for future
-	//ddr3_address = cpu_address;
-	//ddr3_writeword = busdatain;
-	//ddr3_writeena = deviceDDR3 ? cpu_writeena : 4'b0000;
-	//ddr3_readena = deviceDDR3 ? cpu_readena : 0;
+	// DDR3 (0x00040000 - 0x0FFFFFFF)
+	// Handler is a clocked module
+
+	// Audio fifo write control - TBD
+	//audiofifoin = busdatain;
+	//audiofifowe = deviceAudioWrite ? ((~audiofifofull) & (|buswe)) : 1'b0;
 
 	// GPU command fifo write control
 	gpu_fifocommand = busdatain; // DWORD writes only, no byte masking
@@ -638,7 +693,7 @@ always_comb begin
 	endcase
 	outuartfifowe = deviceUARTTxWrite ? ((~outfifofull) & (|buswe)) : 1'b0;
 
-	// SPI (transmit) - Reserved for future
+	// SPI (transmit)
 	case (buswe)
 		4'b1000: begin sdwq_datain = busdatain[31:24]; end
 		4'b0100: begin sdwq_datain = busdatain[23:16]; end
