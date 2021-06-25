@@ -37,8 +37,8 @@ use IEEE.MATH_REAL.ALL;
 
 entity SPI_MASTER is
     Generic (
-        CLK_FREQ    : natural := 100e6; -- set system clock frequency in Hz (100Mhz by default)
-        SCLK_FREQ   : natural := 5e6;   -- set SPI clock frequency in Hz (condition: SCLK_FREQ <= CLK_FREQ/10)
+        CLK_FREQ    : natural := 100e6; -- set system clock frequency in Hz (@100Mhz)
+        SCLK_FREQ   : natural := 10e6;  -- set SPI clock frequency in Hz (condition: SCLK_FREQ <= CLK_FREQ/10)
         WORD_SIZE   : natural := 8;     -- size of transfer word in bits, must be power of two
         SLAVE_COUNT : natural := 1      -- count of SPI slaves
     );

@@ -35,8 +35,7 @@ localparam MAIN_INIT = 3'd0;
 localparam MAIN_IDLE = 3'd1;
 localparam MAIN_WAIT_WRITE = 3'd2;
 localparam MAIN_WAIT_READ = 3'd3;
-localparam MAIN_FINISH_WRITE = 3'd4;
-localparam MAIN_FINISH_READ = 3'd5;
+localparam MAIN_FINISH_READ = 3'd4;
 logic [2:0] mainstate = MAIN_INIT;
 
 wire calib_done;
@@ -229,13 +228,12 @@ always @ (posedge ui_clk) begin
 			
 				if (app_rd_data_valid) begin
 					ddr3readwe <= 1'b1;
-					unique case (ddr3cmdout[35:34]) // busaddress[3:2])
+					unique case (ddr3cmdout[35:34]) // busaddress[3:2] used for DWORD select
 						2'b11: begin ddr3readin <= app_rd_data[127:96]; end
 						2'b10: begin ddr3readin <= app_rd_data[95:64]; end
 						2'b01: begin ddr3readin <= app_rd_data[63:32]; end
 						2'b00: begin ddr3readin <= app_rd_data[31:0]; end
 					endcase
-					//ddr3readin <= app_rd_data[31:0];
 					state <= IDLE;
 				end
 			end
@@ -296,6 +294,7 @@ always @(posedge cpuclock) begin
 			end
 
 			MAIN_IDLE: begin
+				ddr3writere <= 1'b0;
 				if (deviceDDR3) begin
 					if (busre) begin
 						ddr3cmdin <= {1'b0, 4'b0, busaddress[27:0], 32'd0};
@@ -313,18 +312,9 @@ always @(posedge cpuclock) begin
 				ddr3cmdwe <= 1'b0;
 				if (~ddr3writeempty) begin
 					ddr3writere <= 1'b1;
-					mainstate <= MAIN_FINISH_WRITE;
+					mainstate <= MAIN_IDLE;//MAIN_FINISH_WRITE;
 				end else begin
 					mainstate <= MAIN_WAIT_WRITE;
-				end
-			end
-
-			MAIN_FINISH_WRITE: begin
-				ddr3writere <= 1'b0;
-				if (ddr3writevalid) begin // Write ack arrived
-					mainstate <= MAIN_IDLE;
-				end else begin
-					mainstate <= MAIN_FINISH_WRITE;
 				end
 			end
 

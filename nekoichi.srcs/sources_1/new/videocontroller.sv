@@ -11,9 +11,7 @@ module VideoControllerGen(
 		input wire [3:0] mem_writeena,
 		input wire [31:0] writeword,
 		input wire [11:0] lanemask,
-		output wire [3:0] red,
-		output wire [3:0] green,
-		output wire [3:0] blue,
+		output wire [7:0] paletteindex,
 		output wire inDisplayWindow );
 
 logic [31:0] scanlinecache [0:63];
@@ -31,9 +29,7 @@ wire [1:0] videobyteselect = video_x[2:1];
 wire [31:0] vram_data[0:11];
 logic [7:0] videooutbyte;
 
-assign blue = {videooutbyte[7:6], 2'b00};
-assign red = {videooutbyte[5:3], 1'b0}; // TODO: Scanline cache + byteselect to pick the right 8 bit value here
-assign green = {videooutbyte[2:0], 1'b0};
+assign paletteindex = videooutbyte;
 
 // Generate 12 slices of 256*16 pixels of video memory
 genvar slicegen;

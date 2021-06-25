@@ -6,6 +6,7 @@ module devicerouter(
 	input cpuclock,
 	input gpuclock,
 	input vgaclock,
+	input spiclock,
 	input audiomasterclock,
 	input sys_clk_i,
 	input clk_ref_i,
@@ -67,35 +68,53 @@ module devicerouter(
 // Device selection
 // -----------------------------------------------------------------------
 
-wire deviceBRAM					= (busaddress[31]==1'b0) & (busaddress < 32'h00040000) ? 1'b1 : 1'b0;	// 0x00000000 - 0x0003FFFF
-wire deviceDDR3					= (busaddress[31]==1'b0) & (busaddress >= 32'h00040000) ? 1'b1 : 1'b0;	// 0x00040000 - 0x0FFFFFFF
-wire deviceAudioWrite			= {busaddress[31], busaddress[5:2]} == 5'b11000 ? 1'b1 : 1'b0;			// 0x80000020 Audio output port
-wire deviceSwitchCountRead		= {busaddress[31], busaddress[5:2]} == 5'b10111 ? 1'b1 : 1'b0;			// 0x8000001C Switch incoming queue byte count
-wire deviceSwitchRead			= {busaddress[31], busaddress[5:2]} == 5'b10110 ? 1'b1 : 1'b0;			// 0x80000018 Device switch states
-wire deviceSPIWrite				= {busaddress[31], busaddress[5:2]} == 5'b10101 ? 1'b1 : 1'b0;			// 0x80000014 SPI interface to SDCart write port
-wire deviceSPIRead				= {busaddress[31], busaddress[5:2]} == 5'b10100 ? 1'b1 : 1'b0;			// 0x80000010 SPI interface to SDCard read port
-wire deviceUARTTxWrite			= {busaddress[31], busaddress[5:2]} == 5'b10011 ? 1'b1 : 1'b0;			// 0x8000000C UART write port
-wire deviceUARTRxRead			= {busaddress[31], busaddress[5:2]} == 5'b10010 ? 1'b1 : 1'b0;			// 0x80000008 UART read port
-wire deviceUARTByteCountRead	= {busaddress[31], busaddress[5:2]} == 5'b10001 ? 1'b1 : 1'b0;			// 0x80000004 UART incoming queue byte count
-wire deviceGPUFIFOWrite			= {busaddress[31], busaddress[5:2]} == 5'b10000 ? 1'b1 : 1'b0;			// 0x80000000 GPU command queue
+wire deviceBRAM					= (busaddress[31:28]==4'b0000) & (busaddress < 32'h00020000) ? 1'b1 : 1'b0;		// 0x00000000 - 0x0001FFFF (128Kbytes)
+wire deviceDDR3					= (busaddress[31:28]==4'b0000) & (busaddress >= 32'h00020000) ? 1'b1 : 1'b0;	// 0x00020000 - 0x0FFFFFFF (8Mbytes-128Kbytes due to overlap)
+wire deviceAudioWrite			= {busaddress[31:28], busaddress[5:2]} == 8'b10001000 ? 1'b1 : 1'b0;			// 0x8xxxxx20 Audio output port
+wire deviceSwitchCountRead		= {busaddress[31:28], busaddress[5:2]} == 8'b10000111 ? 1'b1 : 1'b0;			// 0x8xxxxx1C Switch incoming queue byte count
+wire deviceSwitchRead			= {busaddress[31:28], busaddress[5:2]} == 8'b10000110 ? 1'b1 : 1'b0;			// 0x8xxxxx18 Device switch states
+wire deviceSPIWrite				= {busaddress[31:28], busaddress[5:2]} == 8'b10000101 ? 1'b1 : 1'b0;			// 0x8xxxxx14 SPI interface to SDCart write port
+wire deviceSPIRead				= {busaddress[31:28], busaddress[5:2]} == 8'b10000100 ? 1'b1 : 1'b0;			// 0x8xxxxx10 SPI interface to SDCard read port
+wire deviceUARTTxWrite			= {busaddress[31:28], busaddress[5:2]} == 8'b10000011 ? 1'b1 : 1'b0;			// 0x8xxxxx0C UART write port
+wire deviceUARTRxRead			= {busaddress[31:28], busaddress[5:2]} == 8'b10000010 ? 1'b1 : 1'b0;			// 0x8xxxxx08 UART read port
+wire deviceUARTByteCountRead	= {busaddress[31:28], busaddress[5:2]} == 8'b10000001 ? 1'b1 : 1'b0;			// 0x8xxxxx04 UART incoming queue byte count
+wire deviceGPUFIFOWrite			= {busaddress[31:28], busaddress[5:2]} == 8'b10000000 ? 1'b1 : 1'b0;			// 0x8xxxxx00 GPU command queue
 
 // -----------------------------------------------------------------------
 // I2S2 Audio output
 // -----------------------------------------------------------------------
 
-wire latchAudioData = deviceAudioWrite ? (|buswe) : 1'b0;
+wire abfull, abempty, abvalid;
+logic [31:0] abdin;
+logic abwe = 1'b0;
+wire abre;
+wire [31:0] abdout;
+audiofifo AudioBuffer(
+	.wr_clk(cpuclock),
+	.full(abfull),
+	.din(abdin),
+	.wr_en(abwe),
+	.rd_clk(audiomasterclock),
+	.empty(abempty),
+	.dout(abdout),
+	.rd_en(abre),
+	.valid(abvalid),
+	.rst(reset_p) );
 
-/*i2s2audio soundoutput(
+i2s2audio soundoutput(
 	.resetn(reset_n),
-    .clock(audiomasterclock),
+	.cpuclock(cpuclock),
+    .audioclock(audiomasterclock),
 
-	.latch(latchAudioData),			// Latch data when high
-    .leftrightchannels(busdatain),	// Joint stereo DWORD
+	.abempty(abempty),
+	.abvalid(abvalid),
+	.audiore(abre),
+    .leftrightchannels(abdout),	// Joint stereo DWORD input
 
     .tx_mclk(tx_mclk),
     .tx_lrck(tx_lrck),
     .tx_sclk(tx_sclk),
-    .tx_sdout(tx_sdout) );*/
+    .tx_sdout(tx_sdout) );
 
 // -----------------------------------------------------------------------
 // Device: DDR3
@@ -218,7 +237,7 @@ SPIFIFO SDCardWriteFifo(
 	.empty(sdwq_empty),
 	.dout(sdwq_dataout),
 	.rd_en(sdwq_re),
-	.rd_clk(cpuclock),
+	.rd_clk(spiclock),
 	.valid(sqwq_valid),
 	// Clt
 	.rst(reset_p) );
@@ -227,7 +246,7 @@ SPIFIFO SDCardWriteFifo(
 logic sddatawe = 1'b0;
 logic [7:0] sddataout;
 logic [1:0] sdqwritestate = 2'b00;
-always @(posedge cpuclock) begin
+always @(posedge spiclock) begin
 
 	sdwq_re <= 1'b0;
 	sddatawe <= 1'b0;
@@ -266,7 +285,7 @@ SPIFIFO SDCardReadFifo(
 	.full(sdrq_full),
 	.din(sdrq_datain),
 	.wr_en(sdrq_we),
-	.wr_clk(cpuclock),
+	.wr_clk(spiclock),
 	// Out
 	.empty(sdrq_empty),
 	.dout(sdrq_dataout),
@@ -291,7 +310,7 @@ end
 // SD Card Controller
 // -----------------
 SPI_MASTER SDCardController(
-        .CLK(cpuclock),
+        .CLK(spiclock),
         .RST(reset_p), // spi_cd?
         // SPI MASTER INTERFACE
         .SCLK(spi_sck),
@@ -450,19 +469,42 @@ wire [3:0] dmawe;
 // System memory - FAST section
 sysmem FastRAM(
 	// CPU direct access port
-	.addra(busaddress[17:2]),									// 16 bit DWORD memory address
+	.addra(busaddress[16:2]),									// 16 bit DWORD memory address
 	.clka(cpuclock),											// Synchronized to CPU clock
 	.dina(busdatain),											// Data in from CPU
 	.douta(memdataout),											// Data out from RAM address to CPU
 	.wea(deviceBRAM ? buswe : 4'b0000),							// Write control line from CPU
 	.ena(deviceBRAM ? (reset_n & (busre | (|buswe))) : 1'b0),	// Unit enabled only when not in reset and reading or writing
 	// GPU DMA port
-	.addrb(dmaaddress[17:2]),									// 16 bit DWORD GPU address
+	.addrb(dmaaddress[16:2]),									// 16 bit DWORD GPU address
 	.clkb(gpuclock),											// Synchronized to GPU clock
 	.dinb(dmadatain),											// Data from GPU
 	.doutb(dmadataout),											// Data to GPU
 	.web(dmawe),												// GPU write control line
 	.enb(reset_n) );											// Reads are always enabled for GPU when not in reset
+
+// -----------------------------------------------------------------------
+// Color palette
+// -----------------------------------------------------------------------
+
+wire palettewe;
+wire [7:0] paletteaddress;
+wire [7:0] palettereadaddress;
+wire [31:0] palettedata;
+
+logic [31:0] paletteentries[0:255];
+
+initial begin
+	$readmemh("colorpalette.mem", paletteentries);
+end
+
+always @(posedge gpuclock) begin
+	if (palettewe)
+		paletteentries[paletteaddress] <= palettedata;
+end
+
+wire [31:0] paletteout;
+assign paletteout = paletteentries[palettereadaddress];
 
 // -----------------------------------------------------------------------
 // GPU
@@ -503,7 +545,11 @@ GPU rv32gpu(
 	.dmaaddress(dmaaddress),			// DMA memory address in SYSMEM
 	.dmawriteword(dmadatain),			// Input to DMA channel of SYSMEM
 	.dma_data(dmadataout),				// Output from DMA channel of SYSMEM
-	.dmawe(dmawe) );					// DMA write control
+	.dmawe(dmawe),	 					// DMA write control
+	// Color palette
+	.palettewe(palettewe),				// Color palette write control
+	.paletteaddress(paletteaddress),	// Address to write the color value to
+	.palettedata(palettedata) );		// Color value to write to the palette
 
 // -----------------------------------------------------------------------
 // GPU FIFO
@@ -530,13 +576,15 @@ gpufifo GPUCommands(
 
 wire [11:0] video_x;
 wire [11:0] video_y;
+wire [7:0] PALETTEINDEX_ONE;
+wire [7:0] PALETTEINDEX_TWO;
 
-wire [3:0] VIDEO_R_ONE;
+/*wire [3:0] VIDEO_R_ONE;
 wire [3:0] VIDEO_G_ONE;
 wire [3:0] VIDEO_B_ONE;
 wire [3:0] VIDEO_R_TWO;
 wire [3:0] VIDEO_G_TWO;
-wire [3:0] VIDEO_B_TWO;
+wire [3:0] VIDEO_B_TWO;*/
 wire inDisplayWindowA, inDisplayWindowB;
 
 VideoControllerGen VideoUnitA(
@@ -552,9 +600,10 @@ VideoControllerGen VideoUnitA(
 	.writeword(gpuwriteword),
 	.lanemask(gpulanewritemask),
 	// Video output
-	.red(VIDEO_R_ONE),
-	.green(VIDEO_G_ONE),
-	.blue(VIDEO_B_ONE),
+	.paletteindex(PALETTEINDEX_ONE),
+	//.red(VIDEO_R_ONE),
+	//.green(VIDEO_G_ONE),
+	//.blue(VIDEO_B_ONE),
 	.inDisplayWindow(inDisplayWindowA) );
 
 VideoControllerGen VideoUnitB(
@@ -570,9 +619,10 @@ VideoControllerGen VideoUnitB(
 	.writeword(gpuwriteword),
 	.lanemask(gpulanewritemask),
 	// Video output
-	.red(VIDEO_R_TWO),
-	.green(VIDEO_G_TWO),
-	.blue(VIDEO_B_TWO),
+	.paletteindex(PALETTEINDEX_TWO),
+	//.red(VIDEO_R_TWO),
+	//.green(VIDEO_G_TWO),
+	//.blue(VIDEO_B_TWO),
 	.inDisplayWindow(inDisplayWindowB) );
 
 wire vsync_we;
@@ -580,9 +630,18 @@ logic [31:0] vsynccounter;
 
 wire inDisplayWindow = videopage == 1'b0 ? inDisplayWindowA : inDisplayWindowB;
 assign DVI_DE = inDisplayWindow;
-assign DVI_R = inDisplayWindow ? (videopage == 1'b0 ? VIDEO_R_ONE : VIDEO_R_TWO) : 1'b0;
-assign DVI_G = inDisplayWindow ? (videopage == 1'b0 ? VIDEO_G_ONE : VIDEO_G_TWO) : 1'b0;
-assign DVI_B = inDisplayWindow ? (videopage == 1'b0 ? VIDEO_B_ONE : VIDEO_B_TWO) : 1'b0;
+assign palettereadaddress = (videopage == 1'b0) ? PALETTEINDEX_ONE : PALETTEINDEX_TWO;
+wire [3:0] VIDEO_B = paletteout[7:4];
+wire [3:0] VIDEO_R = paletteout[15:12];
+wire [3:0] VIDEO_G = paletteout[23:20];
+
+//assign blue = {videooutbyte[7:6], 2'b00};
+//assign red = {videooutbyte[5:3], 1'b0}; // TODO: Scanline cache + byteselect to pick the right 8 bit value here
+//assign green = {videooutbyte[2:0], 1'b0};
+
+assign DVI_R = inDisplayWindow ? VIDEO_R : 1'b0;
+assign DVI_G = inDisplayWindow ? VIDEO_G : 1'b0;
+assign DVI_B = inDisplayWindow ? VIDEO_B : 1'b0;
 assign DVI_CLK = vgaclock;
 
 vgatimer VideoScanout(
@@ -656,9 +715,10 @@ wire uartwritestall = deviceUARTTxWrite ? outfifofull : 1'b0;
 wire uartreadstall = deviceUARTRxRead ? infifoempty : 1'b0;
 wire spiwritestall = deviceSPIWrite ? sdwq_full : 1'b0;
 wire spireadstall = deviceSPIRead ? sdrq_empty : 1'b0;
+wire audiostall = deviceAudioWrite ? abfull : 1'b0;
 // NOTE: Switch reads will never stall, but either return instant state or cached state from FIFO
 
-assign busstall = uartwritestall | uartreadstall | gpustall | spiwritestall | spireadstall | ddr3stall;
+assign busstall = uartwritestall | uartreadstall | gpustall | spiwritestall | spireadstall | ddr3stall | audiostall;
 
 always_comb begin
 	// SYSMEM r/w (0x00000000 - 0x0003FFFF)
@@ -670,6 +730,9 @@ always_comb begin
 	// Audio fifo write control - TBD
 	//audiofifoin = busdatain;
 	//audiofifowe = deviceAudioWrite ? ((~audiofifofull) & (|buswe)) : 1'b0;
+	
+	abdin = busdatain;
+	abwe = deviceAudioWrite ? ((~abfull) & (|buswe)) : 1'b0;
 
 	// GPU command fifo write control
 	gpu_fifocommand = busdatain; // DWORD writes only, no byte masking

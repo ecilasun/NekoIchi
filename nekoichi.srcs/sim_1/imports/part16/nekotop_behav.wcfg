@@ -1,0 +1,889 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wave_config>
+   <wave_state>
+   </wave_state>
+   <db_ref_list>
+      <db_ref path="nekotop_behav.wdb" id="1">
+         <top_modules>
+            <top_module name="glbl" />
+            <top_module name="nekotop" />
+         </top_modules>
+      </db_ref>
+   </db_ref_list>
+   <zoom_setting>
+      <ZoomStartTime time="14095616000fs"></ZoomStartTime>
+      <ZoomEndTime time="63895616001fs"></ZoomEndTime>
+      <Cursor1Time time="28095616000fs"></Cursor1Time>
+   </zoom_setting>
+   <column_width_setting>
+      <NameColumnWidth column_width="229"></NameColumnWidth>
+      <ValueColumnWidth column_width="75"></ValueColumnWidth>
+   </column_width_setting>
+   <WVObjectSize size="189" />
+   <wvobject fp_name="divider195" type="divider">
+      <obj_property name="label">TOP</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/nekotop/CLK_I">
+      <obj_property name="ElementShortName">CLK_I</obj_property>
+      <obj_property name="ObjectShortName">CLK_I</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/nekotop/RST_I">
+      <obj_property name="ElementShortName">RST_I</obj_property>
+      <obj_property name="ObjectShortName">RST_I</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/nekotop/allClocksLocked">
+      <obj_property name="ElementShortName">allClocksLocked</obj_property>
+      <obj_property name="ObjectShortName">allClocksLocked</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/nekotop/vgaclock">
+      <obj_property name="ElementShortName">vgaclock</obj_property>
+      <obj_property name="ObjectShortName">vgaclock</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/nekotop/gpuclock">
+      <obj_property name="ElementShortName">gpuclock</obj_property>
+      <obj_property name="ObjectShortName">gpuclock</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/nekotop/uartbase">
+      <obj_property name="ElementShortName">uartbase</obj_property>
+      <obj_property name="ObjectShortName">uartbase</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/nekotop/wallclock">
+      <obj_property name="ElementShortName">wallclock</obj_property>
+      <obj_property name="ObjectShortName">wallclock</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/nekotop/cpuclock">
+      <obj_property name="ElementShortName">cpuclock</obj_property>
+      <obj_property name="ObjectShortName">cpuclock</obj_property>
+   </wvobject>
+   <wvobject fp_name="divider196" type="divider">
+      <obj_property name="label">BUS</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/nekotop/mydevicetree/deviceBRAM">
+      <obj_property name="ElementShortName">deviceBRAM</obj_property>
+      <obj_property name="ObjectShortName">deviceBRAM</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/nekotop/mydevicetree/deviceDDR3">
+      <obj_property name="ElementShortName">deviceDDR3</obj_property>
+      <obj_property name="ObjectShortName">deviceDDR3</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/nekotop/mydevicetree/deviceAudioWrite">
+      <obj_property name="ElementShortName">deviceAudioWrite</obj_property>
+      <obj_property name="ObjectShortName">deviceAudioWrite</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/nekotop/mydevicetree/deviceSwitchCountRead">
+      <obj_property name="ElementShortName">deviceSwitchCountRead</obj_property>
+      <obj_property name="ObjectShortName">deviceSwitchCountRead</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/nekotop/mydevicetree/deviceSwitchRead">
+      <obj_property name="ElementShortName">deviceSwitchRead</obj_property>
+      <obj_property name="ObjectShortName">deviceSwitchRead</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/nekotop/mydevicetree/deviceSPIWrite">
+      <obj_property name="ElementShortName">deviceSPIWrite</obj_property>
+      <obj_property name="ObjectShortName">deviceSPIWrite</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/nekotop/mydevicetree/deviceSPIRead">
+      <obj_property name="ElementShortName">deviceSPIRead</obj_property>
+      <obj_property name="ObjectShortName">deviceSPIRead</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/nekotop/mydevicetree/deviceUARTTxWrite">
+      <obj_property name="ElementShortName">deviceUARTTxWrite</obj_property>
+      <obj_property name="ObjectShortName">deviceUARTTxWrite</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/nekotop/mydevicetree/deviceUARTRxRead">
+      <obj_property name="ElementShortName">deviceUARTRxRead</obj_property>
+      <obj_property name="ObjectShortName">deviceUARTRxRead</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/nekotop/mydevicetree/deviceUARTByteCountRead">
+      <obj_property name="ElementShortName">deviceUARTByteCountRead</obj_property>
+      <obj_property name="ObjectShortName">deviceUARTByteCountRead</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/nekotop/mydevicetree/deviceGPUFIFOWrite">
+      <obj_property name="ElementShortName">deviceGPUFIFOWrite</obj_property>
+      <obj_property name="ObjectShortName">deviceGPUFIFOWrite</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/nekotop/mydevicetree/busaddress">
+      <obj_property name="ElementShortName">busaddress[31:0]</obj_property>
+      <obj_property name="ObjectShortName">busaddress[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/nekotop/mydevicetree/busdatain">
+      <obj_property name="ElementShortName">busdatain[31:0]</obj_property>
+      <obj_property name="ObjectShortName">busdatain[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/nekotop/mydevicetree/busdataout">
+      <obj_property name="ElementShortName">busdataout[31:0]</obj_property>
+      <obj_property name="ObjectShortName">busdataout[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/nekotop/mydevicetree/buswe">
+      <obj_property name="ElementShortName">buswe[3:0]</obj_property>
+      <obj_property name="ObjectShortName">buswe[3:0]</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/nekotop/mydevicetree/busre">
+      <obj_property name="ElementShortName">busre</obj_property>
+      <obj_property name="ObjectShortName">busre</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/nekotop/mydevicetree/busstall">
+      <obj_property name="ElementShortName">busstall</obj_property>
+      <obj_property name="ObjectShortName">busstall</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/nekotop/mycpu/IRQ">
+      <obj_property name="ElementShortName">IRQ</obj_property>
+      <obj_property name="ObjectShortName">IRQ</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/nekotop/mycpu/IRQ_TYPE">
+      <obj_property name="ElementShortName">IRQ_TYPE[1:0]</obj_property>
+      <obj_property name="ObjectShortName">IRQ_TYPE[1:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="divider1616" type="divider">
+      <obj_property name="label">audiobuffer</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/nekotop/mydevicetree/AudioBuffer/rst">
+      <obj_property name="ElementShortName">rst</obj_property>
+      <obj_property name="ObjectShortName">rst</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/nekotop/mydevicetree/AudioBuffer/wr_clk">
+      <obj_property name="ElementShortName">wr_clk</obj_property>
+      <obj_property name="ObjectShortName">wr_clk</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/nekotop/mydevicetree/AudioBuffer/rd_clk">
+      <obj_property name="ElementShortName">rd_clk</obj_property>
+      <obj_property name="ObjectShortName">rd_clk</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/nekotop/mydevicetree/AudioBuffer/din">
+      <obj_property name="ElementShortName">din[31:0]</obj_property>
+      <obj_property name="ObjectShortName">din[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/nekotop/mydevicetree/AudioBuffer/wr_en">
+      <obj_property name="ElementShortName">wr_en</obj_property>
+      <obj_property name="ObjectShortName">wr_en</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/nekotop/mydevicetree/AudioBuffer/rd_en">
+      <obj_property name="ElementShortName">rd_en</obj_property>
+      <obj_property name="ObjectShortName">rd_en</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/nekotop/mydevicetree/AudioBuffer/dout">
+      <obj_property name="ElementShortName">dout[31:0]</obj_property>
+      <obj_property name="ObjectShortName">dout[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/nekotop/mydevicetree/AudioBuffer/full">
+      <obj_property name="ElementShortName">full</obj_property>
+      <obj_property name="ObjectShortName">full</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/nekotop/mydevicetree/AudioBuffer/empty">
+      <obj_property name="ElementShortName">empty</obj_property>
+      <obj_property name="ObjectShortName">empty</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/nekotop/mydevicetree/AudioBuffer/valid">
+      <obj_property name="ElementShortName">valid</obj_property>
+      <obj_property name="ObjectShortName">valid</obj_property>
+   </wvobject>
+   <wvobject fp_name="divider1605" type="divider">
+      <obj_property name="label">soundoutput</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/nekotop/mydevicetree/soundoutput/resetn">
+      <obj_property name="ElementShortName">resetn</obj_property>
+      <obj_property name="ObjectShortName">resetn</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/nekotop/mydevicetree/soundoutput/cpuclock">
+      <obj_property name="ElementShortName">cpuclock</obj_property>
+      <obj_property name="ObjectShortName">cpuclock</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/nekotop/mydevicetree/soundoutput/audioclock">
+      <obj_property name="ElementShortName">audioclock</obj_property>
+      <obj_property name="ObjectShortName">audioclock</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/nekotop/mydevicetree/soundoutput/abempty">
+      <obj_property name="ElementShortName">abempty</obj_property>
+      <obj_property name="ObjectShortName">abempty</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/nekotop/mydevicetree/soundoutput/abvalid">
+      <obj_property name="ElementShortName">abvalid</obj_property>
+      <obj_property name="ObjectShortName">abvalid</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/nekotop/mydevicetree/soundoutput/audiore">
+      <obj_property name="ElementShortName">audiore</obj_property>
+      <obj_property name="ObjectShortName">audiore</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/nekotop/mydevicetree/soundoutput/leftrightchannels">
+      <obj_property name="ElementShortName">leftrightchannels[31:0]</obj_property>
+      <obj_property name="ObjectShortName">leftrightchannels[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/nekotop/mydevicetree/soundoutput/tx_mclk">
+      <obj_property name="ElementShortName">tx_mclk</obj_property>
+      <obj_property name="ObjectShortName">tx_mclk</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/nekotop/mydevicetree/soundoutput/tx_lrck">
+      <obj_property name="ElementShortName">tx_lrck</obj_property>
+      <obj_property name="ObjectShortName">tx_lrck</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/nekotop/mydevicetree/soundoutput/tx_sclk">
+      <obj_property name="ElementShortName">tx_sclk</obj_property>
+      <obj_property name="ObjectShortName">tx_sclk</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/nekotop/mydevicetree/soundoutput/tx_sdout">
+      <obj_property name="ElementShortName">tx_sdout</obj_property>
+      <obj_property name="ObjectShortName">tx_sdout</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/nekotop/mydevicetree/soundoutput/count">
+      <obj_property name="ElementShortName">count[8:0]</obj_property>
+      <obj_property name="ObjectShortName">count[8:0]</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/nekotop/mydevicetree/soundoutput/oldceight">
+      <obj_property name="ElementShortName">oldceight</obj_property>
+      <obj_property name="ObjectShortName">oldceight</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/nekotop/mydevicetree/soundoutput/lrck">
+      <obj_property name="ElementShortName">lrck</obj_property>
+      <obj_property name="ObjectShortName">lrck</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/nekotop/mydevicetree/soundoutput/sclk">
+      <obj_property name="ElementShortName">sclk</obj_property>
+      <obj_property name="ObjectShortName">sclk</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/nekotop/mydevicetree/soundoutput/tx_data_l">
+      <obj_property name="ElementShortName">tx_data_l[31:0]</obj_property>
+      <obj_property name="ObjectShortName">tx_data_l[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/nekotop/mydevicetree/soundoutput/tx_data_r">
+      <obj_property name="ElementShortName">tx_data_r[31:0]</obj_property>
+      <obj_property name="ObjectShortName">tx_data_r[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/nekotop/mydevicetree/soundoutput/tx_data_l_shift">
+      <obj_property name="ElementShortName">tx_data_l_shift[23:0]</obj_property>
+      <obj_property name="ObjectShortName">tx_data_l_shift[23:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/nekotop/mydevicetree/soundoutput/tx_data_r_shift">
+      <obj_property name="ElementShortName">tx_data_r_shift[23:0]</obj_property>
+      <obj_property name="ObjectShortName">tx_data_r_shift[23:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="divider194" type="divider">
+      <obj_property name="label">CPU</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/nekotop/mycpu/reset">
+      <obj_property name="ElementShortName">reset</obj_property>
+      <obj_property name="ObjectShortName">reset</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/nekotop/memaddress">
+      <obj_property name="ElementShortName">memaddress[31:0]</obj_property>
+      <obj_property name="ObjectShortName">memaddress[31:0]</obj_property>
+      <obj_property name="CustomSignalColor">#F0E68C</obj_property>
+      <obj_property name="UseCustomSignalColor">true</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/nekotop/cpureadena">
+      <obj_property name="ElementShortName">cpureadena</obj_property>
+      <obj_property name="ObjectShortName">cpureadena</obj_property>
+      <obj_property name="CustomSignalColor">#F0E68C</obj_property>
+      <obj_property name="UseCustomSignalColor">true</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/nekotop/cpudatain">
+      <obj_property name="ElementShortName">cpudatain[31:0]</obj_property>
+      <obj_property name="ObjectShortName">cpudatain[31:0]</obj_property>
+      <obj_property name="CustomSignalColor">#F0E68C</obj_property>
+      <obj_property name="UseCustomSignalColor">true</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/nekotop/cpudataout">
+      <obj_property name="ElementShortName">cpudataout[31:0]</obj_property>
+      <obj_property name="ObjectShortName">cpudataout[31:0]</obj_property>
+      <obj_property name="CustomSignalColor">#F0E68C</obj_property>
+      <obj_property name="UseCustomSignalColor">true</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/nekotop/cpuwriteena">
+      <obj_property name="ElementShortName">cpuwriteena[3:0]</obj_property>
+      <obj_property name="ObjectShortName">cpuwriteena[3:0]</obj_property>
+      <obj_property name="CustomSignalColor">#F0E68C</obj_property>
+      <obj_property name="UseCustomSignalColor">true</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/nekotop/mycpu/cpustate">
+      <obj_property name="ElementShortName">cpustate[12:0]</obj_property>
+      <obj_property name="ObjectShortName">cpustate[12:0]</obj_property>
+      <obj_property name="CustomSignalColor">#800080</obj_property>
+      <obj_property name="UseCustomSignalColor">true</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/nekotop/mycpu/decodeenable">
+      <obj_property name="ElementShortName">decodeenable</obj_property>
+      <obj_property name="ObjectShortName">decodeenable</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/nekotop/mycpu/illegalinstruction">
+      <obj_property name="ElementShortName">illegalinstruction</obj_property>
+      <obj_property name="ObjectShortName">illegalinstruction</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/nekotop/mycpu/PC">
+      <obj_property name="ElementShortName">PC[31:0]</obj_property>
+      <obj_property name="ObjectShortName">PC[31:0]</obj_property>
+      <obj_property name="CustomSignalColor">#FFFFFF</obj_property>
+      <obj_property name="UseCustomSignalColor">true</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/nekotop/mycpu/intregisterwriteenable">
+      <obj_property name="ElementShortName">intregisterwriteenable</obj_property>
+      <obj_property name="ObjectShortName">intregisterwriteenable</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/nekotop/mycpu/floatregisterwriteenable">
+      <obj_property name="ElementShortName">floatregisterwriteenable</obj_property>
+      <obj_property name="ObjectShortName">floatregisterwriteenable</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/nekotop/mycpu/rdata">
+      <obj_property name="ElementShortName">rdata[31:0]</obj_property>
+      <obj_property name="ObjectShortName">rdata[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/nekotop/mycpu/fdata">
+      <obj_property name="ElementShortName">fdata[31:0]</obj_property>
+      <obj_property name="ObjectShortName">fdata[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/nekotop/mycpu/isexecutingfloatop">
+      <obj_property name="ElementShortName">isexecutingfloatop</obj_property>
+      <obj_property name="ObjectShortName">isexecutingfloatop</obj_property>
+   </wvobject>
+   <wvobject fp_name="divider747" type="divider">
+      <obj_property name="label">decoder</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/nekotop/mycpu/mydecoder/clock">
+      <obj_property name="ElementShortName">clock</obj_property>
+      <obj_property name="ObjectShortName">clock</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/nekotop/mycpu/mydecoder/instruction">
+      <obj_property name="ElementShortName">instruction[31:0]</obj_property>
+      <obj_property name="ObjectShortName">instruction[31:0]</obj_property>
+      <obj_property name="CustomSignalColor">#FF00FF</obj_property>
+      <obj_property name="UseCustomSignalColor">true</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/nekotop/mycpu/mydecoder/rwen">
+      <obj_property name="ElementShortName">rwen</obj_property>
+      <obj_property name="ObjectShortName">rwen</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/nekotop/mycpu/mydecoder/fwen">
+      <obj_property name="ElementShortName">fwen</obj_property>
+      <obj_property name="ObjectShortName">fwen</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/nekotop/mycpu/mydecoder/opcode">
+      <obj_property name="ElementShortName">opcode[6:0]</obj_property>
+      <obj_property name="ObjectShortName">opcode[6:0]</obj_property>
+      <obj_property name="CustomSignalColor">#F0E68C</obj_property>
+      <obj_property name="UseCustomSignalColor">true</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/nekotop/mycpu/mydecoder/aluop">
+      <obj_property name="ElementShortName">aluop[4:0]</obj_property>
+      <obj_property name="ObjectShortName">aluop[4:0]</obj_property>
+      <obj_property name="CustomSignalColor">#F0E68C</obj_property>
+      <obj_property name="UseCustomSignalColor">true</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/nekotop/mycpu/mydecoder/func3">
+      <obj_property name="ElementShortName">func3[2:0]</obj_property>
+      <obj_property name="ObjectShortName">func3[2:0]</obj_property>
+      <obj_property name="CustomSignalColor">#F0E68C</obj_property>
+      <obj_property name="UseCustomSignalColor">true</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/nekotop/mycpu/mydecoder/func7">
+      <obj_property name="ElementShortName">func7[6:0]</obj_property>
+      <obj_property name="ObjectShortName">func7[6:0]</obj_property>
+      <obj_property name="CustomSignalColor">#F0E68C</obj_property>
+      <obj_property name="UseCustomSignalColor">true</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/nekotop/mycpu/mydecoder/func12">
+      <obj_property name="ElementShortName">func12[11:0]</obj_property>
+      <obj_property name="ObjectShortName">func12[11:0]</obj_property>
+      <obj_property name="CustomSignalColor">#F0E68C</obj_property>
+      <obj_property name="UseCustomSignalColor">true</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/nekotop/mycpu/mydecoder/rs1">
+      <obj_property name="ElementShortName">rs1[4:0]</obj_property>
+      <obj_property name="ObjectShortName">rs1[4:0]</obj_property>
+      <obj_property name="CustomSignalColor">#F0E68C</obj_property>
+      <obj_property name="UseCustomSignalColor">true</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/nekotop/mycpu/mydecoder/rs2">
+      <obj_property name="ElementShortName">rs2[4:0]</obj_property>
+      <obj_property name="ObjectShortName">rs2[4:0]</obj_property>
+      <obj_property name="CustomSignalColor">#F0E68C</obj_property>
+      <obj_property name="UseCustomSignalColor">true</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/nekotop/mycpu/mydecoder/rs3">
+      <obj_property name="ElementShortName">rs3[4:0]</obj_property>
+      <obj_property name="ObjectShortName">rs3[4:0]</obj_property>
+      <obj_property name="CustomSignalColor">#F0E68C</obj_property>
+      <obj_property name="UseCustomSignalColor">true</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/nekotop/mycpu/mydecoder/rd">
+      <obj_property name="ElementShortName">rd[4:0]</obj_property>
+      <obj_property name="ObjectShortName">rd[4:0]</obj_property>
+      <obj_property name="CustomSignalColor">#F0E68C</obj_property>
+      <obj_property name="UseCustomSignalColor">true</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/nekotop/mycpu/mydecoder/csrindex">
+      <obj_property name="ElementShortName">csrindex[11:0]</obj_property>
+      <obj_property name="ObjectShortName">csrindex[11:0]</obj_property>
+      <obj_property name="CustomSignalColor">#F0E68C</obj_property>
+      <obj_property name="UseCustomSignalColor">true</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/nekotop/mycpu/mydecoder/immed">
+      <obj_property name="ElementShortName">immed[31:0]</obj_property>
+      <obj_property name="ObjectShortName">immed[31:0]</obj_property>
+      <obj_property name="CustomSignalColor">#F0E68C</obj_property>
+      <obj_property name="UseCustomSignalColor">true</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/nekotop/mycpu/mydecoder/selectimmedasrval2">
+      <obj_property name="ElementShortName">selectimmedasrval2</obj_property>
+      <obj_property name="ObjectShortName">selectimmedasrval2</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/nekotop/mycpu/rval1">
+      <obj_property name="ElementShortName">rval1[31:0]</obj_property>
+      <obj_property name="ObjectShortName">rval1[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/nekotop/mycpu/rval2">
+      <obj_property name="ElementShortName">rval2[31:0]</obj_property>
+      <obj_property name="ObjectShortName">rval2[31:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="divider306" type="divider">
+      <obj_property name="label">ALU</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/nekotop/mycpu/myalu/aluout">
+      <obj_property name="ElementShortName">aluout[31:0]</obj_property>
+      <obj_property name="ObjectShortName">aluout[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/nekotop/mycpu/myalu/func3">
+      <obj_property name="ElementShortName">func3[2:0]</obj_property>
+      <obj_property name="ObjectShortName">func3[2:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/nekotop/mycpu/myalu/val1">
+      <obj_property name="ElementShortName">val1[31:0]</obj_property>
+      <obj_property name="ObjectShortName">val1[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/nekotop/mycpu/myalu/val2">
+      <obj_property name="ElementShortName">val2[31:0]</obj_property>
+      <obj_property name="ObjectShortName">val2[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/nekotop/mycpu/myalu/aluop">
+      <obj_property name="ElementShortName">aluop[4:0]</obj_property>
+      <obj_property name="ObjectShortName">aluop[4:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="divider318" type="divider">
+      <obj_property name="label">registers</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/nekotop/mycpu/myintegerregs/registers">
+      <obj_property name="DisplayName">label</obj_property>
+      <obj_property name="ElementShortName">registers[0:31][31:0]</obj_property>
+      <obj_property name="ObjectShortName">registers[0:31][31:0]</obj_property>
+      <obj_property name="label">integerregisters</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/nekotop/mycpu/myfloatregs/registers">
+      <obj_property name="DisplayName">label</obj_property>
+      <obj_property name="ElementShortName">registers[0:31][31:0]</obj_property>
+      <obj_property name="ObjectShortName">registers[0:31][31:0]</obj_property>
+      <obj_property name="label">floatregisters</obj_property>
+      <obj_property name="Radix">REALRADIX</obj_property>
+      <obj_property name="radix_realType">FLOATINGPOINTRADIX</obj_property>
+      <obj_property name="radix_fractionWidth">24</obj_property>
+      <obj_property name="radix_otherWidth">8</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/nekotop/mycpu/CSRmisa">
+      <obj_property name="ElementShortName">CSRmisa[31:0]</obj_property>
+      <obj_property name="ObjectShortName">CSRmisa[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/nekotop/mycpu/CSRmvendorid">
+      <obj_property name="ElementShortName">CSRmvendorid[31:0]</obj_property>
+      <obj_property name="ObjectShortName">CSRmvendorid[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/nekotop/mycpu/CSRmtval">
+      <obj_property name="ElementShortName">CSRmtval[31:0]</obj_property>
+      <obj_property name="ObjectShortName">CSRmtval[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/nekotop/mycpu/CSRmscratch">
+      <obj_property name="ElementShortName">CSRmscratch[31:0]</obj_property>
+      <obj_property name="ObjectShortName">CSRmscratch[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/nekotop/mycpu/CSRmepc">
+      <obj_property name="ElementShortName">CSRmepc[31:0]</obj_property>
+      <obj_property name="ObjectShortName">CSRmepc[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/nekotop/mycpu/CSRmcause">
+      <obj_property name="ElementShortName">CSRmcause[31:0]</obj_property>
+      <obj_property name="ObjectShortName">CSRmcause[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/nekotop/mycpu/CSRmip">
+      <obj_property name="ElementShortName">CSRmip[31:0]</obj_property>
+      <obj_property name="ObjectShortName">CSRmip[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/nekotop/mycpu/CSRmtvec">
+      <obj_property name="ElementShortName">CSRmtvec[31:0]</obj_property>
+      <obj_property name="ObjectShortName">CSRmtvec[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/nekotop/mycpu/CSRmie">
+      <obj_property name="ElementShortName">CSRmie[31:0]</obj_property>
+      <obj_property name="ObjectShortName">CSRmie[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/nekotop/mycpu/CSRmstatus">
+      <obj_property name="ElementShortName">CSRmstatus[31:0]</obj_property>
+      <obj_property name="ObjectShortName">CSRmstatus[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/nekotop/mycpu/CSRTime">
+      <obj_property name="ElementShortName">CSRTime[63:0]</obj_property>
+      <obj_property name="ObjectShortName">CSRTime[63:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/nekotop/mycpu/CSRTimeCmp">
+      <obj_property name="ElementShortName">CSRTimeCmp[63:0]</obj_property>
+      <obj_property name="ObjectShortName">CSRTimeCmp[63:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/nekotop/mycpu/CSRCycle">
+      <obj_property name="ElementShortName">CSRCycle[63:0]</obj_property>
+      <obj_property name="ObjectShortName">CSRCycle[63:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/nekotop/mycpu/CSRReti">
+      <obj_property name="ElementShortName">CSRReti[63:0]</obj_property>
+      <obj_property name="ObjectShortName">CSRReti[63:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="divider1317" type="divider">
+      <obj_property name="label">FPU</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/nekotop/mycpu/clock">
+      <obj_property name="ElementShortName">clock</obj_property>
+      <obj_property name="ObjectShortName">clock</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/nekotop/mycpu/fmaddvalid">
+      <obj_property name="ElementShortName">fmaddvalid</obj_property>
+      <obj_property name="ObjectShortName">fmaddvalid</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/nekotop/mycpu/fmsubvalid">
+      <obj_property name="ElementShortName">fmsubvalid</obj_property>
+      <obj_property name="ObjectShortName">fmsubvalid</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/nekotop/mycpu/fnmsubvalid">
+      <obj_property name="ElementShortName">fnmsubvalid</obj_property>
+      <obj_property name="ObjectShortName">fnmsubvalid</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/nekotop/mycpu/fnmaddvalid">
+      <obj_property name="ElementShortName">fnmaddvalid</obj_property>
+      <obj_property name="ObjectShortName">fnmaddvalid</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/nekotop/mycpu/faddvalid">
+      <obj_property name="ElementShortName">faddvalid</obj_property>
+      <obj_property name="ObjectShortName">faddvalid</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/nekotop/mycpu/fsubvalid">
+      <obj_property name="ElementShortName">fsubvalid</obj_property>
+      <obj_property name="ObjectShortName">fsubvalid</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/nekotop/mycpu/fmulvalid">
+      <obj_property name="ElementShortName">fmulvalid</obj_property>
+      <obj_property name="ObjectShortName">fmulvalid</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/nekotop/mycpu/fdivvalid">
+      <obj_property name="ElementShortName">fdivvalid</obj_property>
+      <obj_property name="ObjectShortName">fdivvalid</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/nekotop/mycpu/fi2fvalid">
+      <obj_property name="ElementShortName">fi2fvalid</obj_property>
+      <obj_property name="ObjectShortName">fi2fvalid</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/nekotop/mycpu/fui2fvalid">
+      <obj_property name="ElementShortName">fui2fvalid</obj_property>
+      <obj_property name="ObjectShortName">fui2fvalid</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/nekotop/mycpu/ff2ivalid">
+      <obj_property name="ElementShortName">ff2ivalid</obj_property>
+      <obj_property name="ObjectShortName">ff2ivalid</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/nekotop/mycpu/ff2uivalid">
+      <obj_property name="ElementShortName">ff2uivalid</obj_property>
+      <obj_property name="ObjectShortName">ff2uivalid</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/nekotop/mycpu/fsqrtvalid">
+      <obj_property name="ElementShortName">fsqrtvalid</obj_property>
+      <obj_property name="ObjectShortName">fsqrtvalid</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/nekotop/mycpu/feqvalid">
+      <obj_property name="ElementShortName">feqvalid</obj_property>
+      <obj_property name="ObjectShortName">feqvalid</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/nekotop/mycpu/fltvalid">
+      <obj_property name="ElementShortName">fltvalid</obj_property>
+      <obj_property name="ObjectShortName">fltvalid</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/nekotop/mycpu/flevalid">
+      <obj_property name="ElementShortName">flevalid</obj_property>
+      <obj_property name="ObjectShortName">flevalid</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/nekotop/mycpu/fmaddresultvalid">
+      <obj_property name="ElementShortName">fmaddresultvalid</obj_property>
+      <obj_property name="ObjectShortName">fmaddresultvalid</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/nekotop/mycpu/fmsubresultvalid">
+      <obj_property name="ElementShortName">fmsubresultvalid</obj_property>
+      <obj_property name="ObjectShortName">fmsubresultvalid</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/nekotop/mycpu/fnmsubresultvalid">
+      <obj_property name="ElementShortName">fnmsubresultvalid</obj_property>
+      <obj_property name="ObjectShortName">fnmsubresultvalid</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/nekotop/mycpu/fnmaddresultvalid">
+      <obj_property name="ElementShortName">fnmaddresultvalid</obj_property>
+      <obj_property name="ObjectShortName">fnmaddresultvalid</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/nekotop/mycpu/faddresultvalid">
+      <obj_property name="ElementShortName">faddresultvalid</obj_property>
+      <obj_property name="ObjectShortName">faddresultvalid</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/nekotop/mycpu/fsubresultvalid">
+      <obj_property name="ElementShortName">fsubresultvalid</obj_property>
+      <obj_property name="ObjectShortName">fsubresultvalid</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/nekotop/mycpu/fmulresultvalid">
+      <obj_property name="ElementShortName">fmulresultvalid</obj_property>
+      <obj_property name="ObjectShortName">fmulresultvalid</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/nekotop/mycpu/fdivresultvalid">
+      <obj_property name="ElementShortName">fdivresultvalid</obj_property>
+      <obj_property name="ObjectShortName">fdivresultvalid</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/nekotop/mycpu/fi2fresultvalid">
+      <obj_property name="ElementShortName">fi2fresultvalid</obj_property>
+      <obj_property name="ObjectShortName">fi2fresultvalid</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/nekotop/mycpu/fui2fresultvalid">
+      <obj_property name="ElementShortName">fui2fresultvalid</obj_property>
+      <obj_property name="ObjectShortName">fui2fresultvalid</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/nekotop/mycpu/ff2iresultvalid">
+      <obj_property name="ElementShortName">ff2iresultvalid</obj_property>
+      <obj_property name="ObjectShortName">ff2iresultvalid</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/nekotop/mycpu/ff2uiresultvalid">
+      <obj_property name="ElementShortName">ff2uiresultvalid</obj_property>
+      <obj_property name="ObjectShortName">ff2uiresultvalid</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/nekotop/mycpu/fsqrtresultvalid">
+      <obj_property name="ElementShortName">fsqrtresultvalid</obj_property>
+      <obj_property name="ObjectShortName">fsqrtresultvalid</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/nekotop/mycpu/feqresultvalid">
+      <obj_property name="ElementShortName">feqresultvalid</obj_property>
+      <obj_property name="ObjectShortName">feqresultvalid</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/nekotop/mycpu/fltresultvalid">
+      <obj_property name="ElementShortName">fltresultvalid</obj_property>
+      <obj_property name="ObjectShortName">fltresultvalid</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/nekotop/mycpu/fleresultvalid">
+      <obj_property name="ElementShortName">fleresultvalid</obj_property>
+      <obj_property name="ObjectShortName">fleresultvalid</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/nekotop/mycpu/fmaddresult">
+      <obj_property name="ElementShortName">fmaddresult[31:0]</obj_property>
+      <obj_property name="ObjectShortName">fmaddresult[31:0]</obj_property>
+      <obj_property name="Radix">REALRADIX</obj_property>
+      <obj_property name="radix_realType">FLOATINGPOINTRADIX</obj_property>
+      <obj_property name="radix_fractionWidth">24</obj_property>
+      <obj_property name="radix_otherWidth">8</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/nekotop/mycpu/fmsubresult">
+      <obj_property name="ElementShortName">fmsubresult[31:0]</obj_property>
+      <obj_property name="ObjectShortName">fmsubresult[31:0]</obj_property>
+      <obj_property name="Radix">REALRADIX</obj_property>
+      <obj_property name="radix_realType">FLOATINGPOINTRADIX</obj_property>
+      <obj_property name="radix_fractionWidth">24</obj_property>
+      <obj_property name="radix_otherWidth">8</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/nekotop/mycpu/fnmsubresult">
+      <obj_property name="ElementShortName">fnmsubresult[31:0]</obj_property>
+      <obj_property name="ObjectShortName">fnmsubresult[31:0]</obj_property>
+      <obj_property name="Radix">REALRADIX</obj_property>
+      <obj_property name="radix_realType">FLOATINGPOINTRADIX</obj_property>
+      <obj_property name="radix_fractionWidth">24</obj_property>
+      <obj_property name="radix_otherWidth">8</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/nekotop/mycpu/fnmaddresult">
+      <obj_property name="ElementShortName">fnmaddresult[31:0]</obj_property>
+      <obj_property name="ObjectShortName">fnmaddresult[31:0]</obj_property>
+      <obj_property name="Radix">REALRADIX</obj_property>
+      <obj_property name="radix_realType">FLOATINGPOINTRADIX</obj_property>
+      <obj_property name="radix_fractionWidth">24</obj_property>
+      <obj_property name="radix_otherWidth">8</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/nekotop/mycpu/faddresult">
+      <obj_property name="ElementShortName">faddresult[31:0]</obj_property>
+      <obj_property name="ObjectShortName">faddresult[31:0]</obj_property>
+      <obj_property name="Radix">REALRADIX</obj_property>
+      <obj_property name="radix_realType">FLOATINGPOINTRADIX</obj_property>
+      <obj_property name="radix_fractionWidth">24</obj_property>
+      <obj_property name="radix_otherWidth">8</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/nekotop/mycpu/fsubresult">
+      <obj_property name="ElementShortName">fsubresult[31:0]</obj_property>
+      <obj_property name="ObjectShortName">fsubresult[31:0]</obj_property>
+      <obj_property name="Radix">REALRADIX</obj_property>
+      <obj_property name="radix_realType">FLOATINGPOINTRADIX</obj_property>
+      <obj_property name="radix_fractionWidth">24</obj_property>
+      <obj_property name="radix_otherWidth">8</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/nekotop/mycpu/fmulresult">
+      <obj_property name="ElementShortName">fmulresult[31:0]</obj_property>
+      <obj_property name="ObjectShortName">fmulresult[31:0]</obj_property>
+      <obj_property name="Radix">REALRADIX</obj_property>
+      <obj_property name="radix_realType">FLOATINGPOINTRADIX</obj_property>
+      <obj_property name="radix_fractionWidth">24</obj_property>
+      <obj_property name="radix_otherWidth">8</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/nekotop/mycpu/fdivresult">
+      <obj_property name="ElementShortName">fdivresult[31:0]</obj_property>
+      <obj_property name="ObjectShortName">fdivresult[31:0]</obj_property>
+      <obj_property name="Radix">REALRADIX</obj_property>
+      <obj_property name="radix_realType">FLOATINGPOINTRADIX</obj_property>
+      <obj_property name="radix_fractionWidth">24</obj_property>
+      <obj_property name="radix_otherWidth">8</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/nekotop/mycpu/fi2fresult">
+      <obj_property name="ElementShortName">fi2fresult[31:0]</obj_property>
+      <obj_property name="ObjectShortName">fi2fresult[31:0]</obj_property>
+      <obj_property name="Radix">REALRADIX</obj_property>
+      <obj_property name="radix_realType">FLOATINGPOINTRADIX</obj_property>
+      <obj_property name="radix_fractionWidth">24</obj_property>
+      <obj_property name="radix_otherWidth">8</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/nekotop/mycpu/fui2fresult">
+      <obj_property name="ElementShortName">fui2fresult[31:0]</obj_property>
+      <obj_property name="ObjectShortName">fui2fresult[31:0]</obj_property>
+      <obj_property name="Radix">REALRADIX</obj_property>
+      <obj_property name="radix_realType">FLOATINGPOINTRADIX</obj_property>
+      <obj_property name="radix_fractionWidth">24</obj_property>
+      <obj_property name="radix_otherWidth">8</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/nekotop/mycpu/ff2iresult">
+      <obj_property name="ElementShortName">ff2iresult[31:0]</obj_property>
+      <obj_property name="ObjectShortName">ff2iresult[31:0]</obj_property>
+      <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
+      <obj_property name="radix_realType">FLOATINGPOINTRADIX</obj_property>
+      <obj_property name="radix_fractionWidth">24</obj_property>
+      <obj_property name="radix_otherWidth">8</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/nekotop/mycpu/ff2uiresult">
+      <obj_property name="ElementShortName">ff2uiresult[31:0]</obj_property>
+      <obj_property name="ObjectShortName">ff2uiresult[31:0]</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+      <obj_property name="radix_realType">FLOATINGPOINTRADIX</obj_property>
+      <obj_property name="radix_fractionWidth">24</obj_property>
+      <obj_property name="radix_otherWidth">8</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/nekotop/mycpu/fsqrtresult">
+      <obj_property name="ElementShortName">fsqrtresult[31:0]</obj_property>
+      <obj_property name="ObjectShortName">fsqrtresult[31:0]</obj_property>
+      <obj_property name="Radix">REALRADIX</obj_property>
+      <obj_property name="radix_realType">FLOATINGPOINTRADIX</obj_property>
+      <obj_property name="radix_fractionWidth">24</obj_property>
+      <obj_property name="radix_otherWidth">8</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/nekotop/mycpu/feqresult">
+      <obj_property name="ElementShortName">feqresult[7:0]</obj_property>
+      <obj_property name="ObjectShortName">feqresult[7:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/nekotop/mycpu/fltresult">
+      <obj_property name="ElementShortName">fltresult[7:0]</obj_property>
+      <obj_property name="ObjectShortName">fltresult[7:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/nekotop/mycpu/fleresult">
+      <obj_property name="ElementShortName">fleresult[7:0]</obj_property>
+      <obj_property name="ObjectShortName">fleresult[7:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="divider2324" type="divider">
+      <obj_property name="label">x</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/nekotop/mycpu/floatdiv/aclk">
+      <obj_property name="ElementShortName">aclk</obj_property>
+      <obj_property name="ObjectShortName">aclk</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/nekotop/mycpu/floatdiv/s_axis_a_tvalid">
+      <obj_property name="ElementShortName">s_axis_a_tvalid</obj_property>
+      <obj_property name="ObjectShortName">s_axis_a_tvalid</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/nekotop/mycpu/floatdiv/s_axis_a_tdata">
+      <obj_property name="ElementShortName">s_axis_a_tdata[31:0]</obj_property>
+      <obj_property name="ObjectShortName">s_axis_a_tdata[31:0]</obj_property>
+      <obj_property name="Radix">REALRADIX</obj_property>
+      <obj_property name="radix_realType">FLOATINGPOINTRADIX</obj_property>
+      <obj_property name="radix_fractionWidth">24</obj_property>
+      <obj_property name="radix_otherWidth">8</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/nekotop/mycpu/floatdiv/s_axis_b_tvalid">
+      <obj_property name="ElementShortName">s_axis_b_tvalid</obj_property>
+      <obj_property name="ObjectShortName">s_axis_b_tvalid</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/nekotop/mycpu/floatdiv/s_axis_b_tdata">
+      <obj_property name="ElementShortName">s_axis_b_tdata[31:0]</obj_property>
+      <obj_property name="ObjectShortName">s_axis_b_tdata[31:0]</obj_property>
+      <obj_property name="Radix">REALRADIX</obj_property>
+      <obj_property name="radix_realType">FLOATINGPOINTRADIX</obj_property>
+      <obj_property name="radix_fractionWidth">24</obj_property>
+      <obj_property name="radix_otherWidth">8</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/nekotop/mycpu/floatdiv/m_axis_result_tvalid">
+      <obj_property name="ElementShortName">m_axis_result_tvalid</obj_property>
+      <obj_property name="ObjectShortName">m_axis_result_tvalid</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/nekotop/mycpu/floatdiv/m_axis_result_tdata">
+      <obj_property name="ElementShortName">m_axis_result_tdata[31:0]</obj_property>
+      <obj_property name="ObjectShortName">m_axis_result_tdata[31:0]</obj_property>
+      <obj_property name="Radix">REALRADIX</obj_property>
+      <obj_property name="radix_realType">FLOATINGPOINTRADIX</obj_property>
+      <obj_property name="radix_fractionWidth">24</obj_property>
+      <obj_property name="radix_otherWidth">8</obj_property>
+   </wvobject>
+   <wvobject fp_name="divider894" type="divider">
+      <obj_property name="label">fastram</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/nekotop/mydevicetree/FastRAM/clka">
+      <obj_property name="ElementShortName">clka</obj_property>
+      <obj_property name="ObjectShortName">clka</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/nekotop/mydevicetree/FastRAM/ena">
+      <obj_property name="ElementShortName">ena</obj_property>
+      <obj_property name="ObjectShortName">ena</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/nekotop/mydevicetree/FastRAM/wea">
+      <obj_property name="ElementShortName">wea[3:0]</obj_property>
+      <obj_property name="ObjectShortName">wea[3:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/nekotop/mydevicetree/FastRAM/addra">
+      <obj_property name="ElementShortName">addra[14:0]</obj_property>
+      <obj_property name="ObjectShortName">addra[14:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/nekotop/mydevicetree/FastRAM/dina">
+      <obj_property name="ElementShortName">dina[31:0]</obj_property>
+      <obj_property name="ObjectShortName">dina[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/nekotop/mydevicetree/FastRAM/douta">
+      <obj_property name="ElementShortName">douta[31:0]</obj_property>
+      <obj_property name="ObjectShortName">douta[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/nekotop/mydevicetree/FastRAM/clkb">
+      <obj_property name="ElementShortName">clkb</obj_property>
+      <obj_property name="ObjectShortName">clkb</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/nekotop/mydevicetree/FastRAM/enb">
+      <obj_property name="ElementShortName">enb</obj_property>
+      <obj_property name="ObjectShortName">enb</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/nekotop/mydevicetree/FastRAM/web">
+      <obj_property name="ElementShortName">web[3:0]</obj_property>
+      <obj_property name="ObjectShortName">web[3:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/nekotop/mydevicetree/FastRAM/addrb">
+      <obj_property name="ElementShortName">addrb[14:0]</obj_property>
+      <obj_property name="ObjectShortName">addrb[14:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/nekotop/mydevicetree/FastRAM/dinb">
+      <obj_property name="ElementShortName">dinb[31:0]</obj_property>
+      <obj_property name="ObjectShortName">dinb[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/nekotop/mydevicetree/FastRAM/doutb">
+      <obj_property name="ElementShortName">doutb[31:0]</obj_property>
+      <obj_property name="ObjectShortName">doutb[31:0]</obj_property>
+   </wvobject>
+</wave_config>

@@ -73,7 +73,7 @@ peripheralclock myotherclock(
 	.ddrclock(sys_clk_i),		// DDR base clock @166.66667Mhz
 	.ddrclockref(clk_ref_i),	// DDR ref clock @200.0Mhz
 	.locked(clockBLocked) );	// High when clock is stable
-	
+
 videoclocks VideoClockGen(
 	.resetn(~RST_I),			// Incoming external reset (negated)
 	.clk_in1(CLK_I),			// Input external clock
@@ -121,6 +121,7 @@ devicerouter mydevicetree(
 	.cpuclock(cpuclock),
 	.gpuclock(gpuclock),
 	.vgaclock(vgaclock),
+	.spiclock(cpuclock),
 	.audiomasterclock(audiomasterclock),
 	.sys_clk_i(sys_clk_i),
 	.clk_ref_i(clk_ref_i),

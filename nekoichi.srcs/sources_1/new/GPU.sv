@@ -3,58 +3,6 @@
 `include "cpuops.vh"
 `include "gpuops.vh"
 
-// ================================================================
-// Find dividing vertex and generate max two triangles out of one
-// ================================================================
-/*module TriangleSplitter(
-	input wire reset,
-	input wire signed [15:0] y0,
-	input wire signed [15:0] y1,
-	input wire signed [15:0] y2,
-	output logic hassplittris,
-	output logic signed [15:0] splitY);
-
-wire mid0 = ((y0>y1) & (y0<y2)) | ((y0>y2) & (y0<y1));
-wire mid1 = ((y1>y0) & (y1<y2)) | ((y1>y2) & (y1<y0));
-wire mid2 = ((y2>y1) & (y2<y0)) | ((y2>y0) & (y2<y1));
-
-always_comb begin
-	if (reset) begin
-	end else begin
-		hassplittris = (mid0 | mid1 | mid2);
-		splitY = mid0 ? y0 : (mid1 ? y1 : (mid2 ? y2 : 16'hFFFF));
-	end
-end
-
-endmodule*/
-
-// ==============================================================
-// Edge equation / mask generator
-// ==============================================================
-
-module LineRasterMask(
-	input wire reset,
-	input wire signed [15:0] pX,
-	input wire signed [15:0] pY,
-	input wire signed [15:0] x0,
-	input wire signed [15:0] y0,
-	input wire signed [15:0] x1,
-	input wire signed [15:0] y1,
-	output wire outmask );
-
-logic signed [31:0] lineedge;
-wire signed [15:0] A = (pY-y0);
-wire signed [15:0] B = (pX-x0);
-wire signed [15:0] dy = (y1-y0);
-wire signed [15:0] dx = (x0-x1);
-
-always_comb begin
-	lineedge = A*dx + B*dy;
-end
-
-assign outmask = lineedge[31]; // Only care about the sign bit
-
-endmodule
 
 // ==============================================================
 // GPU register file
@@ -120,7 +68,10 @@ module GPU (
 	output logic [31:0] dmaaddress,
 	output logic [31:0] dmawriteword,
 	output logic [3:0] dmawe,
-	input wire [31:0] dma_data );
+	input wire [31:0] dma_data,
+	output logic palettewe = 1'b0,
+	output logic [7:0] paletteaddress,
+	output logic [31:0] palettedata );
 
 logic [`GPUSTATEBITS-1:0] gpustate = `GPUSTATEIDLE_MASK;
 
@@ -151,141 +102,6 @@ gpuregisterfile gpuregs(
 	.rval3(rval3) );
 
 // ==============================================================
-// Coarse rasterizer
-// ==============================================================
-
-logic signed [15:0] tileX0, tileY0;
-logic signed [15:0] x0, y0, x1, y1, x2, y2;
-
-// Tile crossing mask
-wire tilemask;
-//wire widetilemask;
-wire [3:0] tilecoverage;
-
-// Masks for individual wide and narrow tiles
-wire [11:0] edgemask;
-
-// Triangle facing flag
-logic triFacing;
-
-// Narrow mask for edge 0
-LineRasterMask m0(reset, tileX0,         tileY0, x0,y0, x1,y1, edgemask[0]);
-LineRasterMask m1(reset, tileX0+16'sd1,  tileY0, x0,y0, x1,y1, edgemask[1]);
-LineRasterMask m2(reset, tileX0+16'sd2,  tileY0, x0,y0, x1,y1, edgemask[2]);
-LineRasterMask m3(reset, tileX0+16'sd3,  tileY0, x0,y0, x1,y1, edgemask[3]);
-
-// Narrow mask for edge 1
-LineRasterMask m4(reset, tileX0,         tileY0, x1,y1, x2,y2, edgemask[4]);
-LineRasterMask m5(reset, tileX0+16'sd1,  tileY0, x1,y1, x2,y2, edgemask[5]);
-LineRasterMask m6(reset, tileX0+16'sd2,  tileY0, x1,y1, x2,y2, edgemask[6]);
-LineRasterMask m7(reset, tileX0+16'sd3,  tileY0, x1,y1, x2,y2, edgemask[7]);
-
-// Narrow mask for edge 2
-LineRasterMask m8(reset,  tileX0,        tileY0, x2,y2, x0,y0, edgemask[8]);
-LineRasterMask m9(reset,  tileX0+16'sd1, tileY0, x2,y2, x0,y0, edgemask[9]);
-LineRasterMask m10(reset, tileX0+16'sd2, tileY0, x2,y2, x0,y0, edgemask[10]);
-LineRasterMask m11(reset, tileX0+16'sd3, tileY0, x2,y2, x0,y0, edgemask[11]);
-
-// Triangle facing
-LineRasterMask tfc(reset, x2, y2, x0,y0, x1,y1, triFacing);
-
-// Splitter
-/*wire hassplittris;
-wire signed [15:0] splitY;
-TriangleSplitter trisplitter(.reset(reset), .y0(y0),.y1(y1),.y2(y2), .hassplittris(hassplittris), .splitY(splitY));*/
-
-// Composite tile mask
-// If any bit of a tile is set, an edge crosses it
-// If all edges cross a tile, it's inside the triangle
-assign tilemask = (|edgemask[3:0]) & (|edgemask[7:4]) & (|edgemask[11:8]);
-assign tilecoverage = edgemask[3:0] & edgemask[7:4] & edgemask[11:8];
-
-// ==============================================================
-// Tile scan area min-max calculation
-// ==============================================================
-
-logic signed [15:0] minXval, maxXval;
-logic signed [15:0] minYval, maxYval;
-
-wire signed [15:0] minx01 = x0 < x1 ? x0 : x1;
-wire signed [15:0] minx12 = x1 < x2 ? x1 : x2;
-wire signed [15:0] maxx01 = x0 >= x1 ? x0 : x1;
-wire signed [15:0] maxx12 = x1 >= x2 ? x1 : x2;
-wire signed [15:0] maxx2z = x2 >= 255 ? 255 : x2;
-
-wire signed [15:0] miny01 = y0 < y1 ? y0 : y1;
-wire signed [15:0] miny12 = y1 < y2 ? y1 : y2;
-wire signed [15:0] maxy01 = y0 >= y1 ? y0 : y1;
-wire signed [15:0] maxy12 = y1 >= y2 ? y1 : y2;
-
-always_comb begin
-	if (reset) begin
-		// 
-	end else begin
-		// Pick actual min/max
-		minXval = minx01 < minx12 ? minx01 : minx12;
-		maxXval = maxx01 >= maxx12 ? maxx01 : maxx12;
-		minYval = miny01 < miny12 ? miny01 : miny12;
-		maxYval = maxy01 >= maxy12 ? maxy01 : maxy12;
-
-		// Clamp to viewport min coords (0,0)
-		minXval = minXval < 16'sd0 ? 16'sd0 : minXval;
-		maxXval = maxXval < 16'sd0 ? 16'sd0 : maxXval;
-		minYval = minYval < 16'sd0 ? 16'sd0 : minYval;
-		maxYval = maxYval < 16'sd0 ? 16'sd0 : maxYval;
-	
-		// Clamp to viewport max coords (255,191)
-		minXval = minXval < 16'sd256 ? minXval : 16'sd255;
-		maxXval = maxXval < 16'sd256 ? maxXval : 16'sd255;
-		minYval = minYval < 16'sd192 ? minYval : 16'sd191;
-		maxYval = maxYval < 16'sd192 ? maxYval : 16'sd191;
-		
-		// Truncate X min/max to nearest multiple of 4
-		minXval = {minXval[15:2],2'b00};
-		maxXval = {maxXval[15:2],2'b00};
-		//minYval = {minYval[15:2],2'b00};
-		//maxYval = {maxYval[15:2],2'b00};
-	end
-end
-
-// ==============================================================
-// Triangle setup for barycentric generation
-// ==============================================================
-
-// See: https://fgiesen.wordpress.com/2013/02/10/optimizing-the-basic-rasterizer/
-/*wire signed [15:0] A01 = (y0 - y1)*4;
-wire signed [15:0] B01 = x1 - x0;
-wire signed [15:0] A12 = (y1 - y2)*4;
-wire signed [15:0] B12 = x2 - x1;
-wire signed [15:0] A20 = (y2 - y0)*4; // We move 4 steps to the right
-wire signed [15:0] B20 = x0 - x2;
-
-logic signed [31:0] w0_init, w1_init, w2_init;
-wire signed [15:0] t0A = (minYval-y0);
-wire signed [15:0] t1A = (minYval-y1);
-wire signed [15:0] t2A = (minYval-y2);
-wire signed [15:0] t0B = (minXval-x0);
-wire signed [15:0] t1B = (minXval-x1);
-wire signed [15:0] t2B = (minXval-x2);
-wire signed [15:0] t0dy = (y1-y0);
-wire signed [15:0] t1dy = (y2-y1);
-wire signed [15:0] t2dy = (y0-y2);
-wire signed [15:0] t0dx = (x0-x1);
-wire signed [15:0] t1dx = (x1-x2);
-wire signed [15:0] t2dx = (x2-x0);
-always_comb begin
-	if (reset) begin
-		// 
-	end else begin
-		w0_init = t0A*t0dx + t0B*t0dy;
-		w1_init = t1A*t1dx + t1B*t1dy;
-		w2_init = t2A*t2dx + t2B*t2dy;
-	end
-end
-logic signed [31:0] w0_row, w1_row, w2_row;
-logic signed [31:0] w0, w1, w2;*/
-
-// ==============================================================
 // Main state machine
 // ==============================================================
 
@@ -314,6 +130,8 @@ always_ff @(posedge clock) begin
 				lanemask <= 12'h000;
 				// And DMA writes
 				dmawe <= 4'b0000;
+				// Stop palette writes
+				palettewe <= 1'b0;
 
 				// See if there's something on the fifo
 				if (~fifoempty) begin
@@ -364,10 +182,10 @@ always_ff @(posedge clock) begin
 						gpustate[`GPUSTATEIDLE] <= 1'b1;
 					end
 
-					`GPUCMD_MEMOUT: begin
-						vramaddress <= immshort[17:4];
-						vramwriteword <= rval1;
-						vramwe <= immshort[3:0];
+					`GPUCMD_SETPALENT: begin
+						paletteaddress <= immshort[7:0];
+						palettedata <= rval1;
+						palettewe <= 1'b1;
 						gpustate[`GPUSTATEIDLE] <= 1'b1;
 					end
 
@@ -387,17 +205,9 @@ always_ff @(posedge clock) begin
 						gpustate[`GPUSTATEDMAKICK] <= 1'b1;
 					end
 
-					`GPUCMD_RASTER: begin
-						// Grab primitive vertex data from rs&rd
-						{y0, x0} <= rval1;
-						{y1, x1} <= rval2;
-						{y2, x2} <= rval3;
-
-						// DEBU: Solid color output during development
-						// Full DWORD color from immshort, mask selects which pixels to write
-						vramwriteword <= {immshort[10:3], immshort[10:3], immshort[10:3], immshort[10:3]};
-
-						gpustate[`GPUSTATERASTERKICK] <= 1'b1;
+					`GPUCMD_UNUSED: begin
+						// NOOP
+						gpustate[`GPUSTATEIDLE] <= 1'b1;
 					end
 
 					`GPUCMD_SYSMEMOUT: begin
@@ -452,61 +262,6 @@ always_ff @(posedge clock) begin
 					dmaaddress <= dmaaddress + 32'd4;
 					dmacount <= dmacount + 14'd1;
 					gpustate[`GPUSTATEDMA] <= 1'b1;
-				end
-			end
-
-			gpustate[`GPUSTATERASTERKICK]: begin
-				// Set up scan extents (4x1 tiles for a 4bit mask)
-				tileX0 <= minXval; // tile width=4
-				tileY0 <= minYval; // tile height=1 (but using 4 aligned at start)
-				//w0_row <= w0_init;
-				//w1_row <= w1_init;
-				//w2_row <= w2_init;
-				//w0 <= w0_init;
-				//w1 <= w1_init;
-				//w2 <= w2_init;
-				if (triFacing == 1'b1) begin
-					// Start by figuring out if we have something to rasterize
-					// on this scanline.
-					// No pixels found means we're backfacing and can bail out early
-					gpustate[`GPUSTATERASTER] <= 1'b1;
-				end else begin
-					// Backfacing polygons don't go into raster state
-					gpustate[`GPUSTATEIDLE] <= 1'b1;
-				end
-			end
-
-			gpustate[`GPUSTATERASTER]: begin
-				if (tileY0 >= maxYval) begin
-					// We have exhausted all rows to rasterize
-					gpustate[`GPUSTATEIDLE] <= 1'b1;
-				end else begin
-
-					// Output tile mask for this tile
-					vramaddress <= {tileY0[7:0], tileX0[7:2]};
-					// This effectively turns off writes for unoccupied tiles since tilecoverage == 0
-					vramwe <= tilecoverage;
-					//vramwriteword <= {w0[15:8], w0[15:8]+A12, w0[15:8]+A12+A12, w0[15:8]+A12+A12+A12};
-
-					// Did we run out of tiles in this direction, or hit a zero tile mask?
-					if (tileX0 >= maxXval) begin // | (~widetilemask)
-						tileX0 <= minXval;
-						// Step one tile down
-						tileY0 <= tileY0 + 16'sd1; // tile height=1
-						//w0_row <= w0_row + B12;
-						//w1_row <= w1_row + B20;
-						//w2_row <= w2_row + B01;
-						//w0 <= w0_row + B12;
-						//w1 <= w1_row + B20;
-						//w2 <= w2_row + B01;
-					end else begin
-						// Step to next tile on scanline
-						tileX0 <= tileX0 + 16'sd4;
-						//w0 <= w0 + A12;
-						//w1 <= w1 + A20;
-						//w2 <= w2 + A01;
-					end
-					gpustate[`GPUSTATERASTER] <= 1'b1;
 				end
 			end
 
