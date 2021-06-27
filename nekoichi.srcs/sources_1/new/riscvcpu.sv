@@ -439,7 +439,7 @@ end
 
 logic [63:0] internalretirecounter = 64'd0;
 always @(posedge clock) begin
-	if (cpustate == `CPURETIREINSTRUCTION) begin
+	if (cpustate[`CPURETIREINSTRUCTION] == 1'b1) begin
 		internalretirecounter <= internalretirecounter + 64'd1;
 	end
 end
@@ -996,52 +996,40 @@ always @(posedge clock) begin
 			end
 
 			cpustate[`CPUFSTORE]: begin
-				/*if (busstall) begin
-					// Bus might stall during writes if busy
-					// Wait in this state until it's freed
-					cpustate[`CPUFSTORE] <= 1'b1;
-				end else begin*/
-					// DWORD
-					memaddress <= targetaddress;
-					cpuwriteena <= 4'b1111;
-					cpudataout <= storedata;
-					cpustate[`CPUSTORECOMPLETE] <= 1'b1;
-				//end
+				// DWORD
+				memaddress <= targetaddress;
+				cpuwriteena <= 4'b1111;
+				cpudataout <= storedata;
+				cpustate[`CPUSTORECOMPLETE] <= 1'b1;
 			end
 
 			cpustate[`CPUSTORE]: begin
-				/*if (busstall) begin
-					// Bus might stall during writes if busy
-					// Wait in this state until it's freed
-					cpustate[`CPUSTORE] <= 1'b1;
-				end else begin*/
-					// Request write of current register data to memory
-					// with appropriate write mask and data size
-					memaddress <= targetaddress;
-					unique case (Wfunc3)
-						3'b000: begin // BYTE
-							cpudataout <= {storedata[7:0], storedata[7:0], storedata[7:0], storedata[7:0]};
-							unique case (targetaddress[1:0])
-								2'b11: begin cpuwriteena <= 4'b1000; end
-								2'b10: begin cpuwriteena <= 4'b0100; end
-								2'b01: begin cpuwriteena <= 4'b0010; end
-								2'b00: begin cpuwriteena <= 4'b0001; end
-							endcase
-						end
-						3'b001: begin // WORD
-							cpudataout <= {storedata[15:0], storedata[15:0]};
-							unique case (targetaddress[1])
-								1'b1: begin cpuwriteena <= 4'b1100; end
-								1'b0: begin cpuwriteena <= 4'b0011; end
-							endcase
-						end
-						default: begin // DWORD
-							cpudataout <= storedata;
-							cpuwriteena <= 4'b1111;
-						end
-					endcase
-					cpustate[`CPUSTORECOMPLETE] <= 1'b1;
-				//end
+				// Request write of current register data to memory
+				// with appropriate write mask and data size
+				memaddress <= targetaddress;
+				unique case (Wfunc3)
+					3'b000: begin // BYTE
+						cpudataout <= {storedata[7:0], storedata[7:0], storedata[7:0], storedata[7:0]};
+						unique case (targetaddress[1:0])
+							2'b11: begin cpuwriteena <= 4'b1000; end
+							2'b10: begin cpuwriteena <= 4'b0100; end
+							2'b01: begin cpuwriteena <= 4'b0010; end
+							2'b00: begin cpuwriteena <= 4'b0001; end
+						endcase
+					end
+					3'b001: begin // WORD
+						cpudataout <= {storedata[15:0], storedata[15:0]};
+						unique case (targetaddress[1])
+							1'b1: begin cpuwriteena <= 4'b1100; end
+							1'b0: begin cpuwriteena <= 4'b0011; end
+						endcase
+					end
+					default: begin // DWORD
+						cpudataout <= storedata;
+						cpuwriteena <= 4'b1111;
+					end
+				endcase
+				cpustate[`CPUSTORECOMPLETE] <= 1'b1;
 			end
 			
 			cpustate[`CPUSTORECOMPLETE]: begin
@@ -1064,7 +1052,7 @@ always @(posedge clock) begin
 
 				// Turn off memory writes in flight
 				cpuwriteena <= 4'b0000;
-			
+
 				// About mcause register:
 				// If high bit is set, it's an interrupt, otherwise it's an exception (such as illegal instruction)
 				// Interrupt handlers are asynchronous (return via MRET)

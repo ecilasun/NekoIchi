@@ -256,7 +256,7 @@ ddr3readdonequeue DDR3ReadDone(
 
 //logic [31:0] ddr3datain; // Shadow of busdatain
 
-wire [15:0] ctag = busaddress[27:12]; // Ignore 4 highest bits since only r/w for ARAM are routed here
+wire [15:0] ctag = busaddress[27:12]; // Ignore 4 highest bits since only r/w for DDR3 are routed here
 wire [7:0] cline = busaddress[11:4];
 wire [1:0] coffset = busaddress[3:2]; // 4xDWORD (16xBYTE, 128bits) aligned
 wire [31:0] cwidemask = {{8{buswe[3]}}, {8{buswe[2]}}, {8{buswe[1]}}, {8{buswe[0]}}};
