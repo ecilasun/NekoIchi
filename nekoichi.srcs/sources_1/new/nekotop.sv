@@ -56,7 +56,7 @@ module nekotop(
 	input spi_cd
 );
 
-wire cpuclock, wallclock, uartbase, gpuclock, vgaclock, audiomasterclock, sys_clk_i, clk_ref_i;
+wire cpuclock, wallclock, uartbase, gpuclock, apuclock, vgaclock, audiomasterclock, sys_clk_i, clk_ref_i;
 wire clockALocked, clockBLocked, clockCLocked, clockDLocked;
 
 clockgen myclock(
@@ -74,10 +74,11 @@ peripheralclock myotherclock(
 	.ddrclockref(clk_ref_i),	// DDR ref clock @200.0Mhz
 	.locked(clockBLocked) );	// High when clock is stable
 
-videoclocks VideoClockGen(
+videoclocks AudioVideoClockGen(
 	.resetn(~RST_I),			// Incoming external reset (negated)
 	.clk_in1(CLK_I),			// Input external clock
-	.gpuclock(gpuclock),		// Generated GPU clock 
+	.gpuclock(gpuclock),		// Generated GPU clock
+	.apuclock(apuclock),		// Generated APU clock
 	.vgaclock(vgaclock),		// 25Mhz VGA clock
 	.locked(clockCLocked) );	// High when clock is stable
 
@@ -120,6 +121,7 @@ devicerouter mydevicetree(
 	.uartbase(uartbase),
 	.cpuclock(cpuclock),
 	.gpuclock(gpuclock),
+	.apuclock(apuclock),
 	.vgaclock(vgaclock),
 	.spiclock(cpuclock),
 	.audiomasterclock(audiomasterclock),

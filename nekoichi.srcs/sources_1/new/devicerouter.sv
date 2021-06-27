@@ -5,6 +5,7 @@ module devicerouter(
 	input uartbase,
 	input cpuclock,
 	input gpuclock,
+	input apuclock,
 	input vgaclock,
 	input spiclock,
 	input audiomasterclock,
@@ -68,17 +69,19 @@ module devicerouter(
 // Device selection
 // -----------------------------------------------------------------------
 
-wire deviceBRAM					= (busaddress[31:28]==4'b0000) & (busaddress < 32'h00020000) ? 1'b1 : 1'b0;		// 0x00000000 - 0x0001FFFF (128Kbytes)
-wire deviceDDR3					= (busaddress[31:28]==4'b0000) & (busaddress >= 32'h00020000) ? 1'b1 : 1'b0;	// 0x00020000 - 0x0FFFFFFF (8Mbytes-128Kbytes due to overlap)
-wire deviceAudioWrite			= {busaddress[31:28], busaddress[5:2]} == 8'b10001000 ? 1'b1 : 1'b0;			// 0x8xxxxx20 Audio output port
-wire deviceSwitchCountRead		= {busaddress[31:28], busaddress[5:2]} == 8'b10000111 ? 1'b1 : 1'b0;			// 0x8xxxxx1C Switch incoming queue byte count
-wire deviceSwitchRead			= {busaddress[31:28], busaddress[5:2]} == 8'b10000110 ? 1'b1 : 1'b0;			// 0x8xxxxx18 Device switch states
-wire deviceSPIWrite				= {busaddress[31:28], busaddress[5:2]} == 8'b10000101 ? 1'b1 : 1'b0;			// 0x8xxxxx14 SPI interface to SDCart write port
-wire deviceSPIRead				= {busaddress[31:28], busaddress[5:2]} == 8'b10000100 ? 1'b1 : 1'b0;			// 0x8xxxxx10 SPI interface to SDCard read port
-wire deviceUARTTxWrite			= {busaddress[31:28], busaddress[5:2]} == 8'b10000011 ? 1'b1 : 1'b0;			// 0x8xxxxx0C UART write port
-wire deviceUARTRxRead			= {busaddress[31:28], busaddress[5:2]} == 8'b10000010 ? 1'b1 : 1'b0;			// 0x8xxxxx08 UART read port
-wire deviceUARTByteCountRead	= {busaddress[31:28], busaddress[5:2]} == 8'b10000001 ? 1'b1 : 1'b0;			// 0x8xxxxx04 UART incoming queue byte count
-wire deviceGPUFIFOWrite			= {busaddress[31:28], busaddress[5:2]} == 8'b10000000 ? 1'b1 : 1'b0;			// 0x8xxxxx00 GPU command queue
+wire deviceDDR3					= (busaddress[31:28]==4'b0000) ? 1'b1 : 1'b0;							// 0x00000000 - 0x0FFFFFFF (8Mbytes-128Kbytes due to overlap)
+wire deviceGRAM					= (busaddress[31:28]==4'b0001) ? 1'b1 : 1'b0;							// 0x10000000 - 0x1FFFFFFF (Actual range is 128Kbytes; 0x0001FFFF)
+wire deviceARAM					= (busaddress[31:28]==4'b0010) ? 1'b1 : 1'b0;							// 0x20000000 - 0x2FFFFFFF (Actual range is 64Kbytes;  0x0000FFFF)
+wire deviceGPUFIFOWrite			= {busaddress[31:28], busaddress[5:2]} == 8'b10000000 ? 1'b1 : 1'b0;	// 0x8xxxxx00 GPU command queue
+wire deviceUARTByteCountRead	= {busaddress[31:28], busaddress[5:2]} == 8'b10000001 ? 1'b1 : 1'b0;	// 0x8xxxxx04 UART incoming queue byte count
+wire deviceUARTRxRead			= {busaddress[31:28], busaddress[5:2]} == 8'b10000010 ? 1'b1 : 1'b0;	// 0x8xxxxx08 UART read port
+wire deviceUARTTxWrite			= {busaddress[31:28], busaddress[5:2]} == 8'b10000011 ? 1'b1 : 1'b0;	// 0x8xxxxx0C UART write port
+wire deviceSPIRead				= {busaddress[31:28], busaddress[5:2]} == 8'b10000100 ? 1'b1 : 1'b0;	// 0x8xxxxx10 SPI interface to SDCard read port
+wire deviceSPIWrite				= {busaddress[31:28], busaddress[5:2]} == 8'b10000101 ? 1'b1 : 1'b0;	// 0x8xxxxx14 SPI interface to SDCart write port
+wire deviceSwitchRead			= {busaddress[31:28], busaddress[5:2]} == 8'b10000110 ? 1'b1 : 1'b0;	// 0x8xxxxx18 Device switch states
+wire deviceSwitchCountRead		= {busaddress[31:28], busaddress[5:2]} == 8'b10000111 ? 1'b1 : 1'b0;	// 0x8xxxxx1C Switch incoming queue byte count
+wire deviceAudioWrite			= {busaddress[31:28], busaddress[5:2]} == 8'b10001000 ? 1'b1 : 1'b0;	// 0x8xxxxx20 Raw audio output port
+wire deviceAPUFIFOWrite			= {busaddress[31:28], busaddress[5:2]} == 8'b10001001 ? 1'b1 : 1'b0;	// 0x8xxxxx24 APU command queue
 
 // -----------------------------------------------------------------------
 // I2S2 Audio output
@@ -457,30 +460,62 @@ always @(posedge cpuclock) begin
 end
 
 // -----------------------------------------------------------------------
-// System memory
+// Graphics RAM - GPU/CPU shared - 128Kbytes
+// CPU can execute code from this area while GPU is accessing it
+// 0x10000000
 // -----------------------------------------------------------------------
 
-wire [31:0] memdataout;
-wire [31:0] dmaaddress;
-wire [31:0] dmadatain;
-wire [31:0] dmadataout;
-wire [3:0] dmawe;
+logic [31:0] videomemdatain; // Shadow of busdatain
+wire [31:0] vmemdataout;
+wire [31:0] gdmaaddress;
+wire [31:0] gdmadatain;
+wire [31:0] gdmadataout;
+wire [3:0] gdmawe;
 
-// System memory - FAST section
-sysmem FastRAM(
+sysmem GraphicsRAM(
 	// CPU direct access port
-	.addra(busaddress[16:2]),									// 16 bit DWORD memory address
 	.clka(cpuclock),											// Synchronized to CPU clock
-	.dina(busdatain),											// Data in from CPU
-	.douta(memdataout),											// Data out from RAM address to CPU
-	.wea(deviceBRAM ? buswe : 4'b0000),							// Write control line from CPU
-	.ena(deviceBRAM ? (reset_n & (busre | (|buswe))) : 1'b0),	// Unit enabled only when not in reset and reading or writing
+	.addra(busaddress[16:2]),									// 15 bit DWORD aligned memory address
+	.dina(videomemdatain),										// Data in from CPU
+	.douta(vmemdataout),										// Data out from RAM address to CPU
+	.wea(deviceGRAM ? buswe : 4'b0000),							// Write control line from CPU 
+	.ena(deviceGRAM ? (reset_n & (busre | (|buswe))) : 1'b0),	// Unit enabled only when not in reset and reading or writing 
 	// GPU DMA port
-	.addrb(dmaaddress[16:2]),									// 16 bit DWORD GPU address
 	.clkb(gpuclock),											// Synchronized to GPU clock
-	.dinb(dmadatain),											// Data from GPU
-	.doutb(dmadataout),											// Data to GPU
-	.web(dmawe),												// GPU write control line
+	.addrb(gdmaaddress[16:2]),									// 15 bit DWORD aligned GPU address
+	.dinb(gdmadatain),											// Data from GPU
+	.doutb(gdmadataout),										// Data to GPU
+	.web(gdmawe),												// GPU write control line
+	.enb(reset_n) );											// Reads are always enabled for GPU when not in reset
+
+// -----------------------------------------------------------------------
+// Audio RAM - APU/CPU shared - 64Kbytes
+// (Doubles as BOOT ROM at startup)
+// CPU can execute code from this area while APU is accessing it
+// 0x20000000
+// -----------------------------------------------------------------------
+
+logic [31:0] audiomemdatain; // Shadow of busdatain
+wire [31:0] amemdataout;
+wire [31:0] admaaddress;
+wire [31:0] admadatain;
+wire [31:0] admadataout;
+wire [3:0] admawe;
+
+bootmem AudioRAMAndBootROM(
+	// CPU direct access port
+	.clka(cpuclock),											// Synchronized to CPU clock
+	.addra(busaddress[15:2]),									// 14 bit DWORD aligned memory address
+	.dina(audiomemdatain),										// Data in from CPU
+	.douta(amemdataout),										// Data out from RAM address to CPU
+	.wea(deviceARAM ? buswe : 4'b0000),							// Write control line from CPU
+	.ena(deviceARAM ? (reset_n & (busre | (|buswe))) : 1'b0),	// Unit enabled only when not in reset and reading or writing
+	// APU DMA port
+	.clkb(apuclock),											// Synchronized to APU clock
+	.addrb(admaaddress[15:2]),									// 14 bit DWORD aligned APU address
+	.dinb(admadatain),											// Data from APU
+	.doutb(admadataout),										// Data to APU
+	.web(admawe),												// APU write control line
 	.enb(reset_n) );											// Reads are always enabled for GPU when not in reset
 
 // -----------------------------------------------------------------------
@@ -541,12 +576,12 @@ GPU rv32gpu(
 	.vramwe(gpuwriteena),				// VRAM write enable line
 	.vramwriteword(gpuwriteword),		// Data to write to VRAM
 	.lanemask(gpulanewritemask),		// Video memory lane force enable mask
-	// SYSMEM input/output 
-	.dmaaddress(dmaaddress),			// DMA memory address in SYSMEM
-	.dmawriteword(dmadatain),			// Input to DMA channel of SYSMEM
-	.dma_data(dmadataout),				// Output from DMA channel of SYSMEM
-	.dmawe(dmawe),	 					// DMA write control
-	// Color palette
+	// GRAM input/output 
+	.dmaaddress(gdmaaddress),			// DMA memory address in GRAM
+	.dmawriteword(gdmadatain),			// Input to DMA channel of GRAM
+	.dma_data(gdmadataout),				// Output from DMA channel of GRAM
+	.dmawe(gdmawe),	 					// DMA write control
+	// Color palette write channel
 	.palettewe(palettewe),				// Color palette write control
 	.paletteaddress(paletteaddress),	// Address to write the color value to
 	.palettedata(palettedata) );		// Color value to write to the palette
@@ -569,6 +604,52 @@ gpufifo GPUCommands(
 	.rd_clk(gpuclock),
 	.rst(reset_p),
 	.valid(gpu_fifodatavalid) );
+	
+// -----------------------------------------------------------------------
+// APU
+// -----------------------------------------------------------------------
+
+wire [31:0] apu_fifodataout;
+wire apu_fifowrfull;
+wire apu_fifordempty;
+wire apu_fifodatavalid;
+wire apu_fifore;
+
+logic [31:0] apu_fifocommand;
+logic apu_fifowe;
+
+APU rv32apu(
+	.clock(apuclock),					// APU clock
+	.reset(reset_p),					// Reset line
+	// FIFO control
+	.fifoempty(apu_fifordempty),
+	.fifodout(apu_fifodataout),
+	.fifdoutvalid(apu_fifodatavalid),
+	.fiford_en(apu_fifore),
+	// GRAM input/output 
+	.dmaaddress(admaaddress),			// DMA memory address in ARAM
+	.dmawriteword(admadatain),			// Input to DMA channel of ARAM
+	.dma_data(admadataout),				// Output from DMA channel of ARAM
+	.dmawe(admawe) ); 					// DMA write control
+
+// -----------------------------------------------------------------------
+// APU FIFO
+// -----------------------------------------------------------------------
+
+gpufifo APUCommands(
+	// Write
+	.full(apu_fifowrfull),
+	.din(apu_fifocommand),
+	.wr_en(apu_fifowe),
+	// Read
+	.empty(apu_fifordempty),
+	.dout(apu_fifodataout),
+	.rd_en(apu_fifore),
+	// Control
+	.wr_clk(cpuclock),
+	.rd_clk(apuclock),
+	.rst(reset_p),
+	.valid(apu_fifodatavalid) );
 
 // -----------------------------------------------------------------------
 // DVI
@@ -705,12 +786,14 @@ always_comb begin
 		deviceSwitchRead: busdataout = switchdatawide;
 		deviceSwitchCountRead: busdataout = switchdatacountout;
 		deviceDDR3: busdataout = ddr3dataout;
-		deviceBRAM: busdataout = memdataout;
+		deviceGRAM: busdataout = vmemdataout;
+		deviceARAM: busdataout = amemdataout;
 	endcase
 end
 
 //wire ddr3stall = deviceDDR3 ? (ddr3readstall | ddr3writestall) : 1'b0;
 wire gpustall = deviceGPUFIFOWrite ? gpu_fifowrfull : 1'b0;
+wire apustall = deviceAPUFIFOWrite ? apu_fifowrfull : 1'b0;
 wire uartwritestall = deviceUARTTxWrite ? outfifofull : 1'b0;
 wire uartreadstall = deviceUARTRxRead ? infifoempty : 1'b0;
 wire spiwritestall = deviceSPIWrite ? sdwq_full : 1'b0;
@@ -718,28 +801,26 @@ wire spireadstall = deviceSPIRead ? sdrq_empty : 1'b0;
 wire audiostall = deviceAudioWrite ? abfull : 1'b0;
 // NOTE: Switch reads will never stall, but either return instant state or cached state from FIFO
 
-assign busstall = uartwritestall | uartreadstall | gpustall | spiwritestall | spireadstall | ddr3stall | audiostall;
+assign busstall = uartwritestall | uartreadstall | gpustall | apustall | spiwritestall | spireadstall | ddr3stall | audiostall;
 
 always_comb begin
-	// SYSMEM r/w (0x00000000 - 0x0003FFFF)
-	// This one self-selects in the System memory section
-	
-	// DDR3 (0x00040000 - 0x0FFFFFFF)
-	// Handler is a clocked module
 
-	// Audio fifo write control - TBD
-	//audiofifoin = busdatain;
-	//audiofifowe = deviceAudioWrite ? ((~audiofifofull) & (|buswe)) : 1'b0;
-	
 	abdin = busdatain;
 	abwe = deviceAudioWrite ? ((~abfull) & (|buswe)) : 1'b0;
+
+	// For graphics memory writes from CPU
+	if (deviceGRAM & (|buswe)) videomemdatain = busdatain;
+
+	// For audio memory writes from CPU
+	if (deviceARAM & (|buswe)) audiomemdatain = busdatain;
 
 	// GPU command fifo write control
 	gpu_fifocommand = busdatain; // DWORD writes only, no byte masking
 	gpu_fifowe = deviceGPUFIFOWrite ? ((~gpu_fifowrfull) & (|buswe)) : 1'b0;
 
-	// UART (receive)
-	// This one self-selects in the UART device
+	// Audio command fifo write control
+	apu_fifocommand = busdatain; // DWORD writes only, no byte masking
+	apu_fifowe = deviceAPUFIFOWrite ? ((~apu_fifowrfull) & (|buswe)) : 1'b0;
 
 	// SPI (receive)
 	sdrq_re = (deviceSPIRead & (~sdrq_empty)) ? busre : 1'b0;

@@ -1,7 +1,7 @@
 // ======================== CPU States ==========================
 
 // Number of bits for the one-hot encoded CPU state
-`define CPUSTAGECOUNT           13
+`define CPUSTAGECOUNT           14
 
 // Bit indices for one-hot encoded CPU state
 `define CPUFETCH				0
@@ -16,7 +16,8 @@
 `define CPUFSTALL				9
 `define CPUFFSTALL				10
 `define CPUFSTORE				11
-`define CPULATCH				12
+`define CPUUPDATECSR			12
+`define CPUSTORECOMPLETE		13
 
 `define CPUSTAGEMASK_NONE				0
 
@@ -32,7 +33,8 @@
 `define CPUSTATEMASK_FSTALL				512
 `define CPUSTATEMASK_FFSTALL			1024
 `define CPUSTATEMASK_FSTORE				2048
-`define CPUSTATEMASK_LATCH				4096
+`define CPUSTATEMASK_UPDATECSR			4096
+`define CPUSTATEMASK_STORECOMPLETE		8192
 // ==============================================================
 
 // =================== CSR REGISTER MAPPINGS ====================

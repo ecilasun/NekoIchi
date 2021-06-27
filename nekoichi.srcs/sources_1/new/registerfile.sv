@@ -15,7 +15,7 @@ logic [31:0] registers[0:31];
 initial begin
 	registers[0] <= 32'h00000000; // Zero register
 	registers[1] <= 32'h00000000; // Default return address 
-	registers[2] <= 32'h0001FFF0; // Default stack pointer (for 128K)
+	registers[2] <= 32'h2000FFF0; // Default stack pointer at bottom of ARAM (grows upwards)
 	registers[3] <= 32'h00000000;
 	registers[4] <= 32'h00000000;
 	registers[5] <= 32'h00000000;

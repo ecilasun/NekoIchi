@@ -12,7 +12,7 @@ module ddr3controller(
 	input [31:0] busaddress,
 	input [31:0] busdatain,
 	output ddr3stall,
-	output wire [31:0] ddr3dataout,
+	output logic [31:0] ddr3dataout,
 	
     output          ddr3_reset_n,
     output  [0:0]   ddr3_cke,
@@ -64,18 +64,12 @@ wire app_zq_ack;
 
 wire ddr3cmdfull, ddr3cmdempty, ddr3cmdvalid;
 logic ddr3cmdre = 1'b0, ddr3cmdwe = 1'b0;
-logic [64:0] ddr3cmdin;
-wire [64:0] ddr3cmdout;
-
-wire ddr3writefull, ddr3writeempty, ddr3writevalid;
-logic ddr3writewe = 1'b0, ddr3writere = 1'b0;
-logic ddr3writein = 1'b0;
-wire ddr3writeout;
+logic [152:0] ddr3cmdin;
+wire [152:0] ddr3cmdout;
 
 wire ddr3readfull, ddr3readempty, ddr3readvalid;
 logic ddr3readwe = 1'b0, ddr3readre = 1'b0;
-logic [31:0] ddr3readin = 32'd0;
-//wire [31:0] ddr3readout;
+logic [127:0] ddr3readin = 128'd0;
 
 wire ui_clk;
 wire ui_clk_sync_rst;
@@ -157,7 +151,6 @@ always @ (posedge ui_clk) begin
 			end
 			
 			IDLE: begin
-				ddr3writewe <= 1'b0;
 				ddr3readwe <= 1'b0;
 				if (~ddr3cmdempty) begin
 					ddr3cmdre <= 1'b1;
@@ -168,7 +161,7 @@ always @ (posedge ui_clk) begin
 			DECODECMD: begin
 				ddr3cmdre <= 1'b0;
 				if (ddr3cmdvalid) begin
-					if (ddr3cmdout[64]==1'b1)
+					if (ddr3cmdout[152]==1'b1) // Write request?
 						state <= WRITE;
 					else
 						state <= READ;
@@ -180,19 +173,10 @@ always @ (posedge ui_clk) begin
 					state <= WRITE_DONE;
 					app_en <= 1;
 					app_wdf_wren <= 1;
-					app_addr <= {ddr3cmdout[59:35], 3'b000}; // Addresses are in multiples of 16 bits x8 == 128 bits
-
-					unique case (ddr3cmdout[35:34]) // busaddress[3:2])
-						2'b11: begin app_wdf_mask <= {ddr3cmdout[63:60],12'hFFF}; end
-						2'b10: begin app_wdf_mask <= {4'hF, ddr3cmdout[63:60], 8'hFF}; end
-						2'b01: begin app_wdf_mask <= {8'hFF, ddr3cmdout[63:60], 4'hF}; end
-						2'b00: begin app_wdf_mask <= {12'hFFF, ddr3cmdout[63:60]}; end
-					endcase
-
-					//app_wdf_mask <= 16'h0000;
-
+					app_addr <= {1'b0, ddr3cmdout[151:128], 3'b000}; // Addresses are in multiples of 16 bits x8 == 128 bits
+					app_wdf_mask <= 16'h0000; // Always write the full 128bits
 					app_cmd <= CMD_WRITE;
-					app_wdf_data <= {ddr3cmdout[31:0], ddr3cmdout[31:0], ddr3cmdout[31:0], ddr3cmdout[31:0]};
+					app_wdf_data <= ddr3cmdout[127:0]; // 128bit value from cache
 				end
 			end
 
@@ -206,8 +190,6 @@ always @ (posedge ui_clk) begin
 				end
 			
 				if (~app_en & ~app_wdf_wren) begin
-					ddr3writewe <= 1'b1;
-					ddr3writein <= 1'b1;
 					state <= IDLE;
 				end
 			end
@@ -215,7 +197,7 @@ always @ (posedge ui_clk) begin
 			READ: begin
 				if (app_rdy) begin
 					app_en <= 1;
-					app_addr <= {ddr3cmdout[59:35], 3'b000}; // Addresses are in multiples of 16 bits x8 == 128 bits
+					app_addr <= {1'b0, ddr3cmdout[151:128], 3'b000};
 					app_cmd <= CMD_READ;
 					state <= READ_DONE;
 				end
@@ -227,13 +209,10 @@ always @ (posedge ui_clk) begin
 				end
 			
 				if (app_rd_data_valid) begin
+					// After this step, full 128bit value will be available on the
+					// ddr3readre when read is asserted and ddr3readvalid is high
 					ddr3readwe <= 1'b1;
-					unique case (ddr3cmdout[35:34]) // busaddress[3:2] used for DWORD select
-						2'b11: begin ddr3readin <= app_rd_data[127:96]; end
-						2'b10: begin ddr3readin <= app_rd_data[95:64]; end
-						2'b01: begin ddr3readin <= app_rd_data[63:32]; end
-						2'b00: begin ddr3readin <= app_rd_data[31:0]; end
-					endcase
+					ddr3readin <= app_rd_data;
 					state <= IDLE;
 				end
 			end
@@ -255,86 +234,153 @@ ddr3cmdfifo DDR3Cmd(
 	.valid(ddr3cmdvalid),
 	.rd_clk(ui_clk),
 	.rst(reset) );
-
-// write done queue
-ddr3writedonequeue DDR3WriteDone(
-	.full(ddr3writefull),
-	.din(ddr3writein),
-	.wr_en(ddr3writewe),
-	.wr_clk(ui_clk),
-	.empty(ddr3writeempty),
-	.dout(ddr3writeout),
-	.rd_en(ddr3writere),
-	.valid(ddr3writevalid),
-	.rd_clk(cpuclock),
-	.rst(ui_clk_sync_rst) );
-
+	
 // read done queue
+wire [127:0] ddr3readout;
 ddr3readdonequeue DDR3ReadDone(
 	.full(ddr3readfull),
 	.din(ddr3readin),
 	.wr_en(ddr3readwe),
 	.wr_clk(ui_clk),
 	.empty(ddr3readempty),
-	.dout(ddr3dataout), //ddr3readout),
+	.dout(ddr3readout),
 	.rd_en(ddr3readre),
 	.valid(ddr3readvalid),
 	.rd_clk(cpuclock),
 	.rst(ui_clk_sync_rst) );
+	
 
-always @(posedge cpuclock) begin
-	if (reset) begin
-		mainstate <= MAIN_INIT;
+// ------------------
+// DDR3 cache
+// ------------------
+
+//logic [31:0] ddr3datain; // Shadow of busdatain
+
+wire [15:0] ctag = busaddress[27:12]; // Ignore 4 highest bits since only r/w for ARAM are routed here
+wire [7:0] cline = busaddress[11:4];
+wire [1:0] coffset = busaddress[3:2]; // 4xDWORD (16xBYTE, 128bits) aligned
+wire [31:0] cwidemask = {{8{buswe[3]}}, {8{buswe[2]}}, {8{buswe[1]}}, {8{buswe[0]}}};
+wire [31:0] cwidemaskn = {{8{~buswe[3]}}, {8{~buswe[2]}}, {8{~buswe[1]}}, {8{~buswe[0]}}};
+
+// The division of address into cache, device and byte index data is as follows
+// device  tag              line     offset  byteindex
+// 0000    0000000000000000 00000000 00      00
+
+logic cachedirty[0:255];
+logic [15:0] cachetags[0:255];
+logic [127:0] cache[0:255];
+
+initial begin
+	integer i;
+	// All pages are 'clean', but all tags are invalid and cache is zeroed out by default
+	for (int i=0;i<256;i=i+1) begin
+		cachedirty[i] = 1'b0;
+		cachetags[i] = 16'hFFFF;
+		cache[i] = 128'd0;
+	end
+end
+
+logic [3:0] DDR3state = 4'b0000; // Default to idle
+logic DDR3ready = 1'b0;
+wire DDR3cachehit = (deviceDDR3 & (cachetags[cline] == ctag)) ? 1'b1 : 1'b0;
+
+always_ff @(posedge cpuclock) begin
+	if (~resetn) begin
+		// 
 	end else begin
+	
+		DDR3ready <= 1'b0;
+	
+		case(DDR3state)
+			4'b0000: begin // IDLE
+				// This should only happen for ARAM
+				if (deviceDDR3 & (busre | (|buswe))) begin
+	
+					// Entry in cache
+					if (cachetags[cline] == ctag) begin
+					
+						// Read dword at offset
+						if (busre) begin
+							case (coffset)
+								2'b00: ddr3dataout <= cache[cline][31:0];
+								2'b01: ddr3dataout <= cache[cline][63:32];
+								2'b10: ddr3dataout <= cache[cline][95:64];
+								2'b11: ddr3dataout <= cache[cline][127:96];
+							endcase
+							DDR3ready <= 1'b1;
+						end
+	
+						// Write onto dword at offset using write mask to update modified section only
+						if (|buswe) begin
+							case (coffset)
+								// TODO: we have a write mask in this device...
+								2'b00: cache[cline][31:0] <= (cwidemaskn&cache[cline][31:0]) | (cwidemask&busdatain);
+								2'b01: cache[cline][63:32] <= (cwidemaskn&cache[cline][63:32]) | (cwidemask&busdatain);
+								2'b10: cache[cline][95:64] <= (cwidemaskn&cache[cline][95:64]) | (cwidemask&busdatain);
+								2'b11: cache[cline][127:96] <= (cwidemaskn&cache[cline][127:96]) | (cwidemask&busdatain);
+							endcase
+							// This cache line is now dirty
+							cachedirty[cline] <= 1'b1;
+							DDR3ready <= 1'b1;
+						end
 
-		case (mainstate)
-			MAIN_INIT: begin
-				// TODO:
-				mainstate <= MAIN_IDLE;
-			end
-
-			MAIN_IDLE: begin
-				ddr3writere <= 1'b0;
-				if (deviceDDR3) begin
-					if (busre) begin
-						ddr3cmdin <= {1'b0, 4'b0, busaddress[27:0], 32'd0};
-						ddr3cmdwe <= 1'b1;
-						mainstate <= MAIN_WAIT_READ;
-					end else if (|buswe) begin
-						ddr3cmdin <= {1'b1, ~buswe, busaddress[27:0], busdatain};
-						ddr3cmdwe <= 1'b1;
-						mainstate <= MAIN_WAIT_WRITE;
+					end else begin
+						// Entry not in cache
+						// Do we need to flush then populate?
+						if (cachedirty[cline]) begin
+							DDR3state <= 4'b0001; // WRITEBACK & REPOPULATE
+						end else begin
+							DDR3state <= 4'b0010; // POPULATE
+						end
 					end
 				end
 			end
 
-			MAIN_WAIT_WRITE: begin
+			4'b0001: begin // WRITEBACK
+				// Write back old cache line contents to old address
+				ddr3cmdin <= {1'b1, cachetags[cline], cline, cache[cline]};
+				ddr3cmdwe <= 1'b1;
+				// NOTE: commands are executed sequentially on the DDR3 interface side
+				// Therefore we can queue up a write and then a read
+				// and do not require a wait afterwards except for the read.
+				// Re-populate this cache line
+				DDR3state <= 4'b0010; // REPOPULATE
+			end
+
+			4'b0010: begin // (RE)POPULATE
+				// Load contents to new address, discarding current cache line (either evicted or discarded)
+				ddr3cmdin <= {1'b0, ctag, cline, 128'd0};
+				ddr3cmdwe <= 1'b1;
+				// Wait for read result
+				DDR3state <= 4'b0011; // READWAITSTATE
+			end
+
+			4'b0011: begin // READWAITSTATE
 				ddr3cmdwe <= 1'b0;
-				if (~ddr3writeempty) begin
-					ddr3writere <= 1'b1;
-					mainstate <= MAIN_IDLE;//MAIN_FINISH_WRITE;
+				if (~ddr3readempty) begin
+					// Read result available for this cache line
+					// Request to read it
+					ddr3readre <= 1'b1;
+					DDR3state <= 4'b0100; // UPDATECACHELINE
 				end else begin
-					mainstate <= MAIN_WAIT_WRITE;
+					DDR3state <= 4'b0011; // READWAITSTATE
 				end
 			end
 
-			MAIN_WAIT_READ: begin
-				ddr3cmdwe <= 1'b0;
-				if (~ddr3readempty) begin
-					ddr3readre <= 1'b1;
-					mainstate <= MAIN_FINISH_READ;
-				end else begin
-					mainstate <= MAIN_WAIT_READ;
-				end
-			end
-			
-			MAIN_FINISH_READ: begin
+			4'b0100: begin // UPDATECACHELINE
+				// Stop result read request
 				ddr3readre <= 1'b0;
-				if (ddr3readvalid) begin // Read ack arrived
-					//ddr3dataout <= ddr3readout;
-					mainstate <= MAIN_IDLE;
+				if (ddr3readvalid) begin
+					// Update the tag for this line
+					cachetags[cline] <= ctag;
+					// Grab the data output at this address
+					cache[cline] <= ddr3readout; // NOTE: This needs to be notified by DDR3 driver
+					// No longer dirty
+					cachedirty[cline] <= 1'b0;
+					DDR3state <= 4'b0000; // IDLE
 				end else begin
-					mainstate <= MAIN_FINISH_READ;
+					// Wait in this state until a 
+					DDR3state <= 4'b0100; // UPDATECACHELINE
 				end
 			end
 
@@ -343,7 +389,6 @@ always @(posedge cpuclock) begin
 	end
 end
 
-// Stall until there's something in the output queues
-assign ddr3stall = deviceDDR3 & ((busre&(~ddr3readvalid)) | ((~busre)&(~(mainstate==MAIN_IDLE))));
+assign ddr3stall = deviceDDR3 ? ~(DDR3cachehit & DDR3ready) : 1'b0; // Stall during cache miss
 
 endmodule

@@ -21,8 +21,17 @@ module riscvcpu(
 // clock, in FETCH state.
 logic [`CPUSTAGECOUNT-1:0] cpustate = `CPUSTAGEMASK_RETIREINSTRUCTION;
 
-logic [31:0] PC = 32'd0;
-logic [31:0] nextPC = 32'd0;
+logic [31:0] PC = 32'h20000000;			// Boot from AudioRAM/BootROM device
+logic [31:0] nextPC = 32'h20000000;		// Has to be same as PC at startup
+
+// Assume no ebreak
+logic ebreak = 1'b0;
+// Assume valid instruction
+logic illegalinstruction = 1'b0;
+
+// Write address has to be set at the same time
+// as read or write enable, this shadow ensures that
+logic [31:0] targetaddress;
 
 // Integer and float file write control lines
 wire rwen, fwen;
@@ -416,24 +425,28 @@ logic [63:0] CSRReti = 64'd0;
 // Custom CSRs r/w between 0x802-0x8FF
 
 // Advancing cycles is simple since clocks = cycles
+logic [63:0] internalcyclecounter = 64'd0;
 always @(posedge clock) begin
-	CSRCycle <= CSRCycle + 64'd1;
+	internalcyclecounter <= internalcyclecounter + 64'd1;
 end
 
 // Time is also simple since we know we have 10M ticks per second
 // from which we can derive seconds elapsed
+logic [63:0] internalwallclockcounter = 64'd0;
 always @(posedge wallclock) begin
-	CSRTime <= CSRTime + 64'd1;
+	internalwallclockcounter <= internalwallclockcounter + 64'd1;
+end
+
+logic [63:0] internalretirecounter = 64'd0;
+always @(posedge clock) begin
+	if (cpustate == `CPURETIREINSTRUCTION) begin
+		internalretirecounter <= internalretirecounter + 64'd1;
+	end
 end
 
 // -----------------------------------------------------------------------
 // CPU Core
 // -----------------------------------------------------------------------
-
-// Assume no ebreak
-logic ebreak = 1'b0;
-// Assume valid instruction
-logic illegalinstruction = 1'b0;
 
 always @(posedge clock) begin
 	if (reset) begin
@@ -466,6 +479,10 @@ always @(posedge clock) begin
 
 			cpustate[`CPUDECODE]: begin
 				decodeenable <= 1'b0;
+				// Update counters
+				CSRCycle <= internalcyclecounter;
+				CSRTime <= internalwallclockcounter;
+				CSRReti <= internalretirecounter;
 				cpustate[`CPUEXEC] <= 1'b1;
 			end
 
@@ -481,7 +498,8 @@ always @(posedge clock) begin
 				fdata <= 32'd0; // Don't care
 				rdata <= 32'd0; // Don't care
 				storedata <= 32'd0; // Don't care
-				memaddress <= 32'd0; // Don't care
+				//memaddress <= 32'd0; // Don't touch without corresponding re/we set
+				targetaddress <= 32'd0; // Don't care
 
 				// Set this up at the appropriate time
 				// so that the write happens after
@@ -525,12 +543,12 @@ always @(posedge clock) begin
 					end
 					`OPCODE_FLOAT_STW : begin
 						storedata <= frval2;
-						memaddress <= rval1 + Wimmed;
+						targetaddress <= rval1 + Wimmed;
 						cpustate[`CPUFSTORE] <= 1'b1;
 					end
 					`OPCODE_STORE: begin
 						storedata <= rval2;
-						memaddress <= rval1 + Wimmed;
+						targetaddress <= rval1 + Wimmed;
 						cpustate[`CPUSTORE] <= 1'b1;
 					end
 					`OPCODE_FENCE: begin
@@ -540,6 +558,7 @@ always @(posedge clock) begin
 					`OPCODE_SYSTEM: begin
 						unique case (Wfunc3)
 							3'b000: begin // ECALL/EBREAK
+								cpustate[`CPURETIREINSTRUCTION] <= 1'b1;
 								unique case (Wfunc12)
 									12'b000000000000: begin // ECALL
 										// TBD
@@ -562,147 +581,39 @@ always @(posedge clock) begin
 									end
 								endcase
 							end
-							3'b001: begin // CSRRW
+							3'b001, // CSRRW
+							3'b010, // CSRRS
+							3'b011, // CSSRRC
+							3'b101, // CSRRWI
+							3'b110, // CSRRSI
+							3'b111: begin // CSRRCI
+								cpustate[`CPUUPDATECSR] <= 1'b1;
 								// Swap rs1 and csr register values
 								unique case (Wcsrindex)
-									12'h300: begin rdata <= CSRmstatus; CSRmstatus<=rval1; end
-									12'h301: begin rdata <= CSRmisa; CSRmisa<=rval1; end
-									12'h304: begin rdata <= CSRmie; CSRmie<=rval1; end
-									12'h305: begin rdata <= CSRmtvec; CSRmtvec<=rval1; end
-									12'h340: begin rdata <= CSRmscratch; CSRmscratch<=rval1; end
-									12'h341: begin rdata <= CSRmepc; CSRmepc<=rval1; end
-									12'h342: begin rdata <= CSRmcause; CSRmcause<=rval1; end
-									12'h343: begin rdata <= CSRmtval; CSRmtval<=rval1; end
-									12'h344: begin rdata <= CSRmip; CSRmip<=rval1; end
-									12'h800: begin rdata <= CSRTimeCmp[31:0]; CSRTimeCmp[31:0]<=rval1; end
-									12'h801: begin rdata <= CSRTimeCmp[63:32]; CSRTimeCmp[63:32]<=rval1; end
-									12'hC00: begin rdata <= CSRCycle[31:0]; end
+									12'h300: begin rdata <= CSRmstatus;end
+									12'h301: begin rdata <= CSRmisa; end
+									12'h304: begin rdata <= CSRmie; end
+									12'h305: begin rdata <= CSRmtvec; end
+									12'h340: begin rdata <= CSRmscratch; end
+									12'h341: begin rdata <= CSRmepc; end
+									12'h342: begin rdata <= CSRmcause; end
+									12'h343: begin rdata <= CSRmtval; end
+									12'h344: begin rdata <= CSRmip; end
+									12'h800: begin rdata <= CSRTimeCmp[31:0]; end
+									12'h801: begin rdata <= CSRTimeCmp[63:32]; end
+									12'hB00: begin rdata <= CSRCycle[31:0]; end
+									12'hB80: begin rdata <= CSRCycle[63:32]; end
 									12'hC01: begin rdata <= CSRTime[31:0]; end
 									12'hC02: begin rdata <= CSRReti[31:0]; end
-									12'hC80: begin rdata <= CSRCycle[63:32]; end
 									12'hC81: begin rdata <= CSRTime[63:32]; end
 									12'hC82: begin rdata <= CSRReti[63:32]; end
 									12'hF11: begin rdata <= CSRmvendorid; end
-									default: begin rdata <= 32'd0; end
 								endcase
 							end
-							3'b010: begin // CSRRS
-								unique case (Wcsrindex)
-									12'h300: begin rdata <= CSRmstatus; CSRmstatus<=CSRmstatus | rval1; end
-									12'h301: begin rdata <= CSRmisa; CSRmisa<=CSRmisa | rval1; end
-									12'h304: begin rdata <= CSRmie; CSRmie<=CSRmie | rval1; end
-									12'h305: begin rdata <= CSRmtvec; CSRmtvec<=CSRmtvec | rval1; end
-									12'h340: begin rdata <= CSRmscratch; CSRmscratch<=CSRmscratch | rval1; end
-									12'h341: begin rdata <= CSRmepc; CSRmepc<=CSRmepc | rval1; end
-									12'h342: begin rdata <= CSRmcause; CSRmcause<=CSRmcause | rval1; end
-									12'h343: begin rdata <= CSRmtval; CSRmtval<=CSRmtval | rval1; end
-									12'h344: begin rdata <= CSRmip; CSRmip<=CSRmip | rval1; end
-									12'h800: begin rdata <= CSRTimeCmp[31:0]; CSRTimeCmp[31:0]<=CSRTimeCmp[31:0] | rval1; end
-									12'h801: begin rdata <= CSRTimeCmp[63:32]; CSRTimeCmp[63:32]<=CSRTimeCmp[63:32] | rval1; end
-									12'hC00: begin rdata <= CSRCycle[31:0]; end
-									12'hC01: begin rdata <= CSRTime[31:0]; end
-									12'hC02: begin rdata <= CSRReti[31:0]; end
-									12'hC80: begin rdata <= CSRCycle[63:32]; end
-									12'hC81: begin rdata <= CSRTime[63:32]; end
-									12'hC82: begin rdata <= CSRReti[63:32]; end
-									12'hF11: begin rdata <= CSRmvendorid; end
-									default: begin rdata <= 32'd0; end
-								endcase
-							end
-							3'b011: begin // CSSRRC
-								unique case (Wcsrindex)
-									12'h300: begin rdata <= CSRmstatus; CSRmstatus<=CSRmstatus&(~rval1); end
-									12'h301: begin rdata <= CSRmisa; CSRmisa<=CSRmisa&(~rval1); end
-									12'h304: begin rdata <= CSRmie; CSRmie<=CSRmie&(~rval1); end
-									12'h305: begin rdata <= CSRmtvec; CSRmtvec<=CSRmtvec&(~rval1); end
-									12'h340: begin rdata <= CSRmscratch; CSRmscratch<=CSRmscratch&(~rval1); end
-									12'h341: begin rdata <= CSRmepc; CSRmepc<=CSRmepc&(~rval1); end
-									12'h342: begin rdata <= CSRmcause; CSRmcause<=CSRmcause&(~rval1); end
-									12'h343: begin rdata <= CSRmtval; CSRmtval<=CSRmtval&(~rval1); end
-									12'h344: begin rdata <= CSRmip; CSRmip<=CSRmip&(~rval1); end
-									12'h800: begin rdata <= CSRTimeCmp[31:0]; CSRTimeCmp[31:0]<=CSRTimeCmp[31:0]&(~rval1); end
-									12'h801: begin rdata <= CSRTimeCmp[63:32]; CSRTimeCmp[63:32]<=CSRTimeCmp[63:32]&(~rval1); end
-									12'hC00: begin rdata <= CSRCycle[31:0]; end
-									12'hC01: begin rdata <= CSRTime[31:0]; end
-									12'hC02: begin rdata <= CSRReti[31:0]; end
-									12'hC80: begin rdata <= CSRCycle[63:32]; end
-									12'hC81: begin rdata <= CSRTime[63:32]; end
-									12'hC82: begin rdata <= CSRReti[63:32]; end
-									12'hF11: begin rdata <= CSRmvendorid; end
-									default: begin rdata <= 32'd0; end
-								endcase
-							end
-							3'b101: begin // CSRRWI
-								unique case (Wcsrindex)
-									12'h300: begin rdata <= CSRmstatus; CSRmstatus<=Wimmed; end
-									12'h301: begin rdata <= CSRmisa; CSRmisa<=Wimmed; end
-									12'h304: begin rdata <= CSRmie; CSRmie<=Wimmed; end
-									12'h305: begin rdata <= CSRmtvec; CSRmtvec<=Wimmed; end
-									12'h340: begin rdata <= CSRmscratch; CSRmscratch<=Wimmed; end
-									12'h341: begin rdata <= CSRmepc; CSRmepc<=Wimmed; end
-									12'h342: begin rdata <= CSRmcause; CSRmcause<=Wimmed; end
-									12'h343: begin rdata <= CSRmtval; CSRmtval<=Wimmed; end
-									12'h344: begin rdata <= CSRmip; CSRmip<=Wimmed; end
-									12'h800: begin rdata <= CSRTimeCmp[31:0]; CSRTimeCmp[31:0]<=Wimmed; end
-									12'h801: begin rdata <= CSRTimeCmp[63:32]; CSRTimeCmp[63:32]<=Wimmed; end
-									12'hC00: begin rdata <= CSRCycle[31:0]; end
-									12'hC01: begin rdata <= CSRTime[31:0]; end
-									12'hC02: begin rdata <= CSRReti[31:0]; end
-									12'hC80: begin rdata <= CSRCycle[63:32]; end
-									12'hC81: begin rdata <= CSRTime[63:32]; end
-									12'hC82: begin rdata <= CSRReti[63:32]; end
-									12'hF11: begin rdata <= CSRmvendorid; end
-									default: begin rdata <= 32'd0; end
-								endcase
-							end
-							3'b110: begin // CSRRSI
-								unique case (Wcsrindex)
-									12'h300: begin rdata <= CSRmstatus; CSRmstatus<=CSRmstatus | Wimmed; end
-									12'h301: begin rdata <= CSRmisa; CSRmisa<=CSRmisa | Wimmed; end
-									12'h304: begin rdata <= CSRmie; CSRmie<=CSRmie | Wimmed; end
-									12'h305: begin rdata <= CSRmtvec; CSRmtvec<=CSRmtvec | Wimmed; end
-									12'h340: begin rdata <= CSRmscratch; CSRmscratch<=CSRmscratch | Wimmed; end
-									12'h341: begin rdata <= CSRmepc; CSRmepc<=CSRmepc | Wimmed; end
-									12'h342: begin rdata <= CSRmcause; CSRmcause<=CSRmcause | Wimmed; end
-									12'h343: begin rdata <= CSRmtval; CSRmtval<=CSRmtval | Wimmed; end
-									12'h344: begin rdata <= CSRmip; CSRmip<=CSRmip | Wimmed; end
-									12'h800: begin rdata <= CSRTimeCmp[31:0]; CSRTimeCmp[31:0]<=CSRTimeCmp[31:0] | Wimmed; end
-									12'h801: begin rdata <= CSRTimeCmp[63:32]; CSRTimeCmp[63:32]<=CSRTimeCmp[63:32] | Wimmed; end
-									12'hC00: begin rdata <= CSRCycle[31:0]; end
-									12'hC01: begin rdata <= CSRTime[31:0]; end
-									12'hC02: begin rdata <= CSRReti[31:0]; end
-									12'hC80: begin rdata <= CSRCycle[63:32]; end
-									12'hC81: begin rdata <= CSRTime[63:32]; end
-									12'hC82: begin rdata <= CSRReti[63:32]; end
-									12'hF11: begin rdata <= CSRmvendorid; end
-									default: begin rdata <= 32'd0; end
-								endcase
-							end
-							3'b111: begin // CSRRCI
-								unique case (Wcsrindex)
-									12'h300: begin rdata <= CSRmstatus; CSRmstatus<=CSRmstatus&(~Wimmed); end
-									12'h301: begin rdata <= CSRmisa; CSRmisa<=CSRmisa&(~Wimmed); end
-									12'h304: begin rdata <= CSRmie; CSRmie<=CSRmie&(~Wimmed); end
-									12'h305: begin rdata <= CSRmtvec; CSRmtvec<=CSRmtvec&(~Wimmed); end
-									12'h340: begin rdata <= CSRmscratch; CSRmscratch<=CSRmscratch&(~Wimmed); end
-									12'h341: begin rdata <= CSRmepc; CSRmepc<=CSRmepc&(~Wimmed); end
-									12'h342: begin rdata <= CSRmcause; CSRmcause<=CSRmcause&(~Wimmed); end
-									12'h343: begin rdata <= CSRmtval; CSRmtval<=CSRmtval&(~Wimmed); end
-									12'h344: begin rdata <= CSRmip; CSRmip<=CSRmip&(~Wimmed); end
-									12'h800: begin rdata <= CSRTimeCmp[31:0]; CSRTimeCmp[31:0]<=CSRTimeCmp[31:0]&(~Wimmed); end
-									12'h801: begin rdata <= CSRTimeCmp[63:32]; CSRTimeCmp[63:32]<=CSRTimeCmp[63:32]&(~Wimmed); end
-									12'hC00: begin rdata <= CSRCycle[31:0]; end
-									12'hC01: begin rdata <= CSRTime[31:0]; end
-									12'hC02: begin rdata <= CSRReti[31:0]; end
-									12'hC80: begin rdata <= CSRCycle[63:32]; end
-									12'hC81: begin rdata <= CSRTime[63:32]; end
-									12'hC82: begin rdata <= CSRReti[63:32]; end
-									12'hF11: begin rdata <= CSRmvendorid; end
-									default: begin rdata <= 32'd0; end
-								endcase
+							default: begin
+								cpustate[`CPURETIREINSTRUCTION] <= 1'b1;
 							end
 						endcase
-						cpustate[`CPURETIREINSTRUCTION] <= 1'b1;
 					end
 					`OPCODE_FLOAT_OP: begin
 						unique case (Wfunc7)
@@ -805,6 +716,104 @@ always @(posedge clock) begin
 					end
 				endcase
 
+			end
+			
+			cpustate[`CPUUPDATECSR]: begin
+				// Write to r/w CSR
+				unique case(Wfunc3)
+					3'b001: begin // CSRRW
+						// Swap rs1 and csr register values
+						unique case (Wcsrindex)
+							12'h300: begin CSRmstatus<=rval1; end
+							12'h301: begin CSRmisa<=rval1; end
+							12'h304: begin CSRmie<=rval1; end
+							12'h305: begin CSRmtvec<=rval1; end
+							12'h340: begin CSRmscratch<=rval1; end
+							12'h341: begin CSRmepc<=rval1; end
+							12'h342: begin CSRmcause<=rval1; end
+							12'h343: begin CSRmtval<=rval1; end
+							12'h344: begin CSRmip<=rval1; end
+							12'h800: begin CSRTimeCmp[31:0]<=rval1; end
+							12'h801: begin CSRTimeCmp[63:32]<=rval1; end
+						endcase
+					end
+					3'b010: begin // CSRRS
+						unique case (Wcsrindex)
+							12'h300: begin CSRmstatus<=CSRmstatus | rval1; end
+							12'h301: begin CSRmisa<=CSRmisa | rval1; end
+							12'h304: begin CSRmie<=CSRmie | rval1; end
+							12'h305: begin CSRmtvec<=CSRmtvec | rval1; end
+							12'h340: begin CSRmscratch<=CSRmscratch | rval1; end
+							12'h341: begin CSRmepc<=CSRmepc | rval1; end
+							12'h342: begin CSRmcause<=CSRmcause | rval1; end
+							12'h343: begin CSRmtval<=CSRmtval | rval1; end
+							12'h344: begin CSRmip<=CSRmip | rval1; end
+							12'h800: begin CSRTimeCmp[31:0]<=CSRTimeCmp[31:0] | rval1; end
+							12'h801: begin CSRTimeCmp[63:32]<=CSRTimeCmp[63:32] | rval1; end
+						endcase
+					end
+					3'b011: begin // CSSRRC
+						unique case (Wcsrindex)
+							12'h300: begin CSRmstatus<=CSRmstatus&(~rval1); end
+							12'h301: begin CSRmisa<=CSRmisa&(~rval1); end
+							12'h304: begin CSRmie<=CSRmie&(~rval1); end
+							12'h305: begin CSRmtvec<=CSRmtvec&(~rval1); end
+							12'h340: begin CSRmscratch<=CSRmscratch&(~rval1); end
+							12'h341: begin CSRmepc<=CSRmepc&(~rval1); end
+							12'h342: begin CSRmcause<=CSRmcause&(~rval1); end
+							12'h343: begin CSRmtval<=CSRmtval&(~rval1); end
+							12'h344: begin CSRmip<=CSRmip&(~rval1); end
+							12'h800: begin CSRTimeCmp[31:0]<=CSRTimeCmp[31:0]&(~rval1); end
+							12'h801: begin CSRTimeCmp[63:32]<=CSRTimeCmp[63:32]&(~rval1); end
+						endcase
+					end
+					3'b101: begin // CSRRWI
+						unique case (Wcsrindex)
+							12'h300: begin CSRmstatus<=Wimmed; end
+							12'h301: begin CSRmisa<=Wimmed; end
+							12'h304: begin CSRmie<=Wimmed; end
+							12'h305: begin CSRmtvec<=Wimmed; end
+							12'h340: begin CSRmscratch<=Wimmed; end
+							12'h341: begin CSRmepc<=Wimmed; end
+							12'h342: begin CSRmcause<=Wimmed; end
+							12'h343: begin CSRmtval<=Wimmed; end
+							12'h344: begin CSRmip<=Wimmed; end
+							12'h800: begin CSRTimeCmp[31:0]<=Wimmed; end
+							12'h801: begin CSRTimeCmp[63:32]<=Wimmed; end
+						endcase
+					end
+					3'b110: begin // CSRRSI
+						unique case (Wcsrindex)
+							12'h300: begin CSRmstatus<=CSRmstatus | Wimmed; end
+							12'h301: begin CSRmisa<=CSRmisa | Wimmed; end
+							12'h304: begin CSRmie<=CSRmie | Wimmed; end
+							12'h305: begin CSRmtvec<=CSRmtvec | Wimmed; end
+							12'h340: begin CSRmscratch<=CSRmscratch | Wimmed; end
+							12'h341: begin CSRmepc<=CSRmepc | Wimmed; end
+							12'h342: begin CSRmcause<=CSRmcause | Wimmed; end
+							12'h343: begin CSRmtval<=CSRmtval | Wimmed; end
+							12'h344: begin CSRmip<=CSRmip | Wimmed; end
+							12'h800: begin CSRTimeCmp[31:0]<=CSRTimeCmp[31:0] | Wimmed; end
+							12'h801: begin CSRTimeCmp[63:32]<=CSRTimeCmp[63:32] | Wimmed; end
+						endcase
+					end
+					3'b111: begin // CSRRCI
+						unique case (Wcsrindex)
+							12'h300: begin CSRmstatus<=CSRmstatus&(~Wimmed); end
+							12'h301: begin CSRmisa<=CSRmisa&(~Wimmed); end
+							12'h304: begin CSRmie<=CSRmie&(~Wimmed); end
+							12'h305: begin CSRmtvec<=CSRmtvec&(~Wimmed); end
+							12'h340: begin CSRmscratch<=CSRmscratch&(~Wimmed); end
+							12'h341: begin CSRmepc<=CSRmepc&(~Wimmed); end
+							12'h342: begin CSRmcause<=CSRmcause&(~Wimmed); end
+							12'h343: begin CSRmtval<=CSRmtval&(~Wimmed); end
+							12'h344: begin CSRmip<=CSRmip&(~Wimmed); end
+							12'h800: begin CSRTimeCmp[31:0]<=CSRTimeCmp[31:0]&(~Wimmed); end
+							12'h801: begin CSRTimeCmp[63:32]<=CSRTimeCmp[63:32]&(~Wimmed); end
+						endcase
+					end
+				endcase
+				cpustate[`CPURETIREINSTRUCTION] <= 1'b1;
 			end
 			
 			cpustate[`CPUFSTALL]: begin
@@ -987,30 +996,32 @@ always @(posedge clock) begin
 			end
 
 			cpustate[`CPUFSTORE]: begin
-				if (busstall) begin
+				/*if (busstall) begin
 					// Bus might stall during writes if busy
 					// Wait in this state until it's freed
 					cpustate[`CPUFSTORE] <= 1'b1;
-				end else begin
+				end else begin*/
 					// DWORD
+					memaddress <= targetaddress;
 					cpuwriteena <= 4'b1111;
 					cpudataout <= storedata;
-					cpustate[`CPURETIREINSTRUCTION] <= 1'b1;
-				end
+					cpustate[`CPUSTORECOMPLETE] <= 1'b1;
+				//end
 			end
 
 			cpustate[`CPUSTORE]: begin
-				if (busstall) begin
+				/*if (busstall) begin
 					// Bus might stall during writes if busy
 					// Wait in this state until it's freed
 					cpustate[`CPUSTORE] <= 1'b1;
-				end else begin
+				end else begin*/
 					// Request write of current register data to memory
 					// with appropriate write mask and data size
+					memaddress <= targetaddress;
 					unique case (Wfunc3)
 						3'b000: begin // BYTE
 							cpudataout <= {storedata[7:0], storedata[7:0], storedata[7:0], storedata[7:0]};
-							unique case (memaddress[1:0])
+							unique case (targetaddress[1:0])
 								2'b11: begin cpuwriteena <= 4'b1000; end
 								2'b10: begin cpuwriteena <= 4'b0100; end
 								2'b01: begin cpuwriteena <= 4'b0010; end
@@ -1019,7 +1030,7 @@ always @(posedge clock) begin
 						end
 						3'b001: begin // WORD
 							cpudataout <= {storedata[15:0], storedata[15:0]};
-							unique case (memaddress[1])
+							unique case (targetaddress[1])
 								1'b1: begin cpuwriteena <= 4'b1100; end
 								1'b0: begin cpuwriteena <= 4'b0011; end
 							endcase
@@ -1029,6 +1040,15 @@ always @(posedge clock) begin
 							cpuwriteena <= 4'b1111;
 						end
 					endcase
+					cpustate[`CPUSTORECOMPLETE] <= 1'b1;
+				//end
+			end
+			
+			cpustate[`CPUSTORECOMPLETE]: begin
+				if (busstall) begin
+					cpustate[`CPUSTORECOMPLETE] <= 1'b1;
+				end else begin
+					cpuwriteena <= 4'b0000;
 					cpustate[`CPURETIREINSTRUCTION] <= 1'b1;
 				end
 			end
@@ -1044,10 +1064,7 @@ always @(posedge clock) begin
 
 				// Turn off memory writes in flight
 				cpuwriteena <= 4'b0000;
-
-				// Turn on reads to fetch the next instruction
-				cpureadena <= 1'b1;
-				
+			
 				// About mcause register:
 				// If high bit is set, it's an interrupt, otherwise it's an exception (such as illegal instruction)
 				// Interrupt handlers are asynchronous (return via MRET)
@@ -1101,7 +1118,9 @@ always @(posedge clock) begin
 				// Default, assume no exceptions/interrupts
 				PC <= nextPC;
 				memaddress <= nextPC;
-				
+				// Turn on reads to fetch the next instruction
+				cpureadena <= 1'b1;
+
 				// If interrupts are enabled (MIE)
 				if (CSRmstatus[3]) begin
 
@@ -1135,9 +1154,6 @@ always @(posedge clock) begin
 						CSRmcause[31:16] <= {1'b1, 13'd0, IRQ_TYPE}; // Mask generated for devices causing interrupt
 					end
 				end
-
-				// Update retired instruction count CSR
-				CSRReti <= CSRReti + 64'd1;
 
 				cpustate[`CPUFETCH] <= 1'b1;
 			end
