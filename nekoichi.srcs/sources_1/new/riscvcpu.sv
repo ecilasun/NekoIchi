@@ -1058,22 +1058,22 @@ always @(posedge clock) begin
 				// Interrupt handlers are asynchronous (return via MRET)
 				// Exception handlers are synchronous
 				
-				// Interrupts (hig bit set) 
+				// Interrupts (hig bit set):
 				// User software interrupt: 0
 				// Supervisor software interrupt: 1
-				// Machine software interrupt: 3
+				// Machine software interrupt: 3               +
 				// User timer interrupt: 4
 				// Supervisor timer interrupt: 5
-				// Machine timer interrupt:7 
+				// Machine timer interrupt:7                   +
 				// User external interrupt: 8
 				// Supervisor external interrupt: 9
-				// Machine external interrupts: 11
+				// Machine external interrupts: 11             +
 				// >=16: implementation specific
 
-				// Exceptions (high bit zero)
+				// Exceptions (high bit zero):
 				// Instruction address misaligned: 0
 				// Instruction access fault: 1
-				// Illegal instruction: 2
+				// Illegal instruction: 2                      +
 				// Breakpoint: 3
 				// Load address misaligned: 4
 				// Load access fault: 5
@@ -1117,8 +1117,10 @@ always @(posedge clock) begin
 						CSRmstatus[3] <= 1'b0; // Clear interrupts during handler
 						CSRmtval <= 32'd0; // Store interrupt/exception specific data (default=0)
 						CSRmepc <= nextPC; // Remember where to return
-						PC <= {CSRmtvec[31:2],2'b0}; // Jump to handler
-						memaddress <= {CSRmtvec[31:2],2'b0};
+						// Jump to handler
+						// Set up non-vectored branch (always assume CSRmtvec[1:0]==2'b00)
+						PC <= {CSRmtvec[31:2],2'b00};
+						memaddress <= {CSRmtvec[31:2],2'b00};
 					end
 
 					if (CSRmie[2] & illegalinstruction) begin // EXCEPTION:ILLEGALINSTRUCTION

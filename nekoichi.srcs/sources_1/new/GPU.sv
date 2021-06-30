@@ -60,10 +60,10 @@ module GPU (
 	input wire fifdoutvalid,
 	output logic fiford_en,
 	// VRAM
-	output logic [13:0] vramaddress,
+	output logic [14:0] vramaddress,
 	output logic [3:0] vramwe,
 	output logic [31:0] vramwriteword,
-	output logic [11:0] lanemask,
+	output logic [12:0] lanemask,
 	// SYSRAM DMA channel
 	output logic [31:0] dmaaddress,
 	output logic [31:0] dmawriteword,
@@ -85,7 +85,7 @@ logic [2:0] rs2;
 logic [2:0] rs3;
 logic [2:0] rd;
 logic [2:0] cmd;
-logic [13:0] dmacount;
+logic [14:0] dmacount;
 logic [21:0] immshort;
 logic [27:0] imm;
 gpuregisterfile gpuregs(
@@ -112,7 +112,7 @@ always_ff @(posedge clock) begin
 
 		gpustate <= `GPUSTATEIDLE_MASK;
 		vramwe <= 4'b0000;
-		lanemask <= 12'h000;
+		lanemask <= 13'd0;
 		dmawe <= 4'b0000;
 		fiford_en <= 1'b0;
 
@@ -127,7 +127,7 @@ always_ff @(posedge clock) begin
 				vramwe <= 4'b0000;
 				rwren <= 1'b0;
 				// Also turn off parallel writes
-				lanemask <= 12'h000;
+				lanemask <= 13'd0;
 				// And DMA writes
 				dmawe <= 4'b0000;
 				// Stop palette writes
@@ -190,17 +190,17 @@ always_ff @(posedge clock) begin
 					end
 
 					`GPUCMD_CLEAR: begin
-						vramaddress <= 14'd0;
+						vramaddress <= 15'd0;
 						vramwriteword <= rval1;
 						// Enable all 4 bytes since clears are 32bit per write
 						vramwe <= 4'b1111;
-						lanemask <= 12'hFFF; // Turn on all lanes for parallel writes
+						lanemask <= 13'h1FFF; // Turn on all lanes for parallel writes
 						gpustate[`GPUSTATECLEAR] <= 1'b1;
 					end
 
 					`GPUCMD_SYSDMA: begin
 						dmaaddress <= rval1; // rs1: source
-						dmacount <= 14'd0;
+						dmacount <= 15'd0;
 						dmawe <= 4'b0000; // Reading from SYSRAM
 						gpustate[`GPUSTATEDMAKICK] <= 1'b1;
 					end
@@ -225,10 +225,10 @@ always_ff @(posedge clock) begin
 			end
 			
 			gpustate[`GPUSTATECLEAR]: begin // CLEAR
-				if (vramaddress == 14'h400) begin // 12*(256*192/4) (DWORD addresses) -> 0xC*0x400
+				if (vramaddress == 15'h800) begin // (512*16/4) (DWORD addresses) -> 0x800 (2048, size of one slice of DWORDs, of which there are 13)
 					gpustate[`GPUSTATEIDLE] <= 1'b1;
 				end else begin
-					vramaddress <= vramaddress + 14'd1;
+					vramaddress <= vramaddress + 15'd1;
 					// Loop in same state
 					gpustate[`GPUSTATECLEAR] <= 1'b1;
 				end
@@ -241,16 +241,16 @@ always_ff @(posedge clock) begin
 			end
 
 			gpustate[`GPUSTATEDMA]: begin // SYSDMA
-				if (dmacount == immshort[13:0]) begin
+				if (dmacount == immshort[14:0]) begin
 					// DMA done
 					vramwe <= 4'b0000;
 					gpustate[`GPUSTATEIDLE] <= 1'b1;
 				end else begin
 					// Write the previous DWORD to absolute address
-					vramaddress <= rval2[13:0] + dmacount;
+					vramaddress <= rval2[14:0] + dmacount;
 					vramwriteword <= dma_data;
 					
-					if (immshort[14]==1'b1) begin
+					if (immshort[15]==1'b1) begin
 						// Zero-masked DMA
 						vramwe <= {|dma_data[31:24], |dma_data[23:16], |dma_data[15:8], |dma_data[7:0]};
 					end else begin
@@ -260,7 +260,7 @@ always_ff @(posedge clock) begin
 
 					// Step to next DWORD to read
 					dmaaddress <= dmaaddress + 32'd4;
-					dmacount <= dmacount + 14'd1;
+					dmacount <= dmacount + 15'd1;
 					gpustate[`GPUSTATEDMA] <= 1'b1;
 				end
 			end

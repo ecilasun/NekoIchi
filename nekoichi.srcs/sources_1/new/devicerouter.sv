@@ -123,6 +123,7 @@ i2s2audio soundoutput(
 // Device: DDR3
 // -----------------------------------------------------------------------
 
+logic [31:0] ddr3datain; // Shadow of busdatain
 wire [31:0] ddr3dataout;
 wire ddr3stall;
 
@@ -136,7 +137,7 @@ ddr3controller ddr3memory(
 	.busre(busre),
 	.buswe(buswe),
 	.busaddress(busaddress),
-	.busdatain(busdatain),
+	.busdatain(ddr3datain),
 	.ddr3stall(ddr3stall),
 	.ddr3dataout(ddr3dataout),
     .ddr3_reset_n(ddr3_reset_n),
@@ -220,9 +221,10 @@ end
 // Controls the SDCard unit on PMOD port C
 // -----------------------------------------------------------------------
 
-// -----------------
-// SD Card Write
-// -----------------
+// ------------------
+// SD Card Write FIFO
+// ------------------
+
 wire sdwq_empty, sqwq_valid;
 wire [7:0] sdwq_dataout;
 wire sdwq_full;
@@ -274,8 +276,9 @@ always @(posedge spiclock) begin
 end
 
 // -----------------
-// SD Card Read
+// SD Card Read FIFO
 // -----------------
+
 logic sdrq_re = 1'b0;
 wire sdrq_full;
 wire sdrq_empty;
@@ -312,6 +315,7 @@ end
 // -----------------
 // SD Card Controller
 // -----------------
+
 SPI_MASTER SDCardController(
         .CLK(spiclock),
         .RST(reset_p), // spi_cd?
@@ -556,10 +560,10 @@ logic [31:0] gpu_fifocommand;
 logic [31:0] vsync_signal = 32'd0;
 logic gpu_fifowe;
 
-wire [13:0] gpuwriteaddress;
+wire [14:0] gpuwriteaddress;
 wire [3:0] gpuwriteena;
 wire [31:0] gpuwriteword;
-wire [11:0] gpulanewritemask;
+wire [12:0] gpulanewritemask;
 
 GPU rv32gpu(
 	.clock(gpuclock),					// GPU clock
@@ -660,12 +664,7 @@ wire [11:0] video_y;
 wire [7:0] PALETTEINDEX_ONE;
 wire [7:0] PALETTEINDEX_TWO;
 
-/*wire [3:0] VIDEO_R_ONE;
-wire [3:0] VIDEO_G_ONE;
-wire [3:0] VIDEO_B_ONE;
-wire [3:0] VIDEO_R_TWO;
-wire [3:0] VIDEO_G_TWO;
-wire [3:0] VIDEO_B_TWO;*/
+wire dataEnableA, dataEnableB;
 wire inDisplayWindowA, inDisplayWindowB;
 
 VideoControllerGen VideoUnitA(
@@ -682,9 +681,7 @@ VideoControllerGen VideoUnitA(
 	.lanemask(gpulanewritemask),
 	// Video output
 	.paletteindex(PALETTEINDEX_ONE),
-	//.red(VIDEO_R_ONE),
-	//.green(VIDEO_G_ONE),
-	//.blue(VIDEO_B_ONE),
+	.dataEnable(dataEnableA),
 	.inDisplayWindow(inDisplayWindowA) );
 
 VideoControllerGen VideoUnitB(
@@ -701,28 +698,26 @@ VideoControllerGen VideoUnitB(
 	.lanemask(gpulanewritemask),
 	// Video output
 	.paletteindex(PALETTEINDEX_TWO),
-	//.red(VIDEO_R_TWO),
-	//.green(VIDEO_G_TWO),
-	//.blue(VIDEO_B_TWO),
+	.dataEnable(dataEnableB),
 	.inDisplayWindow(inDisplayWindowB) );
 
 wire vsync_we;
 logic [31:0] vsynccounter;
 
+wire dataEnable = videopage == 1'b0 ? dataEnableA : dataEnableB;
 wire inDisplayWindow = videopage == 1'b0 ? inDisplayWindowA : inDisplayWindowB;
-assign DVI_DE = inDisplayWindow;
+assign DVI_DE = dataEnable;
 assign palettereadaddress = (videopage == 1'b0) ? PALETTEINDEX_ONE : PALETTEINDEX_TWO;
+// TODO: Depending on video more, use palette out or the byte (PALETTEINDEX_ONE/PALETTEINDEX_TWO) as RGB color
+// May also want to introduce a secondary palette?
 wire [3:0] VIDEO_B = paletteout[7:4];
 wire [3:0] VIDEO_R = paletteout[15:12];
 wire [3:0] VIDEO_G = paletteout[23:20];
 
-//assign blue = {videooutbyte[7:6], 2'b00};
-//assign red = {videooutbyte[5:3], 1'b0}; // TODO: Scanline cache + byteselect to pick the right 8 bit value here
-//assign green = {videooutbyte[2:0], 1'b0};
-
-assign DVI_R = inDisplayWindow ? VIDEO_R : 1'b0;
-assign DVI_G = inDisplayWindow ? VIDEO_G : 1'b0;
-assign DVI_B = inDisplayWindow ? VIDEO_B : 1'b0;
+// TODO: Border color
+assign DVI_R = inDisplayWindow ? (dataEnable ? VIDEO_R : 4'b0010) : 1'b0;
+assign DVI_G = inDisplayWindow ? (dataEnable ? VIDEO_G : 4'b0010) : 1'b0;
+assign DVI_B = inDisplayWindow ? (dataEnable ? VIDEO_B : 4'b0010) : 1'b0;
 assign DVI_CLK = vgaclock;
 
 vgatimer VideoScanout(
@@ -791,7 +786,6 @@ always_comb begin
 	endcase
 end
 
-//wire ddr3stall = deviceDDR3 ? (ddr3readstall | ddr3writestall) : 1'b0;
 wire gpustall = deviceGPUFIFOWrite ? gpu_fifowrfull : 1'b0;
 wire apustall = deviceAPUFIFOWrite ? apu_fifowrfull : 1'b0;
 wire uartwritestall = deviceUARTTxWrite ? outfifofull : 1'b0;
@@ -804,6 +798,8 @@ wire audiostall = deviceAudioWrite ? abfull : 1'b0;
 assign busstall = uartwritestall | uartreadstall | gpustall | apustall | spiwritestall | spireadstall | ddr3stall | audiostall;
 
 always_comb begin
+
+	ddr3datain = busdatain;
 
 	abdin = busdatain;
 	abwe = deviceAudioWrite ? ((~abfull) & (|buswe)) : 1'b0;
@@ -824,7 +820,7 @@ always_comb begin
 
 	// SPI (receive)
 	sdrq_re = (deviceSPIRead & (~sdrq_empty)) ? busre : 1'b0;
-	
+
 	// Switch (receive)
 	switchre = (deviceSwitchRead & (~switchempty)) ? busre : 1'b0;
 
